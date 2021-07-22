@@ -8,6 +8,10 @@
 # dependencies
 /node_modules
 
+#credentials
+/definitions/firebaseConfig.json
+/definitions/stravaConfig.json
+
 # IDEs and editors
 /.idea
 .project
