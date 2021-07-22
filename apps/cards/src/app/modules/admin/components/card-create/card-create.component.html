@@ -1,0 +1,22 @@
+<h4>Create new card factory</h4>
+<div [formGroup]="form" *ngIf="form">
+    <app-input [label]="'Id (leave blank for creating new card factory)'" [fc]="form.get('id')"></app-input>
+    <app-input [label]="'Title'" [fc]="form.get('title')"></app-input>
+
+    <div style="display: flex; margin: 15px;">
+        <div *ngFor="let tier of iterator">
+            <h3>Tier #{{tier}}</h3>
+            <label for="description-{{tier}}">Description</label>
+            <br>
+            <textarea rows="7" id="description-{{tier}}" [formControl]="form.get('tiers.' + tier + '.description')"></textarea>
+            <app-input [label]="'Value'" [fc]="form.get('tiers.' + tier + '.value')"></app-input>
+            <app-input [label]="'Modifier'" [fc]="form.get('tiers.' + tier + '.modifier')"></app-input>
+        </div>
+    </div>
+
+    <app-image-upload [multiple]="false"
+                      [formControl]="imageControl"
+    ></app-image-upload>
+
+    <p-button (click)="submit()" label="Save"></p-button>
+</div>

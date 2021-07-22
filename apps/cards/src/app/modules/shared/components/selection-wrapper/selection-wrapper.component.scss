@@ -1,0 +1,23 @@
+.selection-wrapper {
+  &--wrap {
+    .selection-wrapper__items {
+      display: flex;
+      flex-wrap: wrap;
+    }
+    .selection-wrapper__data-item {
+      margin: 16px;
+    }
+  }
+  input {
+    margin-right: 16px;
+    transform: scale(2);
+  }
+  &__data-item {
+    display: flex;
+    align-items: center;
+  }
+  &__select-all {
+    display: flex;
+    align-items: center;
+  }
+}

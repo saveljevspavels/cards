@@ -1,0 +1,44 @@
+<div class="admin-commands">
+  <app-selection-wrapper
+    [formControl]="selectedAthletes"
+    [template]="athleteTemplate"
+    [dataItems]="allAthletes | async" >
+    <ng-template #athleteTemplate let-dataItem="dataItem">
+      <app-athlete
+        [athlete]="dataItem"
+        [small]="true"
+      ></app-athlete>
+    </ng-template>
+  </app-selection-wrapper>
+
+  <div class="admin-commands__buttons">
+    <p-button [disabled]="!selectedAthletes.value.length" (click)="requestActivities()" label="Request Activities"></p-button>
+  </div>
+
+  <div>
+    <label for="cardAmount">Card Amount</label><input id="cardAmount" [formControl]="cardAmount">
+    <p-button [disabled]="!selectedAthletes.value.length || !cardAmount.value" (click)="dealCards()" label="Deal Cards"></p-button>
+  </div>
+
+  <app-selection-wrapper
+    [formControl]="selectedCards"
+    [template]="cardTemplate"
+    [dataItems]="allCards | async"
+    [wrap]="true"
+  >
+    <ng-template #cardTemplate let-dataItem="dataItem">
+      <app-card
+        [card]="dataItem"
+        [small]="true"
+      ></app-card>
+    </ng-template>
+  </app-selection-wrapper>
+
+  <div class="admin-commands__buttons">
+    <p-button [disabled]="!selectedCards.value.length" (click)="setDeck()" label="Set Deck"></p-button>
+    <p-button [disabled]="!selectedCards.value.length" (click)="addToDeck()" label="Add to Deck"></p-button>
+    <p-button (click)="shuffleDeck()" label="Shuffle Deck"></p-button>
+  </div>
+</div>
+
+

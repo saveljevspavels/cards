@@ -1,0 +1,20 @@
+<div class="card {{small && 'card--small'}} card--tier-{{card.tier}}" *ngIf="card">
+  <div class="card__content">
+    <img class="card__image" src="{{imageObservable | async}}">
+    <div class="card__title">
+      {{card.title}}
+    </div>
+    <div class="card__description">
+      {{card.description}}
+      <div *ngIf="!small && division">Min distance ({{rules.DIVISION[division].RUN_DISTANCE | distance}})</div>
+    </div>
+  </div>
+  <div class="card__bonuses">
+    <div class="card__modifier" *ngIf="card.modifier !== 0">
+      {{card.modifier | modifier}}
+    </div>
+    <div class="card__value" *ngIf="card.value !== 0">
+      {{card.value | value}}
+    </div>
+  </div>
+</div>

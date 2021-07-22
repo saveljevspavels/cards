@@ -1,0 +1,16 @@
+{
+  "GAME_START": "2021-07-12",
+  "HAND_SIZE": 3,
+  "DIVISION": {
+    "1": {
+      "RUN_DISTANCE": 3000
+    },
+    "2": {
+      "RUN_DISTANCE": 5000
+    },
+    "3": {
+      "RUN_DISTANCE": 8000
+    }
+  },
+  "DEFAULT_REWARD": 100
+}

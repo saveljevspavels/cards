@@ -1,0 +1,6 @@
+<div class="athlete {{small && 'athlete--small'}}" *ngIf="athlete">
+  <img src="{{athlete.profile_medium}}" class="athlete__profile-picture">
+  <div class="athlete__name">
+    {{athlete.firstname}} {{athlete.lastname}}
+  </div>
+</div>

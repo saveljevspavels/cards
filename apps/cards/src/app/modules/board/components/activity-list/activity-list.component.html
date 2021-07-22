@@ -1,0 +1,7 @@
+<app-header></app-header>
+
+<h2>Activity List</h2>
+
+<div>
+  <app-activity *ngFor="let activity of approvedActivities | async" [activity]="activity"></app-activity>
+</div>

@@ -1,0 +1,14 @@
+<div class="activity-review">
+  <h3>Submitted Activities</h3>
+  <div *ngFor="let activity of submittedActivities | async; let i = index" class="activity-review__activities">
+    <app-activity
+        [selection]="true"
+        [(ngModel)]="selectedCards[i]"
+        [activity]="activity"
+        [showComments]="true"
+        [showImages]="true"
+    ></app-activity>
+    <p-button (click)="rejectActivity(activity.id)" label="Reject"></p-button>
+    <p-button (click)="approveActivity(activity.id, selectedCards[i])" label="Approve"></p-button>
+  </div>
+</div>

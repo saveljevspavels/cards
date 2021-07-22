@@ -1,0 +1,6 @@
+<h2>Create Card Instances</h2>
+<div>
+    <app-input [label]="'Tier'" [fc]="form.get('tier')"></app-input>
+    <app-input [label]="'Amount'" [fc]="form.get('amount')"></app-input>
+</div>
+<p-button [disabled]="createDisabled" (click)="submit()" label="Create"></p-button>

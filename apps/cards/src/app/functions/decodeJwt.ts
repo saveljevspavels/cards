@@ -1,0 +1,20 @@
+export function decodeJwt(jwt: string) {
+    if (! jwt) {
+        return null;
+    }
+
+    const jwtParts = jwt.split('.');
+    if (jwtParts.length < 2) {
+        return null;
+    }
+    const base64 = jwtParts[1].replace(/-/g, '+').replace(/_/g, '/');
+    try {
+        const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
+            return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+        }).join(''));
+
+        return JSON.parse(jsonPayload) || null;
+    } catch (error) {
+        return null;
+    }
+}

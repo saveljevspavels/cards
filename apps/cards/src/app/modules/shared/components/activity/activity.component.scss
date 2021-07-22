@@ -1,0 +1,19 @@
+.activity {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    > div {
+        padding: 16px;
+    }
+    &__images {
+        //display: flex;
+    }
+    &__image {
+        display: block;
+        max-width: 160px;
+        max-height: 160px;
+        width: auto;
+        height: auto;
+        padding: 16px;
+    }
+}

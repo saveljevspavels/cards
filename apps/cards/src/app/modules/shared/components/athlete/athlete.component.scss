@@ -1,0 +1,23 @@
+.athlete {
+  width: 250px;
+  display: flex;
+  align-items: center;
+  &--small {
+    width: auto;
+    .athlete__profile-picture {
+      height: 36px;
+      width: 36px;
+      border-radius: 50px;
+      border: 1px solid black;
+    }
+  }
+  &__profile-picture {
+    height: 100px;
+    width: 100px;
+    border-radius: 50px;
+    border: 2px solid black;
+  }
+  &__name {
+    font-size: 20px;
+  }
+}

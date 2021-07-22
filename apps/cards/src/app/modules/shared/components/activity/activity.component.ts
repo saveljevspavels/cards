@@ -1,0 +1,57 @@
+import {Component, forwardRef, Input, OnInit} from '@angular/core';
+import {ControlValueAccessor, FormControl, NG_VALUE_ACCESSOR} from "@angular/forms";
+import {FileService} from "../../../../services/file.service";
+
+@Component({
+    selector: 'app-activity',
+    templateUrl: './activity.component.html',
+    styleUrls: ['./activity.component.scss'],
+    providers: [{
+        provide: NG_VALUE_ACCESSOR,
+        useExisting: forwardRef(() => ActivityComponent),
+        multi: true,
+    }]
+})
+export class ActivityComponent implements OnInit, ControlValueAccessor {
+
+    public selectedCards = new FormControl([])
+    public imageObservables: any;
+
+    @Input()
+    public activity: any;
+
+    @Input()
+    public selection = false;
+
+    @Input()
+    public showImages = true;
+
+    @Input()
+    public showComments = false;
+
+    constructor(private fileService: FileService) { }
+
+    async ngOnInit() {
+        this.selectedCards.valueChanges.subscribe((value) => {
+            this._onChange(value)
+        })
+
+        if(this.showImages && this.activity.gameData?.images?.length) {
+            this.imageObservables = await this.fileService.getImageUrls(this.activity.gameData.images)
+        }
+    }
+
+    _onChange: any = () => {};
+    _onTouched: any = () => {};
+
+    writeValue(value: any) {}
+
+    registerOnChange(fn: any) {
+        this._onChange = fn;
+    }
+
+    registerOnTouched(fn: any) {
+        this._onTouched = fn;
+    }
+
+}

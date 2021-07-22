@@ -1,0 +1,25 @@
+{
+    "STRAVA_BASE": "www.strava.com",
+    "API_PREFIX": "/api/",
+    "ACTIVITY_STATUSES": {
+        "NEW": "new",
+        "SUBMITTED": "submitted",
+        "REJECTED": "rejected",
+        "APPROVED": "approved"
+    },
+    "COLLECTIONS": {
+        "PENDING_ACTIVITIES": "pending_activities",
+        "DETAILED_ACTIVITIES": "detailed_activities",
+        "COMMANDS": "commands",
+        "HANDS": "hands",
+        "ATHLETES": "athletes",
+        "CARDS": "cards",
+        "SCORES": "scores",
+        "PERMISSIONS": "permissions",
+        "CARD_FACTORIES": "card_factories"
+    },
+    "HANDS": {
+        "DECK": "deck"
+    },
+    "DEFAULT_RESPONSE": "OK"
+}
