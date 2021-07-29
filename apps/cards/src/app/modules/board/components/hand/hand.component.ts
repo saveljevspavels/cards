@@ -19,9 +19,6 @@ import {map} from "rxjs/operators";
 })
 export class HandComponent implements OnInit, ControlValueAccessor {
 
-    @Input()
-    public division: number;
-
     public rules = RULES;
     public possibleCombinations = new BehaviorSubject<any[]>([])
     public cards = new BehaviorSubject<any[]>([]);

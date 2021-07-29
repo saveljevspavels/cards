@@ -1,16 +1,29 @@
 {
-  "GAME_START": "2021-07-12",
-  "HAND_SIZE": 3,
-  "DIVISION": {
-    "1": {
-      "RUN_DISTANCE": 3000
+    "GAME_START": "2021-07-26",
+    "HAND_SIZE": 3,
+    "DIVISION": {
+        "RUN": {
+            "1": {
+                "DISTANCE": 3000
+            },
+            "2": {
+                "DISTANCE": 5000
+            },
+            "3": {
+                "DISTANCE": 8000
+            }
+        },
+        "BIKE": {
+            "1": {
+                "DISTANCE": 15000
+            },
+            "2": {
+                "DISTANCE": 20000
+            },
+            "3": {
+                "DISTANCE": 30000
+            }
+        }
     },
-    "2": {
-      "RUN_DISTANCE": 5000
-    },
-    "3": {
-      "RUN_DISTANCE": 8000
-    }
-  },
-  "DEFAULT_REWARD": 100
+    "DEFAULT_REWARD": 100
 }

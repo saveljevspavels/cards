@@ -22,7 +22,7 @@ export class AthleteComponent implements OnInit {
 
   ngOnInit(): void {
     if(this.athleteId) {
-      this.athleteService.athletes.pipe(filter(athletes => athletes.length)).subscribe(_ =>{
+      this.athleteService.athletes.pipe(filter(athletes => !!athletes.length)).subscribe(_ =>{
         this.athlete = this.athleteService.getAthlete(this.athleteId.toString())
       })
     }

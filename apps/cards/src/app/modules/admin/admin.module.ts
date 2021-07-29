@@ -11,6 +11,7 @@ import { ActivityReviewComponent } from './components/activity-review/activity-r
 import { CardManagementComponent } from './components/card-management/card-management.component';
 import { CardFactoryComponent } from './components/card-factory/card-factory.component';
 import { CardInstanceCreateComponent } from './components/card-instance-create/card-instance-create.component';
+import { AthleteManagementComponent } from './components/athlete-management/athlete-management.component';
 
 
 @NgModule({
@@ -21,7 +22,8 @@ import { CardInstanceCreateComponent } from './components/card-instance-create/c
     ActivityReviewComponent,
     CardManagementComponent,
     CardFactoryComponent,
-    CardInstanceCreateComponent
+    CardInstanceCreateComponent,
+    AthleteManagementComponent
   ],
     imports: [
         CommonModule,
@@ -33,6 +35,7 @@ import { CardInstanceCreateComponent } from './components/card-instance-create/c
         ReactiveFormsModule,
         FormsModule,
         CommonModule,
+        ReactiveFormsModule,
         ReactiveFormsModule
     ],
   providers: [

@@ -15,7 +15,6 @@
         "ATHLETES": "athletes",
         "CARDS": "cards",
         "SCORES": "scores",
-        "PERMISSIONS": "permissions",
         "CARD_FACTORIES": "card_factories"
     },
     "HANDS": {

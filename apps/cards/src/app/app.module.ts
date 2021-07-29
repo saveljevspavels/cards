@@ -14,11 +14,11 @@ import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
 import {HttpMainInterceptor} from "./services/http.interceptor";
 import * as FIREBASE_CONFIG from '../../../../definitions/firebaseConfig.json';
 import {environment} from "../environments/environment";
-import {AuthService} from "./services/auth.service";
 import {MessagesModule} from "primeng/messages";
 import {MessageModule} from "primeng/message";
 import {MessageService} from "primeng/api";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
+import {AthleteService} from "./services/athlete.service";
 
 const firebaseConfig = FIREBASE_CONFIG;
 
@@ -45,8 +45,8 @@ const firebaseConfig = FIREBASE_CONFIG;
     { provide: HTTP_INTERCEPTORS, useClass: HttpMainInterceptor, multi: true },
     {
       provide: APP_INITIALIZER,
-      useFactory: (authService: AuthService) => () => authService.getPermissions(),
-      deps: [AuthService],
+      useFactory: (athleteService: AthleteService) => () => athleteService.permissionPromise(),
+      deps: [AthleteService],
       multi: true
     },
     MessageService

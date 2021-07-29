@@ -16,6 +16,7 @@ import {HttpClientModule} from "@angular/common/http";
 import {ImageUploadComponent} from "./components/image-upload/image-upload.component";
 import {FileService} from "../../services/file.service";
 import {InputTextareaModule} from "primeng/inputtextarea";
+import {DivisionInfoComponent} from "./components/division-info/division-info.component";
 
 const COMPS = [
     InputComponent,
@@ -25,7 +26,8 @@ const COMPS = [
     ActivityComponent,
     CardComponent,
     SelectionWrapperComponent,
-    ImageUploadComponent
+    ImageUploadComponent,
+    DivisionInfoComponent
 ]
 
 const MODULES = [
@@ -43,7 +45,8 @@ const MODULES = [
         FormsModule,
         ReactiveFormsModule,
         RouterModule,
-        ...MODULES
+        ...MODULES,
+        CommonModule
     ],
     exports: [
         ...COMPS,

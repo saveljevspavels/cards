@@ -25,6 +25,9 @@ export class SelectionWrapperComponent implements OnInit, OnChanges, ControlValu
   @Input()
   selectionEnabled = true;
 
+  @Input()
+  idKey = 'id'
+
   public innerForm: FormGroup;
   public selectAll = this.formBuilder.control(false)
 
@@ -37,7 +40,7 @@ export class SelectionWrapperComponent implements OnInit, OnChanges, ControlValu
     if(this.dataItems?.length) {
       this.innerForm = this.formBuilder.group({})
       this.dataItems.forEach((item: any) => {
-        this.innerForm.addControl(typeof item === 'string' ? item : item.id, this.formBuilder.control(false))
+        this.innerForm.addControl(typeof item === 'string' ? item : item[this.idKey], this.formBuilder.control(false))
       })
       this.innerForm.valueChanges.subscribe((values: any) => {
         const res = Object.keys(values).filter(key => values[key])
@@ -46,7 +49,7 @@ export class SelectionWrapperComponent implements OnInit, OnChanges, ControlValu
 
       this.selectAll.valueChanges.subscribe((value: any) => {
         this.dataItems.forEach((item: any) => {
-          this.innerForm.get(typeof item === 'string' ? item : item.id.toString())?.setValue(value)
+          this.innerForm.get(typeof item === 'string' ? item : item[this.idKey].toString())?.setValue(value)
         })
       })
     }

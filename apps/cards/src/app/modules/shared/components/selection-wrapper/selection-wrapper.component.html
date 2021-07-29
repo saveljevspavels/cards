@@ -7,7 +7,7 @@
   </div>
   <div class="selection-wrapper__items">
     <div class="selection-wrapper__data-item" *ngFor="let dataItem of dataItems">
-      <input *ngIf="selectionEnabled" type="checkbox" [formControl]="innerForm.get(dataItem?.id?.toString() || dataItem)">
+      <input *ngIf="selectionEnabled" type="checkbox" [formControl]="innerForm.get(dataItem[idKey]?.toString() || dataItem)">
       <ng-template
         [ngTemplateOutlet]="template"
         [ngTemplateOutletContext]="{ dataItem: dataItem }"

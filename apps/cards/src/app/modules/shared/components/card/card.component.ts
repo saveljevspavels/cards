@@ -2,7 +2,6 @@ import {Component, Input, OnInit} from '@angular/core';
 import Card from "../../../../interfaces/card";
 import {filter} from "rxjs/operators";
 import {DeckService} from "../../../../services/deck.service";
-import {RULES} from "../../../../app.module";
 import {FileService} from "../../../../services/file.service";
 
 @Component({
@@ -16,15 +15,11 @@ export class CardComponent implements OnInit {
     public card: Card;
 
     @Input()
-    public division: number;
-
-    @Input()
     public cardId: string;
 
     @Input()
     small: boolean = false;
 
-    rules = RULES;
     imageObservable: any;
 
     constructor(private deckService: DeckService,

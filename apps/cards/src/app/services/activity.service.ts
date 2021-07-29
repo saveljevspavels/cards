@@ -7,7 +7,9 @@ import {LocalStorageService} from "./local-storage.service";
 import {CONST} from "../app.module";
 import {environment} from "../../environments/environment";
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class ActivityService {
 
   public pendingActivities = new BehaviorSubject<any>([])

@@ -15,18 +15,23 @@ export class FirestoreService {
     cardCollection = this.db.collection(CONST.COLLECTIONS.CARDS)
     cardFactoryCollection = this.db.collection(CONST.COLLECTIONS.CARD_FACTORIES)
     scoreCollection = this.db.collection(CONST.COLLECTIONS.SCORES)
-    permissionCollection = this.db.collection(CONST.COLLECTIONS.PERMISSIONS)
 
     constructor() {
     }
 
     async saveAthlete(athlete) {
         const athleteDoc = this.athleteCollection.doc(athlete.id.toString())
-        const permissionDoc = this.permissionCollection.doc(athlete.id.toString())
         const athleteExists = (await athleteDoc.get()).exists
         if(!athleteExists) {
-            await athleteDoc.set({...athlete, division: 1})
-            await permissionDoc.set({default: true, admin: false})
+            await athleteDoc.set(
+                {
+                    ...athlete,
+                    division: {
+                        RUN: 1,
+                        BIKE: 1
+                    },
+                    permissions: ['default']
+                })
             console.log('Athlete', athlete.id, 'saved')
         } else {
             console.log('Athlete', athlete.id, 'logged in')
@@ -331,6 +336,30 @@ export class FirestoreService {
             return CONST.DEFAULT_RESPONSE
         } else {
             return 'Invalid factory'
+        }
+    }
+
+    async setDivisions(athleteIds, division) {
+        for(let id of athleteIds) {
+            const athleteDoc = this.athleteCollection.doc(id.toString())
+            const athlete = (await athleteDoc.get()).data() || {}
+
+            await athleteDoc.set({
+                ...athlete,
+                division
+            })
+        }
+    }
+
+    async setPermissions(athleteIds, permissions) {
+        for(let id of athleteIds) {
+            const athleteDoc = this.athleteCollection.doc(id.toString())
+            const athlete = (await athleteDoc.get()).data() || {}
+
+            await athleteDoc.set({
+                ...athlete,
+                permissions
+            })
         }
     }
 }

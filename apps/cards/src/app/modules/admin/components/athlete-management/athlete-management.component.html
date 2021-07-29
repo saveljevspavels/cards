@@ -1,0 +1,42 @@
+<app-menu></app-menu>
+
+<h2>Athlete Management</h2>
+
+<div class="athlete-management">
+    <app-selection-wrapper
+        [formControl]="selectedAthletes"
+        [template]="athleteTemplate"
+        [dataItems]="allAthletes | async" >
+        <ng-template #athleteTemplate let-dataItem="dataItem">
+            <div>
+                <app-athlete
+                    [athlete]="dataItem"
+                    [small]="true"
+                ></app-athlete>
+                <app-division-info [division]="dataItem.division"></app-division-info>
+                Current Permissions: {{dataItem.permissions | json}}
+            </div>
+        </ng-template>
+    </app-selection-wrapper>
+
+    <div *ngFor="let input of form.controls | keyvalue">
+        <app-input [fc]="input.value" [label]="input.key"></app-input>
+    </div>
+
+    <p-button [disabled]="!selectedAthletes.value.length || form.invalid" (click)="setDivisions()" [label]="'Set Divisions'"></p-button>
+
+    <app-selection-wrapper
+        [formControl]="selectedPermissions"
+        [template]="permissionTemplate"
+        [dataItems]="PERMISSIONS | keyvalue"
+        [idKey]="'value'"
+    >
+        <ng-template #permissionTemplate let-dataItem="dataItem">
+            <div>
+                {{dataItem.value}}
+            </div>
+        </ng-template>
+    </app-selection-wrapper>
+
+    <p-button [disabled]="!selectedAthletes.value.length || !selectedPermissions.value.length" (click)="setPermissions()" [label]="'Set Permissions'"></p-button>
+</div>

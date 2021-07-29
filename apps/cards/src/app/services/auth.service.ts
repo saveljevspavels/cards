@@ -5,9 +5,6 @@ import {
 import {HttpClient, HttpParams} from "@angular/common/http";
 import {filter, tap} from "rxjs/operators";
 import {Router} from "@angular/router";
-import {BehaviorSubject} from "rxjs";
-import {LocalStorageService} from "./local-storage.service";
-import {AngularFirestore} from "@angular/fire/firestore";
 import {CONST, STRAVA_CONFIG} from "../app.module";
 import {environment} from "../../environments/environment";
 
@@ -17,23 +14,9 @@ import {environment} from "../../environments/environment";
 export class AuthService {
 
   responseParams: any;
-  public permissions = new BehaviorSubject<any>(null)
 
   constructor(private httpClient: HttpClient,
-              private router: Router,
-              private db: AngularFirestore) {
-    db.collection(CONST.COLLECTIONS.PERMISSIONS).doc(LocalStorageService.athleteId).valueChanges().subscribe((permissions: any) => {
-      this.permissions.next(permissions || {})
-    });
-  }
-
-  getPermissions() {
-    return new Promise((resolve) => {
-      this.permissions.pipe(filter((perms) => perms !== null))
-        .subscribe( () => {
-          resolve(true);
-        });
-    });
+              private router: Router) {
   }
 
   authorize(clientId: string, returnUrl: string, requiredPermissions: string) {
