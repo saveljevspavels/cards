@@ -48,7 +48,7 @@ export class AthleteService {
 
     permissionPromise() {
         return new Promise((resolve) => {
-            this.permissions.pipe(filter((perms) => perms !== null))
+            this.permissions.pipe(filter((perms) => !!perms.length))
                 .subscribe( () => {
                     resolve(true);
                 });

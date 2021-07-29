@@ -341,11 +341,7 @@ export class FirestoreService {
 
     async setDivisions(athleteIds, division) {
         for(let id of athleteIds) {
-            const athleteDoc = this.athleteCollection.doc(id.toString())
-            const athlete = (await athleteDoc.get()).data() || {}
-
-            await athleteDoc.set({
-                ...athlete,
+            await this.athleteCollection.doc(id.toString()).update({
                 division
             })
         }
@@ -353,11 +349,7 @@ export class FirestoreService {
 
     async setPermissions(athleteIds, permissions) {
         for(let id of athleteIds) {
-            const athleteDoc = this.athleteCollection.doc(id.toString())
-            const athlete = (await athleteDoc.get()).data() || {}
-
-            await athleteDoc.set({
-                ...athlete,
+            await this.athleteCollection.doc(id.toString()).update({
                 permissions
             })
         }
