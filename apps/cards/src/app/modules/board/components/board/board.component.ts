@@ -14,6 +14,8 @@ export class BoardComponent implements OnInit {
     public athlete: any = null;
     public newActivities = this.activityService.newActivities;
 
+    public activityToSubmit = null;
+
     public form: FormGroup;
 
     constructor(private athleteService: AthleteService,
@@ -26,6 +28,14 @@ export class BoardComponent implements OnInit {
         this.athlete = this.athleteService.me
     }
 
+    enterSubmitMode(activity: any) {
+        this.activityToSubmit = activity;
+    }
+
+    exitSubmitMode() {
+        this.activityToSubmit = null;
+    }
+
     async submitActivity(activityId: string) {
         const uploadedImages = await this.fileService.uploadImages(this.form.value.selectedImages)
         this.activityService.submitActivity(
@@ -35,6 +45,7 @@ export class BoardComponent implements OnInit {
             this.form.value.comments,
         ).subscribe(() => {
             this.initForm()
+            this.exitSubmitMode();
         })
     }
 
