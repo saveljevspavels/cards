@@ -1,5 +1,6 @@
 import {Component, forwardRef, Input, OnChanges, OnInit, SimpleChanges, TemplateRef} from '@angular/core';
 import {ControlValueAccessor, FormBuilder, FormGroup, NG_VALUE_ACCESSOR} from "@angular/forms";
+import {pairwise} from "rxjs/operators";
 
 @Component({
   selector: 'app-selection-wrapper',
@@ -26,7 +27,12 @@ export class SelectionWrapperComponent implements OnInit, OnChanges, ControlValu
   selectionEnabled = true;
 
   @Input()
+  singleSelection = false;
+
+  @Input()
   idKey = 'id'
+
+  public value: string[];
 
   public innerForm: FormGroup;
   public selectAll = this.formBuilder.control(false)
@@ -42,17 +48,28 @@ export class SelectionWrapperComponent implements OnInit, OnChanges, ControlValu
       this.dataItems.forEach((item: any) => {
         this.innerForm.addControl(typeof item === 'string' ? item : item[this.idKey], this.formBuilder.control(false))
       })
-      this.innerForm.valueChanges.subscribe((values: any) => {
-        const res = Object.keys(values).filter(key => values[key])
-        this._onChange(res)
+      this.innerForm.valueChanges.pipe(pairwise()).subscribe(([oldVal, newVal]) => {
+        const res = Object.keys(newVal).filter(key => newVal[key])
+        if(this.singleSelection && res.length > 1) {
+            const last = this.lastSelected(oldVal, newVal)
+            if(last) {
+                this.toggleAll(false)
+                this.innerForm.get(last)?.patchValue(true)
+            }
+        }
+        this._onChange(this.value)
       })
 
       this.selectAll.valueChanges.subscribe((value: any) => {
-        this.dataItems.forEach((item: any) => {
-          this.innerForm.get(typeof item === 'string' ? item : item[this.idKey].toString())?.setValue(value)
-        })
+        this.toggleAll(value)
       })
     }
+  }
+
+    toggleAll(value: boolean) {
+    this.dataItems.forEach((item: any) => {
+      this.innerForm.get(typeof item === 'string' ? item : item[this.idKey].toString())?.setValue(value)
+    })
   }
 
   _onChange: any = () => {};
@@ -78,4 +95,8 @@ export class SelectionWrapperComponent implements OnInit, OnChanges, ControlValu
     this._onTouched = fn;
   }
 
+  lastSelected(oldSet: any, newSet: any): string {
+    const last = Object.entries(newSet).find(([key, value]) => value && !oldSet[key])
+    return last ? last[0] : ''
+  }
 }

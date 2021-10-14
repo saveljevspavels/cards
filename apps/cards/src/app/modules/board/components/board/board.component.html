@@ -2,13 +2,7 @@
 
 <h2>Board</h2>
 
-<app-athlete [athlete]="athlete | async"></app-athlete>
-
-<app-division-info [division]="(athlete | async)?.division"></app-division-info>
-
-<app-hand
-    [formControl]="form.get('selectedCards')">
-</app-hand>
+<app-card-queue [formControl]="form.get('selectedCards')"></app-card-queue>
 
 <div *ngIf="!activityToSubmit; else submitMode">
     <h3>New Activities</h3>

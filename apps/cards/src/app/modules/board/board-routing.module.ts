@@ -6,6 +6,7 @@ import {LeaderboardComponent} from "./components/leaderboard/leaderboard.compone
 import {ActivityService} from "../../services/activity.service";
 import {AthleteService} from "../../services/athlete.service";
 import {ScoreService} from "../../services/score.service";
+import {ProfileComponent} from "./components/profile/profile.component";
 
 const routes: Routes = [
   {
@@ -19,6 +20,10 @@ const routes: Routes = [
   {
     path: 'leaderboard',
     component: LeaderboardComponent
+  },
+  {
+    path: 'profile',
+    component: ProfileComponent
   }
 ]
 

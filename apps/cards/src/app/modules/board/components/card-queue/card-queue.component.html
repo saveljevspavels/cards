@@ -1,0 +1,22 @@
+<div class="card-queue">
+    <div *ngIf="(cardQueue | async).cardIds.length; else noCards">
+        <div class="hand__cards">
+            <app-selection-wrapper
+                [singleSelection]="true"
+                [formControl]="selectedCards"
+                [template]="cardTemplate"
+                [dataItems]="(cardQueue | async).cardIds"
+                [wrap]="true"
+            >
+                <ng-template #cardTemplate let-dataItem="dataItem">
+                    <app-card
+                        [cardId]="dataItem"
+                    ></app-card>
+                </ng-template>
+            </app-selection-wrapper>
+        </div>
+    </div>
+    <ng-template #noCards>
+        <div>No cards</div>
+    </ng-template>
+</div>

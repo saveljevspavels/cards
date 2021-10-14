@@ -23,6 +23,10 @@ export class MenuComponent implements OnInit {
             path: '/board/leaderboard'
         },
         {
+            title: 'Profile',
+            path: '/board/profile'
+        },
+        {
             title: 'Admin',
             path: '/admin',
             permission: 'admin-panel'

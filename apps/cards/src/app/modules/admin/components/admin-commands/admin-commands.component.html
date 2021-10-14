@@ -34,10 +34,13 @@
     </ng-template>
   </app-selection-wrapper>
 
+  <app-deck></app-deck>
+
   <div class="admin-commands__buttons">
     <p-button [disabled]="!selectedCards.value.length" (click)="setDeck()" label="Set Deck"></p-button>
     <p-button [disabled]="!selectedCards.value.length" (click)="addToDeck()" label="Add to Deck"></p-button>
     <p-button (click)="shuffleDeck()" label="Shuffle Deck"></p-button>
+    <p-button (click)="startGame()" label="Start Game"></p-button>
   </div>
 </div>
 

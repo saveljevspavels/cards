@@ -18,7 +18,9 @@
         "CARD_FACTORIES": "card_factories"
     },
     "HANDS": {
-        "DECK": "deck"
+        "DECK": "deck",
+        "QUEUE": "queue",
+        "DISCARD": "discard"
     },
     "DEFAULT_RESPONSE": "OK"
 }

@@ -9,6 +9,8 @@ import { ActivityListComponent } from './components/activity-list/activity-list.
 import {LeaderboardComponent} from "./components/leaderboard/leaderboard.component";
 import {ScoresComponent} from "../shared/components/scores/scores.component";
 import {ActivityService} from "../../services/activity.service";
+import { ProfileComponent } from './components/profile/profile.component';
+import { CardQueueComponent } from './components/card-queue/card-queue.component';
 
 
 @NgModule({
@@ -17,7 +19,9 @@ import {ActivityService} from "../../services/activity.service";
     HandComponent,
     ActivityListComponent,
     LeaderboardComponent,
-    ScoresComponent
+    ScoresComponent,
+    ProfileComponent,
+    CardQueueComponent
   ],
   imports: [
     CommonModule,

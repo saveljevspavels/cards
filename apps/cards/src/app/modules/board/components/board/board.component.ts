@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import {AthleteService} from "../../../../services/athlete.service";
 import {ActivityService} from "../../../../services/activity.service";
 import {FormBuilder, FormControl, FormGroup} from "@angular/forms";
 import {FileService} from "../../../../services/file.service";
@@ -11,21 +10,18 @@ import {FileService} from "../../../../services/file.service";
 })
 export class BoardComponent implements OnInit {
 
-    public athlete: any = null;
     public newActivities = this.activityService.newActivities;
 
     public activityToSubmit = null;
 
     public form: FormGroup;
 
-    constructor(private athleteService: AthleteService,
-                private activityService: ActivityService,
+    constructor(private activityService: ActivityService,
                 private formBuilder: FormBuilder,
                 private fileService: FileService) { }
 
     ngOnInit(): void {
         this.initForm()
-        this.athlete = this.athleteService.me
     }
 
     enterSubmitMode(activity: any) {

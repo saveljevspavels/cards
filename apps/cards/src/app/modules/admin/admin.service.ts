@@ -12,6 +12,9 @@ export class AdminService {
     public submittedActivities = new BehaviorSubject<any>([])
     public cardFactories = new BehaviorSubject<any>([])
 
+    public deck = new BehaviorSubject<string[]>([]);
+    private deckDocument = this.db.collection(CONST.COLLECTIONS.HANDS)
+
     constructor(private http: HttpClient,
                 private db: AngularFirestore,) {
         db.collection(CONST.COLLECTIONS.DETAILED_ACTIVITIES,
@@ -20,6 +23,10 @@ export class AdminService {
             )
         ).valueChanges().subscribe((activities: any) => {
             this.submittedActivities.next(activities)
+        });
+
+        this.deckDocument.doc(CONST.HANDS.DECK).valueChanges().subscribe((deck: any) => {
+            this.deck.next(deck?.cardIds || [])
         });
 
         db.collection(CONST.COLLECTIONS.CARD_FACTORIES).valueChanges().subscribe((cardFactories: any) => {
@@ -56,6 +63,10 @@ export class AdminService {
         return this.http.post(`${environment.baseBE}/deal-cards`, {
             athletes, amount
         }).subscribe()
+    }
+
+    public dealQueue() {
+        return this.http.post(`${environment.baseBE}/deal-queue`, {}).subscribe()
     }
 
     public rejectActivity(activityId: any) {

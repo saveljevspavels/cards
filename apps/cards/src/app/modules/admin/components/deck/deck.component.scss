@@ -1,0 +1,14 @@
+.deck {
+    display: inline-block;
+    &__title {
+        display: inline-block;
+    }
+    &:hover {
+        .deck__cards {
+            display: flex;
+        }
+    }
+    &__cards {
+        display: none;
+    }
+}

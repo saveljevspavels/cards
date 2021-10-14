@@ -1,13 +1,15 @@
 <div class="selection-wrapper {{wrap && 'selection-wrapper--wrap'}}"
      [formGroup]="innerForm"
      *ngIf="innerForm && dataItems.length">
-  <div class="selection-wrapper__select-all" *ngIf="selectionEnabled">
+  <div class="selection-wrapper__select-all" *ngIf="selectionEnabled && !singleSelection">
     <input type="checkbox" [formControl]="selectAll">
     <h4>Select/Deselect All</h4>
   </div>
   <div class="selection-wrapper__items">
     <div class="selection-wrapper__data-item" *ngFor="let dataItem of dataItems">
-      <input *ngIf="selectionEnabled" type="checkbox" [formControl]="innerForm.get(dataItem[idKey]?.toString() || dataItem)">
+      <input *ngIf="selectionEnabled"
+             type="checkbox"
+             [formControl]="innerForm.get(dataItem[idKey]?.toString() || dataItem)">
       <ng-template
         [ngTemplateOutlet]="template"
         [ngTemplateOutletContext]="{ dataItem: dataItem }"

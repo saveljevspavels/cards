@@ -27,6 +27,15 @@ export default class DeckService {
             }
         });
 
+        app.post(`${CONST.API_PREFIX}deal-queue`, async (req, res) => {
+            const result = await fireStoreService.dealQueue()
+            if(result) {
+                res.status(200).send({response: CONST.DEFAULT_RESPONSE});
+            } else {
+                res.status(400).send({response: 'Not enough cards in deck'});
+            }
+        });
+
         app.post(`${CONST.API_PREFIX}discard-cards`, (req, res) => {
             fireStoreService.discardCards(req.body.athleteId, req.body.cardIds)
             res.status(200).send({});

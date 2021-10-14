@@ -5,6 +5,8 @@ import {LocalStorageService} from "./local-storage.service";
 import {HttpClient} from "@angular/common/http";
 import {CONST} from "../app.module";
 import {environment} from "../../environments/environment";
+import {map} from "rxjs/operators";
+import Hand from "../interfaces/hand";
 
 @Injectable({
   providedIn: 'root'
@@ -12,12 +14,18 @@ import {environment} from "../../environments/environment";
 export class DeckService {
 
     public cards = new BehaviorSubject<any>([]);
+    public cardQueue = new BehaviorSubject<Hand>({cardIds: []});
     private cardCollection = this.db.collection(CONST.COLLECTIONS.CARDS);
+    private cardQueueDocument = this.db.collection(CONST.COLLECTIONS.HANDS).doc(CONST.HANDS.QUEUE);
 
     constructor(private db: AngularFirestore,
                 private http: HttpClient) {
         this.cardCollection.valueChanges().subscribe((cards: any[]) => {
             this.cards.next(cards)
+        });
+        this.cardQueueDocument.valueChanges().subscribe((cards: any) => {
+            console.log('cards',cards)
+            this.cardQueue.next(cards)
         });
     }
 

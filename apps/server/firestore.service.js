@@ -115,7 +115,7 @@ export class FirestoreService {
             shuffledDeck.push(...currentDeck.splice(i, 1))
         }
 
-        await this.setDeck({cardIds: shuffledDeck})
+        await this.setDeck(shuffledDeck)
         console.log('Decs is shuffled, contains', shuffledDeck, 'cards')
     }
 
@@ -149,6 +149,21 @@ export class FirestoreService {
         const currentHand = (await athleteHand.get()).data()?.cardIds
         const newHand = [...currentHand || [], ...cards]
         await athleteHand.set({cardIds: newHand})
+    }
+
+    async dealQueue() {
+        const queueHand = this.handCollection.doc(CONST.HANDS.QUEUE);
+        const currentQueue = (await queueHand.get()).data()?.cardIds || []
+        console.log('There are ', currentQueue.length, 'cards in the queue, trying to draw a card')
+        if(currentQueue.length < RULES.QUEUE.LENGTH) {
+            for(let i = 0; i < RULES.QUEUE.LENGTH - currentQueue.length; i++) {
+                await this.dealCards([CONST.HANDS.QUEUE], 1)
+            }
+            return CONST.DEFAULT_RESPONSE;
+        } else {
+            console.log('Queue hand is full (', currentQueue.length, ')')
+            return 'Queue is full'
+        }
     }
 
     async discardFromAthlete(athlete, cards) {
