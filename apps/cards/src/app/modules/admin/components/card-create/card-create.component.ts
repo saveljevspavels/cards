@@ -51,8 +51,11 @@ export class CardCreateComponent implements OnInit, OnChanges {
     }
 
     ngOnChanges(changes: SimpleChanges) {
-        if(changes.selectedCardFactory?.currentValue) {
-            this.form.setValue(changes.selectedCardFactory.currentValue)
+        const factory = changes.selectedCardFactory?.currentValue;
+        if(factory) {
+            this.validatorAmount.setValue(Object.keys(factory.cards[0]?.validators).length);
+            this.cardAmount.setValue(Object.keys(factory.cards).length);
+            setTimeout(() => this.form.setValue(changes.selectedCardFactory.currentValue))
         }
     }
 
