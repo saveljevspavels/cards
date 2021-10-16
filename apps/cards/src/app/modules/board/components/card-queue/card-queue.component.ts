@@ -3,6 +3,8 @@ import {DeckService} from "../../../../services/deck.service";
 import Hand from "../../../../interfaces/hand";
 import {Observable} from "rxjs";
 import {ControlValueAccessor, FormControl, NG_VALUE_ACCESSOR} from "@angular/forms";
+import {RULES} from "../../../../app.module";
+import {GameService} from "../../../../services/game.service";
 
 @Component({
   selector: 'app-card-queue',
@@ -15,11 +17,14 @@ import {ControlValueAccessor, FormControl, NG_VALUE_ACCESSOR} from "@angular/for
   }]
 })
 export class CardQueueComponent implements OnInit, ControlValueAccessor {
+    public RULES = RULES;
 
     public cardQueue: Observable<Hand> = this.deckService.cardQueue.asObservable()
+    public cardUses: Observable<number> = this.gameService.cardUses.asObservable()
     public selectedCards = new FormControl([]);
 
-    constructor(public deckService: DeckService) { }
+    constructor(public deckService: DeckService,
+                public gameService: GameService) { }
 
     ngOnInit(): void {
         this.selectedCards.valueChanges.subscribe((values: any) => {

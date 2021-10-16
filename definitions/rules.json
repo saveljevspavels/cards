@@ -25,7 +25,6 @@
             }
         }
     },
-    "DEFAULT_REWARD": 100,
     "QUEUE": {
         "LENGTH": 7,
         "SLIDE_COUNTER": 5

@@ -95,4 +95,8 @@ export class AdminService {
     public createCardInstances(body: any) {
         return this.http.post(`${environment.baseBE}/create-card-instances`, body)
     }
+
+    public startGame() {
+        return this.http.post(`${environment.baseBE}/start-game`, {})
+    }
 }

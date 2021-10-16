@@ -9,6 +9,9 @@
     </div>
   </div>
   <div class="card__bonuses">
+    <div class="card__progression" *ngIf="card.cardUses.usesToProgress !== 0">
+        To {{card.progression === 'tiers' ? 'level up' : 'change'}}: {{card.cardUses.self}}/{{card.cardUses.usesToProgress}}
+    </div>
     <div class="card__value" *ngIf="card.value !== 0">
       {{card.value | value}}
     </div>

@@ -15,6 +15,7 @@ export class FirestoreService {
     cardCollection = this.db.collection(CONST.COLLECTIONS.CARDS)
     cardFactoryCollection = this.db.collection(CONST.COLLECTIONS.CARD_FACTORIES)
     scoreCollection = this.db.collection(CONST.COLLECTIONS.SCORES)
+    gameCollection = this.db.collection(CONST.COLLECTIONS.GAME)
 
     constructor() {
     }
@@ -238,7 +239,7 @@ export class FirestoreService {
                 comments
             }
         })
-        await this.discardCards(athleteId, cardIds)
+        // await this.discardCards(athleteId, cardIds) // No discarding in current game mode
         console.log('Athlete', athleteId, 'submitted activity with', cardIds)
     }
 
@@ -274,6 +275,12 @@ export class FirestoreService {
         const cardQuery = this.cardCollection.where('id', 'in', cardIds)
         const cardDocs = await cardQuery.get()
         cardDocs.forEach(card => {
+          card.ref.update({
+              cardUses: {
+                  ...card.data().cardUses,
+                  self: card.data().cardUses.self + 1
+              }
+          })
           playedCards.push(card.data())
         })
       }
@@ -281,7 +288,6 @@ export class FirestoreService {
       const newScore = updateScore(
         score,
         cardIds.length ? playedCards.reduce((acc, card) => acc + parseInt(card.value), 0) : 0,
-        cardIds.length ? playedCards.reduce((acc, card) => acc + parseInt(card.modifier), 0) :  0,
         cardIds.length ? playedCards.length : 0
       )
       await scoreDoc.set({
@@ -289,7 +295,29 @@ export class FirestoreService {
         athleteId: activity.athlete.id.toString()
       });
 
+      await this.updateTotalCardUses(cardIds.length);
+
       console.log('Activity', activityId, 'was approved for athlete', activity.athlete.id.toString(), 'with cards', cardIds)
+    }
+
+    async updateTotalCardUses(amount) {
+        const queueDoc = await this.handCollection.doc(CONST.HANDS.QUEUE)
+        const queue = (await queueDoc.get()).data() || {}
+        const cardQuery = this.cardCollection.where('id', 'in', queue.cardIds)
+        const cardDocs = await cardQuery.get()
+        cardDocs.forEach((card) => {
+            card.ref.update({
+                cardUses: {
+                    ...card.data().cardUses,
+                    total: card.data().cardUses.total + amount
+                }
+            });
+        });
+        const gameDoc = this.gameCollection.doc(CONST.GAME_ID)
+        const game = (await gameDoc.get()).data() || {}
+        await gameDoc.update({
+            cardUses: game.cardUses + amount
+        })
     }
 
     async createCardFactory(card) {
@@ -324,14 +352,14 @@ export class FirestoreService {
 
     async createCardFromFactory(factory, tier) {
         const id = generateId();
-        const card = factory.progression === 'flat'
-            ? factory.cards[Math.floor(Math.random() * Object.keys(factory.cards).length)] // Random card for flat progression
+        let card = factory.progression === 'flat'
+            ? factory.cards[getRandomInt(Object.keys(factory.cards).length)] // Random card for flat progression
             : factory.cards[tier]
         if(!card) {
             console.error('Card', factory.title, 'tier', tier, 'not defined')
             return;
         }
-        await this.cardCollection.doc(id).set({
+        card = {
             id,
             title: factory.title,
             image: factory.image,
@@ -339,8 +367,15 @@ export class FirestoreService {
             activityTypes: factory.activityTypes,
             progression: factory.progression,
             tier,
-            ...card
-        })
+            ...card,
+        }
+        card.cardUses = {
+            usesToProgress: card.usesToProgress,
+            self: 0,
+            total: 0
+        }
+        delete card.usesToProgress;
+        await this.cardCollection.doc(id).set(card)
 
         console.log('Created', factory.title, 'card, tier', tier)
     }
@@ -396,5 +431,13 @@ export class FirestoreService {
                 permissions
             })
         }
+    }
+
+    async startGame() {
+        const gameDoc = this.gameCollection.doc(CONST.GAME_ID)
+        await gameDoc.set({
+            cardUses: 0
+        })
+        return await this.dealQueue()
     }
 }

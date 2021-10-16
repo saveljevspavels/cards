@@ -15,12 +15,14 @@
         "ATHLETES": "athletes",
         "CARDS": "cards",
         "SCORES": "scores",
-        "CARD_FACTORIES": "card_factories"
+        "CARD_FACTORIES": "card_factories",
+        "GAME": "game"
     },
     "HANDS": {
         "DECK": "deck",
         "QUEUE": "queue",
         "DISCARD": "discard"
     },
-    "DEFAULT_RESPONSE": "OK"
+    "DEFAULT_RESPONSE": "OK",
+    "GAME_ID": "game1"
 }

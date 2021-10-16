@@ -1,3 +1,5 @@
+import {Progression} from "./card-factory";
+
 export default interface Card {
     title: string;
     image: '';
@@ -7,6 +9,7 @@ export default interface Card {
     value: number;
     cardUses: CardUses;
     factoryId: string;
+    progression: Progression;
     activityTypes: string[];
 }
 

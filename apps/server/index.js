@@ -11,6 +11,7 @@ import ActivityService from "./activity.service.js";
 import CardService from "./card.service.js";
 import ImageService from "./images.service.js";
 import AthleteService from "./athlete.service.js";
+import GameService from "./game.service.js";
 
 
 // creates express http server
@@ -24,4 +25,5 @@ const activityService = new ActivityService(app, fireStoreService);
 const cardService = new CardService(app, fireStoreService);
 const imageService = new ImageService(app, fireStoreService);
 const athleteService = new AthleteService(app, fireStoreService);
+const gameService = new GameService(app, fireStoreService);
 

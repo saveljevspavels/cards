@@ -38,12 +38,8 @@ export const getRandomInt = (max) => {
     return Math.floor(Math.random() * max);
 }
 
-export const updateScore = (score, values, modifiers, cardAmount) => {
-  const finalValue = parseInt(
-    (
-      ((RULES.DEFAULT_REWARD + values) * ( 100 + modifiers )
-    ) + '').slice(0, -2)
-  )
+export const updateScore = (score, values, cardAmount) => {
+  const finalValue = values;
   return {
     value: score.value ? parseInt(score.value + finalValue) : finalValue,
     activities: score.activities ? parseInt(score.activities + 1) : 1,

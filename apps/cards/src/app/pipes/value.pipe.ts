@@ -6,7 +6,7 @@ export class ValuePipe implements PipeTransform {
 
   transform(value:any) {
     if (value) {
-      return `+ ${value} points`;
+      return `${value} points`;
     }
     return value;
   }

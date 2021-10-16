@@ -49,11 +49,11 @@ export class AdminCommandsComponent implements OnInit {
         this.adminService.deleteCards(this.selectedCards.value)
     }
 
-    startGame() {
-        this.dealQueue()
-    }
-
     dealQueue() {
         this.adminService.dealQueue()
+    }
+
+    startGame() {
+        this.adminService.startGame().subscribe(() => console.log('Game Started'))
     }
 }
