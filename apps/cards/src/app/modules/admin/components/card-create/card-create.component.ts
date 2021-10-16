@@ -90,7 +90,7 @@ export class CardCreateComponent implements OnInit, OnChanges {
             switch (progression) {
                 case 'tiers':
                     for(let i = 0; i < this.cardAmount.value; i++) {
-                        this.form.get('cards.' + i + '.tier')?.setValue(i + 1)
+                        this.form.get('cards.' + i + '.tier')?.setValue(i)
                     }
                     break;
                 case 'flat':
@@ -111,7 +111,7 @@ export class CardCreateComponent implements OnInit, OnChanges {
         const cardGroup = this.formBuilder.group({
             description: ['', [Validators.required]],
             tier: ['0', [Validators.required]],
-            usesToUpgrade: ['0', [Validators.required]],
+            usesToProgress: ['0', [Validators.required]],
             value: ['0', [Validators.required]],
         })
         this.setValidatorsToCardGroup(cardGroup, this.validatorAmount.value)

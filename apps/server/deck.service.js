@@ -13,6 +13,11 @@ export default class DeckService {
             res.status(200).send({});
         });
 
+        app.post(`${CONST.API_PREFIX}delete-cards`, (req, res) => {
+            fireStoreService.deleteCards(req.body)
+            res.status(200).send({});
+        });
+
         app.post(`${CONST.API_PREFIX}shuffle-deck`, (req, res) => {
             fireStoreService.shuffleDeck()
             res.status(200).send({});

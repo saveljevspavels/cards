@@ -2,14 +2,14 @@ export default interface CardFactory {
     id: string;
     image: string;
     title: string;
-    usesToProgress: number;
     activityTypes: string[];
     progression: Progression;
     cards: {
         tier: number;
         value: number;
         description: number;
-        validation: CardValidation
+        validation: CardValidation;
+        usesToProgress: number;
     }[]
 }
 

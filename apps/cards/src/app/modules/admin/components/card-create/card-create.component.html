@@ -28,7 +28,7 @@
         <app-textarea [label]="'Description'" [fc]="cardGroup.get('description')"></app-textarea>
         <app-input [label]="'Tier'" [fc]="cardGroup.get('tier')"></app-input>
         <app-input [label]="'Value'" [fc]="cardGroup.get('value')"></app-input>
-        <app-input [label]="'Uses to Upgrade'" [fc]="cardGroup.get('usesToUpgrade')"></app-input>
+        <app-input [label]="'Uses to Progress'" [fc]="cardGroup.get('usesToProgress')"></app-input>
         <ng-container
             *ngFor="let validator of validatorAmountIterator"
             [ngTemplateOutlet]="validatorTemplate"

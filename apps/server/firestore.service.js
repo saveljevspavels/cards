@@ -105,6 +105,25 @@ export class FirestoreService {
         console.log('Adding', cards.length, 'cards to deck (now', currentDeck.length + cards.length, ')')
     }
 
+    async deleteCards(cards) {
+        const handsToCheck = ['deck', 'discard', 'queue']
+        for(let i = 0; i < handsToCheck.length; i++) {
+            const handDocument = this.handCollection.doc(CONST.HANDS[handsToCheck[i].toUpperCase()]);
+            const currentHand = (await handDocument.get()).data()?.cardIds || []
+            cards.forEach(card => {
+                if(currentHand.indexOf(card) !== -1) {
+                    currentHand.splice(currentHand.indexOf(card), 1);
+                    console.log('Card', card, 'deleted from', handsToCheck[i])
+                }
+            })
+            await handDocument.set({cardIds: currentHand})
+        }
+        for(let i = 0; i < cards.length; i++) {
+            await this.cardCollection.doc(cards[i]).delete()
+        }
+        console.log('Cards', cards, 'deleted')
+    }
+
     async shuffleDeck() {
         const deck = this.handCollection.doc(CONST.HANDS.DECK);
         const currentDeck = (await deck.get()).data()?.cardIds
@@ -301,20 +320,29 @@ export class FirestoreService {
                 this.createCardFromFactory(factory, tier)
             }
         }))
-
-        console.log('Created', cardFactories.length * amount, 'cards, tier', tier)
     }
 
     async createCardFromFactory(factory, tier) {
         const id = generateId();
+        const card = factory.progression === 'flat'
+            ? factory.cards[Math.floor(Math.random() * Object.keys(factory.cards).length)] // Random card for flat progression
+            : factory.cards[tier]
+        if(!card) {
+            console.error('Card', factory.title, 'tier', tier, 'not defined')
+            return;
+        }
         await this.cardCollection.doc(id).set({
             id,
             title: factory.title,
             image: factory.image,
             factoryId: factory.id,
+            activityTypes: factory.activityTypes,
+            progression: factory.progression,
             tier,
-            ...factory.tiers[tier]
+            ...card
         })
+
+        console.log('Created', factory.title, 'card, tier', tier)
     }
 
     async combineCards(athleteId, cardIds) {

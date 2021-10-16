@@ -55,6 +55,10 @@ export class AdminService {
         return this.http.post(`${environment.baseBE}/add-to-deck`, cardIds).subscribe()
     }
 
+    public deleteCards(cardIds: string[]) {
+        return this.http.post(`${environment.baseBE}/delete-cards`, cardIds).subscribe()
+    }
+
     public shuffleDeck(cardIds: string[]) {
         return this.http.post(`${environment.baseBE}/shuffle-deck`, {}).subscribe()
     }

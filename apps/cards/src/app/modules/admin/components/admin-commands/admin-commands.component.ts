@@ -45,6 +45,10 @@ export class AdminCommandsComponent implements OnInit {
         this.adminService.dealCards(this.selectedAthletes.value, this.cardAmount.value)
     }
 
+    deleteCards() {
+        this.adminService.deleteCards(this.selectedCards.value)
+    }
+
     startGame() {
         this.dealQueue()
     }

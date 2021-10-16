@@ -13,7 +13,7 @@ export class CardInstanceCreateComponent implements OnInit {
     public cardFactoryIds = []
 
     public form = this.formBuilder.group({
-        tier: [1, [Validators.required, Validators.min(1), Validators.max(5)]],
+        tier: [0, [Validators.required]],
         amount: [1, [Validators.required, Validators.min(1)]]
     })
 
