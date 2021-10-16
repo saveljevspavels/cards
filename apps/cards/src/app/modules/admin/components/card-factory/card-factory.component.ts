@@ -1,4 +1,5 @@
 import {Component, Input, OnInit, Output, EventEmitter} from '@angular/core';
+import CardFactory from "../../../../interfaces/card-factory";
 
 @Component({
   selector: 'app-card-factory',
@@ -8,7 +9,7 @@ import {Component, Input, OnInit, Output, EventEmitter} from '@angular/core';
 export class CardFactoryComponent implements OnInit {
 
     @Input()
-    public cardFactory: any;
+    public cardFactory: CardFactory;
 
     @Output()
     public select = new EventEmitter();

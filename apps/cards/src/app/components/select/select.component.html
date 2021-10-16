@@ -1,0 +1,8 @@
+<div>
+    <label>{{label}}</label>
+    <br>
+    <select [formControl]="fc">
+        <option [ngValue]="null" disabled>Please Select</option>
+        <option *ngFor="let option of options" [ngValue]="option.value">{{option.label}}</option>
+    </select>
+</div>

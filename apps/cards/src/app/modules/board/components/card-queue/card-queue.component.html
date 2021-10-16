@@ -1,5 +1,5 @@
 <div class="card-queue">
-    <div *ngIf="(cardQueue | async).cardIds.length; else noCards">
+    <div *ngIf="(cardQueue | async)?.cardIds.length; else noCards">
         <div class="hand__cards">
             <app-selection-wrapper
                 [singleSelection]="true"

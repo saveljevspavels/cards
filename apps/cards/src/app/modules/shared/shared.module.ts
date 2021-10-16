@@ -17,9 +17,13 @@ import {ImageUploadComponent} from "./components/image-upload/image-upload.compo
 import {FileService} from "../../services/file.service";
 import {InputTextareaModule} from "primeng/inputtextarea";
 import {DivisionInfoComponent} from "./components/division-info/division-info.component";
+import {SelectComponent} from "../../components/select/select.component";
+import {TextareaComponent} from "../../components/textarea/textarea.component";
 
 const COMPS = [
     InputComponent,
+    SelectComponent,
+
     AthleteComponent,
     MenuComponent,
     HeaderComponent,
@@ -39,7 +43,10 @@ const MODULES = [
 ]
 
 @NgModule({
-    declarations: COMPS,
+    declarations: [
+        COMPS,
+        TextareaComponent
+    ],
     imports: [
         CommonModule,
         FormsModule,
@@ -50,7 +57,8 @@ const MODULES = [
     ],
     exports: [
         ...COMPS,
-        ...MODULES
+        ...MODULES,
+        TextareaComponent
     ],
     providers: [
         FileService

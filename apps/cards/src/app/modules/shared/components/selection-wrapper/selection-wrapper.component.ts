@@ -56,8 +56,10 @@ export class SelectionWrapperComponent implements OnInit, OnChanges, ControlValu
                 this.toggleAll(false)
                 this.innerForm.get(last)?.patchValue(true)
             }
+            this._onChange(last)
+        } else {
+            this._onChange(res)
         }
-        this._onChange(this.value)
       })
 
       this.selectAll.valueChanges.subscribe((value: any) => {

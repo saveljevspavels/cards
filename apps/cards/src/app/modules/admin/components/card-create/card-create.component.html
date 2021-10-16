@@ -1,17 +1,18 @@
 <h4>Create new card factory</h4>
+<app-input [label]="'Card Amount'" [fc]="cardAmount"></app-input>
+<app-input [label]="'Validator Amount'" [fc]="validatorAmount"></app-input>
 <div [formGroup]="form" *ngIf="form">
     <app-input [label]="'Id (leave blank for creating new card factory)'" [fc]="form.get('id')"></app-input>
     <app-input [label]="'Title'" [fc]="form.get('title')"></app-input>
+    <app-input [label]="'Activity Types'" [fc]="form.get('activityTypes')"></app-input>
+    <app-select [label]="'Progression'" [fc]="form.get('progression')" [options]="progressionOptions"></app-select>
 
     <div style="display: flex; margin: 15px;">
-        <div *ngFor="let tier of iterator">
-            <h3>Tier #{{tier}}</h3>
-            <label for="description-{{tier}}">Description</label>
-            <br>
-            <textarea rows="7" id="description-{{tier}}" [formControl]="form.get('tiers.' + tier + '.description')"></textarea>
-            <app-input [label]="'Value'" [fc]="form.get('tiers.' + tier + '.value')"></app-input>
-            <app-input [label]="'Modifier'" [fc]="form.get('tiers.' + tier + '.modifier')"></app-input>
-        </div>
+        <ng-container
+            *ngFor="let card of cardAmountIterator"
+            [ngTemplateOutlet]="cardTemplate"
+            [ngTemplateOutletContext]="{index: card, cardGroup: form.get('cards.' + card)}">
+        </ng-container>
     </div>
 
     <app-image-upload [multiple]="false"
@@ -20,3 +21,28 @@
 
     <p-button (click)="submit()" label="Save"></p-button>
 </div>
+
+<ng-template #cardTemplate let-cardGroup="cardGroup" let-index="index">
+    <div>
+        <h3>Card #{{index}}</h3>
+        <app-textarea [label]="'Description'" [fc]="cardGroup.get('description')"></app-textarea>
+        <app-input [label]="'Tier'" [fc]="cardGroup.get('tier')"></app-input>
+        <app-input [label]="'Value'" [fc]="cardGroup.get('value')"></app-input>
+        <app-input [label]="'Uses to Upgrade'" [fc]="cardGroup.get('usesToUpgrade')"></app-input>
+        <ng-container
+            *ngFor="let validator of validatorAmountIterator"
+            [ngTemplateOutlet]="validatorTemplate"
+            [ngTemplateOutletContext]="{index: validator, validatorGroup: cardGroup.get('validators.' + validator)}">
+        </ng-container>
+        <p-button (click)="copyCards(cardGroup.value)"> Copy card</p-button>
+    </div>
+</ng-template>
+
+<ng-template #validatorTemplate let-validatorGroup="validatorGroup" let-index="index">
+    <div>
+        <h5>Validator #{{index}}</h5>
+        <app-select [label]="'Property'" [fc]="validatorGroup.get('property')" [options]="propertyOptions"></app-select>
+        <app-select [label]="'Comparator'" [fc]="validatorGroup.get('comparator')" [options]="comparatorOptions"></app-select>
+        <app-input [label]="'Value'" [fc]="validatorGroup.get('value')"></app-input>
+    </div>
+</ng-template>

@@ -1,6 +1,5 @@
 import {Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
-import {FormArray, FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
-import {AngularFirestore} from "@angular/fire/firestore";
+import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {AdminService} from "../../admin.service";
 import {FileService} from "../../../../services/file.service";
 
@@ -14,15 +13,41 @@ export class CardCreateComponent implements OnInit, OnChanges {
     @Input()
     public selectedCardFactory: any;
 
-    public tierAmount = new FormControl(5)
-    public form = this.initForm()
+    public cardAmount = new FormControl(5, [Validators.min(1)])
+    public validatorAmount = new FormControl(0, [Validators.min(0)])
+    public form: FormGroup;
     public imageControl = new FormControl([]);
+
+    public progressionOptions = [
+        { value: 'tiers', label: 'Tiers' },
+        { value: 'flat', label: 'Flat' },
+        { value: 'none', label: 'None' },
+    ]
+
+    public comparatorOptions = [
+        { value: 'greater', label: 'Greater' },
+        { value: 'less', label: 'Less' },
+        { value: 'equals', label: 'Equals' },
+        { value: 'baseMultiplier', label: 'Base Value Multiplier' },
+    ]
+
+    public propertyOptions = [
+        { value: 'distance', label: 'Distance' },
+        { value: 'speed', label: 'Speed' },
+    ]
 
     constructor(private formBuilder: FormBuilder,
                 private adminService: AdminService,
                 private fileService: FileService) { }
 
     ngOnInit(): void {
+        this.form = this.initForm()
+        this.cardAmount.valueChanges.subscribe((amount) => {
+            this.updateFormCardAmount(this.form, amount)
+        })
+        this.validatorAmount.valueChanges.subscribe((amount) => {
+            this.updateValidatorAmount(this.form, amount)
+        })
     }
 
     ngOnChanges(changes: SimpleChanges) {
@@ -31,8 +56,12 @@ export class CardCreateComponent implements OnInit, OnChanges {
         }
     }
 
-    get iterator() {
-        return [...Array(this.tierAmount.value).keys()].map(val => val+1)
+    get cardAmountIterator() {
+        return [...Array(parseInt(this.cardAmount.value, 10)).keys()]
+    }
+
+    get validatorAmountIterator() {
+        return [...Array(parseInt(this.validatorAmount.value, 10)).keys()]
     }
 
     async submit() {
@@ -49,30 +78,81 @@ export class CardCreateComponent implements OnInit, OnChanges {
         const form = this.formBuilder.group({
             id: [''],
             title: ['', [Validators.required]],
-            tiers: this.formBuilder.group({}),
             image: ['', [Validators.required]],
+            activityTypes: ['', [Validators.required]],
+            progression: ['']
         })
-        for(let i = 1; i <= this.tierAmount.value; i++) {
-            (<FormGroup>form.get('tiers')).addControl(
-                i.toString(),
-                this.getTierGroup()
-            )
-        }
-        // @ts-ignore
-        form.get('tiers.1.description').valueChanges.subscribe(desc => {
-            for(let i = 2; i <= this.tierAmount.value; i++) {
-                // @ts-ignore
-                this.form.get('tiers.' + i + '.description').setValue(desc)
+        this.updateFormCardAmount(form, this.cardAmount.value)
+        form.get('progression')?.valueChanges.subscribe(progression => {
+            switch (progression) {
+                case 'tiers':
+                    for(let i = 0; i < this.cardAmount.value; i++) {
+                        this.form.get('cards.' + i + '.tier')?.setValue(i + 1)
+                    }
+                    break;
+                case 'flat':
+                    for(let i = 0; i < this.cardAmount.value; i++) {
+                        this.form.get('cards.' + i + '.tier')?.setValue(0)
+                    }
+                    break;
+                case 'none':
+                    this.form.get('cards.0.tier')?.setValue(0)
+                    this.cardAmount.setValue(1);
+                    break;
             }
         })
         return form
     }
 
-    getTierGroup(): FormGroup {
-        return this.formBuilder.group({
+    getCardGroup(): FormGroup {
+        const cardGroup = this.formBuilder.group({
             description: ['', [Validators.required]],
-            modifier: ['0', [Validators.required]],
+            tier: ['0', [Validators.required]],
+            usesToUpgrade: ['0', [Validators.required]],
             value: ['0', [Validators.required]],
         })
+        this.setValidatorsToCardGroup(cardGroup, this.validatorAmount.value)
+        return cardGroup;
+    }
+
+    getValidatorGroup(): FormGroup {
+        return this.formBuilder.group({
+            property: ['', [Validators.required]],
+            comparator: [''],
+            value: ['0', [Validators.required]],
+        })
+    }
+
+    updateFormCardAmount(form: FormGroup, amount: number) {
+        form.setControl('cards', this.formBuilder.group({}))
+        for(let i = 0; i < amount; i++) {
+            (<FormGroup>form.get('cards')).addControl(
+                i.toString(),
+                this.getCardGroup()
+            )
+        }
+    }
+
+    updateValidatorAmount(form: FormGroup, amount: number) {
+        for(let card = 0; card < this.cardAmount.value; card++) {
+            const cardGroup = (<FormGroup>form.get('cards.' + card));
+            this.setValidatorsToCardGroup(cardGroup, amount)
+        }
+    }
+
+    setValidatorsToCardGroup(cardGroup: FormGroup, amount: number) {
+        cardGroup.setControl('validators', this.formBuilder.group({}));
+        for(let validator = 0; validator < amount; validator++) {
+            (<FormGroup>cardGroup.get('validators')).addControl(
+                validator.toString(),
+                this.getValidatorGroup()
+            )
+        }
+    }
+
+    copyCards(cardValue: any) {
+        for(let i = 0; i < this.cardAmount.value; i++) {
+            this.form.get('cards.' + i)?.setValue(cardValue)
+        }
     }
 }
