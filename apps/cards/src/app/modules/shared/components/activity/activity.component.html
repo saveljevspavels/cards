@@ -33,7 +33,7 @@
             </ng-template>
         </app-selection-wrapper>
     </div>
-    <div *ngIf="showImages && imageObservables" class="activity__images">
-        <img class="activity__image" *ngFor="let image of imageObservables" src="{{image | async}}">
+    <div *ngIf="showImages && this.activity.gameData?.images?.length" class="activity__images">
+        <img class="activity__image" *ngFor="let image of this.activity.gameData?.images" src="{{image}}">
     </div>
 </div>

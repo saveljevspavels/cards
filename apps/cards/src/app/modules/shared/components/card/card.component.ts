@@ -32,7 +32,7 @@ export class CardComponent implements OnInit {
             })
         }
 
-        this.imageObservable = this.card?.image && (await this.fileService.getImageUrls([this.card.image]))[0]
+        // this.imageObservable = this.card?.image && (await this.fileService.getImageUrls([this.card.image]))[0]
     }
 
 }

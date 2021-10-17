@@ -35,10 +35,6 @@ export class ActivityComponent implements OnInit, ControlValueAccessor {
         this.selectedCards.valueChanges.subscribe((value) => {
             this._onChange(value)
         })
-
-        if(this.showImages && this.activity.gameData?.images?.length) {
-            this.imageObservables = await this.fileService.getImageUrls(this.activity.gameData.images)
-        }
     }
 
     _onChange: any = () => {};

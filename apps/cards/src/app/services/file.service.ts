@@ -13,19 +13,10 @@ export class FileService {
             for(let i = 0; i < files.length; i++) {
                 const id = UtilService.generateId()
                 await this.storage.upload(`images/${id}`, files[i]);
-                uploadedFileIds.push(id)
+                const url = await this.storage.ref(`images/${id}`).getDownloadURL().toPromise()
+                uploadedFileIds.push(url)
             }
         }
         return uploadedFileIds;
-    }
-
-    async getImageUrls(fileIds: string[]) {
-        const fileUrls = []
-        if(fileIds.length) {
-            for(let i = 0; i < fileIds.length; i++) {
-                fileUrls.push(await this.storage.ref(`images/${fileIds[i]}`).getDownloadURL())
-            }
-        }
-        return fileUrls;
     }
 }

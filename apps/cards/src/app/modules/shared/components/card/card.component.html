@@ -1,6 +1,6 @@
-<div class="card {{small && 'card--small'}} card--tier-{{card.tier}}" *ngIf="card">
+<div class="card {{small && 'card--small'}} card--tier-{{card.progression === 'tier' ? card.tier : (card.value | tier)}}" *ngIf="card">
   <div class="card__content">
-    <img class="card__image" src="{{imageObservable | async}}">
+    <img class="card__image" src="{{card.image}}">
     <div class="card__title">
       {{card.title}}
     </div>
