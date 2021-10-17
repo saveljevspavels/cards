@@ -1,4 +1,5 @@
 import CONST from "../../definitions/constants.json";
+import {RESPONSES} from "./response-codes.js";
 
 export default class DeckService {
     constructor(app, fireStoreService) {
@@ -26,7 +27,7 @@ export default class DeckService {
         app.post(`${CONST.API_PREFIX}deal-cards`, async (req, res) => {
             const result = await fireStoreService.dealCards(req.body.athletes, req.body.amount)
             if(result) {
-                res.status(200).send({response: CONST.DEFAULT_RESPONSE});
+                res.status(200).send({response: RESPONSES.SUCCESS});
             } else {
                 res.status(400).send({response: 'Not enough cards in deck'});
             }
@@ -35,7 +36,7 @@ export default class DeckService {
         app.post(`${CONST.API_PREFIX}deal-queue`, async (req, res) => {
             const result = await fireStoreService.dealQueue()
             if(result) {
-                res.status(200).send({response: CONST.DEFAULT_RESPONSE});
+                res.status(200).send({response: RESPONSES.SUCCESS});
             } else {
                 res.status(400).send({response: 'Not enough cards in deck'});
             }
@@ -48,7 +49,7 @@ export default class DeckService {
 
         app.post(`${CONST.API_PREFIX}draw-card`, async (req, res) => {
             const response = await fireStoreService.drawCard(req.body.athleteId)
-            res.status(response === CONST.DEFAULT_RESPONSE ? 200 : 400).send({response});
+            res.status(response === RESPONSES.SUCCESS ? 200 : 400).send({response});
         });
     }
 }

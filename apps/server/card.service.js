@@ -1,4 +1,5 @@
 import CONST from "../../definitions/constants.json";
+import {RESPONSES} from "./response-codes.js";
 
 export default class CardService {
     constructor(app, fireStoreService) {
@@ -15,7 +16,7 @@ export default class CardService {
 
         app.post(`${CONST.API_PREFIX}combine-cards`, async (req, res) => {
             const response = await fireStoreService.combineCards(req.body.athleteId, req.body.cardIds)
-            res.status(response === CONST.DEFAULT_RESPONSE ? 200 : 400).send({response});
+            res.status(response === RESPONSES.SUCCESS ? 200 : 400).send({response});
         });
     }
 }

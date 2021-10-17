@@ -1,6 +1,6 @@
 import {Component, forwardRef, Input, OnChanges, OnInit, SimpleChanges, TemplateRef} from '@angular/core';
 import {ControlValueAccessor, FormBuilder, FormGroup, NG_VALUE_ACCESSOR} from "@angular/forms";
-import {pairwise} from "rxjs/operators";
+import {pairwise, startWith} from "rxjs/operators";
 
 @Component({
   selector: 'app-selection-wrapper',
@@ -48,7 +48,10 @@ export class SelectionWrapperComponent implements OnInit, OnChanges, ControlValu
       this.dataItems.forEach((item: any) => {
         this.innerForm.addControl(typeof item === 'string' ? item : item[this.idKey], this.formBuilder.control(false))
       })
-      this.innerForm.valueChanges.pipe(pairwise()).subscribe(([oldVal, newVal]) => {
+      this.innerForm.valueChanges.pipe(
+          startWith([]),
+          pairwise()
+      ).subscribe(([oldVal, newVal]) => {
         const res = Object.keys(newVal).filter(key => newVal[key])
         if(this.singleSelection && res.length > 1) {
             const last = this.lastSelected(oldVal, newVal)
@@ -56,7 +59,7 @@ export class SelectionWrapperComponent implements OnInit, OnChanges, ControlValu
                 this.toggleAll(false)
                 this.innerForm.get(last)?.patchValue(true)
             }
-            this._onChange(last)
+            this._onChange([last])
         } else {
             this._onChange(res)
         }

@@ -14,7 +14,7 @@ export default interface Card {
 }
 
 export interface CardUses {
-    self: number;
-    total: number;
+    progression: number;
+    queue: number;
     usesToProgress: number;
 }

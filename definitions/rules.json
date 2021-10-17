@@ -27,6 +27,7 @@
     },
     "QUEUE": {
         "LENGTH": 7,
-        "SLIDE_COUNTER": 5
-    }
+        "CARDS_TO_SHIFT": 5
+    },
+    "CARD_VALUE_STEP": 5
 }

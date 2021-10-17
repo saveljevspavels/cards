@@ -2,7 +2,6 @@ import {Component, Input, OnInit} from '@angular/core';
 import Card from "../../../../interfaces/card";
 import {filter} from "rxjs/operators";
 import {DeckService} from "../../../../services/deck.service";
-import {FileService} from "../../../../services/file.service";
 
 @Component({
   selector: 'app-card',
@@ -22,8 +21,7 @@ export class CardComponent implements OnInit {
 
     imageObservable: any;
 
-    constructor(private deckService: DeckService,
-                private fileService: FileService) { }
+    constructor(private deckService: DeckService) { }
 
     async ngOnInit() {
         if(this.cardId) {
@@ -31,8 +29,6 @@ export class CardComponent implements OnInit {
                 this.card = this.deckService.getCard(this.cardId)
             })
         }
-
-        // this.imageObservable = this.card?.image && (await this.fileService.getImageUrls([this.card.image]))[0]
     }
 
 }

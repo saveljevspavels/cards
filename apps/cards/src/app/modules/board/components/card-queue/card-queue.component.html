@@ -1,7 +1,7 @@
 <div class="card-queue">
     <div *ngIf="(cardQueue | async)?.cardIds.length; else noCards">
         <div class="hand__shift-counter">
-            <h4>Cards played: {{cardUses | async}}/{{RULES.QUEUE.SLIDE_COUNTER}}</h4>
+            <h4>Cards played: {{cardUses | async}}/{{RULES.QUEUE.CARDS_TO_SHIFT}}</h4>
             <p>When cards are played, row shifts, last card is discarded and new card is being drawn</p>
         </div>
         <div class="hand__cards">

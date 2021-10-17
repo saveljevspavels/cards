@@ -38,7 +38,7 @@ export const getRandomInt = (max) => {
     return Math.floor(Math.random() * max);
 }
 
-export const updateScore = (score, values, cardAmount) => {
+export const updateScoreValues = (score, values, cardAmount) => {
   const finalValue = values;
   return {
     value: score.value ? parseInt(score.value + finalValue) : finalValue,

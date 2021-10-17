@@ -23,6 +23,5 @@
         "QUEUE": "queue",
         "DISCARD": "discard"
     },
-    "DEFAULT_RESPONSE": "OK",
     "GAME_ID": "game1"
 }

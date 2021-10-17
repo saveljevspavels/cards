@@ -5,7 +5,6 @@ import {LocalStorageService} from "./local-storage.service";
 import {HttpClient} from "@angular/common/http";
 import {CONST} from "../app.module";
 import {environment} from "../../environments/environment";
-import {map} from "rxjs/operators";
 import Hand from "../interfaces/hand";
 
 @Injectable({
