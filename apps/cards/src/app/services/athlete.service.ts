@@ -1,12 +1,10 @@
 import { Injectable } from '@angular/core';
-import {BehaviorSubject, Observable} from "rxjs";
+import {BehaviorSubject} from "rxjs";
 import {AngularFirestore} from "@angular/fire/firestore";
 import {LocalStorageService} from "./local-storage.service";
-import {COMMANDS} from "../constants/commands";
 import {ActivityService} from "./activity.service";
-import {GAME_START} from "../constants/game";
 import {CONST} from "../app.module";
-import {filter, map} from "rxjs/operators";
+import {filter} from "rxjs/operators";
 import {HttpClient} from "@angular/common/http";
 import {environment} from "../../environments/environment";
 import Athlete from "../interfaces/athlete";
@@ -20,8 +18,6 @@ export class AthleteService {
     public me = new BehaviorSubject<Athlete | null>(null);
     public permissions = new BehaviorSubject<string[]>([]);
     private athleteCollection = this.db.collection(CONST.COLLECTIONS.ATHLETES);
-    private commandCollection = this.db.collection(CONST.COLLECTIONS.COMMANDS,
-    (ref) => ref.where('athleteId', '==', LocalStorageService.athlete.id.toString()));
 
     constructor(private db: AngularFirestore,
                 private activityService: ActivityService,
@@ -30,19 +26,6 @@ export class AthleteService {
             this.athletes.next(athletes)
             this.me.next(athletes.find((athlete: Athlete) => athlete.id === LocalStorageService.athlete.id) || null)
             this.permissions.next(this.me.value?.permissions || [])
-        });
-
-        this.commandCollection.valueChanges().subscribe((commands: any[]) => {
-            commands.forEach(command => {
-                switch(command.type) {
-                    case COMMANDS.REQUEST_ACTIVITIES:
-                        this.activityService.requestActivities({
-                            from: GAME_START,
-                            commandId: command.id
-                        }).subscribe()
-                    break;
-                }
-            })
         });
     }
 
