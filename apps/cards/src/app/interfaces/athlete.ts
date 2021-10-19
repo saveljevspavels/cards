@@ -1,11 +1,11 @@
 export default interface Athlete {
     name: string;
     id: string;
-    divisions: Division;
+    baseWorkout: BaseWorkout;
     permissions: string[];
 }
 
-export interface Division {
-    RUN: number;
-    RIDE: number;
+export interface BaseWorkout {
+    distance: number;
+    pace: number;
 }

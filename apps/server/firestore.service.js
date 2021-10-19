@@ -28,10 +28,7 @@ export class FirestoreService {
             await athleteDoc.set(
                 {
                     ...athlete,
-                    division: {
-                        RUN: 1,
-                        BIKE: 1
-                    },
+                    baseWorkout: null,
                     permissions: ['default']
                 })
             console.log('Athlete', athlete.id, 'saved')
@@ -469,10 +466,10 @@ export class FirestoreService {
         }
     }
 
-    async setDivisions(athleteIds, division) {
+    async setBaseWorkout(athleteIds, baseWorkout) {
         for(let id of athleteIds) {
             await this.athleteCollection.doc(id.toString()).update({
-                division
+                baseWorkout
             })
         }
     }

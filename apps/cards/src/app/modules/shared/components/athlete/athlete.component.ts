@@ -1,6 +1,7 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {AthleteService} from "../../../../services/athlete.service";
 import {filter} from "rxjs/operators";
+import Athlete from "../../../../interfaces/athlete";
 
 @Component({
   selector: 'app-athlete',
@@ -10,7 +11,7 @@ import {filter} from "rxjs/operators";
 export class AthleteComponent implements OnInit {
 
   @Input()
-  athlete: any = null;
+  athlete: Athlete | null = null;
 
   @Input()
   athleteId: any = null;

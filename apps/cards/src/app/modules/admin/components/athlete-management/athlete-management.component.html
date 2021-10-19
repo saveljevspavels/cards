@@ -13,17 +13,18 @@
                     [athlete]="dataItem"
                     [small]="true"
                 ></app-athlete>
-                <app-division-info [division]="dataItem.division"></app-division-info>
+                <app-base-workout-info [baseWorkout]="dataItem.baseWorkout"></app-base-workout-info>
                 Current Permissions: {{dataItem.permissions | json}}
             </div>
         </ng-template>
     </app-selection-wrapper>
 
-    <div *ngFor="let input of form.controls | keyvalue">
-        <app-input [fc]="input.value" [label]="input.key"></app-input>
+    <div>
+        <app-input [fc]="form.get('distance')" [label]="'Distance ' + (form.value.distance | distance)"></app-input>
+        <app-input [fc]="form.get('pace')" [label]="'Pace ' + (form.value.pace | pace)"></app-input>
     </div>
 
-    <p-button [disabled]="!selectedAthletes.value.length || form.invalid" (click)="setDivisions()" [label]="'Set Divisions'"></p-button>
+    <p-button [disabled]="!selectedAthletes.value.length || form.invalid" (click)="setBaseWorkout()" [label]="'Set Base Workout'"></p-button>
 
     <app-selection-wrapper
         [formControl]="selectedPermissions"

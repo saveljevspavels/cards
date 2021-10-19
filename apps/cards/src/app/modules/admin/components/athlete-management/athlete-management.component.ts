@@ -17,8 +17,8 @@ export class AthleteManagementComponent implements OnInit {
     public allAthletes: BehaviorSubject<any> = this.athleteService.athletes;
 
     public form = this.formBuilder.group({
-        RUN: [1, [Validators.min(1), Validators.max(3)]],
-        BIKE: [1, [Validators.min(1), Validators.max(3)]]
+        distance: [1, [Validators.min(1)]],
+        pace: [1, [Validators.min(1)]]
     })
 
     constructor(
@@ -29,8 +29,8 @@ export class AthleteManagementComponent implements OnInit {
     ngOnInit(): void {
     }
 
-    setDivisions() {
-        this.athleteService.setDivisions(this.selectedAthletes.value, this.form.value).subscribe()
+    setBaseWorkout() {
+        this.athleteService.setBaseWorkout(this.selectedAthletes.value, this.form.value).subscribe()
     }
 
     setPermissions() {

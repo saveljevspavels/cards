@@ -42,14 +42,14 @@ export class AthleteService {
         return this.permissions.value.indexOf(permission) !== -1;
     }
 
-    getAthlete(athleteId: string) {
-        return this.athletes.value.find((athlete: any) => athlete.id.toString() === athleteId) || {}
+    getAthlete(athleteId: string): Athlete | null {
+        return this.athletes.value.find((athlete: Athlete) => athlete.id.toString() === athleteId) || null
     }
 
-    setDivisions(athleteIds: string[], divisions: any) {
-        return this.http.post(`${environment.baseBE}/set-divisions`, {
+    setBaseWorkout(athleteIds: string[], baseWorkout: any) {
+        return this.http.post(`${environment.baseBE}/set-base-workout`, {
             athleteIds,
-            divisions
+            baseWorkout
         })
     }
 

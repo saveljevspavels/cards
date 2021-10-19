@@ -16,7 +16,7 @@ import {HttpClientModule} from "@angular/common/http";
 import {ImageUploadComponent} from "./components/image-upload/image-upload.component";
 import {FileService} from "../../services/file.service";
 import {InputTextareaModule} from "primeng/inputtextarea";
-import {DivisionInfoComponent} from "./components/division-info/division-info.component";
+import {BaseWorkoutInfoComponent} from "./components/base-workout-info/base-workout-info.component";
 import {SelectComponent} from "../../components/select/select.component";
 import {TextareaComponent} from "../../components/textarea/textarea.component";
 
@@ -31,7 +31,7 @@ const COMPS = [
     CardComponent,
     SelectionWrapperComponent,
     ImageUploadComponent,
-    DivisionInfoComponent
+    BaseWorkoutInfoComponent
 ]
 
 const MODULES = [

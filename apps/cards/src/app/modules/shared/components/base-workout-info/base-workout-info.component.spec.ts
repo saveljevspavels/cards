@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { DivisionInfoComponent } from './division-info.component';
+import { BaseWorkoutInfoComponent } from './base-workout-info.component';
 
-describe('DivisionInfoComponent', () => {
-  let component: DivisionInfoComponent;
-  let fixture: ComponentFixture<DivisionInfoComponent>;
+describe('BaseWorkoutInfoComponent', () => {
+  let component: BaseWorkoutInfoComponent;
+  let fixture: ComponentFixture<BaseWorkoutInfoComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ DivisionInfoComponent ]
+      declarations: [ BaseWorkoutInfoComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(DivisionInfoComponent);
+    fixture = TestBed.createComponent(BaseWorkoutInfoComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
