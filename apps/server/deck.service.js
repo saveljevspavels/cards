@@ -9,8 +9,8 @@ export default class DeckService {
             res.status(200).send({});
         });
 
-        app.post(`${CONST.API_PREFIX}add-to-deck`, (req, res) => {
-            fireStoreService.addToDeck(req.body)
+        app.post(`${CONST.API_PREFIX}add-to-deck`, async (req, res) => {
+            await fireStoreService.addToHand(CONST.HANDS.DECK, req.body)
             res.status(200).send({});
         });
 

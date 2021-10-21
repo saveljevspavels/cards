@@ -1,6 +1,8 @@
 import { Pipe, PipeTransform, Injectable } from '@angular/core';
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 @Pipe({name: 'distance'})
 export class DistancePipe implements PipeTransform {
 

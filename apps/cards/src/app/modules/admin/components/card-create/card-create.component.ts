@@ -28,12 +28,13 @@ export class CardCreateComponent implements OnInit, OnChanges {
         { value: 'greater', label: 'Greater' },
         { value: 'less', label: 'Less' },
         { value: 'equals', label: 'Equals' },
-        { value: 'baseMultiplier', label: 'Base Value Multiplier' },
+        { value: 'baseGreater', label: 'Greater than multiplied Base Value' },
+        { value: 'baseLess', label: 'Less than multiplied Base Value' },
     ]
 
     public propertyOptions = [
         { value: 'distance', label: 'Distance' },
-        { value: 'speed', label: 'Speed' },
+        { value: 'average_speed', label: 'Speed' },
     ]
 
     constructor(private formBuilder: FormBuilder,

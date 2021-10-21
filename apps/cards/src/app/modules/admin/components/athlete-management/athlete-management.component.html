@@ -21,7 +21,7 @@
 
     <div>
         <app-input [fc]="form.get('distance')" [label]="'Distance ' + (form.value.distance | distance)"></app-input>
-        <app-input [fc]="form.get('pace')" [label]="'Pace ' + (form.value.pace | pace)"></app-input>
+        <app-input [fc]="form.get('average_speed')" [label]="'Pace ' + (form.value.average_speed | pace)"></app-input>
     </div>
 
     <p-button [disabled]="!selectedAthletes.value.length || form.invalid" (click)="setBaseWorkout()" [label]="'Set Base Workout'"></p-button>

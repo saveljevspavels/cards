@@ -3,7 +3,7 @@
     "HAND_SIZE": 3,
     "DEFAULT_BASE_WORKOUT":{
         "DISTANCE": 3000,
-        "PACE": 2.220
+        "AVERAGE_SPEED": 2.220
     },
     "QUEUE": {
         "LENGTH": 7,

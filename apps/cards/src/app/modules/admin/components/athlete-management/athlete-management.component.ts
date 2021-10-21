@@ -18,7 +18,7 @@ export class AthleteManagementComponent implements OnInit {
 
     public form = this.formBuilder.group({
         distance: [1, [Validators.min(1)]],
-        pace: [1, [Validators.min(1)]]
+        average_speed: [1, [Validators.min(1)]]
     })
 
     constructor(

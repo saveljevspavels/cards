@@ -1,7 +1,9 @@
 import { Pipe, PipeTransform, Injectable } from '@angular/core';
 import {TimePipe} from "./time.pipe";
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 @Pipe({name: 'pace'})
 export class PacePipe implements PipeTransform {
 

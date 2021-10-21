@@ -7,5 +7,5 @@ export default interface Athlete {
 
 export interface BaseWorkout {
     distance: number;
-    pace: number;
+    average_speed: number;
 }

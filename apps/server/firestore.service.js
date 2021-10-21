@@ -417,6 +417,7 @@ export class FirestoreService {
             progression: factory.progression,
             tier,
             ...card,
+            validators: Object.values(card.validators)
         }
         card.cardUses = {
             usesToProgress: parseInt(card.usesToProgress, 10),

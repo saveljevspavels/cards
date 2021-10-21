@@ -11,10 +11,17 @@ export default interface Card {
     factoryId: string;
     progression: Progression;
     activityTypes: string[];
+    validators: Validator[];
 }
 
 export interface CardUses {
     progression: number;
     queue: number;
     usesToProgress: number;
+}
+
+export interface Validator {
+    comparator: string;
+    property: string;
+    value: number;
 }

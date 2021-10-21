@@ -19,6 +19,8 @@ import {InputTextareaModule} from "primeng/inputtextarea";
 import {BaseWorkoutInfoComponent} from "./components/base-workout-info/base-workout-info.component";
 import {SelectComponent} from "../../components/select/select.component";
 import {TextareaComponent} from "../../components/textarea/textarea.component";
+import {BoardModule} from "../board/board.module";
+import {ValidatorComponent} from "./components/validator/validator.component";
 
 const COMPS = [
     InputComponent,
@@ -31,7 +33,8 @@ const COMPS = [
     CardComponent,
     SelectionWrapperComponent,
     ImageUploadComponent,
-    BaseWorkoutInfoComponent
+    BaseWorkoutInfoComponent,
+    ValidatorComponent
 ]
 
 const MODULES = [
@@ -53,7 +56,7 @@ const MODULES = [
         ReactiveFormsModule,
         RouterModule,
         ...MODULES,
-        CommonModule
+        CommonModule,
     ],
     exports: [
         ...COMPS,

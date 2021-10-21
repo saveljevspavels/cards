@@ -1,19 +1,22 @@
 <div class="card {{small && 'card--small'}} card--tier-{{card.progression === 'tier' ? card.tier : (card.value | tier)}}" *ngIf="card">
-  <div class="card__content">
-    <img class="card__image" src="{{card.image}}">
-    <div class="card__title">
-      {{card.title}}
+    <div class="card__content">
+        <img class="card__image" src="{{card.image}}">
+        <div class="card__title">
+            {{card.title}}
+        </div>
+        <div class="card__description">
+            {{card.description}}
+        </div>
+        <div class="card__validation">
+            <app-validator *ngFor="let validator of card.validators" [validator]="validator"></app-validator>
+        </div>
     </div>
-    <div class="card__description">
-      {{card.description}}
+    <div class="card__bonuses">
+        <div class="card__progression" *ngIf="card.cardUses.usesToProgress !== 0">
+            To {{card.progression === 'tiers' ? 'level up' : 'change'}}: {{card.cardUses.progression}}/{{card.cardUses.usesToProgress}}
+        </div>
+        <div class="card__value" *ngIf="card.value !== 0">
+            {{card.value | value}}
+        </div>
     </div>
-  </div>
-  <div class="card__bonuses">
-    <div class="card__progression" *ngIf="card.cardUses.usesToProgress !== 0">
-        To {{card.progression === 'tiers' ? 'level up' : 'change'}}: {{card.cardUses.progression}}/{{card.cardUses.usesToProgress}}
-    </div>
-    <div class="card__value" *ngIf="card.value !== 0">
-      {{card.value | value}}
-    </div>
-  </div>
 </div>
