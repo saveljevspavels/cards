@@ -2,6 +2,7 @@ import {Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core'
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {AdminService} from "../../admin.service";
 import {FileService} from "../../../../services/file.service";
+import {CONST} from "../../../../app.module";
 
 @Component({
   selector: 'app-card-create',
@@ -25,16 +26,21 @@ export class CardCreateComponent implements OnInit, OnChanges {
     ]
 
     public comparatorOptions = [
-        { value: 'greater', label: 'Greater' },
-        { value: 'less', label: 'Less' },
-        { value: 'equals', label: 'Equals' },
-        { value: 'baseGreater', label: 'Greater than multiplied Base Value' },
-        { value: 'baseLess', label: 'Less than multiplied Base Value' },
+        { value: CONST.COMPARATORS.GREATER, label: 'Greater' },
+        { value: CONST.COMPARATORS.LESS, label: 'Less' },
+        { value: CONST.COMPARATORS.EQUALS, label: 'Equals' },
+        { value: CONST.COMPARATORS.BASE_GREATER, label: 'Greater than multiplied Base Value' },
+        { value: CONST.COMPARATORS.BASE_LESS, label: 'Less than multiplied Base Value' },
     ]
 
     public propertyOptions = [
-        { value: 'distance', label: 'Distance' },
-        { value: 'average_speed', label: 'Speed' },
+        { value: CONST.ACTIVITY_PROPERTIES.DISTANCE, label: 'Distance' },
+        { value: CONST.ACTIVITY_PROPERTIES.AVERAGE_SPEED, label: 'Speed' },
+        { value: CONST.ACTIVITY_PROPERTIES.MOVING_TIME, label: 'Moving Time' },
+        { value: CONST.ACTIVITY_PROPERTIES.ELAPSED_TIME, label: 'Total Time' },
+        { value: CONST.ACTIVITY_PROPERTIES.START_DATE, label: 'Start Time' },
+        { value: CONST.ACTIVITY_PROPERTIES.ATHLETE_COUNT, label: 'Athlete Count' },
+        { value: CONST.ACTIVITY_PROPERTIES.ACHIEVEMENT_COUNT, label: 'Achievement Count' },
     ]
 
     constructor(private formBuilder: FormBuilder,

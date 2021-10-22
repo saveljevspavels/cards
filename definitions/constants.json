@@ -23,5 +23,21 @@
         "QUEUE": "queue",
         "DISCARD": "discard"
     },
+    "ACTIVITY_PROPERTIES": {
+        "DISTANCE": "distance",
+        "AVERAGE_SPEED": "average_speed",
+        "MOVING_TIME": "moving_time",
+        "ELAPSED_TIME": "elapsed_time",
+        "START_DATE": "start_date_local",
+        "ATHLETE_COUNT": "athlete_count",
+        "ACHIEVEMENT_COUNT": "achievement_count"
+    },
+    "COMPARATORS": {
+        "GREATER": "greater",
+        "LESS": "less",
+        "EQUALS": "equals",
+        "BASE_LESS": "baseLess",
+        "BASE_GREATER": "baseGreater"
+    },
     "GAME_ID": "game1"
 }

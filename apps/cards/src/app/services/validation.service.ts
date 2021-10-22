@@ -20,17 +20,23 @@ export class ValidationService {
     resolveValidationValue(validator: Validator): number {
         if(validator.comparator.indexOf('base') !== -1) {
             switch (validator.property) {
-                case 'distance':
+                case CONST.ACTIVITY_PROPERTIES.DISTANCE:
                     const res = validator.value * (this.baseWorkout?.distance || RULES.DEFAULT_BASE_WORKOUT.DISTANCE)
                     return res - (res % 500)
-                case 'average_speed': return validator.value * (this.baseWorkout?.average_speed || RULES.DEFAULT_BASE_WORKOUT.AVERAGE_SPEED)
-                default: return 0;
+                case CONST.ACTIVITY_PROPERTIES.AVERAGE_SPEED: return validator.value * (this.baseWorkout?.average_speed || RULES.DEFAULT_BASE_WORKOUT.AVERAGE_SPEED)
+                default: return validator.value;
             }
         } else {
-            return validator.value;
+            switch (validator.property) {
+                case CONST.ACTIVITY_PROPERTIES.START_DATE:
+                    return validator.value * 60 * 60
+                case CONST.ACTIVITY_PROPERTIES.ATHLETE_COUNT:
+                case CONST.ACTIVITY_PROPERTIES.ACHIEVEMENT_COUNT:
+                case CONST.ACTIVITY_PROPERTIES.MOVING_TIME:
+                case CONST.ACTIVITY_PROPERTIES.ELAPSED_TIME:
+                default: return validator.value;
+            }
         }
     }
-
-
 
 }

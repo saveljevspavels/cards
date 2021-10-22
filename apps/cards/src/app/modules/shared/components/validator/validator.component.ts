@@ -4,6 +4,7 @@ import {ValidationService} from "../../../../services/validation.service";
 import {PacePipe} from "../../../../pipes/pace.pipe";
 import {DistancePipe} from "../../../../pipes/distance.pipe";
 import {TimePipe} from "../../../../pipes/time.pipe";
+import {CONST} from "../../../../app.module";
 
 @Component({
     selector: 'app-validator',
@@ -16,8 +17,13 @@ export class ValidatorComponent implements OnInit {
     public readableValidator: string;
 
     public propertyNameMapping = new Map([
-        ['distance', 'distance'],
-        ['average_speed', 'pace']
+        [CONST.ACTIVITY_PROPERTIES.DISTANCE, 'distance'],
+        [CONST.ACTIVITY_PROPERTIES.AVERAGE_SPEED, 'pace'],
+        [CONST.ACTIVITY_PROPERTIES.MOVING_TIME, 'moving time'],
+        [CONST.ACTIVITY_PROPERTIES.ELAPSED_TIME, 'total time'],
+        [CONST.ACTIVITY_PROPERTIES.START_DATE, 'start time'],
+        [CONST.ACTIVITY_PROPERTIES.ATHLETE_COUNT, 'number of athletes'],
+        [CONST.ACTIVITY_PROPERTIES.ACHIEVEMENT_COUNT, 'number of achievements'],
     ])
 
     constructor(private validationService: ValidationService,
@@ -31,43 +37,64 @@ export class ValidatorComponent implements OnInit {
 
     comparatorToText(): string {
         switch(this.validator.property) {
-            case 'distance':
+            case CONST.ACTIVITY_PROPERTIES.ELAPSED_TIME:
+            case CONST.ACTIVITY_PROPERTIES.MOVING_TIME:
+            case CONST.ACTIVITY_PROPERTIES.DISTANCE:
+            case CONST.ACTIVITY_PROPERTIES.ATHLETE_COUNT:
+            case CONST.ACTIVITY_PROPERTIES.ACHIEVEMENT_COUNT:
                 switch(this.validator.comparator) {
-                    case 'baseGreater':
-                    case 'greater':
+                    case CONST.COMPARATORS.BASE_GREATER:
+                    case CONST.COMPARATORS.GREATER:
                         return 'at least';
-                    case 'baseLess':
-                    case 'less':
+                    case CONST.COMPARATORS.BASE_LESS:
+                    case CONST.COMPARATORS.LESS:
                         return 'not more than'
-                    case 'equals':
+                    case CONST.COMPARATORS.EQUALS:
                         return 'exactly'
                     default: return ''
                 }
-            case 'average_speed': {
+            case CONST.ACTIVITY_PROPERTIES.AVERAGE_SPEED: {
                 switch(this.validator.comparator) {
-                    case 'baseGreater':
-                    case 'greater':
+                    case CONST.COMPARATORS.BASE_GREATER:
+                    case CONST.COMPARATORS.GREATER:
                         return 'at least';
-                    case 'baseLess':
-                    case 'less':
+                    case CONST.COMPARATORS.BASE_LESS:
+                    case CONST.COMPARATORS.LESS:
                         return 'slower than'
-                    case 'equals':
+                    case CONST.COMPARATORS.EQUALS:
                         return 'exactly'
                     default: return ''
                 }
             }
+            case CONST.ACTIVITY_PROPERTIES.START_DATE:
+                switch(this.validator.comparator) {
+                    case CONST.COMPARATORS.BASE_GREATER:
+                    case CONST.COMPARATORS.GREATER:
+                        return 'after';
+                    case CONST.COMPARATORS.BASE_LESS:
+                    case CONST.COMPARATORS.LESS:
+                        return 'before'
+                    case CONST.COMPARATORS.EQUALS:
+                        return 'exactly at'
+                    default: return ''
+                }
             default: return '';
         }
-
     }
 
     transformValue(): string {
         switch (this.validator.property) {
-            case 'average_speed':
+            case CONST.ACTIVITY_PROPERTIES.AVERAGE_SPEED:
                 return this.pacePipe.transform(this.validationService.resolveValidationValue(this.validator))
-            case 'distance':
+            case CONST.ACTIVITY_PROPERTIES.DISTANCE:
                 return this.distancePipe.transform(this.validationService.resolveValidationValue(this.validator))
-            default: return ''
+            case CONST.ACTIVITY_PROPERTIES.ELAPSED_TIME:
+            case CONST.ACTIVITY_PROPERTIES.MOVING_TIME:
+            case CONST.ACTIVITY_PROPERTIES.START_DATE:
+                return this.timePipe.transform(this.validationService.resolveValidationValue(this.validator))
+            case CONST.ACTIVITY_PROPERTIES.ATHLETE_COUNT:
+            case CONST.ACTIVITY_PROPERTIES.ACHIEVEMENT_COUNT:
+            default: return this.validator.value.toString()
         }
     }
 

@@ -17,6 +17,6 @@ export type Progression = 'tiers' | 'flat' | 'none'
 
 export type CardValidation = {
     property: string;
-    comparator: 'greater' | 'less' | 'equals';
+    comparator: 'greater' | 'less' | 'equals' | 'baseLess' | 'baseGreater';
     value: number;
 }
