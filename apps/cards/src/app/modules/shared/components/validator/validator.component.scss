@@ -1,4 +1,13 @@
 .validator {
     display: inline-block;
     font-size: 12px;
+    &--pass {
+        color: limegreen;
+    }
+    &--fail {
+        color: red;
+    }
+    &--neutral {
+        color: initial;
+    }
 }

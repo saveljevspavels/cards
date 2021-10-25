@@ -5,6 +5,8 @@ import {PacePipe} from "../../../../pipes/pace.pipe";
 import {DistancePipe} from "../../../../pipes/distance.pipe";
 import {TimePipe} from "../../../../pipes/time.pipe";
 import {CONST} from "../../../../app.module";
+import {BoardService} from "../../../../services/board.service";
+import {map} from "rxjs/operators";
 
 @Component({
     selector: 'app-validator',
@@ -15,6 +17,15 @@ export class ValidatorComponent implements OnInit {
 
     @Input() validator: Validator
     public readableValidator: string;
+
+    public selectedActivity = this.boardService.selectedActivity$
+    public validatorStatus = this.selectedActivity.pipe(map((activity) =>
+            !activity
+                ? 'neutral'
+                : this.validationService.validateRule(activity, this.validator)
+                    ? 'pass'
+                    : 'fail'
+    ))
 
     public propertyNameMapping = new Map([
         [CONST.ACTIVITY_PROPERTIES.DISTANCE, 'distance'],
@@ -29,7 +40,8 @@ export class ValidatorComponent implements OnInit {
     constructor(private validationService: ValidationService,
                 private pacePipe: PacePipe,
                 private distancePipe: DistancePipe,
-                private timePipe: TimePipe) { }
+                private timePipe: TimePipe,
+                private boardService: BoardService) { }
 
     ngOnInit(): void {
         this.readableValidator = `Activity ${this.propertyNameMapping.get(this.validator.property)} must be ${this.comparatorToText()} ${this.transformValue()}`

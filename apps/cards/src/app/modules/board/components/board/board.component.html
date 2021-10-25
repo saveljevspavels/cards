@@ -4,20 +4,11 @@
 
 <app-card-queue [formControl]="form.get('selectedCards')"></app-card-queue>
 
-<div *ngIf="!activityToSubmit; else submitMode">
-    <h3>New Activities</h3>
-    <div *ngFor="let activity of newActivities | async" style="display: flex; align-items: center">
-        <app-activity [activity]="activity"></app-activity>
-        <p-button *ngIf="activity.gameData.status === 'new'" (click)="enterSubmitMode(activity)" label="Submit Activity"></p-button>
-        <span *ngIf="activity.gameData.status === 'submitted'">Submitted</span>
-    </div>
-</div>
-
-<ng-template #submitMode>
+<div *ngIf="selectedActivity | async; else selectionMode" >
     <h3>Submitting Activity</h3>
     Please select cards to play, add images/comments
 
-    <app-activity [activity]="activityToSubmit"></app-activity>
+    <app-activity [activity]="selectedActivity | async"></app-activity>
 
     <h3>Upload images, if card requires it</h3>
     <app-image-upload
@@ -27,6 +18,15 @@
     <h3>Comments</h3>
     <textarea id="float-input" rows="5" cols="30" pInputTextarea [formControl]="form.get('comments')"></textarea>
 
-    <p-button (click)="submitActivity(activityToSubmit.id)" label="Submit"></p-button>
+    <p-button (click)="submitSelectedActivity()" label="Submit"></p-button>
     <p-button styleClass="p-button-danger" (click)="exitSubmitMode()" label="Cancel"></p-button>
+</div>
+
+<ng-template #selectionMode>
+    <h3>New Activities</h3>
+    <div *ngFor="let activity of newActivities | async" style="display: flex; align-items: center">
+        <app-activity [activity]="activity"></app-activity>
+        <p-button *ngIf="activity.gameData.status === 'new'" (click)="enterSubmitMode(activity)" label="Submit Activity"></p-button>
+        <span *ngIf="activity.gameData.status === 'submitted'">Submitted</span>
+    </div>
 </ng-template>

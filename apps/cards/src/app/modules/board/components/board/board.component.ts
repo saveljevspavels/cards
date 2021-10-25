@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {ActivityService} from "../../../../services/activity.service";
 import {FormBuilder, FormControl, FormGroup} from "@angular/forms";
 import {FileService} from "../../../../services/file.service";
+import {BoardService} from "../../../../services/board.service";
 
 @Component({
   selector: 'app-board',
@@ -11,31 +12,31 @@ import {FileService} from "../../../../services/file.service";
 export class BoardComponent implements OnInit {
 
     public newActivities = this.activityService.newActivities;
-
-    public activityToSubmit = null;
+    public selectedActivity = this.boardService.selectedActivity$;
 
     public form: FormGroup;
 
     constructor(private activityService: ActivityService,
                 private formBuilder: FormBuilder,
-                private fileService: FileService) { }
+                private fileService: FileService,
+                private boardService: BoardService) { }
 
     ngOnInit(): void {
         this.initForm()
     }
 
     enterSubmitMode(activity: any) {
-        this.activityToSubmit = activity;
+        this.boardService.activity = activity;
     }
 
     exitSubmitMode() {
-        this.activityToSubmit = null;
+        this.boardService.deselectActivity();
     }
 
-    async submitActivity(activityId: string) {
+    async submitSelectedActivity() {
         const uploadedImages = await this.fileService.uploadImages(this.form.value.selectedImages)
         this.activityService.submitActivity(
-            activityId,
+            this.boardService.activity.id.toString(),
             this.form.value.selectedCards,
             uploadedImages,
             this.form.value.comments,

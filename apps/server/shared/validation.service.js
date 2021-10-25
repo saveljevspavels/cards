@@ -1,29 +1,14 @@
-import {Injectable} from "@angular/core";
-import {Validator} from "../interfaces/card";
-import {AthleteService} from "./athlete.service";
-import {BaseWorkout} from "../interfaces/athlete";
-import {CONST, RULES} from "../app.module";
+import CONST from "../../../definitions/constants.json";
+import RULES from "../../../definitions/rules.json";
 
-@Injectable({
-    providedIn: 'root'
-})
 export class ValidationService {
-
-    private baseWorkout: BaseWorkout | null;
-
-    constructor(private athleteService: AthleteService) {
-        this.athleteService.me.subscribe((me) => {
-            this.baseWorkout = me?.baseWorkout || null;
-        })
-    }
-
-    resolveValidationValue(validator: Validator): number {
+    static resolveValidationValue(baseWorkout, validator) {
         if(validator.comparator.indexOf('base') !== -1) {
             switch (validator.property) {
                 case CONST.ACTIVITY_PROPERTIES.DISTANCE:
-                    const res = validator.value * (this.baseWorkout?.distance || RULES.DEFAULT_BASE_WORKOUT.DISTANCE)
+                    const res = validator.value * (baseWorkout?.distance || RULES.DEFAULT_BASE_WORKOUT.DISTANCE)
                     return res - (res % 500)
-                case CONST.ACTIVITY_PROPERTIES.AVERAGE_SPEED: return validator.value * (this.baseWorkout?.average_speed || RULES.DEFAULT_BASE_WORKOUT.AVERAGE_SPEED)
+                case CONST.ACTIVITY_PROPERTIES.AVERAGE_SPEED: return validator.value * (baseWorkout?.average_speed || RULES.DEFAULT_BASE_WORKOUT.AVERAGE_SPEED)
                 default: return validator.value;
             }
         } else {
@@ -39,11 +24,11 @@ export class ValidationService {
         }
     }
 
-    validateRule(activity: any, validator: Validator) {
+    static validateRule(baseWorkout, activity, validator) {
         const activityVal = validator.property === CONST.ACTIVITY_PROPERTIES.START_DATE
-            ? this.getTimeInSeconds(activity[validator.property])
+            ? ValidationService.getTimeInSeconds(activity[validator.property])
             : activity[validator.property]
-        const validatorVal = this.resolveValidationValue(validator)
+        const validatorVal = this.resolveValidationValue(baseWorkout, validator)
 
         switch (validator.comparator) {
             case CONST.COMPARATORS.BASE_GREATER:
@@ -58,7 +43,7 @@ export class ValidationService {
         }
     }
 
-    getTimeInSeconds(ISODate: string): number {
+    static getTimeInSeconds(ISODate) {
         const date = new Date(ISODate)
         return date.getHours() * 60 * 60 + date.getMinutes() * 60 + date.getSeconds();
     }

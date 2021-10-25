@@ -5,6 +5,7 @@ import {generateId, getRandomInt, updateScoreValues} from "./util.js";
 import CONST from "../../definitions/constants.json";
 import RULES from "../../definitions/rules.json";
 import {RESPONSES} from "./response-codes.js";
+import {ValidationService} from "./shared/validation.service.js";
 
 export class FirestoreService {
     db = firebase.initializeApp(FIREBASE_CONFIG.default).firestore();
@@ -242,6 +243,27 @@ export class FirestoreService {
             }
         })
         console.log('Activity', activityId, 'was rejected for athlete', activity.athlete.id.toString())
+    }
+
+    async tryAutoApprove(activityId) { // Currently supports only one card
+        console.log('Attempting auto approve for activity', activityId)
+        const activityDoc = this.detailedActivityCollection.doc(activityId.toString())
+        const activity = (await activityDoc.get()).data() || {}
+        if(!activity.gameData.cards[0]) {
+            await this.approveActivity(activityId)
+        } else {
+            const cardDoc = this.cardCollection.doc(activity.gameData.cards[0])
+            const card = (await cardDoc.get()).data() || {}
+            const athleteDoc = this.athleteCollection.doc(activity.athlete.id.toString())
+            const athlete = (await athleteDoc.get()).data() || {}
+
+            if(card.validators.reduce((acc, validator) => acc && ValidationService.validateRule(athlete.baseWorkout, activity, validator), true)) { // Checks all validators
+                console.log('All validators passed for', activityId)
+                await this.approveActivity(activityId, [card.id])
+            } else {
+                console.log('Switching for manual approve', activityId)
+            }
+        }
     }
 
     async approveActivity(activityId, cardIds = []) {

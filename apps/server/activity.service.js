@@ -4,12 +4,13 @@ import {RESPONSES} from "./response-codes.js";
 export default class ActivityService {
     constructor(app, fireStoreService) {
         app.post(`${CONST.API_PREFIX}submit-activity`, async (req, res) => {
-            fireStoreService.submitActivity(
+            await fireStoreService.submitActivity(
                 req.body.activityId,
                 req.body.cards,
                 req.body.images,
                 req.body.comments
             )
+            await fireStoreService.tryAutoApprove(req.body.activityId)
             res.status(200).send({response: RESPONSES.SUCCESS});
         });
 
