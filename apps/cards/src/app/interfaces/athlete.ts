@@ -8,4 +8,7 @@ export default interface Athlete {
 export interface BaseWorkout {
     distance: number;
     average_speed: number;
+    time_3k: number;
+    time_5k: number;
+    time_10k: number;
 }

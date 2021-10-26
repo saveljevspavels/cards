@@ -35,6 +35,7 @@ export class ValidatorComponent implements OnInit {
         [CONST.ACTIVITY_PROPERTIES.START_DATE, 'start time'],
         [CONST.ACTIVITY_PROPERTIES.ATHLETE_COUNT, 'number of athletes'],
         [CONST.ACTIVITY_PROPERTIES.ACHIEVEMENT_COUNT, 'number of achievements'],
+        [CONST.ACTIVITY_PROPERTIES.TYPE, 'type'],
     ])
 
     constructor(private validationService: ValidationService,
@@ -54,23 +55,24 @@ export class ValidatorComponent implements OnInit {
             case CONST.ACTIVITY_PROPERTIES.DISTANCE:
             case CONST.ACTIVITY_PROPERTIES.ATHLETE_COUNT:
             case CONST.ACTIVITY_PROPERTIES.ACHIEVEMENT_COUNT:
+            case CONST.ACTIVITY_PROPERTIES.TYPE:
                 switch(this.validator.comparator) {
-                    case CONST.COMPARATORS.BASE_GREATER:
                     case CONST.COMPARATORS.GREATER:
                         return 'at least';
-                    case CONST.COMPARATORS.BASE_LESS:
                     case CONST.COMPARATORS.LESS:
                         return 'not more than'
                     case CONST.COMPARATORS.EQUALS:
                         return 'exactly'
+                    case CONST.COMPARATORS.IN:
+                        return 'must be either'
+                    case CONST.COMPARATORS.NOT_IN:
+                        return 'must be neither'
                     default: return ''
                 }
             case CONST.ACTIVITY_PROPERTIES.AVERAGE_SPEED: {
                 switch(this.validator.comparator) {
-                    case CONST.COMPARATORS.BASE_GREATER:
                     case CONST.COMPARATORS.GREATER:
                         return 'at least';
-                    case CONST.COMPARATORS.BASE_LESS:
                     case CONST.COMPARATORS.LESS:
                         return 'slower than'
                     case CONST.COMPARATORS.EQUALS:
@@ -80,10 +82,8 @@ export class ValidatorComponent implements OnInit {
             }
             case CONST.ACTIVITY_PROPERTIES.START_DATE:
                 switch(this.validator.comparator) {
-                    case CONST.COMPARATORS.BASE_GREATER:
                     case CONST.COMPARATORS.GREATER:
                         return 'after';
-                    case CONST.COMPARATORS.BASE_LESS:
                     case CONST.COMPARATORS.LESS:
                         return 'before'
                     case CONST.COMPARATORS.EQUALS:
@@ -103,10 +103,10 @@ export class ValidatorComponent implements OnInit {
             case CONST.ACTIVITY_PROPERTIES.ELAPSED_TIME:
             case CONST.ACTIVITY_PROPERTIES.MOVING_TIME:
             case CONST.ACTIVITY_PROPERTIES.START_DATE:
-                return this.timePipe.transform(this.validationService.resolveValidationValue(this.validator))
+                return this.timePipe.transform(<number>this.validationService.resolveValidationValue(this.validator))
             case CONST.ACTIVITY_PROPERTIES.ATHLETE_COUNT:
             case CONST.ACTIVITY_PROPERTIES.ACHIEVEMENT_COUNT:
-            default: return this.validator.value.toString()
+            default: return this.validator.formula.toString()
         }
     }
 

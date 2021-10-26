@@ -2,7 +2,7 @@ import {Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core'
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {AdminService} from "../../admin.service";
 import {FileService} from "../../../../services/file.service";
-import {CONST} from "../../../../app.module";
+import {CONST, RULES} from "../../../../app.module";
 
 @Component({
   selector: 'app-card-create',
@@ -10,6 +10,8 @@ import {CONST} from "../../../../app.module";
   styleUrls: ['./card-create.component.scss']
 })
 export class CardCreateComponent implements OnInit, OnChanges {
+    public RULES = RULES
+    public CONST = CONST
 
     @Input()
     public selectedCardFactory: any;
@@ -18,30 +20,6 @@ export class CardCreateComponent implements OnInit, OnChanges {
     public validatorAmount = new FormControl(0, [Validators.min(0)])
     public form: FormGroup;
     public imageControl = new FormControl([]);
-
-    public progressionOptions = [
-        { value: 'tiers', label: 'Tiers' },
-        { value: 'flat', label: 'Flat' },
-        { value: 'none', label: 'None' },
-    ]
-
-    public comparatorOptions = [
-        { value: CONST.COMPARATORS.GREATER, label: 'Greater' },
-        { value: CONST.COMPARATORS.LESS, label: 'Less' },
-        { value: CONST.COMPARATORS.EQUALS, label: 'Equals' },
-        { value: CONST.COMPARATORS.BASE_GREATER, label: 'Greater than multiplied Base Value' },
-        { value: CONST.COMPARATORS.BASE_LESS, label: 'Less than multiplied Base Value' },
-    ]
-
-    public propertyOptions = [
-        { value: CONST.ACTIVITY_PROPERTIES.DISTANCE, label: 'Distance' },
-        { value: CONST.ACTIVITY_PROPERTIES.AVERAGE_SPEED, label: 'Speed' },
-        { value: CONST.ACTIVITY_PROPERTIES.MOVING_TIME, label: 'Moving Time' },
-        { value: CONST.ACTIVITY_PROPERTIES.ELAPSED_TIME, label: 'Total Time' },
-        { value: CONST.ACTIVITY_PROPERTIES.START_DATE, label: 'Start Time' },
-        { value: CONST.ACTIVITY_PROPERTIES.ATHLETE_COUNT, label: 'Athlete Count' },
-        { value: CONST.ACTIVITY_PROPERTIES.ACHIEVEMENT_COUNT, label: 'Achievement Count' },
-    ]
 
     constructor(private formBuilder: FormBuilder,
                 private adminService: AdminService,
@@ -89,7 +67,6 @@ export class CardCreateComponent implements OnInit, OnChanges {
             id: [''],
             title: ['', [Validators.required]],
             image: ['', [Validators.required]],
-            activityTypes: ['', [Validators.required]],
             progression: ['']
         })
         this.updateFormCardAmount(form, this.cardAmount.value)
@@ -129,7 +106,7 @@ export class CardCreateComponent implements OnInit, OnChanges {
         return this.formBuilder.group({
             property: ['', [Validators.required]],
             comparator: [''],
-            value: ['0', [Validators.required]],
+            formula: ['0', [Validators.required]],
         })
     }
 

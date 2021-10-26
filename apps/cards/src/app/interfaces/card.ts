@@ -10,7 +10,6 @@ export default interface Card {
     cardUses: CardUses;
     factoryId: string;
     progression: Progression;
-    activityTypes: string[];
     validators: Validator[];
 }
 
@@ -23,5 +22,5 @@ export interface CardUses {
 export interface Validator {
     comparator: string;
     property: string;
-    value: number;
+    formula: string;
 }

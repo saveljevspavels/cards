@@ -257,7 +257,7 @@ export class FirestoreService {
             const athleteDoc = this.athleteCollection.doc(activity.athlete.id.toString())
             const athlete = (await athleteDoc.get()).data() || {}
 
-            if(card.validators.reduce((acc, validator) => acc && ValidationService.validateRule(athlete.baseWorkout, activity, validator), true)) { // Checks all validators
+            if(card.validators.reduce((acc, validator) => acc && ValidationService.validateRule(activity, validator, athlete.baseWorkout), true)) { // Checks all validators
                 console.log('All validators passed for', activityId)
                 await this.approveActivity(activityId, [card.id])
             } else {
@@ -435,7 +435,6 @@ export class FirestoreService {
             title: factory.title,
             image: factory.image,
             factoryId: factory.id,
-            activityTypes: factory.activityTypes,
             progression: factory.progression,
             tier,
             ...card,

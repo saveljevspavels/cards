@@ -1,11 +1,18 @@
 <h4>Create new card factory</h4>
 <app-input [label]="'Card Amount'" [fc]="cardAmount"></app-input>
 <app-input [label]="'Validator Amount'" [fc]="validatorAmount"></app-input>
+<ng-container *ngIf="validatorAmount.value > 0">
+    Base properties for comparison:
+    <ul>
+        <li *ngFor="let property of RULES.DEFAULT_BASE_WORKOUT | keyvalue">
+            {{property.key}}
+        </li>
+    </ul>
+</ng-container>
 <div [formGroup]="form" *ngIf="form">
     <app-input [label]="'Id (leave blank for creating new card factory)'" [fc]="form.get('id')"></app-input>
     <app-input [label]="'Title'" [fc]="form.get('title')"></app-input>
-    <app-input [label]="'Activity Types'" [fc]="form.get('activityTypes')"></app-input>
-    <app-select [label]="'Progression'" [fc]="form.get('progression')" [options]="progressionOptions"></app-select>
+    <app-select [label]="'Progression'" [fc]="form.get('progression')" [options]="CONST.PROGRESSION | keyvalue"></app-select>
 
     <div style="display: flex; margin: 15px;">
         <ng-container
@@ -41,8 +48,8 @@
 <ng-template #validatorTemplate let-validatorGroup="validatorGroup" let-index="index">
     <div>
         <h5>Validator #{{index}}</h5>
-        <app-select [label]="'Property'" [fc]="validatorGroup.get('property')" [options]="propertyOptions"></app-select>
-        <app-select [label]="'Comparator'" [fc]="validatorGroup.get('comparator')" [options]="comparatorOptions"></app-select>
-        <app-input [label]="'Value'" [fc]="validatorGroup.get('value')"></app-input>
+        <app-select [label]="'Property'" [fc]="validatorGroup.get('property')" [options]="CONST.ACTIVITY_PROPERTIES | keyvalue"></app-select>
+        <app-select [label]="'Comparator'" [fc]="validatorGroup.get('comparator')" [options]="CONST.COMPARATORS | keyvalue"></app-select>
+        <app-input [label]="'Formula'" [fc]="validatorGroup.get('formula')"></app-input>
     </div>
 </ng-template>

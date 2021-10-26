@@ -15,7 +15,7 @@ export class SelectComponent implements OnInit {
   public label: string;
 
   @Input()
-  public options: {value: any, label: string}[]
+  public options: {key: any, value: string}[]
 
   constructor() { }
 

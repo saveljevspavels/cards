@@ -25,6 +25,7 @@
     },
     "ACTIVITY_PROPERTIES": {
         "DISTANCE": "distance",
+        "TYPE": "type",
         "AVERAGE_SPEED": "average_speed",
         "MOVING_TIME": "moving_time",
         "ELAPSED_TIME": "elapsed_time",
@@ -32,12 +33,17 @@
         "ATHLETE_COUNT": "athlete_count",
         "ACHIEVEMENT_COUNT": "achievement_count"
     },
+    "PROGRESSION": {
+        "TIERS": "tiers",
+        "FLAT": "flat",
+        "NONE": "none"
+    },
     "COMPARATORS": {
         "GREATER": "greater",
         "LESS": "less",
         "EQUALS": "equals",
-        "BASE_LESS": "baseLess",
-        "BASE_GREATER": "baseGreater"
+        "IN": "in",
+        "NOT_IN": "notIn"
     },
     "GAME_ID": "game1"
 }

@@ -17,41 +17,43 @@ export class ValidationService {
         })
     }
 
-    resolveValidationValue(validator: Validator): number {
-        if(validator.comparator.indexOf('base') !== -1) {
+    resolveValidationValue(validator: Validator, baseWorkout = this.baseWorkout ): number | string {
+        if(baseWorkout !== null) {
+            let formula = validator.formula;
+            Object.entries({
+                ...baseWorkout,
+                ...RULES.DEFAULT_BASE_WORKOUT,
+            }).forEach(([key, value]: any) => {
+                formula = formula.replace(key.toUpperCase(), value)
+            })
             switch (validator.property) {
+                case CONST.ACTIVITY_PROPERTIES.TYPE:
+                    return formula;
                 case CONST.ACTIVITY_PROPERTIES.DISTANCE:
-                    const res = validator.value * (this.baseWorkout?.distance || RULES.DEFAULT_BASE_WORKOUT.DISTANCE)
-                    return res - (res % 500)
-                case CONST.ACTIVITY_PROPERTIES.AVERAGE_SPEED: return validator.value * (this.baseWorkout?.average_speed || RULES.DEFAULT_BASE_WORKOUT.AVERAGE_SPEED)
-                default: return validator.value;
-            }
-        } else {
-            switch (validator.property) {
+                    const value = eval(formula);
+                    return value - (value % 500)
                 case CONST.ACTIVITY_PROPERTIES.START_DATE:
-                    return validator.value * 60 * 60
-                case CONST.ACTIVITY_PROPERTIES.ATHLETE_COUNT:
-                case CONST.ACTIVITY_PROPERTIES.ACHIEVEMENT_COUNT:
-                case CONST.ACTIVITY_PROPERTIES.MOVING_TIME:
-                case CONST.ACTIVITY_PROPERTIES.ELAPSED_TIME:
-                default: return validator.value;
+                    return eval(formula) * 60 * 60
+                default: return eval(formula);
             }
-        }
+        } else return 0;
     }
 
-    validateRule(activity: any, validator: Validator) {
+    validateRule(activity: any, validator: Validator, baseWorkout = this.baseWorkout) {
         const activityVal = validator.property === CONST.ACTIVITY_PROPERTIES.START_DATE
             ? this.getTimeInSeconds(activity[validator.property])
             : activity[validator.property]
-        const validatorVal = this.resolveValidationValue(validator)
+        const validatorVal = this.resolveValidationValue(validator, baseWorkout)
 
         switch (validator.comparator) {
-            case CONST.COMPARATORS.BASE_GREATER:
             case CONST.COMPARATORS.GREATER:
                 return activityVal >= validatorVal;
-            case CONST.COMPARATORS.BASE_LESS:
             case CONST.COMPARATORS.LESS:
                 return activityVal < validatorVal
+            case CONST.COMPARATORS.IN:
+                return validatorVal.toString().toUpperCase().indexOf(activityVal.toUpperCase()) !== -1
+            case CONST.COMPARATORS.NOT_IN:
+                return validatorVal.toString().toUpperCase().indexOf(activityVal.toUpperCase()) === -1
             case CONST.COMPARATORS.EQUALS:
             default:
                 return activityVal === validatorVal

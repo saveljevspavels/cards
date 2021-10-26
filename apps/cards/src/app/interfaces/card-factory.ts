@@ -2,7 +2,6 @@ export default interface CardFactory {
     id: string;
     image: string;
     title: string;
-    activityTypes: string[];
     progression: Progression;
     cards: {
         tier: number;
@@ -17,6 +16,6 @@ export type Progression = 'tiers' | 'flat' | 'none'
 
 export type CardValidation = {
     property: string;
-    comparator: 'greater' | 'less' | 'equals' | 'baseLess' | 'baseGreater';
+    comparator: 'greater' | 'less' | 'equals' | 'in' | 'notIn';
     value: number;
 }
