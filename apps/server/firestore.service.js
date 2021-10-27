@@ -267,22 +267,43 @@ export class FirestoreService {
     }
 
     async approveActivity(activityId, cardIds = []) {
-      const activityDoc = this.detailedActivityCollection.doc(activityId.toString())
-      const activity = (await activityDoc.get()).data() || {}
-      await activityDoc.set({
-        ...activity,
-        gameData: {
-          ...activity.gameData,
-          status: CONST.ACTIVITY_STATUSES.APPROVED,
-          cards: cardIds
+        const activityDoc = this.detailedActivityCollection.doc(activityId.toString())
+        const activity = (await activityDoc.get()).data() || {}
+        await activityDoc.set({
+            ...activity,
+            gameData: {
+              ...activity.gameData,
+              status: CONST.ACTIVITY_STATUSES.APPROVED,
+              cards: cardIds
+            }
+        })
+
+        console.log('Activity', activityId, 'was approved for athlete', activity.athlete.id.toString(), 'with cards', cardIds)
+
+        await this.updatePersonalBests(activity, cardIds)
+        await this.updateScore(activity.athlete.id.toString(), cardIds)
+        await this.updateCardUses(cardIds)
+        await this.updateQueueUses(cardIds.length);
+    }
+
+    async updatePersonalBests(activity, cardIds) {
+        if(cardIds.length) {
+            const cardQuery = this.cardCollection.where('id', 'in', cardIds)
+            const cardDocs = await cardQuery.get()
+            const baseWorkoutPatch = {};
+            cardDocs.forEach((card) => {
+                card.data().validators.forEach(validator => {
+                    RULES.UPDATABLE_PROPERTIES.forEach(property => {
+                        if(validator.formula.indexOf(property) !== -1) {
+                            baseWorkoutPatch[property] = activity[validator.property]
+                        }
+                    })
+                })
+            })
+            if(Object.keys(baseWorkoutPatch).length) {
+                await this.updateBaseWorkout([activity.athlete.id.toString()], baseWorkoutPatch)
+            }
         }
-      })
-
-      console.log('Activity', activityId, 'was approved for athlete', activity.athlete.id.toString(), 'with cards', cardIds)
-
-      await this.updateScore(activity.athlete.id.toString(), cardIds)
-      await this.updateCardUses(cardIds)
-      await this.updateQueueUses(cardIds.length);
     }
 
     async updateCardUses(cardIds) {
@@ -488,12 +509,20 @@ export class FirestoreService {
         }
     }
 
-    async setBaseWorkout(athleteIds, baseWorkout) {
-        for(let id of athleteIds) {
-            await this.athleteCollection.doc(id.toString()).update({
-                baseWorkout
+    async updateBaseWorkout(athleteIds, baseWorkoutPatch) {
+        athleteIds = athleteIds.map(id => parseInt(id, 10))
+        const athleteQuery = this.athleteCollection.where('id', 'in', athleteIds)
+        const athleteDocs = await athleteQuery.get()
+        athleteDocs.forEach((athlete) => {
+            const athleteDoc = this.athleteCollection.doc(athlete.id.toString())
+            athleteDoc.update({
+                baseWorkout: {
+                    ...athlete.data().baseWorkout,
+                    ...baseWorkoutPatch
+                }
             })
-        }
+            console.log('Base workout updated for athlete', athlete.id, 'with', JSON.stringify(baseWorkoutPatch))
+        })
     }
 
     async setPermissions(athleteIds, permissions) {

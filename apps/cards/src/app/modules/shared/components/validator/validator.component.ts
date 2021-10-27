@@ -64,9 +64,9 @@ export class ValidatorComponent implements OnInit {
                     case CONST.COMPARATORS.EQUALS:
                         return 'exactly'
                     case CONST.COMPARATORS.IN:
-                        return 'must be either'
+                        return 'must be either of following:'
                     case CONST.COMPARATORS.NOT_IN:
-                        return 'must be neither'
+                        return 'must be neither of following:'
                     default: return ''
                 }
             case CONST.ACTIVITY_PROPERTIES.AVERAGE_SPEED: {

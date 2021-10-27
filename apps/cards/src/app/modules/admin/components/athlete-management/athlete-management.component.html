@@ -24,7 +24,7 @@
         <app-input [fc]="form.get('average_speed')" [label]="'Pace ' + (form.value.average_speed | pace)"></app-input>
     </div>
 
-    <p-button [disabled]="!selectedAthletes.value.length || form.invalid" (click)="setBaseWorkout()" [label]="'Set Base Workout'"></p-button>
+    <p-button [disabled]="!selectedAthletes.value.length || form.invalid" (click)="updateBaseWorkout()" [label]="'Set Base Workout'"></p-button>
 
     <app-selection-wrapper
         [formControl]="selectedPermissions"

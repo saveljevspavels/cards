@@ -46,8 +46,8 @@ export class AthleteService {
         return this.athletes.value.find((athlete: Athlete) => athlete.id.toString() === athleteId) || null
     }
 
-    setBaseWorkout(athleteIds: string[], baseWorkout: any) {
-        return this.http.post(`${environment.baseBE}/set-base-workout`, {
+    updateBaseWorkout(athleteIds: string[], baseWorkout: any) {
+        return this.http.post(`${environment.baseBE}/update-base-workout`, {
             athleteIds,
             baseWorkout
         })

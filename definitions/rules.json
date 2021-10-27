@@ -1,13 +1,18 @@
 {
-    "GAME_START": "2021-07-26",
+    "GAME_START": "2021-10-20",
     "HAND_SIZE": 3,
     "DEFAULT_BASE_WORKOUT":{
-        "DISTANCE": 3000,
-        "AVERAGE_SPEED": 2.220,
-        "TIME_3K": 1620,
-        "TIME_5K": 2700,
-        "TIME_10K": 5400
+        "distance": 3000,
+        "average_speed": 2.220,
+        "time_3k": 1620,
+        "time_5k": 2700,
+        "time_10k": 5400
     },
+    "UPDATABLE_PROPERTIES": [
+        "time_3k",
+        "time_5k",
+        "time_10k"
+    ],
     "QUEUE": {
         "LENGTH": 7,
         "CARDS_TO_SHIFT": 5

@@ -29,8 +29,8 @@ export class AthleteManagementComponent implements OnInit {
     ngOnInit(): void {
     }
 
-    setBaseWorkout() {
-        this.athleteService.setBaseWorkout(this.selectedAthletes.value, this.form.value).subscribe()
+    updateBaseWorkout() {
+        this.athleteService.updateBaseWorkout(this.selectedAthletes.value, this.form.value).subscribe()
     }
 
     setPermissions() {
