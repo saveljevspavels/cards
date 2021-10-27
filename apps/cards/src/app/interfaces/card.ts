@@ -11,6 +11,7 @@ export default interface Card {
     factoryId: string;
     progression: Progression;
     validators: Validator[];
+    manualValidation: boolean;
 }
 
 export interface CardUses {

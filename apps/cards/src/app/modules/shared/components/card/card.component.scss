@@ -27,7 +27,7 @@
     .card__content {
       padding: 8px 8px 0 8px;
     }
-    .card__description {
+    .card__description, .card__manual-note {
       font-size: 12px;
     }
     .card__bonuses {
@@ -50,7 +50,7 @@
     font-weight: bold;
     margin: 8px;
   }
-  &__description {
+  &__description, &__manual-note {
     font-size: 12px;
   }
   &__bonuses {

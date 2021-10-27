@@ -67,6 +67,7 @@ export class CardCreateComponent implements OnInit, OnChanges {
             id: [''],
             title: ['', [Validators.required]],
             image: ['', [Validators.required]],
+            manualValidation: [false],
             progression: ['']
         })
         this.updateFormCardAmount(form, this.cardAmount.value)
@@ -111,12 +112,23 @@ export class CardCreateComponent implements OnInit, OnChanges {
     }
 
     updateFormCardAmount(form: FormGroup, amount: number) {
-        form.setControl('cards', this.formBuilder.group({}))
-        for(let i = 0; i < amount; i++) {
-            (<FormGroup>form.get('cards')).addControl(
-                i.toString(),
-                this.getCardGroup()
-            )
+        const currentAmount = Object.keys((<FormGroup>form.get('cards'))?.controls || {}).length;
+        if(currentAmount > amount) {
+            for(let i = amount; i < currentAmount; i++) {
+                (<FormGroup>form.get('cards')).removeControl(
+                    i.toString()
+                )
+            }
+        } else if (currentAmount < amount) {
+            if(currentAmount === 0) {
+                form.setControl('cards', this.formBuilder.group({}))
+            }
+            for(let i = currentAmount; i < amount; i++) {
+                (<FormGroup>form.get('cards')).addControl(
+                    i.toString(),
+                    this.getCardGroup()
+                )
+            }
         }
     }
 
@@ -128,12 +140,23 @@ export class CardCreateComponent implements OnInit, OnChanges {
     }
 
     setValidatorsToCardGroup(cardGroup: FormGroup, amount: number) {
-        cardGroup.setControl('validators', this.formBuilder.group({}));
-        for(let validator = 0; validator < amount; validator++) {
-            (<FormGroup>cardGroup.get('validators')).addControl(
-                validator.toString(),
-                this.getValidatorGroup()
-            )
+        const currentAmount = Object.keys((<FormGroup>cardGroup.get('validators'))?.controls || {}).length;
+        if(currentAmount > amount) {
+            for(let i = amount; i < currentAmount; i++) {
+                (<FormGroup>cardGroup.get('validators')).removeControl(
+                    i.toString()
+                )
+            }
+        } else if (currentAmount < amount) {
+            if(currentAmount === 0) {
+                cardGroup.setControl('validators', this.formBuilder.group({}));
+            }
+            for(let validator = currentAmount; validator < amount; validator++) {
+                (<FormGroup>cardGroup.get('validators')).addControl(
+                    validator.toString(),
+                    this.getValidatorGroup()
+                )
+            }
         }
     }
 

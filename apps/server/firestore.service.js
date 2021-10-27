@@ -235,11 +235,10 @@ export class FirestoreService {
     async rejectActivity(activityId) {
         const activityDoc = this.detailedActivityCollection.doc(activityId.toString())
         const activity = (await activityDoc.get()).data() || {}
-        await activityDoc.set({
-            ...activity,
+        await activityDoc.update({
             gameData: {
                 ...activity.gameData,
-                status: CONST.ACTIVITY_STATUSES.REJECTED,
+                status: CONST.ACTIVITY_STATUSES.NEW,
             }
         })
         console.log('Activity', activityId, 'was rejected for athlete', activity.athlete.id.toString())
@@ -254,6 +253,12 @@ export class FirestoreService {
         } else {
             const cardDoc = this.cardCollection.doc(activity.gameData.cards[0])
             const card = (await cardDoc.get()).data() || {}
+
+            if(card.manualValidation) {
+                console.log('Manual validation required for card', card.id)
+                return;
+            }
+
             const athleteDoc = this.athleteCollection.doc(activity.athlete.id.toString())
             const athlete = (await athleteDoc.get()).data() || {}
 
@@ -280,10 +285,13 @@ export class FirestoreService {
 
         console.log('Activity', activityId, 'was approved for athlete', activity.athlete.id.toString(), 'with cards', cardIds)
 
-        await this.updatePersonalBests(activity, cardIds)
-        await this.updateScore(activity.athlete.id.toString(), cardIds)
-        await this.updateCardUses(cardIds)
-        await this.updateQueueUses(cardIds.length);
+        await Promise.all([
+            this.updatePersonalBests(activity, cardIds),
+            this.updateScore(activity.athlete.id.toString(), cardIds),
+            this.updateCardUses(cardIds),
+            this.updateQueueUses(cardIds.length)
+        ])
+
     }
 
     async updatePersonalBests(activity, cardIds) {
@@ -457,6 +465,7 @@ export class FirestoreService {
             image: factory.image,
             factoryId: factory.id,
             progression: factory.progression,
+            manualValidation: factory.manualValidation,
             tier,
             ...card,
             validators: Object.values(card.validators)

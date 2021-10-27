@@ -8,6 +8,7 @@
             {{card.description}}
         </div>
         <div class="card__validation">
+            <span class="card__manual-note" *ngIf="card.manualValidation">Photo/comment required</span>
             <app-validator *ngFor="let validator of card.validators" [validator]="validator"></app-validator>
         </div>
     </div>
