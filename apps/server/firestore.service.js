@@ -232,12 +232,13 @@ export class FirestoreService {
         console.log('Athlete', athleteId, 'submitted activity with', cardIds)
     }
 
-    async rejectActivity(activityId) {
+    async rejectActivity(activityId, comments) {
         const activityDoc = this.detailedActivityCollection.doc(activityId.toString())
         const activity = (await activityDoc.get()).data() || {}
         await activityDoc.update({
             gameData: {
                 ...activity.gameData,
+                comments,
                 status: CONST.ACTIVITY_STATUSES.NEW,
             }
         })
@@ -249,7 +250,7 @@ export class FirestoreService {
         const activityDoc = this.detailedActivityCollection.doc(activityId.toString())
         const activity = (await activityDoc.get()).data() || {}
         if(!activity.gameData.cards[0]) {
-            await this.approveActivity(activityId)
+            console.log('No cards provided on activity, switching to manual validation')
         } else {
             const cardDoc = this.cardCollection.doc(activity.gameData.cards[0])
             const card = (await cardDoc.get()).data() || {}

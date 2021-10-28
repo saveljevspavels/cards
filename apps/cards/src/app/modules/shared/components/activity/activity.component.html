@@ -12,7 +12,7 @@
         <div>
             Time: {{activity.moving_time | time}} ({{activity.elapsed_time | time}})
         </div>
-        <div *ngIf="showComments">
+        <div *ngIf="showComments && activity.gameData.comments">
             Comments: {{activity.gameData.comments}}
         </div>
     </div>

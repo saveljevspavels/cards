@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {ActivityService} from "../../../../services/activity.service";
 import {AdminService} from "../../admin.service";
+import {FormControl} from "@angular/forms";
 
 @Component({
   selector: 'app-activity-review',
@@ -9,18 +10,22 @@ import {AdminService} from "../../admin.service";
 })
 export class ActivityReviewComponent implements OnInit {
 
-  public submittedActivities = this.adminService.submittedActivities;
-  public selectedCards = []
+      public submittedActivities = this.adminService.submittedActivities;
+      public selectedCards = []
+      public rejectionComment = new FormControl('')
 
-  constructor(private adminService: AdminService) { }
+      constructor(private adminService: AdminService,
+                  private activityService: ActivityService) { }
 
-  ngOnInit() {}
+      ngOnInit() {}
 
-  rejectActivity(activityId: string) {
-    this.adminService.rejectActivity(activityId).subscribe()
-  }
+      rejectActivity(activityId: string) {
+          this.activityService.rejectActivity(activityId, this.rejectionComment.value).subscribe(_ => {
+              this.rejectionComment.reset()
+          })
+      }
 
-  approveActivity(activityId: string, cardIds: string[]) {
-    this.adminService.approveActivity(activityId, cardIds).subscribe()
-  }
+      approveActivity(activityId: string, cardIds: string[]) {
+          this.adminService.approveActivity(activityId, cardIds).subscribe()
+      }
 }

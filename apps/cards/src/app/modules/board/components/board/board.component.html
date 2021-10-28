@@ -25,8 +25,8 @@
 <ng-template #selectionMode>
     <h3>New Activities</h3>
     <div *ngFor="let activity of newActivities | async" style="display: flex; align-items: center">
-        <app-activity [activity]="activity"></app-activity>
+        <app-activity [activity]="activity" [showComments]="true"></app-activity>
         <p-button *ngIf="activity.gameData.status === 'new'" (click)="enterSubmitMode(activity)" label="Submit Activity"></p-button>
-        <span *ngIf="activity.gameData.status === 'submitted'">Submitted</span>
+        <p-button *ngIf="activity.gameData.status === 'submitted'" (click)="rejectActivity(activity.id)" styleClass="p-button-danger" label="Cancel Submission"></p-button>
     </div>
 </ng-template>

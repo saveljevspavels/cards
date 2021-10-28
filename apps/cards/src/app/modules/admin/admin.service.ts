@@ -73,12 +73,6 @@ export class AdminService {
         return this.http.post(`${environment.baseBE}/deal-queue`, {}).subscribe()
     }
 
-    public rejectActivity(activityId: any) {
-        return this.http.post(`${environment.baseBE}/reject-activity`, {
-            activityId
-        })
-    }
-
     public approveActivity(activityId: any, cardIds: string[]) {
         return this.http.post(`${environment.baseBE}/approve-activity`, {
             activityId,

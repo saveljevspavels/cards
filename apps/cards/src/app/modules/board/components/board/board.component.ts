@@ -54,4 +54,8 @@ export class BoardComponent implements OnInit {
         })
     }
 
+    rejectActivity(activityId: string) {
+        this.activityService.rejectActivity(activityId, 'Cancelled by athlete').subscribe()
+    }
+
 }

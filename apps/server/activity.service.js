@@ -15,7 +15,7 @@ export default class ActivityService {
         });
 
         app.post(`${CONST.API_PREFIX}reject-activity`, async (req, res) => {
-            fireStoreService.rejectActivity(req.body.activityId)
+            fireStoreService.rejectActivity(req.body.activityId, req.body.comments)
             res.status(200).send({response: RESPONSES.SUCCESS});
         });
 

@@ -64,4 +64,11 @@ export class ActivityService {
       comments
     })
   }
+
+  public rejectActivity(activityId: any, reason: string) {
+    return this.http.post(`${environment.baseBE}/reject-activity`, {
+        activityId,
+        comments: reason
+    })
+  }
 }
