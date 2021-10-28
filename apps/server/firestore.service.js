@@ -219,11 +219,19 @@ export class FirestoreService {
         const activityDoc = this.detailedActivityCollection.doc(activityId.toString())
         const activity = (await activityDoc.get()).data() || {}
         const athleteId = activity.athlete.id.toString();
+        const cardQuery = this.cardCollection.where('id', 'in', cardIds)
+        const cardDocs = await cardQuery.get()
+        const cardSnapshots = [];
+        cardDocs.forEach((card) => {
+            cardSnapshots.push(card.data())
+        })
+
         await activityDoc.set({
             ...activity,
             gameData: {
                 status: CONST.ACTIVITY_STATUSES.SUBMITTED,
-                cards: cardIds,
+                cardIds,
+                cardSnapshots, // Storing card snapshots
                 images: imageIds,
                 comments
             }
@@ -238,6 +246,8 @@ export class FirestoreService {
         await activityDoc.update({
             gameData: {
                 ...activity.gameData,
+                cardSnapshots: [],
+                cardIds: [],
                 comments,
                 status: CONST.ACTIVITY_STATUSES.NEW,
             }
@@ -245,17 +255,16 @@ export class FirestoreService {
         console.log('Activity', activityId, 'was rejected for athlete', activity.athlete.id.toString())
     }
 
-    async tryAutoApprove(activityId) { // Currently supports only one card
+    async tryAutoApprove(activityId) {
         console.log('Attempting auto approve for activity', activityId)
         const activityDoc = this.detailedActivityCollection.doc(activityId.toString())
         const activity = (await activityDoc.get()).data() || {}
-        if(!activity.gameData.cards[0]) {
+        if(!activity.gameData.cardSnapshots[0]) {
             console.log('No cards provided on activity, switching to manual validation')
         } else {
-            const cardDoc = this.cardCollection.doc(activity.gameData.cards[0])
-            const card = (await cardDoc.get()).data() || {}
+            const card = activity.gameData.cardSnapshots[0]
 
-            if(card.manualValidation) {
+            if(activity.gameData.cardSnapshots.find(card => card.manualValidation)) {
                 console.log('Manual validation required for card', card.id)
                 return;
             }
@@ -263,11 +272,14 @@ export class FirestoreService {
             const athleteDoc = this.athleteCollection.doc(activity.athlete.id.toString())
             const athlete = (await athleteDoc.get()).data() || {}
 
-            if(card.validators.reduce((acc, validator) => acc && ValidationService.validateRule(activity, validator, athlete.baseWorkout), true)) { // Checks all validators
+            if(activity.gameData.cardSnapshots
+                .reduce((acc, card) => [...acc, ...card.validators], [])
+                .reduce((acc, validator) => acc && ValidationService.validateRule(activity, validator, athlete.baseWorkout), true)
+            ) { // Checks all validators
                 console.log('All validators passed for', activityId)
                 await this.approveActivity(activityId, [card.id])
             } else {
-                console.log('Switching for manual approve', activityId)
+                console.log('Validator(s) failed, switching for manual approve', activityId)
             }
         }
     }

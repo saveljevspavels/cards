@@ -16,18 +16,18 @@
             Comments: {{activity.gameData.comments}}
         </div>
     </div>
-    <div *ngIf="activity.gameData.cards?.length">
+    <div *ngIf="activity.gameData.cardSnapshots?.length">
         Played cards:
         <app-selection-wrapper
           [selectionEnabled]="selection"
           [formControl]="selectedCards"
           [template]="cardTemplate"
-          [dataItems]="activity.gameData.cards"
+          [dataItems]="activity.gameData.cardSnapshots"
           [wrap]="true"
         >
             <ng-template #cardTemplate let-dataItem="dataItem">
                 <app-card
-                [cardId]="dataItem"
+                [card]="dataItem"
                 [small]="true"
             ></app-card>
             </ng-template>
