@@ -20,10 +20,7 @@ export class ValidationService {
     resolveValidationValue(validator: Validator, baseWorkout = this.baseWorkout ): number | string {
         if(baseWorkout !== null) {
             let formula = validator.formula;
-            Object.entries({
-                ...RULES.DEFAULT_BASE_WORKOUT,
-                ...baseWorkout,
-            }).forEach(([key, value]: any) => {
+            Object.entries(baseWorkout).forEach(([key, value]: any) => {
                 formula = formula.replace(key, value)
             })
             switch (validator.property) {

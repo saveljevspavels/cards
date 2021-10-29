@@ -29,12 +29,14 @@ export class FirestoreService {
             await athleteDoc.set(
                 {
                     ...athlete,
-                    baseWorkout: null,
+                    baseWorkout: RULES.DEFAULT_BASE_WORKOUT,
                     permissions: ['default']
                 })
             console.log('Athlete', athlete.id, 'saved')
+            return true;
         } else {
             console.log('Athlete', athlete.id, 'logged in')
+            return false;
         }
     }
 

@@ -5,10 +5,7 @@ export class ValidationService {
     static resolveValidationValue(validator, baseWorkout ) {
         if(baseWorkout !== null) {
             let formula = validator.formula;
-            Object.entries({
-                ...RULES.DEFAULT_BASE_WORKOUT,
-                ...baseWorkout,
-            }).forEach(([key, value]) => {
+            Object.entries(baseWorkout).forEach(([key, value]) => {
                 formula = formula.replace(key, value)
             })
             switch (validator.property) {

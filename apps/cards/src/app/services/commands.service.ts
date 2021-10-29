@@ -11,7 +11,8 @@ import {ActivityService} from "./activity.service";
     providedIn: 'root'
 })
 export class CommandsService {
-    private commandCollection = this.db.collection(CONST.COLLECTIONS.COMMANDS,
+    private commandCollection = LocalStorageService.athlete && this.db.collection(
+        CONST.COLLECTIONS.COMMANDS,
         (ref) => ref.where('athleteId', '==', LocalStorageService.athlete.id.toString()));
 
     constructor(private db: AngularFirestore,
@@ -19,9 +20,9 @@ export class CommandsService {
     }
 
     init() {
-        console.log('init')
-        this.commandCollection.valueChanges().pipe(distinctUntilChanged()).subscribe((commands: any[]) => {
-            console.log('commands', commands)
+
+
+        this.commandCollection?.valueChanges().pipe(distinctUntilChanged()).subscribe((commands: any[]) => {
             commands.forEach(command => {
                 switch(command.type) {
                     case COMMANDS.REQUEST_ACTIVITIES:

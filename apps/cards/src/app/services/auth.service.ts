@@ -7,6 +7,7 @@ import {filter, tap} from "rxjs/operators";
 import {Router} from "@angular/router";
 import {CONST, STRAVA_CONFIG} from "../app.module";
 import {environment} from "../../environments/environment";
+import {LocalStorageService} from "./local-storage.service";
 
 @Injectable({
   providedIn: 'root'
@@ -46,18 +47,19 @@ export class AuthService {
   private getAuthRequest(params: HttpParams) {
     return this.httpClient.post('https://' + CONST.STRAVA_BASE + '/oauth/token', null, { params })
       .pipe(tap(async (res: any) => {
+        Object.keys(res).forEach(key => {
+            localStorage.setItem(key, typeof res[key] === 'object' ? JSON.stringify(res[key]) : res[key])
+        })
         if(res.athlete) {
           await this.storeAthlete(res.athlete)
         }
-        Object.keys(res).forEach(key => {
-          localStorage.setItem(key, typeof res[key] === 'object' ? JSON.stringify(res[key]) : res[key])
-        })
       }))
   }
 
   async storeAthlete(athlete: any) {
       return this.httpClient.post(`${environment.baseBE}/save-athlete`, {
-        athlete
+          athlete,
+          accessToken: LocalStorageService.accessToken
       }).subscribe()
   }
 

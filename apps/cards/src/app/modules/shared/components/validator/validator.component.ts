@@ -7,6 +7,8 @@ import {TimePipe} from "../../../../pipes/time.pipe";
 import {CONST} from "../../../../app.module";
 import {BoardService} from "../../../../services/board.service";
 import {map} from "rxjs/operators";
+import {AthleteService} from "../../../../services/athlete.service";
+import {Observable} from "rxjs";
 
 @Component({
     selector: 'app-validator',
@@ -16,7 +18,7 @@ import {map} from "rxjs/operators";
 export class ValidatorComponent implements OnInit {
 
     @Input() validator: Validator
-    public readableValidator: string;
+    public readableValidator: Observable<string>;
 
     public selectedActivity = this.boardService.selectedActivity$
     public validatorStatus = this.selectedActivity.pipe(map((activity) =>
@@ -42,10 +44,13 @@ export class ValidatorComponent implements OnInit {
                 private pacePipe: PacePipe,
                 private distancePipe: DistancePipe,
                 private timePipe: TimePipe,
-                private boardService: BoardService) { }
+                private boardService: BoardService,
+                private athleteService: AthleteService) { }
 
     ngOnInit(): void {
-        this.readableValidator = `Activity ${this.propertyNameMapping.get(this.validator.property)} must be ${this.comparatorToText()} ${this.transformValue()}`
+        this.readableValidator = this.athleteService.me.asObservable().pipe(map((_) =>
+            `Activity ${this.propertyNameMapping.get(this.validator.property)} must be ${this.comparatorToText()} ${this.transformValue()}`
+        ))
     }
 
     comparatorToText(): string {
