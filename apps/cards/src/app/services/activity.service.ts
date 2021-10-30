@@ -39,7 +39,6 @@ export class ActivityService {
                         .where('gameData.status', 'in', [CONST.ACTIVITY_STATUSES.NEW, CONST.ACTIVITY_STATUSES.SUBMITTED])
                 )
             ).valueChanges().subscribe((activities: any) => {
-                console.log('activities', activities)
                 this.newActivities.next(activities)
             });
         })

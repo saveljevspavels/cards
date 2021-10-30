@@ -1,6 +1,3 @@
-import https from "https";
-import RULES from '../../definitions/rules.json'
-
 export const generateId = () => {
     return Math.random().toString(36).substring(7);
 }

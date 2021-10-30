@@ -8,6 +8,10 @@
         "time_5k": 2700,
         "time_10k": 5400
     },
+    "ESTIMATION_ACCURACY": {
+        "distance": 1000,
+        "average_speed": 0.001
+    },
     "UPDATABLE_PROPERTIES": [
         "time_3k",
         "time_5k",

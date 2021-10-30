@@ -1,5 +1,6 @@
 import https from "https";
 import CONST from "../../definitions/constants.json";
+import RULES from "../../definitions/rules.json";
 import {parseResponse} from "./util.js";
 
 export default class ClientService {
@@ -37,9 +38,18 @@ export default class ClientService {
                                 })
                                 return acc
                             }, {})
+                        if(!total[properties[0]]) {
+                            return
+                        }
+
                         properties.forEach(prop => {
+                            total[prop] = total[prop].sort((a,b) => a - b);
+                            while (total[prop].length > 4) {
+                                total[prop].length % 2 ? total[prop].pop() : total[prop].shift()
+                            }
                             const sum = total[prop].reduce((acc, item) => acc + item, 0)
-                            baseWorkout[prop] = sum/total[prop].length
+                            baseWorkout[prop] = (sum/total[prop].length);
+                            baseWorkout[prop] = baseWorkout[prop] - baseWorkout[prop] % RULES.ESTIMATION_ACCURACY[prop];
                         })
 
                         fireStoreService.updateBaseWorkout([req.body.athlete.id], baseWorkout)

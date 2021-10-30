@@ -23,7 +23,6 @@ export class DeckService {
             this.cards.next(cards)
         });
         this.cardQueueDocument.valueChanges().subscribe((cards: any) => {
-            console.log('cards',cards)
             this.cardQueue.next(cards)
         });
     }
