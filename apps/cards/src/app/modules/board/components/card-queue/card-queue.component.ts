@@ -1,4 +1,4 @@
-import {Component, forwardRef, OnInit} from '@angular/core';
+import {Component, forwardRef, OnInit, ViewEncapsulation} from '@angular/core';
 import {DeckService} from "../../../../services/deck.service";
 import Hand from "../../../../interfaces/hand";
 import {Observable} from "rxjs";
@@ -10,6 +10,7 @@ import {GameService} from "../../../../services/game.service";
   selector: 'app-card-queue',
   templateUrl: './card-queue.component.html',
   styleUrls: ['./card-queue.component.scss'],
+  encapsulation: ViewEncapsulation.None,
   providers: [{
     provide: NG_VALUE_ACCESSOR,
     useExisting: forwardRef(() => CardQueueComponent),
@@ -17,14 +18,11 @@ import {GameService} from "../../../../services/game.service";
   }]
 })
 export class CardQueueComponent implements OnInit, ControlValueAccessor {
-    public RULES = RULES;
 
     public cardQueue: Observable<Hand> = this.deckService.cardQueue.asObservable()
-    public cardUses: Observable<number> = this.gameService.cardUses.asObservable()
     public selectedCards = new FormControl([]);
 
-    constructor(public deckService: DeckService,
-                public gameService: GameService) { }
+    constructor(public deckService: DeckService) { }
 
     ngOnInit(): void {
         this.selectedCards.valueChanges.subscribe((values: any) => {

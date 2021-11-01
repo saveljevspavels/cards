@@ -1,0 +1,19 @@
+<div class="row">
+    <div class="col-md-6">
+        <div class="">
+            <h4>Rules</h4>
+            <ul>
+                <li *ngFor="let rule of rules.left">{{rule}}</li>
+            </ul>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="">
+            <h4>&nbsp;</h4>
+            <ul>
+                <li *ngFor="let rule of rules.right">{{rule}}</li>
+            </ul>
+            <h4>Cards played: {{cardUses | async}}/{{RULES.QUEUE.CARDS_TO_SHIFT}}</h4>
+        </div>
+    </div>
+</div>

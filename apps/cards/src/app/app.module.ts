@@ -23,35 +23,35 @@ import {AthleteService} from "./services/athlete.service";
 const firebaseConfig = FIREBASE_CONFIG;
 
 @NgModule({
-  declarations: [
-    AppComponent,
-  ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    RouterModule,
-    AngularFireModule.initializeApp(firebaseConfig),
-    AngularFirestoreModule, // firestore
-    AngularFireAuthModule, // auth
-    AngularFireStorageModule, // storage,
-    FormsModule,
-    ReactiveFormsModule,
-    HttpClientModule,
-    MessagesModule,
-    MessageModule,
-    BrowserAnimationsModule
-  ],
-  providers: [
-    { provide: HTTP_INTERCEPTORS, useClass: HttpMainInterceptor, multi: true },
-    {
-      provide: APP_INITIALIZER,
-      useFactory: (athleteService: AthleteService) => () => athleteService.permissionPromise(),
-      deps: [AthleteService],
-      multi: true
-    },
-    MessageService
-  ],
-  bootstrap: [AppComponent]
+    declarations: [
+        AppComponent,
+    ],
+    imports: [
+        BrowserModule,
+        AppRoutingModule,
+        RouterModule,
+        AngularFireModule.initializeApp(firebaseConfig),
+        AngularFirestoreModule, // firestore
+        AngularFireAuthModule, // auth
+        AngularFireStorageModule, // storage,
+        FormsModule,
+        ReactiveFormsModule,
+        HttpClientModule,
+        MessagesModule,
+        MessageModule,
+        BrowserAnimationsModule
+    ],
+    providers: [
+        {provide: HTTP_INTERCEPTORS, useClass: HttpMainInterceptor, multi: true},
+        {
+            provide: APP_INITIALIZER,
+            useFactory: (athleteService: AthleteService) => () => athleteService.permissionPromise(),
+            deps: [AthleteService],
+            multi: true
+        },
+        MessageService
+    ],
+    bootstrap: [AppComponent]
 })
 export class AppModule { }
 

@@ -21,6 +21,8 @@ import {SelectComponent} from "../../components/select/select.component";
 import {TextareaComponent} from "../../components/textarea/textarea.component";
 import {ValidatorComponent} from "./components/validator/validator.component";
 import {CheckboxComponent} from "../../components/checkbox/checkbox.component";
+import {TabMenuModule} from "primeng/tabmenu";
+import {ContentComponent} from "../../components/content/content.component";
 
 const COMPS = [
     InputComponent,
@@ -34,7 +36,8 @@ const COMPS = [
     SelectionWrapperComponent,
     ImageUploadComponent,
     BaseWorkoutInfoComponent,
-    ValidatorComponent
+    ValidatorComponent,
+    ContentComponent
 ]
 
 const MODULES = [
@@ -42,7 +45,8 @@ const MODULES = [
     PipesModule,
     FileUploadModule,
     HttpClientModule,
-    InputTextareaModule
+    InputTextareaModule,
+    TabMenuModule
 ]
 
 @NgModule({

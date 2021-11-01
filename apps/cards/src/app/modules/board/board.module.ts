@@ -10,6 +10,7 @@ import {LeaderboardComponent} from "./components/leaderboard/leaderboard.compone
 import {ScoresComponent} from "../shared/components/scores/scores.component";
 import { ProfileComponent } from './components/profile/profile.component';
 import { CardQueueComponent } from './components/card-queue/card-queue.component';
+import { RulesComponent } from './components/rules/rules.component';
 
 @NgModule({
     declarations: [
@@ -20,6 +21,7 @@ import { CardQueueComponent } from './components/card-queue/card-queue.component
         ScoresComponent,
         ProfileComponent,
         CardQueueComponent,
+        RulesComponent,
     ],
     imports: [
         CommonModule,

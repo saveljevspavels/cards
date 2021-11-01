@@ -8,7 +8,7 @@ import {AthleteManagementComponent} from "./components/athlete-management/athlet
 
 const routes: Routes = [
     {
-        path: '',
+        path: 'game',
         component: AdminComponent
     },
     {

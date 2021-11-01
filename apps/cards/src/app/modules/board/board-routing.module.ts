@@ -9,22 +9,27 @@ import {ScoreService} from "../../services/score.service";
 import {ProfileComponent} from "./components/profile/profile.component";
 
 const routes: Routes = [
-  {
-    path: '',
-    component: BoardComponent
-  },
-  {
-    path: 'activity-list',
-    component: ActivityListComponent
-  },
-  {
-    path: 'leaderboard',
-    component: LeaderboardComponent
-  },
-  {
-    path: 'profile',
-    component: ProfileComponent
-  }
+    {
+        path: '',
+        pathMatch: 'full',
+        redirectTo: 'main'
+    },
+    {
+        path: 'main',
+        component: BoardComponent
+    },
+    {
+        path: 'activity-list',
+        component: ActivityListComponent
+    },
+    {
+        path: 'leaderboard',
+        component: LeaderboardComponent
+    },
+    {
+        path: 'profile',
+        component: ProfileComponent
+    }
 ]
 
 @NgModule({

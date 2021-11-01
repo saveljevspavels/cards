@@ -23,11 +23,15 @@ export class ValidatorComponent implements OnInit {
     public selectedActivity = this.boardService.selectedActivity$
     public validatorStatus = this.selectedActivity.pipe(map((activity) =>
             !activity
-                ? 'neutral'
+                ? {status: 'neutral', icon: 'pi-exclamation-circle'}
                 : this.validationService.validateRule(activity, this.validator)
-                    ? 'pass'
-                    : 'fail'
+                    ? {status: 'pass', icon: 'pi-check-circle'}
+                    : {status: 'fail', icon: 'pi-times-circle'}
     ))
+
+    public icons = {
+        neutral: 'pi-exclamation-circle'
+    }
 
     public propertyNameMapping = new Map([
         [CONST.ACTIVITY_PROPERTIES.DISTANCE, 'distance'],

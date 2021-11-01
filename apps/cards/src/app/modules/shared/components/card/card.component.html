@@ -1,23 +1,28 @@
-<div class="card {{small && 'card--small'}} card--tier-{{card.progression === 'tiers' ? card.tier : (card.value | tier)}}" *ngIf="card">
+<div class="card {{small && 'card--small'}}" *ngIf="card">
     <div class="card__content">
-        <img class="card__image" src="{{card.image}}">
-        <div class="card__title">
-            {{card.title}}
+        <div class="card__image card__image--tier-{{card.progression === 'tiers' ? card.tier : (card.value | tier)}}"
+             [style.background-image]="'url(' + card.image + ')'">
         </div>
-        <div class="card__description">
-            {{card.description}}
-        </div>
-        <div class="card__validation">
-            <span class="card__manual-note" *ngIf="card.manualValidation">Photo/comment required</span>
-            <app-validator *ngFor="let validator of card.validators" [validator]="validator"></app-validator>
+        <div class="ml-3">
+            <div class="card__title">
+                {{card.title}}
+            </div>
+            <div class="card__description mt-2">
+                {{card.description}}
+            </div>
+            <div class="card__validation mt-2">
+                <span class="card__manual-note" *ngIf="card.manualValidation">Photo/comment required</span>
+                <app-validator *ngFor="let validator of card.validators" [validator]="validator"></app-validator>
+            </div>
         </div>
     </div>
     <div class="card__bonuses">
-        <div class="card__progression" *ngIf="card.cardUses.usesToProgress !== 0">
+        <div class="card__progression" *ngIf="card.cardUses.usesToProgress !== 0; else placeholder">
             To {{card.progression === 'tiers' ? 'level up' : 'change'}}: {{card.cardUses.progression}}/{{card.cardUses.usesToProgress}}
         </div>
+        <ng-template #placeholder><div></div></ng-template>
         <div class="card__value" *ngIf="card.value !== 0">
-            {{card.value | value}}
+            <span class="card__value-number">{{card.value}}</span> points
         </div>
     </div>
 </div>

@@ -17,17 +17,11 @@ export class ActivityComponent implements OnInit, ControlValueAccessor {
     public selectedCards = new FormControl([])
     public imageObservables: any;
 
-    @Input()
-    public activity: any;
-
-    @Input()
-    public selection = false;
-
-    @Input()
-    public showImages = true;
-
-    @Input()
-    public showComments = false;
+    @Input() public activity: any;
+    @Input() public selection = false;
+    @Input() public showImages = true;
+    @Input() public showComments = false;
+    @Input() public showAthlete = false;
 
     constructor(private fileService: FileService) { }
 

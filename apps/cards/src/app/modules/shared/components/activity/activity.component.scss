@@ -2,6 +2,12 @@
     display: flex;
     flex-wrap: wrap;
     align-items: center;
+    background-color: var(--card-background);
+    box-shadow: var(--card-shadow);
+    border: 3px solid black;
+    border-radius: 4px;
+    margin-top: 16px;
+    width: 100%;
     > div {
         padding: 16px;
     }
@@ -15,5 +21,11 @@
         width: auto;
         height: auto;
         padding: 16px;
+    }
+    &__type {
+        font-size: var(--text-size-big);
+    }
+    &__data-item {
+        margin-top: 8px;
     }
 }

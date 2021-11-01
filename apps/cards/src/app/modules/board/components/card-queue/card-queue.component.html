@@ -1,16 +1,13 @@
 <div class="card-queue">
+    <h3>Card Queue</h3>
     <div *ngIf="(cardQueue | async)?.cardIds?.length; else noCards">
-        <div class="hand__shift-counter">
-            <h4>Cards played: {{cardUses | async}}/{{RULES.QUEUE.CARDS_TO_SHIFT}}</h4>
-            <p>When cards are played, row shifts, last card is discarded and new card is being drawn</p>
-        </div>
         <div class="hand__cards">
             <app-selection-wrapper
                 [singleSelection]="true"
                 [formControl]="selectedCards"
                 [template]="cardTemplate"
+                [selfSelectable]="true"
                 [dataItems]="(cardQueue | async).cardIds"
-                [wrap]="true"
             >
                 <ng-template #cardTemplate let-dataItem="dataItem">
                     <app-card

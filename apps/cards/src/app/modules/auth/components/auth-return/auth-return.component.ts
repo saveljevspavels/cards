@@ -21,7 +21,7 @@ export class AuthReturnComponent implements OnInit {
     this.responseParams = this.route.snapshot.queryParams;
     if(this.responseParams?.code && this.responseParams.scope === REQUIRED_PERMISSIONS) {
       this.authService.getToken(this.responseParams.code).subscribe(_ => {
-        this.router.navigateByUrl('board');
+        this.router.navigateByUrl('board/main');
       })
     } else {
       console.error('Not all permissions granted')

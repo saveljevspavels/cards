@@ -1,32 +1,59 @@
 <app-header></app-header>
 
-<h2>Board</h2>
+<app-content>
+    <app-rules></app-rules>
+    <div class="row">
+        <div class="col-lg-6">
+            <div *ngIf="selectedActivity | async; else selectionMode">
+                <h3>Submitting Activity</h3>
+                Please select cards to play, add images/comments
 
-<app-card-queue [formControl]="form.get('selectedCards')"></app-card-queue>
+                <app-activity [activity]="selectedActivity | async"></app-activity>
 
-<div *ngIf="selectedActivity | async; else selectionMode" >
-    <h3>Submitting Activity</h3>
-    Please select cards to play, add images/comments
+                <p>Upload images, if card requires it</p>
+                <app-image-upload
+                    [formControl]="form.get('selectedImages')"
+                ></app-image-upload>
 
-    <app-activity [activity]="selectedActivity | async"></app-activity>
+                <app-textarea
+                    rows="4"
+                    styleClass="full-width mt-3"
+                    [label]="'Comments'"
+                    [fc]="form.get('comments')"></app-textarea>
 
-    <h3>Upload images, if card requires it</h3>
-    <app-image-upload
-        [formControl]="form.get('selectedImages')"
-    ></app-image-upload>
-
-    <h3>Comments</h3>
-    <textarea id="float-input" rows="5" cols="30" pInputTextarea [formControl]="form.get('comments')"></textarea>
-
-    <p-button (click)="submitSelectedActivity()" label="Submit"></p-button>
-    <p-button styleClass="p-button-danger" (click)="exitSubmitMode()" label="Cancel"></p-button>
-</div>
-
-<ng-template #selectionMode>
-    <h3>New Activities</h3>
-    <div *ngFor="let activity of newActivities | async" style="display: flex; align-items: center">
-        <app-activity [activity]="activity" [showComments]="true"></app-activity>
-        <p-button *ngIf="activity.gameData.status === 'new'" (click)="enterSubmitMode(activity)" label="Submit Activity"></p-button>
-        <p-button *ngIf="activity.gameData.status === 'submitted'" (click)="rejectActivity(activity.id)" styleClass="p-button-danger" label="Cancel Submission"></p-button>
+                <div class="row mt-3">
+                    <div class="col-md-6">
+                        <p-button styleClass="full-width" [disabled]="!form.get('selectedCards').value.length" (click)="submitSelectedActivity()" label="Submit"></p-button>
+                    </div>
+                    <div class="col-md-6">
+                        <p-button styleClass="p-button-danger full-width" (click)="exitSubmitMode()" label="Cancel"></p-button>
+                    </div>
+                </div>
+            </div>
+            <ng-template #selectionMode>
+                <div>
+                    <h3>Your Pending Activities</h3>
+                    <app-selection-wrapper
+                        [singleSelection]="true"
+                        [formControl]="form.get('selectedActivity')"
+                        [template]="activityTemplate"
+                        [selfSelectable]="true"
+                        [dataItems]="(newActivities | async)"
+                        [idKey]="'id'"
+                    >
+                        <ng-template #activityTemplate let-dataItem="dataItem">
+                            <app-activity
+                                [activity]="dataItem"
+                                [showComments]="true"
+                            ></app-activity>
+                            <p-button *ngIf="dataItem.gameData.status === 'submitted'" (click)="rejectActivity(dataItem.id)" styleClass="p-button-danger" label="Cancel Submission"></p-button>
+                        </ng-template>
+                    </app-selection-wrapper>
+                </div>
+            </ng-template>
+        </div>
+        <div class="col-lg-6">
+            <app-card-queue [formControl]="form.get('selectedCards')"></app-card-queue>
+        </div>
     </div>
-</ng-template>
+</app-content>

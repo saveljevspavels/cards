@@ -1,5 +1,16 @@
 <div class="menu">
-  <div class="menu--item" *ngFor="let route of filteredRoutes">
-    <a routerLink="{{route.path}}">{{route.title}}</a>
-  </div>
+    <div class="menu__navigation">
+        <div class="menu__item"
+             *ngFor="let route of filteredRoutes"
+             routerLinkActive="menu__item--active"
+             routerLink="{{route.path}}"
+        >
+            <span class="pi pi-fw {{route.icon}}"></span>
+            <span class="menu__label">{{route.label}}</span>
+        </div>
+    </div>
+    <div class="menu__item" (click)="logout()">
+        <span class="pi pi-fw pi-times"></span>
+        <span class="menu__label">Logout</span>
+    </div>
 </div>

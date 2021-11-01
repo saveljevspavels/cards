@@ -3,6 +3,7 @@ import {ActivityService} from "../../../../services/activity.service";
 import {FormBuilder, FormControl, FormGroup} from "@angular/forms";
 import {FileService} from "../../../../services/file.service";
 import {BoardService} from "../../../../services/board.service";
+import {CONST} from "../../../../app.module";
 
 @Component({
   selector: 'app-board',
@@ -30,6 +31,7 @@ export class BoardComponent implements OnInit {
     }
 
     exitSubmitMode() {
+        this.form.controls.selectedActivity.setValue('')
         this.boardService.deselectActivity();
     }
 
@@ -50,7 +52,13 @@ export class BoardComponent implements OnInit {
         this.form = this.formBuilder.group({
             selectedCards: [[]],
             selectedImages: [[]],
+            selectedActivity: [''],
             comments: ['']
+        })
+
+        this.form.get('selectedActivity')?.valueChanges.subscribe(value => {
+            const activity = this.newActivities.value.find((activity: any) => activity.id.toString() === value[0]);
+            this.boardService.activity = activity?.gameData.status !== CONST.ACTIVITY_STATUSES.SUBMITTED ? activity : null;
         })
     }
 

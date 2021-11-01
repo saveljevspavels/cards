@@ -1,18 +1,21 @@
 <div class="activity">
-    <div>
+    <div *ngIf="showAthlete">
         <app-athlete *ngIf="activity?.athlete" [small]="true" [athleteId]="activity?.athlete.id"></app-athlete>
     </div>
     <div>
-        <div>
-            Type: {{activity.type}}
+        <div class="activity__data-item">
+            Type: <span class="activity__type">{{activity.type}}</span>
         </div>
-        <div>
+        <div class="activity__data-item">
             Distance: {{activity.distance | distance}}
         </div>
-        <div>
-            Time: {{activity.moving_time | time}} ({{activity.elapsed_time | time}})
+        <div class="activity__data-item">
+            Time: {{activity.moving_time | time}} moving ({{activity.elapsed_time | time}} total)
         </div>
-        <div *ngIf="showComments && activity.gameData.comments">
+        <div class="activity__data-item">
+            Average pace: {{activity.average_speed | pace}}
+        </div>
+        <div class="activity__data-item" *ngIf="showComments && activity.gameData.comments">
             Comments: {{activity.gameData.comments}}
         </div>
     </div>

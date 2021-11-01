@@ -1,4 +1,13 @@
-import {Component, forwardRef, Input, OnChanges, OnInit, SimpleChanges, TemplateRef} from '@angular/core';
+import {
+    Component,
+    forwardRef,
+    Input,
+    OnChanges,
+    OnInit,
+    SimpleChanges,
+    TemplateRef,
+    ViewEncapsulation
+} from '@angular/core';
 import {ControlValueAccessor, FormBuilder, FormGroup, NG_VALUE_ACCESSOR} from "@angular/forms";
 import {pairwise, startWith} from "rxjs/operators";
 
@@ -6,6 +15,7 @@ import {pairwise, startWith} from "rxjs/operators";
   selector: 'app-selection-wrapper',
   templateUrl: './selection-wrapper.component.html',
   styleUrls: ['./selection-wrapper.component.scss'],
+  encapsulation: ViewEncapsulation.None,
   providers: [{
     provide: NG_VALUE_ACCESSOR,
     useExisting: forwardRef(() => SelectionWrapperComponent),
@@ -19,6 +29,9 @@ export class SelectionWrapperComponent implements OnInit, OnChanges, ControlValu
 
   @Input()
   wrap = false;
+
+  @Input()
+  selfSelectable = false;
 
   @Input()
   template: TemplateRef<any>;
@@ -39,6 +52,10 @@ export class SelectionWrapperComponent implements OnInit, OnChanges, ControlValu
 
   constructor(private formBuilder: FormBuilder) { }
 
+  getId(item: any): string {
+      return typeof item === 'string' ? item : item[this.idKey].toString()
+  }
+
   ngOnInit(): void {
   }
 
@@ -46,7 +63,7 @@ export class SelectionWrapperComponent implements OnInit, OnChanges, ControlValu
     if(this.dataItems?.length) {
       this.innerForm = this.formBuilder.group({})
       this.dataItems.forEach((item: any) => {
-        this.innerForm.addControl(typeof item === 'string' ? item : item[this.idKey], this.formBuilder.control(false))
+        this.innerForm.addControl(this.getId(item), this.formBuilder.control(false))
       })
       this.innerForm.valueChanges.pipe(
           startWith([]),
@@ -73,7 +90,7 @@ export class SelectionWrapperComponent implements OnInit, OnChanges, ControlValu
 
     toggleAll(value: boolean) {
     this.dataItems.forEach((item: any) => {
-      this.innerForm.get(typeof item === 'string' ? item : item[this.idKey].toString())?.setValue(value)
+      this.innerForm.get(this.getId(item))?.setValue(value)
     })
   }
 
@@ -103,5 +120,11 @@ export class SelectionWrapperComponent implements OnInit, OnChanges, ControlValu
   lastSelected(oldSet: any, newSet: any): string {
     const last = Object.entries(newSet).find(([key, value]) => value && !oldSet[key])
     return last ? last[0] : ''
+  }
+
+  selectItem(item: any) {
+    if(this.selfSelectable) {
+      this.innerForm.get(this.getId(item))?.setValue(true)
+    }
   }
 }

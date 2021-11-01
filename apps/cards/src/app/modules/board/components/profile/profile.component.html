@@ -1,7 +1,9 @@
 <app-header></app-header>
 
-<h2>Profile</h2>
+<app-content>
+    <h2>Profile</h2>
 
-<app-athlete [athlete]="athlete | async"></app-athlete>
+    <app-athlete [athlete]="athlete | async"></app-athlete>
 
-<app-base-workout-info [baseWorkout]="(athlete | async)?.baseWorkout"></app-base-workout-info>
+    <app-base-workout-info [baseWorkout]="(athlete | async)?.baseWorkout"></app-base-workout-info>
+</app-content>

@@ -1,5 +1,25 @@
-/* You can add global styles to this file, and also import other style files */
+@import "styles/grid";
+
+:root {
+    --text-size: 14px;
+    --text-size-small: 12px;
+    --text-size-big: 20px;
+    --text-color: #111;
+    --text-active: #38f;
+    --card-background: rgba(154, 124, 107, 0.35);
+    --card-shadow: 2px 5px 7px rgba(0, 0, 0, 0.1);
+}
+
+
 body {
     font-family: Helvetica, sans-serif!important;
     letter-spacing: -0.3px;
+    padding: 0;
+    margin: 0;
+    overflow-x: hidden;
+    font-size: var(--text-size)
+}
+
+.full-width {
+    width: 100%;
 }

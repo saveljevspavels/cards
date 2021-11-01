@@ -1,6 +1,7 @@
 .validator {
-    display: inline-block;
-    font-size: 12px;
+    display: flex;
+    align-items: center;
+    font-size: var(--text-size-small);
     &--pass {
         color: limegreen;
     }

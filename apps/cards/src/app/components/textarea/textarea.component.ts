@@ -15,6 +15,9 @@ export class TextareaComponent implements OnInit {
   public fc: FormControl;
 
   @Input()
+  public styleClass: string;
+
+  @Input()
   public label: string;
 
   constructor() { }
