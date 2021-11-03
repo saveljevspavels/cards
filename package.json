@@ -8,7 +8,7 @@
     "start:cards": "ng serve cards --port=4600 --disable-host-check",
     "start:cards:prod": "ng serve cards --port=4600 --disable-host-check --prod",
     "start:server": "node --experimental-json-modules ./apps/server/index.js --port=80",
-    "build": "ng build",
+    "build": "ng build --base-href http://104.248.43.19/",
     "test": "ng test",
     "lint": "nx workspace-lint && ng lint",
     "e2e": "ng e2e",
@@ -43,7 +43,11 @@
     "body-parser": "^1.19.0",
     "cors": "^2.8.5",
     "express": "^4.17.1",
+<<<<<<< HEAD
     "firebase": "^8.10.0",
+=======
+    "http-server": "^14.0.0",
+>>>>>>> 8065f0665fb4c8408689ef4894fe360795b6ad19
     "primeicons": "^4.1.0",
     "primeng": "^12.0.0",
     "rxjs": "~6.6.0",
