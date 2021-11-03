@@ -8,5 +8,5 @@ export const environment: any = {
     rules: RULES,
     stravaConfig: STRAVA_CONFIG,
     authReturnUrl: 'http://localhost:4600/login/return',
-    baseBE: 'http://localhost:80/api',
+    baseBE: 'http://localhost:3000/api',
 };

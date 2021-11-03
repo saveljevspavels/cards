@@ -1,5 +1,5 @@
+<h3>Card Queue</h3>
 <div class="card-queue">
-    <h3>Card Queue</h3>
     <div *ngIf="(cardQueue | async)?.cardIds?.length; else noCards">
         <div class="hand__cards">
             <app-selection-wrapper

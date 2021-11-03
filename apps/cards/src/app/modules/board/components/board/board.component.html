@@ -3,6 +3,12 @@
 <app-content>
     <app-rules></app-rules>
     <div class="row">
+        <div class="col-md-6 d-sm-none d-md-block"></div>
+        <div class="col-md-6 col-sm-12">
+            <app-card-counter></app-card-counter>
+        </div>
+    </div>
+    <div class="row flex-md-nowrap flex-sm-wrap">
         <div class="col-lg-6">
             <div *ngIf="selectedActivity | async; else selectionMode">
                 <h3>Submitting Activity</h3>

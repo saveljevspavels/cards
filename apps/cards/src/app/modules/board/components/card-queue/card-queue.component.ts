@@ -3,8 +3,6 @@ import {DeckService} from "../../../../services/deck.service";
 import Hand from "../../../../interfaces/hand";
 import {Observable} from "rxjs";
 import {ControlValueAccessor, FormControl, NG_VALUE_ACCESSOR} from "@angular/forms";
-import {RULES} from "../../../../app.module";
-import {GameService} from "../../../../services/game.service";
 
 @Component({
   selector: 'app-card-queue',

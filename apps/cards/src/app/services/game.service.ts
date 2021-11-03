@@ -7,19 +7,19 @@ import {CONST} from "../app.module";
 import {environment} from "../../environments/environment";
 import {map} from "rxjs/operators";
 import Hand from "../interfaces/hand";
+import Game from "../interfaces/game";
 
 @Injectable({
   providedIn: 'root'
 })
 export class GameService {
 
-    public cardUses = new BehaviorSubject<any>(0);
+    public gameData = new BehaviorSubject<Game | null>(null);
     private gameDocument = this.db.collection(CONST.COLLECTIONS.GAME).doc(CONST.GAME_ID);
 
-    constructor(private db: AngularFirestore,
-                private http: HttpClient) {
+    constructor(private db: AngularFirestore) {
         this.gameDocument.valueChanges().subscribe((game: any) => {
-            this.cardUses.next(game.cardUses)
+            this.gameData.next(game)
         });
     }
 }

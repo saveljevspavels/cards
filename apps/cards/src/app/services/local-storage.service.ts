@@ -16,4 +16,12 @@ export class LocalStorageService {
     static get athleteId() {
         return (JSON.parse(localStorage.getItem('athlete') || '{}'))?.id?.toString()
     }
+
+    static get rulesHidden(): boolean {
+        return (JSON.parse(localStorage.getItem('rulesHidden') || 'false'))
+    }
+
+    static set rulesHidden(value: boolean) {
+        localStorage.setItem('rulesHidden', value.toString())
+    }
 }

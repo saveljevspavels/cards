@@ -11,6 +11,7 @@ import {ScoresComponent} from "../shared/components/scores/scores.component";
 import { ProfileComponent } from './components/profile/profile.component';
 import { CardQueueComponent } from './components/card-queue/card-queue.component';
 import { RulesComponent } from './components/rules/rules.component';
+import { CardCounterComponent } from './components/card-counter/card-counter.component';
 
 @NgModule({
     declarations: [
@@ -22,6 +23,7 @@ import { RulesComponent } from './components/rules/rules.component';
         ProfileComponent,
         CardQueueComponent,
         RulesComponent,
+        CardCounterComponent,
     ],
     imports: [
         CommonModule,

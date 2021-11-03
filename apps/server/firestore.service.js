@@ -559,9 +559,11 @@ export class FirestoreService {
 
     async startGame() {
         const gameDoc = this.gameCollection.doc(CONST.GAME_ID)
+        const game = (await gameDoc.get()).data() || {}
         await gameDoc.set({
             cardUses: 0,
             shifts: 0,
+            startDate: game.startDate
         })
         return await this.dealQueue()
     }

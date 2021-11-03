@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import {Observable} from "rxjs";
-import {GameService} from "../../../../services/game.service";
 import {RULES} from "../../../../app.module";
+import {LocalStorageService} from "../../../../services/local-storage.service";
 
 @Component({
   selector: 'app-rules',
@@ -9,9 +8,8 @@ import {RULES} from "../../../../app.module";
   styleUrls: ['./rules.component.scss']
 })
 export class RulesComponent implements OnInit {
-    public RULES = RULES;
 
-    public cardUses: Observable<number> = this.gameService.cardUses.asObservable()
+    public rulesHidden = LocalStorageService.rulesHidden;
 
     public rules = {
         left: [
@@ -29,9 +27,14 @@ export class RulesComponent implements OnInit {
         ]
     }
 
-    constructor(public gameService: GameService) { }
+    constructor() { }
 
     ngOnInit(): void {
+    }
+
+    toggleRules() {
+        LocalStorageService.rulesHidden = !this.rulesHidden
+        this.rulesHidden = LocalStorageService.rulesHidden;
     }
 
 }

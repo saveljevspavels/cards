@@ -1,19 +1,23 @@
 <div class="row">
-    <div class="col-md-6">
-        <div class="">
-            <h4>Rules</h4>
-            <ul>
-                <li *ngFor="let rule of rules.left">{{rule}}</li>
-            </ul>
-        </div>
+    <div class="col-md-12">
+        <p-button (click)="toggleRules()" [label]="rulesHidden ? 'Show Rules' : 'Hide Rules'"></p-button>
     </div>
-    <div class="col-md-6">
-        <div class="">
-            <h4>&nbsp;</h4>
-            <ul>
-                <li *ngFor="let rule of rules.right">{{rule}}</li>
-            </ul>
-            <h4>Cards played: {{cardUses | async}}/{{RULES.QUEUE.CARDS_TO_SHIFT}}</h4>
+    <ng-container *ngIf="!rulesHidden">
+        <div class="col-md-6">
+            <div class="">
+                <h4>Rules</h4>
+                <ul>
+                    <li *ngFor="let rule of rules.left">{{rule}}</li>
+                </ul>
+            </div>
         </div>
-    </div>
+        <div class="col-md-6">
+            <div class="">
+                <h4>&nbsp;</h4>
+                <ul>
+                    <li *ngFor="let rule of rules.right">{{rule}}</li>
+                </ul>
+            </div>
+        </div>
+    </ng-container>
 </div>

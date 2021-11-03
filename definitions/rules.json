@@ -1,5 +1,4 @@
 {
-    "GAME_START": "2021-10-20",
     "HAND_SIZE": 3,
     "DEFAULT_BASE_WORKOUT":{
         "distance": 3000,
