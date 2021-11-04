@@ -6,6 +6,7 @@ import {DistancePipe} from "./distance.pipe";
 import {TimePipe} from "./time.pipe";
 import {TierPipe} from "./tier.pipe";
 import {PacePipe} from "./pace.pipe";
+import {ArraySortPipe} from "./sort.pipe";
 
 const PIPES = [
 	ModifierPipe,
@@ -13,7 +14,8 @@ const PIPES = [
     DistancePipe,
     TimePipe,
     TierPipe,
-    PacePipe
+    PacePipe,
+    ArraySortPipe
 ]
 
 @NgModule({

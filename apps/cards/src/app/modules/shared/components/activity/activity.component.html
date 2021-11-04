@@ -1,40 +1,43 @@
 <div class="activity">
+    <div class="activity__id">
+        {{activity.id}}
+    </div>
     <div *ngIf="showAthlete">
         <app-athlete *ngIf="activity?.athlete" [small]="true" [athleteId]="activity?.athlete.id"></app-athlete>
     </div>
-    <div>
+    <div [ngClass]="{'full-width': !activity.gameData.cardSnapshots?.length}">
         <div class="activity__data-item">
             Type: <span class="activity__type">{{activity.type}}</span>
         </div>
-        <div class="activity__data-item">
-            Distance: {{activity.distance | distance}}
-        </div>
-        <div class="activity__data-item">
-            Time: {{activity.moving_time | time}} moving ({{activity.elapsed_time | time}} total)
-        </div>
-        <div class="activity__data-item">
-            Average pace: {{activity.average_speed | pace}}
+        <div class="row">
+            <div class="col-md-6">
+                <div class="activity__data-item">
+                    Started at: {{activity.start_date_local | date : 'EEEE, HH:mm'}}
+                </div>
+                <div class="activity__data-item">
+                    Time: {{activity.moving_time | time}} ({{activity.elapsed_time | time}} total)
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="activity__data-item">
+                    Distance: {{activity.distance | distance}}
+                </div>
+                <div class="activity__data-item">
+                    Average pace: {{activity.average_speed | pace}}
+                </div>
+            </div>
         </div>
         <div class="activity__data-item" *ngIf="showComments && activity.gameData.comments">
             Comments: {{activity.gameData.comments}}
         </div>
     </div>
-    <div *ngIf="activity.gameData.cardSnapshots?.length">
+    <div *ngIf="activity.gameData.cardSnapshots?.length" class="ml-3">
         Played cards:
-        <app-selection-wrapper
-          [selectionEnabled]="selection"
-          [formControl]="selectedCards"
-          [template]="cardTemplate"
-          [dataItems]="activity.gameData.cardSnapshots"
-          [wrap]="true"
-        >
-            <ng-template #cardTemplate let-dataItem="dataItem">
-                <app-card
-                [card]="dataItem"
-                [small]="true"
-            ></app-card>
-            </ng-template>
-        </app-selection-wrapper>
+        <app-card
+            *ngFor="let card of activity.gameData.cardSnapshots"
+            [card]="card"
+            [small]="true"
+        ></app-card>
     </div>
     <div *ngIf="showImages && this.activity.gameData?.images?.length" class="activity__images">
         <img class="activity__image" *ngFor="let image of this.activity.gameData?.images" src="{{image}}">

@@ -1,4 +1,7 @@
 <div class="card {{small && 'card--small'}}" *ngIf="card">
+    <div class="card__id">
+        {{card.id}}
+    </div>
     <div class="card__content">
         <div class="card__image card__image--tier-{{card.progression === 'tiers' ? card.tier : (card.value | tier)}}"
              [style.background-image]="'url(' + card.image + ')'">

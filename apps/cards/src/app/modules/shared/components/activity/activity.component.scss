@@ -1,16 +1,15 @@
 .activity {
+    position: relative;
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    background-color: var(--card-background);
+    background-color: var(--acticity-background);
     box-shadow: var(--card-shadow);
     border: 3px solid black;
     border-radius: 4px;
     margin-top: 16px;
     width: 100%;
-    > div {
-        padding: 16px;
-    }
+    padding: 16px;
     &__images {
         //display: flex;
     }
@@ -27,5 +26,12 @@
     }
     &__data-item {
         margin-top: 8px;
+    }
+    &__id {
+        font-size: 10px;
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        opacity: 0.2;
     }
 }

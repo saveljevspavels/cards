@@ -1,5 +1,8 @@
 .scores {
-  th, td {
-    padding: 10px 16px;
-  }
+    border-spacing: 0;
+    th, td {
+        padding: 10px 16px;
+        background-color: var(--card-background);
+        border: 1px solid black;
+    }
 }

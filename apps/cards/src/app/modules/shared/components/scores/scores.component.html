@@ -5,7 +5,7 @@
     <th>Cards Played</th>
     <th>Points</th>
   </tr>
-  <tr *ngFor="let score of scores | async">
+  <tr *ngFor="let score of scores | async | sort: 'value': 'desc'">
     <td><app-athlete [athleteId]="score.athleteId" [small]="true"></app-athlete></td>
     <td>{{score.activities}}</td>
     <td>{{score.cardsPlayed}}</td>
