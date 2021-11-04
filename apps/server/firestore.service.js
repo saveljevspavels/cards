@@ -8,6 +8,8 @@ import {RESPONSES} from "./response-codes.js";
 import {ValidationService} from "./shared/validation.service.js";
 
 export class FirestoreService {
+    logger;
+
     db = firebase.initializeApp(FIREBASE_CONFIG.default).firestore();
     athleteCollection = this.db.collection(CONST.COLLECTIONS.ATHLETES)
     pendingActivityCollection = this.db.collection(CONST.COLLECTIONS.PENDING_ACTIVITIES)
@@ -19,7 +21,8 @@ export class FirestoreService {
     scoreCollection = this.db.collection(CONST.COLLECTIONS.SCORES)
     gameCollection = this.db.collection(CONST.COLLECTIONS.GAME)
 
-    constructor() {
+    constructor(logger) {
+        this.logger = logger;
     }
 
     async saveAthlete(athlete) {
@@ -32,10 +35,10 @@ export class FirestoreService {
                     baseWorkout: RULES.DEFAULT_BASE_WORKOUT,
                     permissions: ['default']
                 })
-            console.log('Athlete', athlete.id, 'saved')
+            this.logger.info(`Athlete ${athlete.id} saved`)
             return true;
         } else {
-            console.log('Athlete', athlete.id, 'logged in')
+            this.logger.info(`Athlete ${athlete.id} logged in`)
             return false;
         }
     }
@@ -43,20 +46,20 @@ export class FirestoreService {
     addPendingActivity(activity){
         return this.pendingActivityCollection.doc(activity.object_id.toString()).set(activity)
             .then(() => {
-                console.log("Pending activity added!");
+                this.logger.info(`Pending activity added!`);
             })
             .catch((error) => {
-                console.error("Error writing document: ", error);
+                this.logger.error(`Error writing document: ${error}`);
             });
     }
 
     deletePendingActivity(activityId) {
         return this.pendingActivityCollection.doc(activityId.toString()).delete()
             .then(() => {
-                console.log("Pending activity deleted!");
+                this.logger.info(`Pending activity deleted!`);
             })
             .catch((error) => {
-                console.error("Error deleting document: ", error);
+                this.logger.error(`Error deleting document: ${error}`);
             });
     }
 
@@ -64,7 +67,7 @@ export class FirestoreService {
         const activityDoc = this.detailedActivityCollection.doc(activity.id.toString())
         const activityExists = (await activityDoc.get()).exists
         if(activityExists) {
-            console.error("Activity", activity.id, 'already exists');
+            this.logger.error(`Activity ${activity.id} already exists`);
         } else {
             return this.detailedActivityCollection.doc(activity.id.toString()).set(activity)
         }
@@ -78,20 +81,20 @@ export class FirestoreService {
             ...command
         })
         .then(() => {
-            console.log("Command added!");
+            this.logger.info(`Command added!`);
         })
         .catch((error) => {
-            console.error("Error writing document: ", error);
+            console.error(`Error writing document: ${error}`);
         });
     }
 
     async deleteCommand(commandId) {
         return this.commandCollection.doc(commandId).delete()
             .then(() => {
-                console.log("Command deleted!");
+                this.logger.info(`Command deleted!`);
             })
             .catch((error) => {
-                console.error("Error writing document: ", error);
+                this.logger.error(`Error writing document: ${error}`);
             });
     }
 
@@ -104,7 +107,7 @@ export class FirestoreService {
         const handDoc = this.handCollection.doc(hand);
         const currentDeck = (await handDoc.get()).data()?.cardIds || []
         await handDoc.set({cardIds: [...cards, ...currentDeck || []]})
-        console.log('Adding', cards.length, 'cards to hand', hand, '(now', currentDeck.length + cards.length, ')')
+        this.logger.info(`Adding ${cards.length} cards to hand ${hand} (now ${currentDeck.length + cards.length})`)
     }
 
     async deleteCards(cards) {
@@ -115,7 +118,7 @@ export class FirestoreService {
             cards.forEach(card => {
                 if(currentHand.indexOf(card) !== -1) {
                     currentHand.splice(currentHand.indexOf(card), 1);
-                    console.log('Card', card, 'deleted from', handsToCheck[i])
+                    this.logger.info(`Card ${card} deleted from ${handsToCheck[i]}`)
                 }
             })
             await handDocument.set({cardIds: currentHand})
@@ -123,7 +126,7 @@ export class FirestoreService {
         for(let i = 0; i < cards.length; i++) {
             await this.cardCollection.doc(cards[i]).delete()
         }
-        console.log('Cards', cards, 'deleted')
+        this.logger.info(`Cards ${cards} deleted`)
     }
 
     async shuffleDeck() {
@@ -137,13 +140,13 @@ export class FirestoreService {
         }
 
         await this.setDeck(shuffledDeck)
-        console.log('Deck is shuffled, contains', shuffledDeck, 'cards')
+        this.logger.info(`Deck is shuffled, contains ${shuffledDeck} cards`)
     }
 
     async dealCards(athletes, amount) {
         const deck = this.handCollection.doc(CONST.HANDS.DECK);
         const currentDeck = (await deck.get()).data()?.cardIds || []
-        console.log('Cards in deck:', currentDeck.length, 'dealing', amount * athletes.length, 'cards')
+        this.logger.info(`Cards in deck: ${currentDeck.length} dealing ${amount * athletes.length} cards`)
         if(currentDeck.length >= amount * athletes.length) {
             const athleteCards = {}
             for(let i = 0; i < amount; i++) {
@@ -160,7 +163,7 @@ export class FirestoreService {
             await deck.set({cardIds: currentDeck})
             return RESPONSES.SUCCESS;
         } else {
-            console.log('Not enough cards in deck')
+            this.logger.info(`Not enough cards in deck`)
             return RESPONSES.ERROR.NOT_ENOUGH_CARDS;
         }
     }
@@ -168,11 +171,11 @@ export class FirestoreService {
     async dealQueue() {
         const queueHand = this.handCollection.doc(CONST.HANDS.QUEUE);
         const currentQueue = (await queueHand.get()).data()?.cardIds || []
-        console.log('There are', currentQueue.length, 'cards in the queue, trying to draw a card')
+        this.logger.info(`There are ${currentQueue.length} cards in the queue, trying to draw a card`)
         if(currentQueue.length < RULES.QUEUE.LENGTH) {
             return await this.dealCards([CONST.HANDS.QUEUE], RULES.QUEUE.LENGTH - currentQueue.length);
         } else {
-            console.log('Queue hand is full (', currentQueue.length, ')')
+            this.logger.info(`Queue hand is full (${currentQueue.length})`)
             return RESPONSES.ERROR.QUEUE_FULL
         }
     }
@@ -189,16 +192,16 @@ export class FirestoreService {
         })
         if(currentHand.length + cards.length === handSize) {
             await handDoc.set({cardIds: currentHand})
-            console.log('Hand', hand, 'now has', currentHand.length, 'cards, was', handSize)
+            this.logger.info(`Hand ${hand} now has ${currentHand.length} cards, was ${handSize}`)
             return true
         } else {
-            console.error('Hand', hand, 'don\'t have required cards')
+            this.logger.error(`Hand ${hand} don\'t have required cards`)
             return false
         }
     }
 
     async discardCards(hand, cards) {
-        console.log('Discarding', cards.length, 'cards from', hand)
+        this.logger.info(`Discarding ${cards.length} cards from ${hand}`)
         const result = await this.discardFromHand(hand, cards)
         if(result) {
             await this.addToHand(CONST.HANDS.DISCARD)
@@ -208,11 +211,11 @@ export class FirestoreService {
     async drawCard(athlete) {
         const athleteHand = this.handCollection.doc(athlete);
         const currentHand = (await athleteHand.get()).data()?.cardIds || []
-        console.log('Athlete', athlete, 'has', currentHand.length, 'cards, tries to draw a card')
+        this.logger.info(`Athlete ${athlete} has ${currentHand.length} cards, tries to draw a card`)
         if(currentHand.length < RULES.HAND_SIZE) {
             return await this.dealCards([athlete], 1)
         } else {
-            console.log('Athlete', athlete, 'hand is full (', currentHand, ')')
+            this.logger.info(`Athlete ${athlete} hand is full (${currentHand})`)
             return 'Hand is full'
         }
     }
@@ -239,7 +242,7 @@ export class FirestoreService {
             }
         })
         // await this.discardCards(athleteId, cardIds) // No discarding in current game mode
-        console.log('Athlete', athleteId, 'submitted activity with', cardIds)
+        this.logger.info(`Athlete ${athleteId} submitted activity with ${cardIds}`)
     }
 
     async rejectActivity(activityId, comments) {
@@ -254,20 +257,20 @@ export class FirestoreService {
                 status: CONST.ACTIVITY_STATUSES.NEW,
             }
         })
-        console.log('Activity', activityId, 'was rejected for athlete', activity.athlete.id.toString())
+        this.logger.info(`Activity ${activityId} was rejected for athlete ${activity.athlete.id.toString()}`)
     }
 
     async tryAutoApprove(activityId) {
-        console.log('Attempting auto approve for activity', activityId)
+        this.logger.info(`Attempting auto approve for activity ${activityId}`)
         const activityDoc = this.detailedActivityCollection.doc(activityId.toString())
         const activity = (await activityDoc.get()).data() || {}
         if(!activity.gameData.cardSnapshots[0]) {
-            console.log('No cards provided on activity, switching to manual validation')
+            this.logger.info(`No cards provided on activity, switching to manual validation`)
         } else {
             const card = activity.gameData.cardSnapshots[0]
 
             if(activity.gameData.cardSnapshots.find(card => card.manualValidation)) {
-                console.log('Manual validation required for card', card.id)
+                this.logger.info(`Manual validation required for card ${card.id}`)
                 return;
             }
 
@@ -278,10 +281,10 @@ export class FirestoreService {
                 .reduce((acc, card) => [...acc, ...card.validators], [])
                 .reduce((acc, validator) => acc && ValidationService.validateRule(activity, validator, athlete.baseWorkout), true)
             ) { // Checks all validators
-                console.log('All validators passed for', activityId)
+                this.logger.info(`All validators passed for ${activityId}`)
                 await this.approveActivity(activityId, [card.id])
             } else {
-                console.log('Validator(s) failed, switching for manual approve', activityId)
+                this.logger.info(`Validator(s) failed, switching for manual approve ${activityId}`)
             }
         }
     }
@@ -298,7 +301,7 @@ export class FirestoreService {
             }
         })
 
-        console.log('Activity', activityId, 'was approved for athlete', activity.athlete.id.toString(), 'with cards', cardIds)
+        this.logger.info(`Activity ${activityId} was approved for athlete ${activity.athlete.id.toString()} with cards ${cardIds}`)
 
         await Promise.all([
             this.updatePersonalBests(activity, cardIds),
@@ -358,7 +361,7 @@ export class FirestoreService {
                 nextTier = nextTier + 1;
                 break;
         }
-        console.log('Progressing card', cardId, 'to', card.progression, nextTier)
+        this.logger.info(`Progressing card ${cardId} to ${card.progression} nextTier`)
         const factory = (await this.cardFactoryCollection.doc(card.factoryId).get()).data() || {}
         await this.createCardFromFactory(factory, nextTier, card.id);
     }
@@ -433,7 +436,7 @@ export class FirestoreService {
                 queue: 0
             }
         })
-        console.log('Card', cardId, 'value changed by', valueDelta)
+        this.logger.info(`Card ${cardId} value changed by ${valueDelta}`)
     }
 
     async createCardFactory(card) {
@@ -443,10 +446,10 @@ export class FirestoreService {
             id
         })
             .then(() => {
-                console.log("New card created!");
+                this.logger.info(`New card created!`);
             })
             .catch((error) => {
-                console.error("Error writing document: ", error);
+                this.logger.error(`Error writing document: ${error}`);
             });
     }
 
@@ -471,7 +474,7 @@ export class FirestoreService {
             ? factory.cards[getRandomInt(Object.keys(factory.cards).length)] // Random card for flat progression
             : factory.cards[tier]
         if(!card) {
-            console.error('Card', factory.title, 'tier', tier, 'not defined')
+            this.logger.error(`Card ${factory.title} tier ${tier} not defined`)
             return;
         }
         card = {
@@ -493,7 +496,7 @@ export class FirestoreService {
         delete card.usesToProgress;
         await this.cardCollection.doc(id).set(card)
 
-        console.log('Created', factory.title, 'card, tier', tier)
+        this.logger.info(`Created ${factory.title} card ${tier} tier`)
     }
 
     async combineCards(athleteId, cardIds) {
@@ -545,7 +548,7 @@ export class FirestoreService {
                     ...baseWorkoutPatch
                 }
             })
-            console.log('Base workout updated for athlete', athlete.id, 'with', JSON.stringify(baseWorkoutPatch))
+            this.logger.info(`Base workout updated for athlete ${athlete.id} with ${JSON.stringify(baseWorkoutPatch)}`)
         })
     }
 
