@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
 import {AngularFirestore} from "@angular/fire/firestore";
-import {BehaviorSubject} from "rxjs";
+import {BehaviorSubject, Observable} from "rxjs";
 import {HttpClient} from "@angular/common/http";
 import {COMMANDS} from "../../constants/commands";
 import {CONST} from "../../app.module";
 import {environment} from "../../../environments/environment";
+import {LogItem} from "../../interfaces/log-item";
 
 @Injectable()
 export class AdminService {
@@ -92,5 +93,9 @@ export class AdminService {
 
     public startGame() {
         return this.http.post(`${environment.baseBE}/start-game`, {})
+    }
+
+    public getLogs(): Observable<Object> {
+        return this.http.get(`${environment.baseBE}/admin/logs`)
     }
 }

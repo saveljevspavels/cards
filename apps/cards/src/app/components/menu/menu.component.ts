@@ -22,7 +22,7 @@ export class MenuComponent implements OnInit {
         },
         {
             label: 'Leaderboard',
-            icon: 'pi pi-fw pi-pencil',
+            icon: 'pi pi-fw pi-chart-line',
             path: '/board/leaderboard'
         },
         {
@@ -47,6 +47,12 @@ export class MenuComponent implements OnInit {
             icon: 'pi pi-fw pi-cog',
             path: '/admin/athlete-management',
             permission: 'admin-panel'
+        },
+        {
+            label: 'Logs',
+            icon: 'pi pi-fw pi-list',
+            path: '/admin/logs',
+            permission: 'admin-logs'
         }
     ];
 

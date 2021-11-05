@@ -33,11 +33,20 @@
     </div>
     <div *ngIf="activity.gameData.cardSnapshots?.length" class="ml-3">
         Played cards:
-        <app-card
-            *ngFor="let card of activity.gameData.cardSnapshots"
-            [card]="card"
-            [small]="true"
-        ></app-card>
+        <app-selection-wrapper
+            [selectionEnabled]="selection"
+            [formControl]="selectedCards"
+            [template]="cardTemplate"
+            [dataItems]="activity.gameData.cardSnapshots"
+            [wrap]="true"
+        >
+            <ng-template #cardTemplate let-dataItem="dataItem">
+                <app-card
+                    [card]="dataItem"
+                    [small]="true"
+                ></app-card>
+            </ng-template>
+        </app-selection-wrapper>
     </div>
     <div *ngIf="showImages && this.activity.gameData?.images?.length" class="activity__images">
         <img class="activity__image" *ngFor="let image of this.activity.gameData?.images" src="{{image}}">

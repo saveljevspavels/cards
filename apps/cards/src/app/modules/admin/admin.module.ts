@@ -13,6 +13,8 @@ import { CardFactoryComponent } from './components/card-factory/card-factory.com
 import { CardInstanceCreateComponent } from './components/card-instance-create/card-instance-create.component';
 import { AthleteManagementComponent } from './components/athlete-management/athlete-management.component';
 import { DeckComponent } from './components/deck/deck.component';
+import { LogsComponent } from './components/logs/logs.component';
+import { LogItemComponent } from './components/log-item/log-item.component';
 
 
 @NgModule({
@@ -25,7 +27,9 @@ import { DeckComponent } from './components/deck/deck.component';
     CardFactoryComponent,
     CardInstanceCreateComponent,
     AthleteManagementComponent,
-    DeckComponent
+    DeckComponent,
+    LogsComponent,
+    LogItemComponent
   ],
     imports: [
         CommonModule,

@@ -3,10 +3,10 @@
     align-items: center;
     font-size: var(--text-size-small);
     &--pass {
-        color: limegreen;
+        color: var(--color-pass);
     }
     &--fail {
-        color: red;
+        color: var(--color-danger);
     }
     &--neutral {
         color: initial;

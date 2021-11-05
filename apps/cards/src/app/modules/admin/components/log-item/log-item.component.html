@@ -1,0 +1,12 @@
+<div class="log-item">
+    <p>
+        <span class="log-item__icon pi pi-fw"
+              [ngClass]="{
+                'pi-check-circle': item.l === 'info',
+                'pi-info-circle': item.l === 'error'
+              }"
+        ></span>
+        <span class="log-item__timestamp">{{item.t | date: 'MMM d, y, HH:mm:ss'}}</span>
+        <span class="log-item__message">{{item.m}}</span>
+    </p>
+</div>

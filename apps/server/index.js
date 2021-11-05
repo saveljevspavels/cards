@@ -12,30 +12,11 @@ import CardService from "./card.service.js";
 import ImageService from "./images.service.js";
 import AthleteService from "./athlete.service.js";
 import GameService from "./game.service.js";
-import winston from "winston";
-
-const logger = winston.createLogger({
-    format: winston.format.combine(
-        winston.format.timestamp({
-            format: 'YYYY-MM-DD HH:mm:ss',
-        }),
-        winston.format.printf((info) =>
-            JSON.stringify({
-                t: info.timestamp,
-                l: info.level,
-                m: info.message,
-                s: info.splat !== undefined ? `${info.splat}` : '',
-            }) + ','
-        )
-    ),
-    transports: [
-        new winston.transports.Console(),
-        new winston.transports.File({ filename: 'log.log', timestamp: true })
-    ]
-});
+import LoggerService from "./logger.service.js";
 
 const app = express().use(bodyParser.json(), cors());
-const fireStoreService = new FirestoreService(logger)
+const logger = new LoggerService(app);
+const fireStoreService = new FirestoreService(logger);
 const webhookService = new WebhookService(app, fireStoreService);
 const clientService = new ClientService(app, fireStoreService);
 const adminService = new AdminService(app, fireStoreService);

@@ -1,0 +1,14 @@
+.log-item {
+    &__timestamp {
+        display: inline-block;
+        width: 150px;
+    }
+    &__icon {
+        &.pi-check-circle {
+            color: var(--color-text);
+        }
+        &.pi-info-circle {
+            color: var(--color-danger);
+        }
+    }
+}
