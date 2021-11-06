@@ -63,6 +63,7 @@ export default class ClientService {
         app.post(`${CONST.API_PREFIX}activities`, (req, res) => {
             https.get(this.getActivityOptions(req.body.accessToken), response => {
                 parseResponse(response, req.body, (reqBody, responseData) => {
+                    responseData = responseData?.length ? responseData : [];
                     if(reqBody.activityIds?.length) {
                         responseData = responseData.filter(activity => reqBody.activityIds.indexOf(activity.id) !== -1)
                     }
