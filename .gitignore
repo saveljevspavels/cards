@@ -10,6 +10,7 @@
 
 #credentials
 /definitions/firebaseConfig.json
+/definitions/firebaseConfig.prod.json
 /definitions/stravaConfig.json
 
 # IDEs and editors

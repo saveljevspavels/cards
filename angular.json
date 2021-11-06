@@ -44,6 +44,10 @@
                 {
                   "replace": "apps/cards/src/environments/environment.ts",
                   "with": "apps/cards/src/environments/environment.prod.ts"
+                },
+                {
+                  "replace": "definitions/firebaseConfig.json",
+                  "with": "definitions/firebaseConfig.prod.json"
                 }
               ],
               "outputHashing": "all"
