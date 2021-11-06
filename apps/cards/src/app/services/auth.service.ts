@@ -8,6 +8,7 @@ import {Router} from "@angular/router";
 import {CONST, STRAVA_CONFIG} from "../app.module";
 import {environment} from "../../environments/environment";
 import {LocalStorageService} from "./local-storage.service";
+import sampleUser from "../../../../../definitions/sampleUser.json"
 
 @Injectable({
   providedIn: 'root'
@@ -21,7 +22,12 @@ export class AuthService {
   }
 
   authorize(clientId: string, returnUrl: string, requiredPermissions: string) {
-    window.location.href = `http://${CONST.STRAVA_BASE}/oauth/authorize?client_id=${clientId}&response_type=code&redirect_uri=${returnUrl}?exchange_token&approval_prompt=force&scope=${requiredPermissions}`
+      if(environment.production) {
+          window.location.href = `http://${CONST.STRAVA_BASE}/oauth/authorize?client_id=${clientId}&response_type=code&redirect_uri=${returnUrl}?exchange_token&approval_prompt=force&scope=${requiredPermissions}`
+      } else {
+        LocalStorageService.setObject(sampleUser);
+        this.router.navigateByUrl('board')
+      }
   }
 
   getToken(code: string) {
@@ -47,9 +53,7 @@ export class AuthService {
   private getAuthRequest(params: HttpParams) {
     return this.httpClient.post('https://' + CONST.STRAVA_BASE + '/oauth/token', null, { params })
       .pipe(tap(async (res: any) => {
-        Object.keys(res).forEach(key => {
-            localStorage.setItem(key, typeof res[key] === 'object' ? JSON.stringify(res[key]) : res[key])
-        })
+        LocalStorageService.setObject(res);
         if(res.athlete) {
           await this.storeAthlete(res.athlete)
         }

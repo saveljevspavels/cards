@@ -24,4 +24,10 @@ export class LocalStorageService {
     static set rulesHidden(value: boolean) {
         localStorage.setItem('rulesHidden', value.toString())
     }
+
+    static setObject(data: any) {
+        Object.keys(data).forEach(key => {
+            localStorage.setItem(key, typeof data[key] === 'object' ? JSON.stringify(data[key]) : data[key])
+        })
+    }
 }
