@@ -1,10 +1,12 @@
+import CONST from "../../definitions/constants.json";
+
 export default class WebhookService {
     constructor(app, fireStoreService) {
         // Sets server port and logs message on success
         app.listen(process.env.PORT || 3000, () => console.log('webhook is listening'));
 
         // Creates the endpoint for our webhook
-        app.post('/webhook', (req, res) => {
+        app.post(`${CONST.API_PREFIX}webhook`, (req, res) => {
             console.log("webhook event received!", req.query, req.body);
             switch(req.body.aspect_type) {
                 case 'create': fireStoreService.addPendingActivity(req.body); break;
@@ -14,7 +16,7 @@ export default class WebhookService {
         });
 
         // Adds support for GET requests to our webhook
-        app.get('/webhook', (req, res) => {
+        app.get(`${CONST.API_PREFIX}webhook`, (req, res) => {
             // Your verify token. Should be a random string.
             const VERIFY_TOKEN = "STRAVA";
             // Parses the query params
