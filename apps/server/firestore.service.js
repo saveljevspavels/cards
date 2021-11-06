@@ -1,16 +1,19 @@
 import firebase from "firebase";
-// @ts-ignore
-import * as FIREBASE_CONFIG from "../../definitions/firebaseConfig.json";
 import {generateId, getRandomInt, updateScoreValues} from "./util.js";
 import CONST from "../../definitions/constants.json";
 import RULES from "../../definitions/rules.json";
 import {RESPONSES} from "./response-codes.js";
 import {ValidationService} from "./shared/validation.service.js";
+import fs from "fs";
 
 export class FirestoreService {
     logger;
 
-    db = firebase.initializeApp(FIREBASE_CONFIG.default).firestore();
+    db = firebase.initializeApp(
+        JSON.parse(fs.readFileSync(
+            `definitions/firebaseConfig${process.env.NODE_ENV ? '.' + process.env.NODE_ENV : ''}.json`,
+            'utf8'))
+    ).firestore();
     athleteCollection = this.db.collection(CONST.COLLECTIONS.ATHLETES)
     pendingActivityCollection = this.db.collection(CONST.COLLECTIONS.PENDING_ACTIVITIES)
     detailedActivityCollection = this.db.collection(CONST.COLLECTIONS.DETAILED_ACTIVITIES)

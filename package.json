@@ -8,6 +8,7 @@
     "start:cards": "ng serve cards --port=4600 --disable-host-check",
     "start:cards:prod": "ng serve cards --port=4600 --disable-host-check --prod",
     "start:server": "node --experimental-json-modules ./apps/server/index.js",
+    "start:server:prod": "set NODE_ENV=prod&& node --experimental-json-modules ./apps/server/index.js",
     "restart:server": "sudo kill -9 `sudo lsof -t -i:3000` & npm run start:server",
     "build": "ng build --base-href http://104.248.43.19/",
     "test": "ng test",
