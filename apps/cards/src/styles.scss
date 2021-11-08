@@ -60,3 +60,26 @@ body {
 .text-small {
     font-size: var(--text-size-small)
 }
+
+.styled-list {
+    list-style: none;
+    li {
+        font-size: var(--text-size);
+        padding-left: 16px;
+        position: relative;
+        margin-bottom: 16px;
+        &:before {
+            content: '';
+            left: 0;
+            top: 3px;
+            background-color: var(--color-main-1);
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            border-radius: 5px;
+        }
+        &:last-child {
+            margin-bottom: 0;
+        }
+    }
+}

@@ -7,6 +7,7 @@ import {ActivityService} from "../../services/activity.service";
 import {AthleteService} from "../../services/athlete.service";
 import {ScoreService} from "../../services/score.service";
 import {ProfileComponent} from "./components/profile/profile.component";
+import {RulesComponent} from "./components/rules/rules.component";
 
 const routes: Routes = [
     {
@@ -29,6 +30,10 @@ const routes: Routes = [
     {
         path: 'profile',
         component: ProfileComponent
+    },
+    {
+        path: 'rules',
+        component: RulesComponent
     }
 ]
 

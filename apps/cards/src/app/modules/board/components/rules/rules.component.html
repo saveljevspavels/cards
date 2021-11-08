@@ -1,23 +1,7 @@
-<div class="row">
-    <div class="col-md-12">
-        <p-button (click)="toggleRules()" [label]="rulesHidden ? 'Show Rules' : 'Hide Rules'"></p-button>
-    </div>
-    <ng-container *ngIf="!rulesHidden">
-        <div class="col-md-6">
-            <div class="">
-                <h4>Rules</h4>
-                <ul>
-                    <li *ngFor="let rule of rules.left">{{rule}}</li>
-                </ul>
-            </div>
-        </div>
-        <div class="col-md-6">
-            <div class="">
-                <h4 class="d-sm-none d-md-block">&nbsp;</h4>
-                <ul>
-                    <li *ngFor="let rule of rules.right">{{rule}}</li>
-                </ul>
-            </div>
-        </div>
-    </ng-container>
+<app-header></app-header>
+
+<div class="rules">
+    <ul class="styled-list">
+        <li *ngFor="let rule of rules">{{rule}}</li>
+    </ul>
 </div>
