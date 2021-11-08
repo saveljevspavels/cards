@@ -1,4 +1,4 @@
-import {Component, forwardRef, Input, OnInit} from '@angular/core';
+import {Component, forwardRef, Input, OnInit, ViewEncapsulation} from '@angular/core';
 import {ControlValueAccessor, FormControl, NG_VALUE_ACCESSOR} from "@angular/forms";
 import {FileService} from "../../../../services/file.service";
 
@@ -10,7 +10,8 @@ import {FileService} from "../../../../services/file.service";
         provide: NG_VALUE_ACCESSOR,
         useExisting: forwardRef(() => ActivityComponent),
         multi: true,
-    }]
+    }],
+    encapsulation: ViewEncapsulation.None
 })
 export class ActivityComponent implements OnInit, ControlValueAccessor {
 

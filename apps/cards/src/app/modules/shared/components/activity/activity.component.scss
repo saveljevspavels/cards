@@ -4,12 +4,9 @@
     flex-wrap: wrap;
     align-items: center;
     background-color: var(--acticity-background);
-    box-shadow: var(--card-shadow);
-    border: 3px solid black;
-    border-radius: 4px;
-    margin-top: 16px;
     width: 100%;
     padding: 16px;
+    border-radius: 10px;
     &__images {
         //display: flex;
     }
@@ -22,16 +19,46 @@
         padding: 16px;
     }
     &__type {
-        font-size: var(--text-size-big);
+        font-weight: 800;
+        font-size: var(--text-size-title);
+        &--run {
+            color: var(--color-main-4);
+        }
+        &--walk {
+            color: var(--color-main-0);
+        }
+        &--other {
+            color: var(--color-blue);
+        }
     }
     &__data-item {
         margin-top: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+    &__property {
+        color: var(--color-text-light);
+    }
+    &__value {
+        font-weight: 600;
+        color: var(--color-text);
     }
     &__id {
-        font-size: 10px;
         position: absolute;
-        top: 10px;
-        right: 10px;
+        top: var(--padding-value);
+        right: var(--padding-value);
         opacity: 0.2;
+    }
+}
+
+.selection-wrapper__data-item {
+    .activity {
+        border-bottom: 1px solid var(--color-text-light);
+    }
+    &:last-child {
+        .activity {
+            border-bottom: none;
+        }
     }
 }

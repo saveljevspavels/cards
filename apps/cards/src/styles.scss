@@ -2,7 +2,7 @@
 
 :root {
     --text-size: 14px;
-    --text-size-small: 12px;
+    --text-size-small: 10px;
     --text-size-big: 18px;
     --text-size-title: 16px;
     --text-active: #38f;
@@ -10,7 +10,9 @@
     --acticity-background: #fff;
     --background: #E5E5E5;
     --card-shadow: 2px 5px 7px rgba(0, 0, 0, 0.1);
-    --color-text: #111;
+    --color-text: #000;
+    --color-text-lighter: #0F0F3180;
+    --color-text-light: #00000080;
     --color-danger: red;
     --color-pass: limegreen;
     --color-main-0: #ECB844;
@@ -18,8 +20,10 @@
     --color-main-2: #EC8044;
     --color-main-3: #EC6244;
     --color-main-4: #EC4444;
+    --color-blue: #494ADB;
 
-    --padding: 10px 14px 10px 14px;
+    --padding: 14px 14px 14px 14px;
+    --padding-value: 14px;
 }
 
 
@@ -41,4 +45,16 @@ body {
     font-weight: 400;
     font-size: var(--text-size-title);
     margin: 0;
+}
+
+.lighter {
+    color: var(--color-text-lighter)
+}
+
+.light {
+    color: var(--color-text-light)
+}
+
+.text-small {
+    font-size: var(--text-size-small)
 }
