@@ -55,6 +55,7 @@
 .selection-wrapper__data-item {
     .activity {
         border-bottom: 1px solid var(--color-text-light);
+        border-radius: 0;
     }
     &:last-child {
         .activity {

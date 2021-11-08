@@ -9,6 +9,7 @@ export class CollapsibleComponent implements OnInit {
 
     @Input() title: string = '';
     @Input() open = false;
+    @Input() inclusive = false;
     @ViewChild('content', {static: true}) content: ElementRef;
 
     public collapsed = false;

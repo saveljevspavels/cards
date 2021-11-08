@@ -1,12 +1,12 @@
-<div class="card {{small && 'card--small'}}" *ngIf="card">
+<div class="card {{small && 'card--small'}} card--tier-{{card.progression === 'tiers' ? card.tier : (card.value | tier)}}" *ngIf="card">
     <div class="card__id">
         {{card.id}}
     </div>
     <div class="card__content">
-        <div class="card__image card__image--tier-{{card.progression === 'tiers' ? card.tier : (card.value | tier)}}"
+        <div class="card__image"
              [style.background-image]="'url(' + card.image + ')'">
         </div>
-        <div class="ml-3">
+        <div class="ml-2 mt-2">
             <div class="card__title">
                 {{card.title}}
             </div>

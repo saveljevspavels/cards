@@ -1,4 +1,4 @@
-<span class="validator validator--{{(validatorStatus | async).status}} mt-1">
-    <span class="pi pi-fw {{(validatorStatus | async).icon}}"></span>
-    <span>{{readableValidator | async}}</span>
+<span class="validator validator--{{validatorStatus | async}} mt-1">
+    <img src="/assets/icons/validator_{{(validatorStatus | async)}}.svg">
+    <div class="ml-1">{{readableValidator | async}}</div>
 </span>

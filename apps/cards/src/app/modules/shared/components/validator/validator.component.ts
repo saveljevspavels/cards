@@ -23,10 +23,10 @@ export class ValidatorComponent implements OnInit {
     public selectedActivity = this.boardService.selectedActivity$
     public validatorStatus = this.selectedActivity.pipe(map((activity) =>
             !activity
-                ? {status: 'neutral', icon: 'pi-exclamation-circle'}
+                ? 'neutral'
                 : this.validationService.validateRule(activity, this.validator)
-                    ? {status: 'pass', icon: 'pi-check-circle'}
-                    : {status: 'fail', icon: 'pi-times-circle'}
+                    ? 'pass'
+                    : 'fail'
     ))
 
     public icons = {
