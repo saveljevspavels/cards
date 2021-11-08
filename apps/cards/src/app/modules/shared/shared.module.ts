@@ -23,6 +23,8 @@ import {ValidatorComponent} from "./components/validator/validator.component";
 import {CheckboxComponent} from "../../components/checkbox/checkbox.component";
 import {TabMenuModule} from "primeng/tabmenu";
 import {ContentComponent} from "../../components/content/content.component";
+import { CollapsibleComponent } from './components/collapsible/collapsible.component';
+import {ObserversModule} from "@angular/cdk/observers";
 
 const COMPS = [
     InputComponent,
@@ -46,13 +48,15 @@ const MODULES = [
     FileUploadModule,
     HttpClientModule,
     InputTextareaModule,
-    TabMenuModule
+    TabMenuModule,
+    ObserversModule
 ]
 
 @NgModule({
     declarations: [
         COMPS,
-        TextareaComponent
+        TextareaComponent,
+        CollapsibleComponent
     ],
     imports: [
         CommonModule,
@@ -65,7 +69,8 @@ const MODULES = [
     exports: [
         ...COMPS,
         ...MODULES,
-        TextareaComponent
+        TextareaComponent,
+        CollapsibleComponent
     ],
     providers: [
         FileService

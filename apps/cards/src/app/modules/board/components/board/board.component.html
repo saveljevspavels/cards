@@ -37,25 +37,26 @@
                 </div>
             </div>
             <ng-template #selectionMode>
-                <div>
-                    <h3>Your Pending Activities</h3>
-                    <app-selection-wrapper
-                        [singleSelection]="true"
-                        [formControl]="form.get('selectedActivity')"
-                        [template]="activityTemplate"
-                        [selfSelectable]="true"
-                        [dataItems]="(newActivities | async)"
-                        [idKey]="'id'"
-                    >
-                        <ng-template #activityTemplate let-dataItem="dataItem">
-                            <app-activity
-                                [activity]="dataItem"
-                                [showComments]="true"
-                            ></app-activity>
-                            <p-button *ngIf="dataItem.gameData.status === 'submitted'" (click)="rejectActivity(dataItem.id)" styleClass="p-button-danger" label="Cancel Submission"></p-button>
-                        </ng-template>
-                    </app-selection-wrapper>
-                </div>
+                <app-collapsible [title]="'Your Pending Activities'">
+                    <div>
+                        <app-selection-wrapper
+                            [singleSelection]="true"
+                            [formControl]="form.get('selectedActivity')"
+                            [template]="activityTemplate"
+                            [selfSelectable]="true"
+                            [dataItems]="(newActivities | async)"
+                            [idKey]="'id'"
+                        >
+                            <ng-template #activityTemplate let-dataItem="dataItem">
+                                <app-activity
+                                    [activity]="dataItem"
+                                    [showComments]="true"
+                                ></app-activity>
+                                <p-button *ngIf="dataItem.gameData.status === 'submitted'" (click)="rejectActivity(dataItem.id)" styleClass="p-button-danger" label="Cancel Submission"></p-button>
+                            </ng-template>
+                        </app-selection-wrapper>
+                    </div>
+                </app-collapsible>
             </ng-template>
         </div>
         <div class="col-lg-6">

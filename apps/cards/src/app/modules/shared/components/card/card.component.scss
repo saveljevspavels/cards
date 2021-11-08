@@ -73,6 +73,7 @@
         overflow: hidden;
         background-size: cover;
         background-position: center;
+        flex-shrink: 0;
         img {
             width: 106px;
             height: 106px;

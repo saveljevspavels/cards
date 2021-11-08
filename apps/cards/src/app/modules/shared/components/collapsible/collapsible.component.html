@@ -1,0 +1,16 @@
+<div class="collapsible">
+    <div class="collapsible__header" (click)="toggle()">
+        <h3 class="collapsible__title title">{{title}}</h3>
+        <div class="collapsible__icon">
+            <img *ngIf="collapsed" src="/assets/icons/arrow_down.svg">
+            <img *ngIf="!collapsed" src="/assets/icons/arrow_up.svg">
+        </div>
+    </div>
+    <div class="collapsible__content" #content
+         [ngClass]="{'collapsible__content--collapsed': collapsed}"
+         [ngStyle]="{'maxHeight.px': maxHeight ? maxHeight : 'initial'}"
+         (cdkObserveContent)="onContentChange($event)"
+    >
+        <ng-content></ng-content>
+    </div>
+</div>

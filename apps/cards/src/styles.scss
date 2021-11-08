@@ -3,15 +3,23 @@
 :root {
     --text-size: 14px;
     --text-size-small: 12px;
-    --text-size-big: 20px;
+    --text-size-big: 18px;
+    --text-size-title: 16px;
     --text-active: #38f;
-    --card-background: rgba(154, 124, 107, 0.35);
-    --acticity-background: rgba(220, 180, 86, 0.35);
-    --background: #ddd;
+    --card-background: #fff;
+    --acticity-background: #fff;
+    --background: #E5E5E5;
     --card-shadow: 2px 5px 7px rgba(0, 0, 0, 0.1);
     --color-text: #111;
     --color-danger: red;
     --color-pass: limegreen;
+    --color-main-0: #ECB844;
+    --color-main-1: #EC9C44;
+    --color-main-2: #EC8044;
+    --color-main-3: #EC6244;
+    --color-main-4: #EC4444;
+
+    --padding: 10px 14px 10px 14px;
 }
 
 
@@ -27,4 +35,10 @@ body {
 
 .full-width {
     width: 100%;
+}
+
+.title {
+    font-weight: 400;
+    font-size: var(--text-size-title);
+    margin: 0;
 }
