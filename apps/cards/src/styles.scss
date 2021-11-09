@@ -1,11 +1,12 @@
 @import "styles/grid";
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@300;400&display=swap');
 
 :root {
     --text-size: 14px;
     --text-size-small: 10px;
     --text-size-smaller: 8px;
-    --text-size-big: 18px;
     --text-size-title: 16px;
+    --text-size-big: 18px;
 
     --text-active: #38f;
     --card-background: #fff;
@@ -13,16 +14,17 @@
     --background: #E5E5E5;
     --card-shadow: 2px 5px 7px rgba(0, 0, 0, 0.1);
     --color-text: #000;
+    --color-disabled: #ddd;
     --color-text-lighter: #0F0F3180;
     --color-text-light: #00000080;
-    --color-danger: red;
     --color-pass: limegreen;
     --color-main-0: #ECB844;
-    --color-main-1: #EC9C44;
-    --color-main-2: #EC8044;
-    --color-main-3: #EC6244;
-    --color-main-4: #EC4444;
+    --color-main-1: #EC8044;
+    --color-main-2: #EC4444;
+    --color-main-3: #B51D1D;
+    --color-main-4: #942F8A;
     --color-blue: #494ADB;
+    --color-danger: var(--color-main-2);
 
     --padding: 14px 14px 14px 14px;
     --padding-value: 14px;
@@ -30,7 +32,7 @@
 
 
 body {
-    font-family: Helvetica, sans-serif!important;
+    font-family: 'Nunito', sans-serif;
     letter-spacing: -0.3px;
     padding: 0;
     margin: 0;

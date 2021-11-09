@@ -22,10 +22,10 @@ export class CollapsibleComponent implements OnInit {
 
     toggle() {
         this.collapsed = !this.collapsed;
+        this.onContentChange(null)
     }
 
     onContentChange(event: any) {
         this.maxHeight = this.content.nativeElement.getBoundingClientRect().height;
-        console.log('maxHeight', this.maxHeight)
     }
 }

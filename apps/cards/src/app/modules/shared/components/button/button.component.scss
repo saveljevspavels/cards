@@ -1,0 +1,28 @@
+.button {
+    cursor: pointer;
+    background-color: var(--acticity-background);
+    border-radius: 10px;
+    padding: 10px;
+    height: 44px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    .title {
+        font-weight: 700;
+    }
+    &--disabled {
+        pointer-events: none;
+        background-color: var(--color-disabled);
+        color: var(--color-text-lighter);
+    }
+    &--success {
+
+    }
+    &--action {
+        background-color: var(--color-blue);
+    }
+    &--danger {
+        background-color: var(--color-danger);
+    }
+}

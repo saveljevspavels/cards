@@ -12,12 +12,12 @@
   </app-selection-wrapper>
 
   <div class="admin-commands__buttons">
-    <p-button [disabled]="!selectedAthletes.value.length" (click)="requestActivities()" label="Request Activities"></p-button>
+    <app-button [disabled]="!selectedAthletes.value.length" (click)="requestActivities()" label="Request Activities"></app-button>
   </div>
 
   <div>
     <label for="cardAmount">Card Amount</label><input id="cardAmount" [formControl]="cardAmount">
-    <p-button [disabled]="!selectedAthletes.value.length || !cardAmount.value" (click)="dealCards()" label="Deal Cards"></p-button>
+    <app-button [disabled]="!selectedAthletes.value.length || !cardAmount.value" (click)="dealCards()" label="Deal Cards"></app-button>
   </div>
 
   <app-selection-wrapper
@@ -37,12 +37,12 @@
   <app-deck></app-deck>
 
   <div class="admin-commands__buttons">
-    <p-button [disabled]="!selectedCards.value.length" (click)="setDeck()" label="Set Deck"></p-button>
-    <p-button [disabled]="!selectedCards.value.length" (click)="addToDeck()" label="Add to Deck"></p-button>
-    <p-button [disabled]="!selectedCards.value.length" (click)="deleteCards()" styleClass="p-button-danger" label="Delete Cards"></p-button>
-    <p-button (click)="shuffleDeck()" label="Shuffle Deck"></p-button>
-    <p-button (click)="dealQueue()" label="Deal Queue"></p-button>
-    <p-button (click)="startGame()" styleClass="p-button-success" label="Start Game"></p-button>
+    <app-button [disabled]="!selectedCards.value.length" (click)="setDeck()" label="Set Deck"></app-button>
+    <app-button [disabled]="!selectedCards.value.length" (click)="addToDeck()" label="Add to Deck"></app-button>
+    <app-button [disabled]="!selectedCards.value.length" (click)="deleteCards()" type="danger" label="Delete Cards"></app-button>
+    <app-button (click)="shuffleDeck()" label="Shuffle Deck"></app-button>
+    <app-button (click)="dealQueue()" label="Deal Queue"></app-button>
+    <app-button (click)="startGame()" type="action" label="Start Game"></app-button>
   </div>
 </div>
 

@@ -8,8 +8,8 @@
         [showComments]="true"
         [showImages]="true"
     ></app-activity>
-    <p-button (click)="rejectActivity(activity.id)" [disabled]="!rejectionComment.value" label="Reject"></p-button>
-    <p-button (click)="approveActivity(activity.id, selectedCards[i])" label="Approve"></p-button>
+    <app-button (click)="rejectActivity(activity.id)" [disabled]="!rejectionComment.value" label="Reject"></app-button>
+    <app-button (click)="approveActivity(activity.id, selectedCards[i])" label="Approve"></app-button>
   </div>
   <app-textarea [label]="'Rejection Comment'" [fc]="rejectionComment"></app-textarea>
 </div>

@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { LoginComponent } from './login/login.component';
 import {AuthRoutingModule} from "./auth-routing.module";
 import { AuthReturnComponent } from './components/auth-return/auth-return.component';
-import {ButtonModule} from "primeng/button";
+import {SharedModule} from "../shared/shared.module";
 
 
 
@@ -15,7 +15,7 @@ import {ButtonModule} from "primeng/button";
     imports: [
         CommonModule,
         AuthRoutingModule,
-        ButtonModule
+        SharedModule
     ]
 })
 export class AuthModule { }

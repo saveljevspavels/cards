@@ -24,7 +24,7 @@
         <app-input [fc]="form.get('average_speed')" [label]="'Pace ' + (form.value.average_speed | pace)"></app-input>
     </div>
 
-    <p-button [disabled]="!selectedAthletes.value.length || form.invalid" (click)="updateBaseWorkout()" [label]="'Set Base Workout'"></p-button>
+    <app-button [disabled]="!selectedAthletes.value.length || form.invalid" (click)="updateBaseWorkout()" [label]="'Set Base Workout'"></app-button>
 
     <app-selection-wrapper
         [formControl]="selectedPermissions"
@@ -39,5 +39,5 @@
         </ng-template>
     </app-selection-wrapper>
 
-    <p-button [disabled]="!selectedAthletes.value.length || !selectedPermissions.value.length" (click)="setPermissions()" [label]="'Set Permissions'"></p-button>
+    <app-button [disabled]="!selectedAthletes.value.length || !selectedPermissions.value.length" (click)="setPermissions()" [label]="'Set Permissions'"></app-button>
 </div>

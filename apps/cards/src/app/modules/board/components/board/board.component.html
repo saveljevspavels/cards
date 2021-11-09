@@ -28,10 +28,10 @@
 
                 <div class="row mt-3">
                     <div class="col-md-6">
-                        <p-button styleClass="full-width" [disabled]="!form.get('selectedCards').value.length" (click)="submitSelectedActivity()" label="Submit"></p-button>
+                        <app-button [disabled]="!form.get('selectedCards').value.length" (click)="submitSelectedActivity()" label="Submit"></app-button>
                     </div>
                     <div class="col-md-6">
-                        <p-button styleClass="p-button-danger full-width" (click)="exitSubmitMode()" label="Cancel"></p-button>
+                        <app-button type="danger" (click)="exitSubmitMode()" label="Cancel"></app-button>
                     </div>
                 </div>
             </div>
@@ -51,7 +51,7 @@
                                     [activity]="dataItem"
                                     [showComments]="true"
                                 ></app-activity>
-                                <p-button *ngIf="dataItem.gameData.status === 'submitted'" (click)="rejectActivity(dataItem.id)" styleClass="p-button-danger" label="Cancel Submission"></p-button>
+                                <app-button *ngIf="dataItem.gameData.status === 'submitted'" (click)="rejectActivity(dataItem.id)" type="danger" label="Cancel Submission"></app-button>
                             </ng-template>
                         </app-selection-wrapper>
                     </div>
@@ -62,5 +62,5 @@
             <app-card-queue [formControl]="form.get('selectedCards')"></app-card-queue>
         </div>
     </div>
-    <p-button label="Rules" routerLink="/board/rules"></p-button>
+    <app-button icon="rules" styleClass="mt-2" label="Rules" routerLink="/board/rules"></app-button>
 </app-content>

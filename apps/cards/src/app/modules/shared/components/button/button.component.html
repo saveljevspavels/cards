@@ -1,0 +1,8 @@
+<div class="button {{styleClass}}" [ngClass]="{
+        'button--disabled': disabled,
+        'button--danger': type === 'danger',
+        'button--success': type === 'success',
+        'button--action': type === 'action'
+    }">
+    <img *ngIf="icon" src="/assets/icons/{{icon}}.svg">&nbsp;<span class="title">{{label}}</span>
+</div>

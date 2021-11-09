@@ -10,7 +10,6 @@ import {HeaderComponent} from "./components/header/header.component";
 import {ActivityComponent} from "./components/activity/activity.component";
 import {CardComponent} from "./components/card/card.component";
 import {SelectionWrapperComponent} from "./components/selection-wrapper/selection-wrapper.component";
-import {ButtonModule} from "primeng/button";
 import {FileUploadModule} from "primeng/fileupload";
 import {HttpClientModule} from "@angular/common/http";
 import {ImageUploadComponent} from "./components/image-upload/image-upload.component";
@@ -25,6 +24,7 @@ import {TabMenuModule} from "primeng/tabmenu";
 import {ContentComponent} from "../../components/content/content.component";
 import { CollapsibleComponent } from './components/collapsible/collapsible.component';
 import {ObserversModule} from "@angular/cdk/observers";
+import { ButtonComponent } from './components/button/button.component';
 
 const COMPS = [
     InputComponent,
@@ -39,11 +39,13 @@ const COMPS = [
     ImageUploadComponent,
     BaseWorkoutInfoComponent,
     ValidatorComponent,
-    ContentComponent
+    ContentComponent,
+    ButtonComponent,
+    CollapsibleComponent,
+    TextareaComponent,
 ]
 
 const MODULES = [
-    ButtonModule,
     PipesModule,
     FileUploadModule,
     HttpClientModule,
@@ -55,8 +57,6 @@ const MODULES = [
 @NgModule({
     declarations: [
         COMPS,
-        TextareaComponent,
-        CollapsibleComponent
     ],
     imports: [
         CommonModule,
@@ -69,8 +69,6 @@ const MODULES = [
     exports: [
         ...COMPS,
         ...MODULES,
-        TextareaComponent,
-        CollapsibleComponent
     ],
     providers: [
         FileService
