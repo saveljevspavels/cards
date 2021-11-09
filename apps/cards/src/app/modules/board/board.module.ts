@@ -13,6 +13,7 @@ import { CardQueueComponent } from './components/card-queue/card-queue.component
 import { RulesComponent } from './components/rules/rules.component';
 import { CardCounterComponent } from './components/card-counter/card-counter.component';
 import { CounterItemComponent } from './components/card-counter/counter-item/counter-item.component';
+import { BoardParentComponent } from './components/board-parent/board-parent.component';
 
 @NgModule({
     declarations: [
@@ -26,6 +27,7 @@ import { CounterItemComponent } from './components/card-counter/counter-item/cou
         RulesComponent,
         CardCounterComponent,
         CounterItemComponent,
+        BoardParentComponent,
     ],
     imports: [
         CommonModule,

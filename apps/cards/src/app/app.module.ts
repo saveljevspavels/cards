@@ -19,6 +19,7 @@ import {MessageModule} from "primeng/message";
 import {MessageService} from "primeng/api";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import {AthleteService} from "./services/athlete.service";
+import {SharedModule} from "./modules/shared/shared.module";
 
 const firebaseConfig = FIREBASE_CONFIG;
 
@@ -39,7 +40,8 @@ const firebaseConfig = FIREBASE_CONFIG;
         HttpClientModule,
         MessagesModule,
         MessageModule,
-        BrowserAnimationsModule
+        BrowserAnimationsModule,
+        SharedModule
     ],
     providers: [
         {provide: HTTP_INTERCEPTORS, useClass: HttpMainInterceptor, multi: true},

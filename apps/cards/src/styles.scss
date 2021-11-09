@@ -24,10 +24,13 @@
     --color-main-3: #B51D1D;
     --color-main-4: #942F8A;
     --color-blue: #494ADB;
+    --color-blue-light: #494ADB66;
     --color-danger: var(--color-main-2);
 
     --padding: 14px 14px 14px 14px;
     --padding-value: 14px;
+
+    --menu-height: 56px;
 }
 
 
@@ -35,7 +38,7 @@ body {
     font-family: 'Nunito', sans-serif;
     letter-spacing: -0.3px;
     padding: 0;
-    margin: 0;
+    margin: 0 0 var(--menu-height) 0;
     overflow-x: hidden;
     font-size: var(--text-size);
     background-color: var(--background);

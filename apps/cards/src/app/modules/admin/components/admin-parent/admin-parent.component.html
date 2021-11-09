@@ -1,0 +1,6 @@
+<app-mobile-menu (activeTitle)="title = $event" [admin]="true"></app-mobile-menu>
+<app-page-title [title]="title"></app-page-title>
+
+<app-content>
+    <router-outlet></router-outlet>
+</app-content>

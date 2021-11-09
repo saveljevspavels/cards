@@ -1,0 +1,16 @@
+<app-menu *ngIf="admin" [routes]="filteredRoutes.admin"></app-menu>
+
+<div class="mobile-menu">
+    <div class="mobile-menu__link"
+         *ngFor="let route of filteredRoutes.public"
+         [ngClass]="{'mobile-menu__link--active': route === activeItem}"
+         (mouseover)="activeItem = route"
+         (mouseleave)="detectActiveItem()"
+         routerLink="{{route.path}}">
+        <app-svg [icon]="route.icon"></app-svg>
+        <span class="mobile-menu__label">{{route.label}}</span>
+    </div>
+    <div class="mobile-menu__indicator"
+         [ngStyle]="{'width.%': 100 / filteredRoutes.public.length, 'left.%': filteredRoutes.public.indexOf(activeItem) * 100 / filteredRoutes.public.length}"
+    ></div>
+</div>

@@ -25,6 +25,10 @@ import {ContentComponent} from "../../components/content/content.component";
 import { CollapsibleComponent } from './components/collapsible/collapsible.component';
 import {ObserversModule} from "@angular/cdk/observers";
 import { ButtonComponent } from './components/button/button.component';
+import { PageTitleComponent } from './components/page-title/page-title.component';
+import { MobileMenuComponent } from './components/mobile-menu/mobile-menu.component';
+import { SvgComponent } from './components/svg/svg.component';
+import { SvgTemplatesComponent } from './components/svg-templates/svg-templates.component';
 
 const COMPS = [
     InputComponent,
@@ -57,6 +61,10 @@ const MODULES = [
 @NgModule({
     declarations: [
         COMPS,
+        PageTitleComponent,
+        MobileMenuComponent,
+        SvgComponent,
+        SvgTemplatesComponent,
     ],
     imports: [
         CommonModule,
@@ -69,6 +77,9 @@ const MODULES = [
     exports: [
         ...COMPS,
         ...MODULES,
+        PageTitleComponent,
+        MobileMenuComponent,
+        SvgTemplatesComponent,
     ],
     providers: [
         FileService

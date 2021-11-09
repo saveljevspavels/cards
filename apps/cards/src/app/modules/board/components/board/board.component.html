@@ -1,66 +1,62 @@
-<app-header></app-header>
-
-<app-content>
-    <div class="row mb-2">
-        <div class="col-md-6 d-sm-none d-md-block"></div>
-        <div class="col-md-6 col-sm-12">
-            <app-card-counter></app-card-counter>
-        </div>
+<div class="row mb-2">
+    <div class="col-md-6 d-sm-none d-md-block"></div>
+    <div class="col-md-6 col-sm-12">
+        <app-card-counter></app-card-counter>
     </div>
-    <div class="row flex-md-nowrap flex-sm-wrap">
-        <div class="col-lg-6 mb-2">
-            <div *ngIf="selectedActivity | async; else selectionMode">
-                <h3>Submitting Activity</h3>
-                Please select cards to play, add images/comments
+</div>
+<div class="row flex-md-nowrap flex-sm-wrap">
+    <div class="col-lg-6 mb-2">
+        <div *ngIf="selectedActivity | async; else selectionMode">
+            <h3>Submitting Activity</h3>
+            Please select cards to play, add images/comments
 
-                <app-activity [activity]="selectedActivity | async"></app-activity>
+            <app-activity [activity]="selectedActivity | async"></app-activity>
 
-                <p>Upload images, if card requires it</p>
-                <app-image-upload
-                    [formControl]="form.get('selectedImages')"
-                ></app-image-upload>
+            <p>Upload images, if card requires it</p>
+            <app-image-upload
+                [formControl]="form.get('selectedImages')"
+            ></app-image-upload>
 
-                <app-textarea
-                    rows="4"
-                    styleClass="full-width mt-3"
-                    [label]="'Comments'"
-                    [fc]="form.get('comments')"></app-textarea>
+            <app-textarea
+                rows="4"
+                styleClass="full-width mt-3"
+                [label]="'Comments'"
+                [fc]="form.get('comments')"></app-textarea>
 
-                <div class="row mt-3">
-                    <div class="col-md-6">
-                        <app-button [disabled]="!form.get('selectedCards').value.length" (click)="submitSelectedActivity()" label="Submit"></app-button>
-                    </div>
-                    <div class="col-md-6">
-                        <app-button type="danger" (click)="exitSubmitMode()" label="Cancel"></app-button>
-                    </div>
+            <div class="row mt-3">
+                <div class="col-md-6">
+                    <app-button [disabled]="!form.get('selectedCards').value.length" (click)="submitSelectedActivity()" label="Submit"></app-button>
+                </div>
+                <div class="col-md-6">
+                    <app-button type="danger" (click)="exitSubmitMode()" label="Cancel"></app-button>
                 </div>
             </div>
-            <ng-template #selectionMode>
-                <app-collapsible [title]="'Your Pending Activities'" [inclusive]="true">
-                    <div>
-                        <app-selection-wrapper
-                            [singleSelection]="true"
-                            [formControl]="form.get('selectedActivity')"
-                            [template]="activityTemplate"
-                            [selfSelectable]="true"
-                            [dataItems]="(newActivities | async)"
-                            [idKey]="'id'"
-                        >
-                            <ng-template #activityTemplate let-dataItem="dataItem">
-                                <app-activity
-                                    [activity]="dataItem"
-                                    [showComments]="true"
-                                ></app-activity>
-                                <app-button *ngIf="dataItem.gameData.status === 'submitted'" (click)="rejectActivity(dataItem.id)" type="danger" label="Cancel Submission"></app-button>
-                            </ng-template>
-                        </app-selection-wrapper>
-                    </div>
-                </app-collapsible>
-            </ng-template>
         </div>
-        <div class="col-lg-6 mb-2">
-            <app-card-queue [formControl]="form.get('selectedCards')"></app-card-queue>
-        </div>
+        <ng-template #selectionMode>
+            <app-collapsible [title]="'Your Pending Activities'" [inclusive]="true">
+                <div>
+                    <app-selection-wrapper
+                        [singleSelection]="true"
+                        [formControl]="form.get('selectedActivity')"
+                        [template]="activityTemplate"
+                        [selfSelectable]="true"
+                        [dataItems]="(newActivities | async)"
+                        [idKey]="'id'"
+                    >
+                        <ng-template #activityTemplate let-dataItem="dataItem">
+                            <app-activity
+                                [activity]="dataItem"
+                                [showComments]="true"
+                            ></app-activity>
+                            <app-button *ngIf="dataItem.gameData.status === 'submitted'" (click)="rejectActivity(dataItem.id)" type="danger" label="Cancel Submission"></app-button>
+                        </ng-template>
+                    </app-selection-wrapper>
+                </div>
+            </app-collapsible>
+        </ng-template>
     </div>
-    <app-button icon="rules" label="Rules" routerLink="/board/rules"></app-button>
-</app-content>
+    <div class="col-lg-6 mb-2">
+        <app-card-queue [formControl]="form.get('selectedCards')"></app-card-queue>
+    </div>
+</div>
+<app-button icon="rules" label="Rules" routerLink="/board/rules"></app-button>

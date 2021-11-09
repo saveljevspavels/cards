@@ -15,6 +15,7 @@ import { AthleteManagementComponent } from './components/athlete-management/athl
 import { DeckComponent } from './components/deck/deck.component';
 import { LogsComponent } from './components/logs/logs.component';
 import { LogItemComponent } from './components/log-item/log-item.component';
+import { AdminParentComponent } from './components/admin-parent/admin-parent.component';
 
 
 @NgModule({
@@ -29,7 +30,8 @@ import { LogItemComponent } from './components/log-item/log-item.component';
     AthleteManagementComponent,
     DeckComponent,
     LogsComponent,
-    LogItemComponent
+    LogItemComponent,
+    AdminParentComponent
   ],
     imports: [
         CommonModule,

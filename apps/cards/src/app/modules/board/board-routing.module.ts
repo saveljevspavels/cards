@@ -8,33 +8,40 @@ import {AthleteService} from "../../services/athlete.service";
 import {ScoreService} from "../../services/score.service";
 import {ProfileComponent} from "./components/profile/profile.component";
 import {RulesComponent} from "./components/rules/rules.component";
+import {BoardParentComponent} from "./components/board-parent/board-parent.component";
 
 const routes: Routes = [
     {
         path: '',
-        pathMatch: 'full',
-        redirectTo: 'main'
+        component: BoardParentComponent,
+        children: [
+            {
+                path: '',
+                pathMatch: 'full',
+                redirectTo: 'main'
+            },
+            {
+                path: 'main',
+                component: BoardComponent
+            },
+            {
+                path: 'activity-list',
+                component: ActivityListComponent
+            },
+            {
+                path: 'leaderboard',
+                component: LeaderboardComponent
+            },
+            {
+                path: 'profile',
+                component: ProfileComponent
+            },
+            {
+                path: 'rules',
+                component: RulesComponent
+            }
+        ]
     },
-    {
-        path: 'main',
-        component: BoardComponent
-    },
-    {
-        path: 'activity-list',
-        component: ActivityListComponent
-    },
-    {
-        path: 'leaderboard',
-        component: LeaderboardComponent
-    },
-    {
-        path: 'profile',
-        component: ProfileComponent
-    },
-    {
-        path: 'rules',
-        component: RulesComponent
-    }
 ]
 
 @NgModule({
