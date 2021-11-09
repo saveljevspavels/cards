@@ -12,6 +12,7 @@ import { ProfileComponent } from './components/profile/profile.component';
 import { CardQueueComponent } from './components/card-queue/card-queue.component';
 import { RulesComponent } from './components/rules/rules.component';
 import { CardCounterComponent } from './components/card-counter/card-counter.component';
+import { CounterItemComponent } from './components/card-counter/counter-item/counter-item.component';
 
 @NgModule({
     declarations: [
@@ -24,6 +25,7 @@ import { CardCounterComponent } from './components/card-counter/card-counter.com
         CardQueueComponent,
         RulesComponent,
         CardCounterComponent,
+        CounterItemComponent,
     ],
     imports: [
         CommonModule,
