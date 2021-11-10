@@ -1,4 +1,4 @@
-import {Component, forwardRef, OnInit, ViewEncapsulation} from '@angular/core';
+import {Component, forwardRef, Input, OnInit, ViewEncapsulation} from '@angular/core';
 import {DeckService} from "../../../../services/deck.service";
 import Hand from "../../../../interfaces/hand";
 import {Observable} from "rxjs";
@@ -16,6 +16,8 @@ import {ControlValueAccessor, FormControl, NG_VALUE_ACCESSOR} from "@angular/for
   }]
 })
 export class CardQueueComponent implements OnInit, ControlValueAccessor {
+
+    @Input() selectionEnabled = true;
 
     public cardQueue: Observable<Hand> = this.deckService.cardQueue.asObservable()
     public selectedCards = new FormControl([]);

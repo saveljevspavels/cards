@@ -46,8 +46,8 @@
             <div class="stat-item__value">{{(activity.distance | distance) || '-'}}</div>
         </div>
         <div class="stat-item">
-            <div class="v__property">Average pace</div>
-            <div class="v__value">{{(activity.average_speed | pace) || '-'}}</div>
+            <div class="stat-item__property">Average pace</div>
+            <div class="stat-item__value">{{(activity.average_speed | pace) || '-'}}</div>
         </div>
         <div class="stat-item" *ngIf="showComments && activity.gameData.comments">
             <div class="stat-item__property">Comments</div>

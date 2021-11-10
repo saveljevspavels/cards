@@ -1,4 +1,14 @@
-<p-fileUpload #upload name="images[]" customUpload="true" [showUploadButton]="false" (onSelect)="onSelect($event)"
-              [multiple]="multiple" accept="image/*" maxFileSize="1000000"
->
-</p-fileUpload>
+<div class="image-upload">
+    <p-fileUpload #upload
+                  name="images[]"
+                  customUpload="true"
+                  [showUploadButton]="false"
+                  [showCancelButton]="false"
+                  (onSelect)="onSelect($event)"
+                  [multiple]="multiple"
+                  accept="image/*"
+                  maxFileSize="10000000"
+    >
+    </p-fileUpload>
+</div>
+

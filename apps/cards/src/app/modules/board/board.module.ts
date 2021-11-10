@@ -14,6 +14,7 @@ import { RulesComponent } from './components/rules/rules.component';
 import { CardCounterComponent } from './components/card-counter/card-counter.component';
 import { CounterItemComponent } from './components/card-counter/counter-item/counter-item.component';
 import { BoardParentComponent } from './components/board-parent/board-parent.component';
+import { SubmittingActivityComponent } from './components/submitting-activity/submitting-activity.component';
 
 @NgModule({
     declarations: [
@@ -28,6 +29,7 @@ import { BoardParentComponent } from './components/board-parent/board-parent.com
         CardCounterComponent,
         CounterItemComponent,
         BoardParentComponent,
+        SubmittingActivityComponent,
     ],
     imports: [
         CommonModule,

@@ -12,7 +12,10 @@
   <div class="selection-wrapper__items">
     <div class="selection-wrapper__data-item"
          *ngFor="let dataItem of dataItems"
-         [ngClass]="{'selection-wrapper__data-item--selected': innerForm.get(dataItem[idKey]?.toString() || dataItem).value}"
+         [ngClass]="{
+            'selection-wrapper__data-item--selected': innerForm.get(dataItem[idKey]?.toString() || dataItem).value,
+            'selection-wrapper__data-item--no-selection': !selectionEnabled
+         }"
     >
       <input *ngIf="selectionEnabled && !selfSelectable"
              type="checkbox"

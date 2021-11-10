@@ -14,4 +14,8 @@ export class AdminParentComponent implements OnInit {
     ngOnInit(): void {
     }
 
+    setTitle(title: string) {
+        setTimeout(() => this.title = title, 0);
+    }
+
 }

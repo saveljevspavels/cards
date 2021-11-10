@@ -1,5 +1,5 @@
-import {Component, forwardRef, Injector, Input, ViewChild} from '@angular/core';
-import {ControlValueAccessor, FormControl, NG_VALUE_ACCESSOR, NgControl} from "@angular/forms";
+import {Component, forwardRef, Input, ViewChild, ViewEncapsulation} from '@angular/core';
+import {ControlValueAccessor, FormControl, NG_VALUE_ACCESSOR} from "@angular/forms";
 import {FileUpload} from "primeng/fileupload";
 
 @Component({
@@ -10,7 +10,8 @@ import {FileUpload} from "primeng/fileupload";
         provide: NG_VALUE_ACCESSOR,
         useExisting: forwardRef(() => ImageUploadComponent),
         multi: true,
-    }]
+    }],
+    encapsulation: ViewEncapsulation.None
 })
 export class ImageUploadComponent implements ControlValueAccessor {
 

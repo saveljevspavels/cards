@@ -1,0 +1,86 @@
+.image-upload {
+    .p-fileupload-buttonbar {
+        background: none;
+        padding: 0;
+        border: 0;
+    }
+
+    .p-fileupload .p-fileupload-content {
+        background: none;
+        padding: 0;
+        border: 0;
+    }
+    .p-progressbar {
+        display: none;
+    }
+    .p-fileupload-row {
+        &>div {
+            width: 33.3%;
+            font-size: var(--text-size-small);
+            &:nth-child(3) {
+                display:none;
+            }
+            &>img {
+                width: 100px;
+            }
+        }
+    }
+    .p-fileupload-choose, .p-button-icon-only {
+        cursor: pointer;
+        background-color: var(--acticity-background);
+        border-radius: var(--radius);
+        color: var(--color-text);
+        padding: 10px;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: none;
+        .p-button-icon {
+            display: none;
+        }
+        &:focus {
+            outline: none!important;
+            box-shadow: none!important;
+        }
+        &:not(.p-disabled):hover {
+            background-color: var(--acticity-background);
+            color: var(--text-color);
+        }
+    }
+    .p-fileupload-choose {
+        height: 44px;
+        width: 100%;
+        .p-button-label {
+            flex: none;
+            &:before {
+                content: '+';
+                color: var(--color-text);
+                position: relative;
+                font-size: 32px;
+                font-weight: 400;
+                line-height: 0;
+                left: -6px;
+                top: 4px;
+            }
+        }
+    }
+    .p-button-icon-only {
+        display: inline-block;
+        margin-right: -16px;
+        .p-button-label {
+            visibility: visible;
+            &:before {
+                content: '✕';
+                color: var(--color-danger);
+                position: relative;
+                font-size: 28px;
+                top: 4px;
+                right: 2px;
+                line-height: 0;
+                font-weight: 400;
+                transform: rotate(45deg);
+            }
+        }
+    }
+}

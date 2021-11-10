@@ -1,9 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {ActivityService} from "../../../../services/activity.service";
-import {FormBuilder, FormControl, FormGroup} from "@angular/forms";
-import {FileService} from "../../../../services/file.service";
 import {BoardService} from "../../../../services/board.service";
-import {CONST} from "../../../../app.module";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-board',
@@ -13,53 +11,16 @@ import {CONST} from "../../../../app.module";
 export class BoardComponent implements OnInit {
 
     public newActivities = this.activityService.newActivities;
-    public selectedActivity = this.boardService.selectedActivity$;
-
-    public form: FormGroup;
 
     constructor(private activityService: ActivityService,
-                private formBuilder: FormBuilder,
-                private fileService: FileService,
-                private boardService: BoardService) { }
+                private boardService: BoardService,
+                private router: Router) { }
 
-    ngOnInit(): void {
-        this.initForm()
-    }
+    ngOnInit(): void {}
 
     enterSubmitMode(activity: any) {
         this.boardService.activity = activity;
-    }
-
-    exitSubmitMode() {
-        this.form.controls.selectedActivity.setValue('')
-        this.boardService.deselectActivity();
-    }
-
-    async submitSelectedActivity() {
-        const uploadedImages = await this.fileService.uploadImages(this.form.value.selectedImages)
-        this.activityService.submitActivity(
-            this.boardService.activity.id.toString(),
-            this.form.value.selectedCards,
-            uploadedImages,
-            this.form.value.comments,
-        ).subscribe(() => {
-            this.initForm()
-            this.exitSubmitMode();
-        })
-    }
-
-    initForm() {
-        this.form = this.formBuilder.group({
-            selectedCards: [[]],
-            selectedImages: [[]],
-            selectedActivity: [''],
-            comments: ['']
-        })
-
-        this.form.get('selectedActivity')?.valueChanges.subscribe(value => {
-            const activity = this.newActivities.value.find((activity: any) => activity.id.toString() === value[0]);
-            this.boardService.activity = activity?.gameData.status !== CONST.ACTIVITY_STATUSES.SUBMITTED ? activity : null;
-        })
+        this.router.navigateByUrl(`board/submit-activity`)
     }
 
     rejectActivity(activityId: string) {

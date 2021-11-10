@@ -123,7 +123,7 @@ export class SelectionWrapperComponent implements OnInit, OnChanges, ControlValu
   }
 
   selectItem(item: any) {
-    if(this.selfSelectable) {
+    if(this.selfSelectable && this.selectionEnabled) {
       this.innerForm.get(this.getId(item))?.setValue(true)
     }
   }

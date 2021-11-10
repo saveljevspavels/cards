@@ -11,21 +11,25 @@
     .title {
         font-weight: 700;
     }
-    &--disabled {
-        pointer-events: none;
-        background-color: var(--color-disabled);
-        color: var(--color-text-lighter);
-    }
     &--success {
 
     }
     &--action {
         background-color: var(--color-blue);
+        color: var(--acticity-background);
     }
     &--danger {
         color: var(--color-danger);
         app-svg {
             fill: var(--color-danger);
         }
+    }
+    &--disabled {
+        pointer-events: none;
+        background-color: var(--color-disabled);
+        color: var(--color-text-lighter);
+    }
+    &--transparent {
+        background-color: #00000000!important;
     }
 }

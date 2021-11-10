@@ -105,8 +105,7 @@ export class MobileMenuComponent implements OnInit {
     getLocationName(): string {
         let { pathname } = window.location
         const parts = pathname.split('/')
-        const lastPart = parts[parts.length - 1]
-        return lastPart.charAt(0).toUpperCase() + lastPart.slice(1);
+        return parts[parts.length - 1].split('-').map(part => part.charAt(0).toUpperCase() + part.slice(1)).join(' ');
     }
 
 }

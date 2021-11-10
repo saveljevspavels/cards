@@ -20,7 +20,6 @@ export class CardCounterComponent implements OnInit {
     ngOnInit(): void {
         this.gameData.subscribe((game: Game | null) => {
             this.indicatorData = [...Array(RULES.QUEUE.CARDS_TO_SHIFT).keys()].map(index => (game?.cardUses || 0) > index)
-            console.log('indicator', this.indicatorData)
         })
     }
 

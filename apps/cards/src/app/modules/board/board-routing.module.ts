@@ -9,6 +9,7 @@ import {ScoreService} from "../../services/score.service";
 import {ProfileComponent} from "./components/profile/profile.component";
 import {RulesComponent} from "./components/rules/rules.component";
 import {BoardParentComponent} from "./components/board-parent/board-parent.component";
+import {SubmittingActivityComponent} from "./components/submitting-activity/submitting-activity.component";
 
 const routes: Routes = [
     {
@@ -23,6 +24,10 @@ const routes: Routes = [
             {
                 path: 'main',
                 component: BoardComponent
+            },
+            {
+                path: 'submit-activity',
+                component: SubmittingActivityComponent
             },
             {
                 path: 'activity-list',

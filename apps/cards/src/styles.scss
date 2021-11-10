@@ -4,6 +4,7 @@
 :root {
     --text-size: 14px;
     --text-size-small: 10px;
+    --text-size-medium: 12px;
     --text-size-smaller: 8px;
     --text-size-title: 16px;
     --text-size-big: 18px;
@@ -66,6 +67,10 @@ body {
 
 .text-small {
     font-size: var(--text-size-small)
+}
+
+.text-medium {
+    font-size: var(--text-size-medium)
 }
 
 .styled-list {
