@@ -109,3 +109,9 @@ body {
         color: var(--color-text);
     }
 }
+
+.box {
+    background-color: var(--acticity-background);
+    padding: var(--padding);
+    border-radius: var(--radius);
+}

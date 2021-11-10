@@ -263,6 +263,20 @@ export class FirestoreService {
         this.logger.info(`Activity ${activityId} was rejected for athlete ${activity.athlete.id.toString()}`)
     }
 
+    async deleteActivity(activityId) {
+        const activityDoc = this.detailedActivityCollection.doc(activityId.toString())
+        const activity = (await activityDoc.get()).data() || {}
+        await activityDoc.update({
+            gameData: {
+                ...activity.gameData,
+                cardSnapshots: [],
+                cardIds: [],
+                status: CONST.ACTIVITY_STATUSES.DELETED,
+            }
+        })
+        this.logger.info(`Activity ${activityId} was deleted for athlete ${activity.athlete.id.toString()}`)
+    }
+
     async tryAutoApprove(activityId) {
         this.logger.info(`Attempting auto approve for activity ${activityId}`)
         const activityDoc = this.detailedActivityCollection.doc(activityId.toString())

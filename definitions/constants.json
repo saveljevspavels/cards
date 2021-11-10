@@ -5,7 +5,8 @@
         "NEW": "new",
         "SUBMITTED": "submitted",
         "REJECTED": "rejected",
-        "APPROVED": "approved"
+        "APPROVED": "approved",
+        "DELETED": "deleted"
     },
     "COLLECTIONS": {
         "PENDING_ACTIVITIES": "pending_activities",

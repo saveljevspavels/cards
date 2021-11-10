@@ -1,7 +1,7 @@
-<label class="container">
+<label class="checkbox">
     <span>{{label}}</span>
-    <span class="checkmark-container">
+    <span class="checkbox__checkmark-container">
         <input type="checkbox" [formControl]="fc">
-        <span class="checkmark"></span>
+        <span *ngIf="fc.value" class="checkbox__checkmark"></span>
     </span>
 </label>

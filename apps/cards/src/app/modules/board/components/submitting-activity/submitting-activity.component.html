@@ -25,5 +25,9 @@
         <div class="col-md-6 order-md-1">
             <app-button type="danger" [transparent]="true" (click)="exitSubmitMode()" label="Cancel"></app-button>
         </div>
+        <div class="col-md-6 order-md-3 d-flex justify-content-center align-items-center">
+            <app-checkbox [fc]="deleteControl"></app-checkbox>
+            <app-button [disabled]="!deleteControl.value" type="danger" [transparent]="true" (click)="deleteActivity()" label="Delete Activity"></app-button>
+        </div>
     </div>
 </div>

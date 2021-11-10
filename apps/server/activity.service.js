@@ -15,7 +15,12 @@ export default class ActivityService {
         });
 
         app.post(`${CONST.API_PREFIX}reject-activity`, async (req, res) => {
-            fireStoreService.rejectActivity(req.body.activityId, req.body.comments)
+            await fireStoreService.rejectActivity(req.body.activityId, req.body.comments)
+            res.status(200).send({response: RESPONSES.SUCCESS});
+        });
+
+        app.post(`${CONST.API_PREFIX}delete-activity`, async (req, res) => {
+            await fireStoreService.deleteActivity(req.body.activityId)
             res.status(200).send({response: RESPONSES.SUCCESS});
         });
 

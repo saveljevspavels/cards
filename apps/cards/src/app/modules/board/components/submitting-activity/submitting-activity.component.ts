@@ -1,6 +1,6 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {BoardService} from "../../../../services/board.service";
-import {FormBuilder, FormGroup} from "@angular/forms";
+import {FormBuilder, FormControl, FormGroup} from "@angular/forms";
 import {ActivityService} from "../../../../services/activity.service";
 import {FileService} from "../../../../services/file.service";
 import {ActivatedRoute, Router} from "@angular/router";
@@ -13,6 +13,7 @@ import {ActivatedRoute, Router} from "@angular/router";
 export class SubmittingActivityComponent implements OnInit, OnDestroy {
 
     public selectedActivity = this.boardService.selectedActivity$;
+    public deleteControl = new FormControl(false);
 
     public form: FormGroup;
 
@@ -20,8 +21,7 @@ export class SubmittingActivityComponent implements OnInit, OnDestroy {
                 private formBuilder: FormBuilder,
                 private fileService: FileService,
                 private boardService: BoardService,
-                private router: Router,
-                private route: ActivatedRoute) {}
+                private router: Router) {}
 
     ngOnInit(): void {
         if(!this.boardService.activity) {
@@ -48,6 +48,13 @@ export class SubmittingActivityComponent implements OnInit, OnDestroy {
         this.boardService.deselectActivity();
     }
 
+    deleteActivity() {
+        this.activityService.deleteActivity(this.boardService.activity.id).subscribe(() => {
+            this.router.navigateByUrl('board');
+            this.boardService.deselectActivity();
+        });
+    }
+
     initForm() {
         this.form = this.formBuilder.group({
             selectedCards: [[]],
@@ -55,11 +62,6 @@ export class SubmittingActivityComponent implements OnInit, OnDestroy {
             selectedActivity: [''],
             comments: ['']
         })
-
-        // this.form.get('selectedActivity')?.valueChanges.subscribe(value => {
-        //     const activity = this.newActivities.value.find((activity: any) => activity.id.toString() === value[0]);
-        //     this.boardService.activity = activity?.gameData.status !== CONST.ACTIVITY_STATUSES.SUBMITTED ? activity : null;
-        // })
     }
 
     ngOnDestroy() {

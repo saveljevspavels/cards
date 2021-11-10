@@ -81,4 +81,10 @@ export class ActivityService {
             comments: reason
         })
     }
+
+    public deleteActivity(activityId: any) {
+        return this.http.post(`${environment.baseBE}/delete-activity`, {
+            activityId
+        })
+    }
 }
