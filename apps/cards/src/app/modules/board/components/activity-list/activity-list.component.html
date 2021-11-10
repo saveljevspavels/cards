@@ -1,3 +1,22 @@
-<app-activity *ngFor="let activity of approvedActivities | async" [activity]="activity"></app-activity>
+<div class="approved_activities">
+
+    <div *ngFor="let category of categories">
+        <div *ngIf="approvedActivities[category].length" class="mb-3">
+            <p class="text-small light mb-1 mt-0">{{category | titlecase}}</p>
+            <ng-container
+                [ngTemplateOutlet]="activityTemplate"
+                [ngTemplateOutletContext]="{activities: approvedActivities[category]}">
+            </ng-container>
+        </div>
+    </div>
+
+</div>
+
+<ng-template #activityTemplate let-activities="activities">
+    <div class="mb-2" *ngFor="let activity of activities">
+        <app-activity
+            [activity]="activity" [showAthlete]="true"></app-activity>
+    </div>
+</ng-template>
 
 

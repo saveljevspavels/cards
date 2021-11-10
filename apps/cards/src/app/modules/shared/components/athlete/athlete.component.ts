@@ -17,7 +17,7 @@ export class AthleteComponent implements OnInit {
   athleteId: any = null;
 
   @Input()
-  small: boolean = false;
+  size: string = 'medium';
 
   constructor(private athleteService: AthleteService) { }
 

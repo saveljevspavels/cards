@@ -1,11 +1,22 @@
 .page-title {
-    height: var(--menu-height);
+    height: var(--header-height);
+    background-color: var(--background);
+    position: fixed;
+    top: 0;
+    left: 0;
     width: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
-    border-bottom: 2px solid rgba(15, 15, 49, 0.5);;
+    border-bottom: 2px solid rgba(15, 15, 49, 0.5);
+    z-index: 10;
     .title {
+        padding-top: 24px;
         font-weight: 600;
     }
+}
+
+.page-title-placeholder {
+    width: 100%;
+    height: var(--header-height);
 }

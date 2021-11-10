@@ -6,7 +6,7 @@
     position: fixed;
     bottom: 0;
     left: 0;
-    z-index: 1;
+    z-index: 10;
     display: flex;
     justify-content: space-between;
     cursor: pointer;
@@ -28,6 +28,7 @@
         }
     }
     &__indicator {
+        pointer-events: none;
         position: absolute;
         top: 0;
         transform: translateY(-50%);

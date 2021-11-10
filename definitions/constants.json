@@ -29,7 +29,7 @@
         "AVERAGE_SPEED": "average_speed",
         "MOVING_TIME": "moving_time",
         "ELAPSED_TIME": "elapsed_time",
-        "START_DATE": "start_date_local",
+        "START_DATE": "start_date",
         "ATHLETE_COUNT": "athlete_count",
         "ACHIEVEMENT_COUNT": "achievement_count"
     },
