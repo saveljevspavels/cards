@@ -4,7 +4,7 @@
     align-items: center;
     background-color: var(--acticity-background);
     width: 100%;
-    border-radius: 10px;
+    border-radius: var(--radius);
     &__content {
         padding: var(--padding);
     }
@@ -31,19 +31,6 @@
         &--other {
             color: var(--color-blue);
         }
-    }
-    &__data-item {
-        margin-top: 8px;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-    }
-    &__property {
-        color: var(--color-text-light);
-    }
-    &__value {
-        font-weight: 600;
-        color: var(--color-text);
     }
     &__id {
         position: absolute;

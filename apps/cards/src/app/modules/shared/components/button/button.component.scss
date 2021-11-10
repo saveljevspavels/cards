@@ -1,7 +1,7 @@
 .button {
     cursor: pointer;
     background-color: var(--acticity-background);
-    border-radius: 10px;
+    border-radius: var(--radius);
     padding: 10px;
     height: 44px;
     width: 100%;

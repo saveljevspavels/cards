@@ -1,3 +1,7 @@
-<app-athlete [athlete]="athlete | async"></app-athlete>
+<div class="d-flex justify-content-center">
+    <app-athlete [size]="'big'" [athlete]="athlete | async"></app-athlete>
+</div>
 
-<app-base-workout-info [baseWorkout]="(athlete | async)?.baseWorkout"></app-base-workout-info>
+<div class="mt-3">
+    <app-base-workout-info [baseWorkout]="(athlete | async)?.baseWorkout"></app-base-workout-info>
+</div>

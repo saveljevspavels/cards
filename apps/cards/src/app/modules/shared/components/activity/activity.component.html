@@ -33,25 +33,25 @@
                 'activity__type--other': activity.type !== 'Run' && activity.type !== 'Walk'
              }"
         >{{activity.type}}</div>
-        <div class="activity__data-item">
-            <div class="activity__property">Started at</div>
-            <div class="activity__value">{{activity.start_date | date : 'dd MMM, HH:mm'}}</div>
+        <div class="stat-item">
+            <div class="stat-item__property">Started at</div>
+            <div class="stat-item__value">{{activity.start_date | date : 'dd MMM, HH:mm'}}</div>
         </div>
-        <div class="activity__data-item">
-            <div class="activity__property">Time</div>
-            <div class="activity__value">{{activity.moving_time | time}} ({{activity.elapsed_time | time}} total)</div>
+        <div class="stat-item">
+            <div class="stat-item__property">Time</div>
+            <div class="stat-item__value">{{activity.moving_time | time}} ({{activity.elapsed_time | time}} total)</div>
         </div>
-        <div class="activity__data-item">
-            <div class="activity__property">Distance</div>
-            <div class="activity__value">{{(activity.distance | distance) || '-'}}</div>
+        <div class="stat-item">
+            <div class="stat-item__property">Distance</div>
+            <div class="stat-item__value">{{(activity.distance | distance) || '-'}}</div>
         </div>
-        <div class="activity__data-item">
-            <div class="activity__property">Average pace</div>
-            <div class="activity__value">{{(activity.average_speed | pace) || '-'}}</div>
+        <div class="stat-item">
+            <div class="v__property">Average pace</div>
+            <div class="v__value">{{(activity.average_speed | pace) || '-'}}</div>
         </div>
-        <div class="activity__data-item" *ngIf="showComments && activity.gameData.comments">
-            <div class="activity__property">Comments</div>
-            <div class="activity__value">{{activity.gameData.comments}}</div>
+        <div class="stat-item" *ngIf="showComments && activity.gameData.comments">
+            <div class="stat-item__property">Comments</div>
+            <div class="stat-item__value">{{activity.gameData.comments}}</div>
         </div>
     </div>
     <div *ngIf="showImages && this.activity.gameData?.images?.length" class="activity__images mt-n3">

@@ -1,7 +1,7 @@
 .card-counter {
     padding: var(--padding);
     background-color: var(--acticity-background);
-    border-radius: 10px;
+    border-radius: var(--radius);
     &__indicator {
         position: relative;
         display: flex;

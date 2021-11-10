@@ -1,7 +1,7 @@
 .collapsible {
     &__header {
         background: var(--acticity-background);
-        border-radius: 10px;
+        border-radius: var(--radius);
         display: flex;
         align-items: center;
         justify-content: space-between;
@@ -17,6 +17,6 @@
     }
     &--inclusive {
         background: var(--acticity-background);
-        border-radius: 10px;
+        border-radius: var(--radius);
     }
 }

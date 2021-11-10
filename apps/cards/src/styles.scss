@@ -29,6 +29,7 @@
 
     --padding: 14px 14px 14px 14px;
     --padding-value: 14px;
+    --radius: 10px;
 
     --menu-height: 56px;
     --header-height: 74px;
@@ -87,5 +88,19 @@ body {
         &:last-child {
             margin-bottom: 0;
         }
+    }
+}
+
+.stat-item {
+    margin-top: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    &__property {
+        color: var(--color-text-light);
+    }
+    &__value {
+        font-weight: 600;
+        color: var(--color-text);
     }
 }
