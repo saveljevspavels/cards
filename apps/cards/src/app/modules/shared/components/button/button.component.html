@@ -5,5 +5,5 @@
         'button--action': type === 'action',
         'button--transparent': transparent
     }">
-    <app-svg [icon]="icon"></app-svg>&nbsp;<span class="title">{{label}}</span>
+    <ng-container *ngIf="icon"><app-svg [icon]="icon"></app-svg>&nbsp;</ng-container><span class="title">{{label}}</span>
 </div>

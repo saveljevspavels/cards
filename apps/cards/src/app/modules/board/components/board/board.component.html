@@ -12,13 +12,16 @@
                         [idKey]="'id'"
                     >
                         <ng-template #activityTemplate let-dataItem="dataItem">
+                            <ng-container *ngIf="dataItem.gameData.status === 'submitted'">
+                                <p class="mt-0 mb-0 light" style="text-align: center">Waiting for approval</p>
+                                <app-button (click)="rejectActivity(dataItem.id)" type="danger" label="Cancel Submission"></app-button>
+                            </ng-container>
                             <app-activity
                                 [activity]="dataItem"
                                 [showComments]="true"
                                 (click)="enterSubmitMode(dataItem)"
                                 [style]="{'cursor': 'pointer'}"
                             ></app-activity>
-                            <app-button *ngIf="dataItem.gameData.status === 'submitted'" (click)="rejectActivity(dataItem.id)" type="danger" label="Cancel Submission"></app-button>
                         </ng-template>
                     </app-selection-wrapper>
                 </div>
