@@ -4,5 +4,5 @@
         'button--success': type === 'success',
         'button--action': type === 'action'
     }">
-    <img *ngIf="icon" src="/assets/icons/{{icon}}.svg">&nbsp;<span class="title">{{label}}</span>
+    <app-svg [icon]="icon"></app-svg>&nbsp;<span class="title">{{label}}</span>
 </div>

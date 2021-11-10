@@ -23,6 +23,9 @@
         background-color: var(--color-blue);
     }
     &--danger {
-        background-color: var(--color-danger);
+        color: var(--color-danger);
+        app-svg {
+            fill: var(--color-danger);
+        }
     }
 }

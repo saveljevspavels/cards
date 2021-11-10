@@ -1,6 +1,6 @@
 <div class="athlete athlete--{{size}}" *ngIf="athlete">
     <img src="{{athlete.profile_medium}}" class="athlete__profile-picture">
     <div class="athlete__name">
-        {{athlete.firstname}} {{athlete.lastname}}
+        {{athlete.firstname | titlecase}} {{athlete.lastname | titlecase}}
     </div>
 </div>

@@ -1,0 +1,14 @@
+<div class="score-item">
+    <div class="score-item__position score-item__position--{{position}}">
+        {{position}}
+    </div>
+    <div class="score-item__athlete">
+        <app-athlete [athleteId]="score.athleteId"></app-athlete>
+    </div>
+    <div class="score-item__cards-played">
+        {{score.cardsPlayed}}
+    </div>
+    <div class="score-item__points ml-3">
+        {{score.value}}
+    </div>
+</div>

@@ -1,14 +1,16 @@
-<table class="scores">
-  <tr>
-    <th>Athlete</th>
-    <th>Approved Activities</th>
-    <th>Cards Played</th>
-    <th>Points</th>
-  </tr>
-  <tr *ngFor="let score of scores | async | sort: 'value': 'desc'">
-    <td><app-athlete [athleteId]="score.athleteId" [small]="true"></app-athlete></td>
-    <td>{{score.activities}}</td>
-    <td>{{score.cardsPlayed}}</td>
-    <td>{{score.value}}</td>
-  </tr>
-</table>
+<div class="scores">
+    <div class="scores__legend mb-1">
+        <div class="scores__legend-item scores__legend-item--cards ml-3">
+            Cards
+        </div>
+        <div class="scores__legend-item scores__legend-item--points ml-3">
+            Points
+        </div>
+    </div>
+    <div *ngFor="let score of scores | async | sort: 'value': 'desc'; let i = index" class="mb-2">
+        <app-score-item
+            [score]="score"
+            [position]="i + 1"
+        ></app-score-item>
+    </div>
+</div>

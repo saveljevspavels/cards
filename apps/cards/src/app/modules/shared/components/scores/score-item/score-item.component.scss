@@ -1,0 +1,38 @@
+.score-item {
+    width: 100%;
+    padding: var(--padding);
+    background-color: var(--acticity-background);
+    border-radius: var(--radius);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    &__position {
+        font-weight: 900;
+        font-size: 22px;
+        min-width: 30px;
+        color: var(--color-text-light);
+        &--1 {
+            color: var(--color-main-2);
+        }
+        &--2 {
+            color: var(--color-main-1);
+        }
+        &--3 {
+            color: var(--color-main-0);
+        }
+    }
+    &__athlete {
+        flex-grow: 1;
+    }
+    &__cards-played {
+        font-size: var(--text-size-big);
+        color: var(--color-text-light);
+        font-weight: 700;
+    }
+    &__points {
+        font-size: var(--text-size-big);
+        font-weight: 700;
+        min-width: 50px;
+        text-align: right;
+    }
+}

@@ -29,6 +29,7 @@ import { PageTitleComponent } from './components/page-title/page-title.component
 import { MobileMenuComponent } from './components/mobile-menu/mobile-menu.component';
 import { SvgComponent } from './components/svg/svg.component';
 import { SvgTemplatesComponent } from './components/svg-templates/svg-templates.component';
+import { ScoreItemComponent } from './components/scores/score-item/score-item.component';
 
 const COMPS = [
     InputComponent,
@@ -65,6 +66,7 @@ const MODULES = [
         MobileMenuComponent,
         SvgComponent,
         SvgTemplatesComponent,
+        ScoreItemComponent,
     ],
     imports: [
         CommonModule,
@@ -80,6 +82,7 @@ const MODULES = [
         PageTitleComponent,
         MobileMenuComponent,
         SvgTemplatesComponent,
+        ScoreItemComponent,
     ],
     providers: [
         FileService

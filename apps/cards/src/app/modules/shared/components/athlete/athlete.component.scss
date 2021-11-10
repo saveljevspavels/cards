@@ -14,12 +14,13 @@
     }
     &--medium {
         .athlete__profile-picture {
-            height: 48px;
-            width: 48px;
+            height: 42px;
+            width: 42px;
         }
         .athlete__name {
-            font-size: var(--text-size-big);
+            font-size: var(--text-size);
             font-weight: 600;
+            margin-left: 8px;
         }
     }
     &--big {
