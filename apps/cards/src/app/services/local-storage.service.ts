@@ -22,4 +22,8 @@ export class LocalStorageService {
             localStorage.setItem(key, typeof data[key] === 'object' ? JSON.stringify(data[key]) : data[key])
         })
     }
+
+    static getState(item: string) {
+        return (JSON.parse(localStorage.getItem(item) || 'true'))
+    }
 }

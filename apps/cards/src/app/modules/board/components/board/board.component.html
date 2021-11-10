@@ -1,42 +1,51 @@
-<div class="row flex-md-nowrap flex-sm-wrap">
-    <div class="col-lg-6 mb-2">
-        <div>
-            <app-collapsible [title]="'Your Pending Activities'" [inclusive]="true">
-                <div>
-                    <app-selection-wrapper
-                        [singleSelection]="true"
-                        [template]="activityTemplate"
-                        [selfSelectable]="true"
-                        [selectionEnabled]="false"
-                        [dataItems]="(newActivities | async)"
-                        [idKey]="'id'"
-                    >
-                        <ng-template #activityTemplate let-dataItem="dataItem">
-                            <ng-container *ngIf="dataItem.gameData.status === 'submitted'">
-                                <p class="mt-0 mb-0 light" style="text-align: center">Waiting for approval</p>
-                                <app-button (click)="rejectActivity(dataItem.id)" type="danger" label="Cancel Submission"></app-button>
-                            </ng-container>
-                            <app-activity
-                                [activity]="dataItem"
-                                [showComments]="true"
-                                (click)="enterSubmitMode(dataItem)"
-                                [style]="{'cursor': 'pointer'}"
-                            ></app-activity>
-                        </ng-template>
-                    </app-selection-wrapper>
+<div class="d-flex flex-column">
+    <div class="row flex-md-nowrap flex-sm-wrap order-1">
+        <div class="col-lg-6 mb-2">
+            <div>
+                <app-collapsible [title]="'Your Pending Activities'"
+                                 (stateChange)="saveState($event, 'pendingActivities')"
+                                 [inclusive]="true"
+                                 [open]="openStates.pendingActivities">
+                    <div>
+                        <app-selection-wrapper
+                            [singleSelection]="true"
+                            [template]="activityTemplate"
+                            [selfSelectable]="true"
+                            [selectionEnabled]="false"
+                            [dataItems]="(newActivities | async)"
+                            [idKey]="'id'"
+                        >
+                            <ng-template #activityTemplate let-dataItem="dataItem">
+                                <ng-container *ngIf="dataItem.gameData.status === 'submitted'">
+                                    <p class="mt-0 mb-0 light" style="text-align: center">Waiting for approval</p>
+                                    <app-button (click)="rejectActivity(dataItem.id)" type="danger" label="Cancel Submission"></app-button>
+                                </ng-container>
+                                <app-activity
+                                    [activity]="dataItem"
+                                    [showComments]="true"
+                                    (click)="enterSubmitMode(dataItem)"
+                                    [style]="{'cursor': 'pointer'}"
+                                ></app-activity>
+                            </ng-template>
+                        </app-selection-wrapper>
+                    </div>
+                </app-collapsible>
+            </div>
+        </div>
+        <div class="col-lg-6 mb-2">
+            <div class="mb-2">
+                <app-card-counter></app-card-counter>
+            </div>
+            <app-collapsible [title]="'Card Queue'" [open]="openStates.cardQueue" (stateChange)="saveState($event, 'cardQueue')">
+                <div class="card-queue">
+                    <app-card-queue [selectionEnabled]="false"></app-card-queue>
                 </div>
             </app-collapsible>
         </div>
     </div>
-    <div class="col-lg-6 mb-2">
-        <div class="mb-2">
-            <app-card-counter></app-card-counter>
-        </div>
-        <app-collapsible [title]="'Card Queue'">
-            <div class="card-queue">
-                <app-card-queue [selectionEnabled]="false"></app-card-queue>
-            </div>
-        </app-collapsible>
+
+    <div class="order-2" [ngClass]="{'order-2': !openStates.rules, 'order-0 mb-2': openStates.rules}">
+        <app-button icon="rules" label="Rules" (click)="openRules()"></app-button>
     </div>
+
 </div>
-<app-button icon="rules" label="Rules" routerLink="/board/rules"></app-button>
