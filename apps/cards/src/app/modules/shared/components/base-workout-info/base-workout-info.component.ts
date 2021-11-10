@@ -10,8 +10,8 @@ export class BaseWorkoutInfoComponent implements OnInit {
 
     rules = RULES;
 
-    @Input()
-    public baseWorkout: any;
+    @Input() public baseWorkout: any;
+    @Input() public self = false;
 
     constructor() { }
 

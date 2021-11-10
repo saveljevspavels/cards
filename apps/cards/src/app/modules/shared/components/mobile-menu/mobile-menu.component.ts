@@ -34,7 +34,7 @@ export class MobileMenuComponent implements OnInit {
             {
                 label: 'Profile',
                 icon: 'profile',
-                path: '/board/profile'
+                path: '/board/athletes/profile'
             },
             {
                 label: 'Admin',

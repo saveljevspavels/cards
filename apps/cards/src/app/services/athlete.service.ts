@@ -3,7 +3,7 @@ import {BehaviorSubject} from "rxjs";
 import {AngularFirestore} from "@angular/fire/firestore";
 import {LocalStorageService} from "./local-storage.service";
 import {CONST} from "../app.module";
-import {filter} from "rxjs/operators";
+import {filter, map} from "rxjs/operators";
 import {HttpClient} from "@angular/common/http";
 import {environment} from "../../environments/environment";
 import Athlete from "../interfaces/athlete";
@@ -42,6 +42,13 @@ export class AthleteService {
 
     getAthlete(athleteId: string): Athlete | null {
         return this.athletes.value.find((athlete: Athlete) => athlete.id.toString() === athleteId) || null
+    }
+
+    getAthlete$(athleteId: string) {
+        return this.athletes.pipe(
+            filter((athletes) => !!athletes.length),
+            map(() => this.getAthlete(athleteId))
+        )
     }
 
     updateBaseWorkout(athleteIds: string[], baseWorkout: any) {

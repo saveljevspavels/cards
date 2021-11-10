@@ -38,8 +38,17 @@ const routes: Routes = [
                 component: LeaderboardComponent
             },
             {
-                path: 'profile',
-                component: ProfileComponent
+                path: 'athletes',
+                children: [
+                    {
+                        path: 'profile',
+                        component: ProfileComponent
+                    },
+                    {
+                        path: ':athleteId/profile',
+                        component: ProfileComponent
+                    },
+                ]
             },
             {
                 path: 'rules',
