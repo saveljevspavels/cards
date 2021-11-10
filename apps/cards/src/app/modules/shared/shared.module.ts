@@ -30,6 +30,7 @@ import { MobileMenuComponent } from './components/mobile-menu/mobile-menu.compon
 import { SvgComponent } from './components/svg/svg.component';
 import { SvgTemplatesComponent } from './components/svg-templates/svg-templates.component';
 import { ScoreItemComponent } from './components/scores/score-item/score-item.component';
+import { PopupComponent } from './components/popup/popup.component';
 
 const COMPS = [
     InputComponent,
@@ -67,6 +68,7 @@ const MODULES = [
         SvgComponent,
         SvgTemplatesComponent,
         ScoreItemComponent,
+        PopupComponent,
     ],
     imports: [
         CommonModule,
@@ -83,6 +85,7 @@ const MODULES = [
         MobileMenuComponent,
         SvgTemplatesComponent,
         ScoreItemComponent,
+        PopupComponent,
     ],
     providers: [
         FileService

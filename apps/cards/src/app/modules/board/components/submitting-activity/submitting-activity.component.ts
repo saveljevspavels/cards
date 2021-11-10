@@ -1,9 +1,11 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {BoardService} from "../../../../services/board.service";
 import {FormBuilder, FormControl, FormGroup} from "@angular/forms";
 import {ActivityService} from "../../../../services/activity.service";
 import {FileService} from "../../../../services/file.service";
 import {ActivatedRoute, Router} from "@angular/router";
+import {PopupService} from "../../../../services/popup.service";
+import {mergeMap} from "rxjs/operators";
 
 @Component({
   selector: 'app-submitting-activity',
@@ -12,8 +14,10 @@ import {ActivatedRoute, Router} from "@angular/router";
 })
 export class SubmittingActivityComponent implements OnInit, OnDestroy {
 
+    @ViewChild('submitPopup', { static: true }) submitPopup: ElementRef;
+    @ViewChild('deletePopup', { static: true }) deletePopup: ElementRef;
+
     public selectedActivity = this.boardService.selectedActivity$;
-    public deleteControl = new FormControl(false);
 
     public form: FormGroup;
 
@@ -21,7 +25,8 @@ export class SubmittingActivityComponent implements OnInit, OnDestroy {
                 private formBuilder: FormBuilder,
                 private fileService: FileService,
                 private boardService: BoardService,
-                private router: Router) {}
+                private router: Router,
+                private popupService: PopupService) {}
 
     ngOnInit(): void {
         if(!this.boardService.activity) {
@@ -37,7 +42,8 @@ export class SubmittingActivityComponent implements OnInit, OnDestroy {
             this.form.value.selectedCards,
             uploadedImages,
             this.form.value.comments,
-        ).subscribe(() => {
+        ).pipe(mergeMap(() => this.popupService.showPopup(this.submitPopup, 2500)))
+        .subscribe(() => {
             this.initForm()
             this.exitSubmitMode();
         })
@@ -48,8 +54,17 @@ export class SubmittingActivityComponent implements OnInit, OnDestroy {
         this.boardService.deselectActivity();
     }
 
+    openDeletePopup() {
+        this.popupService.showPopup(this.deletePopup)
+    }
+
+    cancelDelete() {
+        this.popupService.popup = null;
+    }
+
     deleteActivity() {
         this.activityService.deleteActivity(this.boardService.activity.id).subscribe(() => {
+            this.popupService.popup = null;
             this.router.navigateByUrl('board');
             this.boardService.deselectActivity();
         });

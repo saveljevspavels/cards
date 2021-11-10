@@ -25,9 +25,31 @@
         <div class="col-md-6 order-md-1">
             <app-button type="danger" [transparent]="true" (click)="exitSubmitMode()" label="Cancel"></app-button>
         </div>
-        <div class="col-md-6 order-md-3 d-flex justify-content-center align-items-center">
-            <app-checkbox [fc]="deleteControl"></app-checkbox>
-            <app-button [disabled]="!deleteControl.value" type="danger" [transparent]="true" (click)="deleteActivity()" label="Delete Activity"></app-button>
+        <div class="col-md-6 order-md-3 mt-4">
+            <app-button type="danger" [transparent]="true" (click)="openDeletePopup()" label="Delete Activity"></app-button>
         </div>
     </div>
 </div>
+
+<ng-template #submitPopup>
+    <div class="d-flex flex-column align-items-center submit-popup">
+        <img src="assets/images/muscle.png" class="mt-4">
+        <p class="title mt-4 mb-4">
+            Your activity was submitted successfully!
+        </p>
+    </div>
+</ng-template>
+
+<ng-template #deletePopup>
+    <div class="d-flex flex-column align-items-center">
+        <p class="mt-4 mb-1">
+            Are you sure you want to delete the activity?
+        </p>
+        <div class="mt-4 mb-2">
+            <app-button type="danger" [label]="'Delete'" (click)="deleteActivity()"></app-button>
+        </div>
+        <div class="mb-3">
+            <app-button (click)="cancelDelete()" [label]="'Cancel'"></app-button>
+        </div>
+    </div>
+</ng-template>
