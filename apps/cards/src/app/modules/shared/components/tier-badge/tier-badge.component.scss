@@ -1,0 +1,14 @@
+.tier-badge {
+    display: flex;
+    align-items: center;
+    &__color {
+        width: 20px;
+        height: 20px;
+        border-radius: 3px;
+        &--0 { background-color: var(--color-main-0); }
+        &--1 { background-color: var(--color-main-1); }
+        &--2 { background-color: var(--color-main-2); }
+        &--3 { background-color: var(--color-main-3); }
+        &--4 { background-color: var(--color-main-4); }
+    }
+}

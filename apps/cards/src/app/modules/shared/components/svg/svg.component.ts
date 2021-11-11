@@ -11,6 +11,7 @@ export class SvgComponent implements OnInit {
     @Input() width = 24;
     @Input() height = 24;
     @Input() viewBox = "0 0 24 24";
+    @Input() styleClass = "";
 
     constructor() { }
 

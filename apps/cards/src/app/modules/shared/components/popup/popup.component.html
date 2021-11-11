@@ -1,5 +1,6 @@
-<div class="popup-background d-flex justify-content-center align-items-center" *ngIf="template | async">
-    <div class="box popup">
+<ng-container *ngIf="template | async">
+    <div class="popup-background" (click)="closePopup()"></div>
+    <div class="popup-content">
         <ng-container [ngTemplateOutlet]="template | async"></ng-container>
     </div>
-</div>
+</ng-container>

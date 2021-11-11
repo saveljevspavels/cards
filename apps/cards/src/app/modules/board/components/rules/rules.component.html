@@ -2,7 +2,13 @@
     <ul class="styled-list">
         <li *ngFor="let rule of rules">{{rule}}</li>
     </ul>
+    <div class="rules__tiers mt-4 box mb-3">
+        <p class="text-small light">
+            Color of the cards background defines its difficulty level
+        </p>
+        <h4 class="title text-bold">Card Difficulty Levels</h4>
+        <div class="mt-2" *ngFor="let tier of tiers; let i = index">
+            <app-tier-badge [label]="tier" [tier]="i"></app-tier-badge>
+        </div>
+    </div>
 </div>
-<ng-template #popup>
-    popup stuff
-</ng-template>

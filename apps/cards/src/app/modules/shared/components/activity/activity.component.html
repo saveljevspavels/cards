@@ -54,10 +54,19 @@
             <div class="stat-item__value">{{activity.gameData.comments}}</div>
         </div>
     </div>
-    <div *ngIf="showImages && this.activity.gameData?.images?.length" class="activity__images mt-n3">
+    <div *ngIf="showImages && this.activity.gameData?.images?.length"
+         class="activity__images mt-n3"
+    >
         <div class="activity__image mr-1"
-             *ngFor="let image of this.activity.gameData?.images"
+             (click)="openGallery(i)"
+             *ngFor="let image of this.activity.gameData?.images; let i = index;"
              [style.background-image]="'url(' + image + ')'">
         </div>
     </div>
 </div>
+
+<ng-template #gallery>
+    <div class="popup popup--big box">
+        <app-swiper [images]="this.activity.gameData?.images" [slideIndex]="slideIndex"></app-swiper>
+    </div>
+</ng-template>

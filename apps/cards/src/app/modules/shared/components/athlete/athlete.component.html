@@ -1,4 +1,4 @@
-<div class="athlete athlete--{{size}}" *ngIf="athlete">
+<div class="athlete athlete--{{size}}" *ngIf="athlete" routerLink="/board/athletes/{{athlete.id}}/profile">
     <img src="{{athlete.profile_medium}}" class="athlete__profile-picture">
     <div class="athlete__name">
         {{athlete.firstname | titlecase}} {{athlete.lastname | titlecase}}

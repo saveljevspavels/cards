@@ -31,6 +31,9 @@ import { SvgComponent } from './components/svg/svg.component';
 import { SvgTemplatesComponent } from './components/svg-templates/svg-templates.component';
 import { ScoreItemComponent } from './components/scores/score-item/score-item.component';
 import { PopupComponent } from './components/popup/popup.component';
+import { TierBadgeComponent } from './components/tier-badge/tier-badge.component';
+import {SwiperModule} from "swiper/angular";
+import { SwiperComponent } from './components/swiper/swiper.component';
 
 const COMPS = [
     InputComponent,
@@ -49,6 +52,8 @@ const COMPS = [
     ButtonComponent,
     CollapsibleComponent,
     TextareaComponent,
+    SwiperComponent,
+    TierBadgeComponent,
 ]
 
 const MODULES = [
@@ -57,7 +62,8 @@ const MODULES = [
     HttpClientModule,
     InputTextareaModule,
     TabMenuModule,
-    ObserversModule
+    ObserversModule,
+    SwiperModule
 ]
 
 @NgModule({

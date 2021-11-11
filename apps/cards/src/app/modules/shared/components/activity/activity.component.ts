@@ -1,6 +1,7 @@
-import {Component, forwardRef, Input, OnInit, ViewEncapsulation} from '@angular/core';
+import {Component, ElementRef, forwardRef, Input, OnInit, ViewChild, ViewEncapsulation} from '@angular/core';
 import {ControlValueAccessor, FormControl, NG_VALUE_ACCESSOR} from "@angular/forms";
 import {FileService} from "../../../../services/file.service";
+import {PopupService} from "../../../../services/popup.service";
 
 @Component({
     selector: 'app-activity',
@@ -15,6 +16,9 @@ import {FileService} from "../../../../services/file.service";
 })
 export class ActivityComponent implements OnInit, ControlValueAccessor {
 
+    @ViewChild('gallery', { static: true }) gallery: ElementRef;
+    public slideIndex = 0;
+
     public selectedCards = new FormControl([])
     public imageObservables: any;
 
@@ -24,7 +28,7 @@ export class ActivityComponent implements OnInit, ControlValueAccessor {
     @Input() public showComments = false;
     @Input() public showAthlete = false;
 
-    constructor(private fileService: FileService) { }
+    constructor(private popupService: PopupService) { }
 
     async ngOnInit() {
         this.selectedCards.valueChanges.subscribe((value) => {
@@ -43,6 +47,11 @@ export class ActivityComponent implements OnInit, ControlValueAccessor {
 
     registerOnTouched(fn: any) {
         this._onTouched = fn;
+    }
+
+    openGallery(index: number) {
+        this.slideIndex = index
+        this.popupService.showPopup(this.gallery)
     }
 
 }

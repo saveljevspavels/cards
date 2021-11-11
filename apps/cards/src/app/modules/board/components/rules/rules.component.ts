@@ -19,6 +19,14 @@ export class RulesComponent implements OnInit {
         'When card is being discarded, its point value is reevaluated based on how many times it was played. Card value will differ next time that card is being drawn.'
     ]
 
+    public tiers = [
+        'Easy',
+        'Normal',
+        'Hard',
+        'Very Hard',
+        'Interesting',
+    ]
+
     constructor() { }
 
     ngOnInit(): void {
