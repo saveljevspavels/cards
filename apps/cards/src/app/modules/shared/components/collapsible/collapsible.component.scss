@@ -11,9 +11,6 @@
     &__content {
         transition: 0.2s ease-in-out;
         overflow: hidden;
-        &--collapsed {
-            max-height: 0!important;
-        }
     }
     &--inclusive {
         background: var(--acticity-background);

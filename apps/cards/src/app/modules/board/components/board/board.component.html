@@ -5,7 +5,7 @@
                 <app-collapsible [title]="'Your Pending Activities'"
                                  (stateChange)="saveState($event, 'pendingActivities')"
                                  [inclusive]="true"
-                                 [open]="openStates.pendingActivities">
+                                 [expanded]="openStates.pendingActivities">
                     <div>
                         <app-selection-wrapper
                             [singleSelection]="true"
@@ -36,7 +36,7 @@
             <div class="mb-2">
                 <app-card-counter></app-card-counter>
             </div>
-            <app-collapsible [title]="'Card Queue'" [open]="openStates.cardQueue" (stateChange)="saveState($event, 'cardQueue')">
+            <app-collapsible [title]="'Card Queue'" [expanded]="openStates.cardQueue" (stateChange)="saveState($event, 'cardQueue')">
                 <div class="card-queue">
                     <app-card-queue [selectionEnabled]="false"></app-card-queue>
                 </div>

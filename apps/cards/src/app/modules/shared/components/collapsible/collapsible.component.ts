@@ -1,22 +1,32 @@
 import {AfterViewInit, Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
+import {animate, state, style, transition, trigger} from "@angular/animations";
 
 @Component({
-  selector: 'app-collapsible',
-  templateUrl: './collapsible.component.html',
-  styleUrls: ['./collapsible.component.scss']
+    selector: 'app-collapsible',
+    templateUrl: './collapsible.component.html',
+    styleUrls: ['./collapsible.component.scss'],
+    animations: [
+        trigger('collapse', [
+            state('expanded', style({
+                height: '*',
+            })),
+            state('collapsed', style({
+                height: '{{startHeight}}',
+            }),{
+                params: {startHeight: '0px'}
+            }),
+            transition('expanded => collapsed', animate('200ms ease-in-out')),
+            transition('collapsed => expanded', animate('200ms ease-in-out'))
+        ])
+    ]
 })
 export class CollapsibleComponent implements AfterViewInit {
 
     @Input() title: string = '';
-    @Input() open = false;
+    @Input() expanded = false;
     @Input() inclusive = false;
-    @ViewChild('content', {static: true}) content: ElementRef;
 
     @Output() public stateChange = new EventEmitter();
-
-    public initialized = false;
-    public collapsed = false;
-    public maxHeight = 0;
 
     constructor() { }
 
@@ -24,19 +34,7 @@ export class CollapsibleComponent implements AfterViewInit {
     }
 
     toggle() {
-        this.collapsed = !this.collapsed;
-        this.stateChange.emit(!this.collapsed);
-        this.onContentChange(null)
-    }
-
-    onContentChange(event: any) {
-        const height = this.content.nativeElement.getBoundingClientRect().height;
-        if(height) {
-            this.maxHeight = height;
-        }
-        if(!this.initialized && this.maxHeight) {
-            this.collapsed = !this.open;
-            this.initialized = true;
-        }
+        this.expanded = !this.expanded;
+        this.stateChange.emit(this.expanded);
     }
 }
