@@ -2,8 +2,11 @@
     <div *ngIf="showAthlete"
          class="d-flex align-items-center"
     >
-        <app-athlete *ngIf="activity?.athlete" [size]="'small'" [athleteId]="activity?.athlete.id"></app-athlete>
-        <span class="text-small">gained {{activity.gameData?.cardSnapshots[0].value}} points by submitting an activity:</span>
+        <div class="ml-1">
+            <app-athlete *ngIf="activity?.athlete" [size]="'small'" [athleteId]="activity?.athlete.id">
+                <span class="text-medium">gained {{activity.gameData?.cardSnapshots[0].value}} points by submitting an activity:</span>
+            </app-athlete>
+        </div>
     </div>
     <div *ngIf="activity.gameData.cardSnapshots?.length">
         <app-selection-wrapper

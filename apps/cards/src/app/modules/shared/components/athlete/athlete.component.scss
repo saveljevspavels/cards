@@ -3,17 +3,22 @@
     align-items: center;
     cursor: pointer;
     &--small {
-        padding: 4px;
+        padding: 6px;
+        .athlete__text {
+            margin-left: 8px;
+        }
         .athlete__profile-picture {
-            height: 27px;
-            width: 27px;
+            height: 38px;
+            width: 38px;
         }
         .athlete__name {
-            font-size: var(--text-size-small);
-            margin-left: 4px;
+            font-size: var(--text-size);
         }
     }
     &--medium {
+        .athlete__text {
+            margin-left: 8px;
+        }
         .athlete__profile-picture {
             height: 42px;
             width: 42px;
@@ -21,7 +26,6 @@
         .athlete__name {
             font-size: var(--text-size);
             font-weight: 600;
-            margin-left: 8px;
         }
     }
     &--big {
@@ -45,6 +49,8 @@
     &__name {
         font-size: var(--text-size-big);
         font-weight: 700;
+    }
+    &__text {
         margin-left: 16px;
     }
 }
