@@ -46,5 +46,6 @@
         "IN": "in",
         "NOT_IN": "notIn"
     },
-    "GAME_ID": "game1"
+    "GAME_ID": "game1",
+    "COMMENT_LENGTH": 300
 }

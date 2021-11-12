@@ -1,6 +1,7 @@
 .athlete {
     display: flex;
     align-items: center;
+    cursor: pointer;
     &--small {
         padding: 4px;
         .athlete__profile-picture {

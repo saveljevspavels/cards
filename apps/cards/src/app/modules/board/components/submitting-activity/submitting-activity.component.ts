@@ -6,6 +6,7 @@ import {FileService} from "../../../../services/file.service";
 import {ActivatedRoute, Router} from "@angular/router";
 import {PopupService} from "../../../../services/popup.service";
 import {mergeMap} from "rxjs/operators";
+import {CONST} from "../../../../app.module";
 
 @Component({
   selector: 'app-submitting-activity',
@@ -41,7 +42,7 @@ export class SubmittingActivityComponent implements OnInit, OnDestroy {
             this.boardService.activity.id.toString(),
             this.form.value.selectedCards,
             uploadedImages,
-            this.form.value.comments,
+            this.form.value.comments.slice(0, CONST.COMMENT_LENGTH),
         ).pipe(mergeMap(() => this.popupService.showPopup(this.submitPopup, 2500)))
         .subscribe(() => {
             this.initForm()

@@ -1,7 +1,4 @@
 <div class="activity">
-    <div class="activity__id text-small lighter">
-        {{activity.id}}
-    </div>
     <div *ngIf="showAthlete"
          class="d-flex align-items-center"
     >
@@ -23,6 +20,9 @@
         </app-selection-wrapper>
     </div>
     <div class="activity__content" [ngClass]="{'full-width': !activity.gameData.cardSnapshots?.length}">
+        <div class="activity__id text-small lighter">
+            {{activity.id}}
+        </div>
         <div class="text-small lighter">
             Type:
         </div>
@@ -66,7 +66,7 @@
 </div>
 
 <ng-template #gallery>
-    <div class="popup popup--big box">
+    <div class="popup box">
         <app-swiper [images]="this.activity.gameData?.images" [slideIndex]="slideIndex"></app-swiper>
     </div>
 </ng-template>

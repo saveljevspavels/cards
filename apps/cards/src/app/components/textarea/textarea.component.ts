@@ -1,5 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {FormControl} from "@angular/forms";
+import {CONST} from "../../app.module";
 
 @Component({
   selector: 'app-textarea',
@@ -8,21 +9,24 @@ import {FormControl} from "@angular/forms";
 })
 export class TextareaComponent implements OnInit {
 
-  @Input()
-  public rows = 7;
+    @Input()
+    public rows = 7;
 
-  @Input()
-  public fc: FormControl;
+    @Input()
+    public maxLength = CONST.COMMENT_LENGTH;
 
-  @Input()
-  public styleClass: string;
+    @Input()
+    public fc: FormControl;
 
-  @Input()
-  public label: string;
+    @Input()
+    public styleClass: string;
 
-  constructor() { }
+    @Input()
+    public label: string;
 
-  ngOnInit(): void {
-  }
+    constructor() { }
+
+    ngOnInit(): void {
+    }
 
 }

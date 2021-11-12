@@ -32,24 +32,28 @@
 </div>
 
 <ng-template #submitPopup>
-    <div class="d-flex flex-column align-items-center submit-popup">
-        <img src="../../../../../assets/images/muscle_sticker.png" class="mt-4">
-        <p class="title mt-4 mb-4">
-            Your activity was submitted successfully!
-        </p>
+    <div class="popup box">
+        <div class="d-flex flex-column align-items-center submit-popup">
+            <img src="../../../../../assets/images/muscle_sticker.png" class="mt-4">
+            <p class="title mt-4 mb-4">
+                Your activity was submitted successfully!
+            </p>
+        </div>
     </div>
 </ng-template>
 
 <ng-template #deletePopup>
-    <div class="d-flex flex-column align-items-center">
-        <p class="mt-4 mb-1">
-            Are you sure you want to delete the activity?
-        </p>
-        <div class="mt-4 mb-2">
-            <app-button type="danger" [label]="'Delete'" (click)="deleteActivity()"></app-button>
-        </div>
-        <div class="mb-3">
-            <app-button (click)="cancelDelete()" [label]="'Cancel'"></app-button>
+    <div class="popup box">
+        <div class="d-flex flex-column align-items-center">
+            <p class="mt-4 mb-1">
+                Are you sure you want to delete the activity?
+            </p>
+            <div class="mt-4 mb-2">
+                <app-button type="danger" [label]="'Delete'" (click)="deleteActivity()"></app-button>
+            </div>
+            <div class="mb-3">
+                <app-button (click)="cancelDelete()" [label]="'Cancel'"></app-button>
+            </div>
         </div>
     </div>
 </ng-template>
