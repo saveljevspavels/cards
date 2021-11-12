@@ -20,5 +20,6 @@
         "LENGTH": 7,
         "CARDS_TO_SHIFT": 5
     },
-    "CARD_VALUE_STEP": 5
+    "CARD_VALUE_STEP": 5,
+    "MAX_CARDS_SUBMIT": 1
 }

@@ -11,8 +11,7 @@ export class PopupComponent implements OnInit {
 
     public template = this.popupService.popup$;
 
-    constructor(private popupService: PopupService,
-                private eRef: ElementRef) { }
+    constructor(private popupService: PopupService) { }
 
     ngOnInit(): void {
     }

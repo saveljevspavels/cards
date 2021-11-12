@@ -1,6 +1,6 @@
 import {ElementRef, Injectable, TemplateRef} from '@angular/core';
 import {BehaviorSubject} from "rxjs";
-import {filter} from "rxjs/operators";
+import {filter, take} from "rxjs/operators";
 
 @Injectable({
     providedIn: 'root'
@@ -15,7 +15,7 @@ export class PopupService {
         if(timeout) {
             setTimeout(() => this.popup = null, timeout)
         }
-        return this.popup$.pipe(filter((res) => res === null));
+        return this.popup$.pipe(filter((res) => res === null), take(1));
     }
 
     public set popup(popup: ElementRef | null) {
@@ -26,5 +26,13 @@ export class PopupService {
         return this._popup.value;
     }
 
-    constructor() { }
+    constructor() {
+        this.popup$.subscribe((popup) =>{
+            if(popup) {
+                document.body.classList.add('no-scroll')
+            } else {
+                document.body.classList.remove('no-scroll')
+            }
+        })
+    }
 }

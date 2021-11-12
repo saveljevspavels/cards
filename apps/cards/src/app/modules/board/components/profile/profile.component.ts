@@ -25,7 +25,6 @@ export class ProfileComponent implements OnInit {
         this.athleteId = this.route.snapshot.params.athleteId;
         this.self = !this.athleteId || LocalStorageService.athleteId === this.athleteId;
         this.athlete = this.self ? this.athleteService.me : this.athleteService.getAthlete$(this.athleteId)
-        console.log(this.athleteId, this.self, this.athlete)
     }
 
     logout() {

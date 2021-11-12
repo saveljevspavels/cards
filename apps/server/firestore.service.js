@@ -227,6 +227,12 @@ export class FirestoreService {
         const activityDoc = this.detailedActivityCollection.doc(activityId.toString())
         const activity = (await activityDoc.get()).data() || {}
         const athleteId = activity.athlete.id.toString();
+
+        if(cardIds.length > RULES.MAX_CARDS_SUBMIT) {
+            this.logger.info(`Athlete ${athleteId} submitted activity with too many cards ${cardIds}`)
+            return RESPONSES.ERROR.MAX_CARDS_SUBMIT
+        }
+
         const cardQuery = this.cardCollection.where('id', 'in', cardIds)
         const cardDocs = await cardQuery.get()
         const cardSnapshots = [];
@@ -246,6 +252,7 @@ export class FirestoreService {
         })
         // await this.discardCards(athleteId, cardIds) // No discarding in current game mode
         this.logger.info(`Athlete ${athleteId} submitted activity with ${cardIds}`)
+        return RESPONSES.SUCCESS
     }
 
     async rejectActivity(activityId, comments) {
@@ -304,6 +311,7 @@ export class FirestoreService {
                 this.logger.info(`Validator(s) failed, switching for manual approve ${activityId}`)
             }
         }
+        return RESPONSES.SUCCESS
     }
 
     async approveActivity(activityId, cardIds = []) {

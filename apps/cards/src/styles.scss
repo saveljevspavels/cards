@@ -48,6 +48,10 @@ body {
     background-color: var(--background);
 }
 
+.no-scroll {
+    overflow: hidden;
+}
+
 .full-width {
     width: 100%;
 }
