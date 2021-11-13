@@ -13,8 +13,11 @@
         transform: scale(2);
     }
     &__data-item {
-        //display: flex;
-        //align-items: center;
+        display: flex;
+        align-items: center;
+        &--no-selection {
+            display: block;
+        }
     }
     &__select-all {
         display: flex;

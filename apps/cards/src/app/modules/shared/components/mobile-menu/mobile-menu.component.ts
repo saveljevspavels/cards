@@ -39,15 +39,21 @@ export class MobileMenuComponent implements OnInit {
             {
                 label: 'Admin',
                 icon: 'rules',
-                path: '/admin/game',
+                path: '/admin/',
                 permission: 'admin-panel'
             },
         ],
         admin: [
             {
-                label: 'Admin',
+                label: 'Activities',
                 icon: 'pi pi-fw pi-cog',
-                path: '/admin/game',
+                path: '/admin/activities',
+                permission: 'admin-panel'
+            },
+            {
+                label: 'Deck',
+                icon: 'pi pi-fw pi-clone',
+                path: '/admin/deck',
                 permission: 'admin-panel'
             },
             {

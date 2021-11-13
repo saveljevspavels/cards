@@ -25,7 +25,7 @@ export class ActivityListComponent implements OnInit {
             const today = date.toISOString().slice(0, 10)
             const yesterday = new Date(date.setDate((date).getDate() - 1)).toISOString().slice(0, 10)
             activities.forEach((activity: any) => {
-                  switch(activity.start_date.slice(0, 10)) {
+                  switch((activity.gameData.submittedAt || activity.start_date).slice(0, 10)) {
                       case today: this.approvedActivities.today.push(activity); break;
                       case yesterday: this.approvedActivities.yesterday.push(activity); break;
                       default: this.approvedActivities.previously.push(activity); break;

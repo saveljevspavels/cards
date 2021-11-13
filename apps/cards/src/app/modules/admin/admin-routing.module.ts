@@ -7,6 +7,7 @@ import {CardManagementComponent} from "./components/card-management/card-managem
 import {AthleteManagementComponent} from "./components/athlete-management/athlete-management.component";
 import {LogsComponent} from "./components/logs/logs.component";
 import {AdminParentComponent} from "./components/admin-parent/admin-parent.component";
+import {AdminDeckComponent} from "./components/admin-deck/admin-deck.component";
 
 const routes: Routes = [
     {
@@ -14,8 +15,17 @@ const routes: Routes = [
         component: AdminParentComponent,
         children: [
             {
-                path: 'game',
+                path: '',
+                redirectTo: 'activities',
+                pathMatch: 'full'
+            },
+            {
+                path: 'activities',
                 component: AdminComponent
+            },
+            {
+                path: 'deck',
+                component: AdminDeckComponent
             },
             {
                 path: 'card-management',

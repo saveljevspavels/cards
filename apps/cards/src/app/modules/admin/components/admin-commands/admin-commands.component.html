@@ -6,43 +6,12 @@
     <ng-template #athleteTemplate let-dataItem="dataItem">
       <app-athlete
         [athlete]="dataItem"
-        [small]="true"
       ></app-athlete>
     </ng-template>
   </app-selection-wrapper>
 
   <div class="admin-commands__buttons">
     <app-button [disabled]="!selectedAthletes.value.length" (click)="requestActivities()" label="Request Activities"></app-button>
-  </div>
-
-  <div>
-    <label for="cardAmount">Card Amount</label><input id="cardAmount" [formControl]="cardAmount">
-    <app-button [disabled]="!selectedAthletes.value.length || !cardAmount.value" (click)="dealCards()" label="Deal Cards"></app-button>
-  </div>
-
-  <app-selection-wrapper
-    [formControl]="selectedCards"
-    [template]="cardTemplate"
-    [dataItems]="allCards | async"
-    [wrap]="true"
-  >
-    <ng-template #cardTemplate let-dataItem="dataItem">
-      <app-card
-        [card]="dataItem"
-        [small]="true"
-      ></app-card>
-    </ng-template>
-  </app-selection-wrapper>
-
-  <app-deck></app-deck>
-
-  <div class="admin-commands__buttons">
-    <app-button [disabled]="!selectedCards.value.length" (click)="setDeck()" label="Set Deck"></app-button>
-    <app-button [disabled]="!selectedCards.value.length" (click)="addToDeck()" label="Add to Deck"></app-button>
-    <app-button [disabled]="!selectedCards.value.length" (click)="deleteCards()" type="danger" label="Delete Cards"></app-button>
-    <app-button (click)="shuffleDeck()" label="Shuffle Deck"></app-button>
-    <app-button (click)="dealQueue()" label="Deal Queue"></app-button>
-    <app-button (click)="startGame()" type="action" label="Start Game"></app-button>
   </div>
 </div>
 

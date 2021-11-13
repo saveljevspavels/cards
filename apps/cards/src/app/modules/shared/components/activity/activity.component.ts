@@ -2,6 +2,7 @@ import {Component, ElementRef, forwardRef, Input, OnInit, ViewChild, ViewEncapsu
 import {ControlValueAccessor, FormControl, NG_VALUE_ACCESSOR} from "@angular/forms";
 import {FileService} from "../../../../services/file.service";
 import {PopupService} from "../../../../services/popup.service";
+import {CONST} from "../../../../app.module";
 
 @Component({
     selector: 'app-activity',
@@ -15,6 +16,7 @@ import {PopupService} from "../../../../services/popup.service";
     encapsulation: ViewEncapsulation.None
 })
 export class ActivityComponent implements OnInit, ControlValueAccessor {
+    public CONST = CONST;
 
     @ViewChild('gallery', { static: true }) gallery: ElementRef;
     public slideIndex = 0;

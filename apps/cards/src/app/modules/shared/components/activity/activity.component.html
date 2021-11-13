@@ -4,7 +4,7 @@
     >
         <div class="ml-1">
             <app-athlete *ngIf="activity?.athlete" [size]="'small'" [athleteId]="activity?.athlete.id">
-                <span class="text-medium">gained {{activity.gameData?.cardSnapshots[0].value}} points by submitting an activity:</span>
+                <span class="text-medium">gained {{activity.gameData?.cardSnapshots[0]?.value || 0}} points by submitting an activity:</span>
             </app-athlete>
         </div>
     </div>
@@ -36,6 +36,10 @@
                 'activity__type--other': activity.type !== 'Run' && activity.type !== 'Walk'
              }"
         >{{activity.type}}</div>
+        <div class="stat-item" *ngIf="activity.gameData.submittedAt && activity.gameData.status === CONST.ACTIVITY_STATUSES.APPROVED">
+            <div class="stat-item__property">Submitted at</div>
+            <div class="stat-item__value">{{activity.gameData.submittedAt | date : 'dd MMM, HH:mm'}}</div>
+        </div>
         <div class="stat-item">
             <div class="stat-item__property">Started at</div>
             <div class="stat-item__value">{{activity.start_date | date : 'dd MMM, HH:mm'}}</div>

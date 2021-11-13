@@ -244,6 +244,7 @@ export class FirestoreService {
             ...activity,
             gameData: {
                 status: CONST.ACTIVITY_STATUSES.SUBMITTED,
+                submittedAt: new Date().toISOString(),
                 cardIds,
                 cardSnapshots, // Storing card snapshots
                 images: imageIds,
@@ -263,6 +264,7 @@ export class FirestoreService {
                 ...activity.gameData,
                 cardSnapshots: [],
                 cardIds: [],
+                images: [],
                 comments,
                 status: CONST.ACTIVITY_STATUSES.NEW,
             }
@@ -322,7 +324,8 @@ export class FirestoreService {
             gameData: {
               ...activity.gameData,
               status: CONST.ACTIVITY_STATUSES.APPROVED,
-              cards: cardIds
+              cardIds,
+              cardSnapshots: activity.gameData.cardSnapshots.filter(snapshot => cardIds.indexOf(snapshot.id) !== -1)
             }
         })
 
