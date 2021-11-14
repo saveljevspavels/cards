@@ -23,6 +23,8 @@
         </ng-container>
     </div>
 
+    <img style="max-height: 100px; max-width: 100px;" src="{{selectedCardFactory?.image}}">
+
     <app-image-upload [multiple]="false"
                       [formControl]="imageControl"
     ></app-image-upload>
@@ -42,7 +44,7 @@
             [ngTemplateOutlet]="validatorTemplate"
             [ngTemplateOutletContext]="{index: validator, validatorGroup: cardGroup.get('validators.' + validator)}">
         </ng-container>
-        <app-button (click)="copyCards(cardGroup.value)"> Copy card</app-button>
+        <app-button (click)="copyCards(cardGroup.value)" label="Copy"></app-button>
     </div>
 </ng-template>
 

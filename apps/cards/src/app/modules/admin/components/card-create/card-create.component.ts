@@ -53,10 +53,10 @@ export class CardCreateComponent implements OnInit, OnChanges {
     }
 
     async submit() {
-        const image = (await this.fileService.uploadImages(this.imageControl.value))[0]
+        const image = this.imageControl.value.length ? (await this.fileService.uploadImages(this.imageControl.value))[0] : this.selectedCardFactory?.image;
         this.adminService.createCardFactory({
             ...this.form.value,
-            image
+            image: image ? image : null
         }).subscribe(() => {
             this.form = this.initForm()
         })
