@@ -7,6 +7,17 @@
                                  [inclusive]="true"
                                  [expanded]="openStates.pendingActivities">
                     <div>
+                        <p class="pl-3 mt-0 pr-3 text-small">
+                            <ng-container *ngIf="(newActivities | async).length; else noActivities">
+                                Click on activity to start its submission process
+                            </ng-container>
+                            <ng-template #noActivities>
+                                No activities. Time to move
+                            </ng-template>
+                        </p>
+                        <ng-template>
+
+                        </ng-template>
                         <app-selection-wrapper
                             [singleSelection]="true"
                             [template]="activityTemplate"
@@ -23,7 +34,7 @@
                                 <app-activity
                                     [activity]="dataItem"
                                     [showComments]="true"
-                                    (click)="enterSubmitMode(dataItem)"
+                                    (click)="dataItem.gameData.status !== 'submitted' && enterSubmitMode(dataItem)"
                                     [style]="{'cursor': 'pointer'}"
                                 ></app-activity>
                             </ng-template>

@@ -1,4 +1,11 @@
-<span class="validator validator--{{validatorStatus | async}} mt-1">
-    <img src="/assets/icons/validator_{{(validatorStatus | async)}}.svg">
+<span *ngIf="!manual; else manualTemplate" class="validator validator--{{validatorStatus | async}} mt-1">
+    <app-svg [width]="17" [height]="17" [icon]="'validator_' + (validatorStatus | async)"></app-svg>
     <div class="ml-1">{{readableValidator | async}}</div>
 </span>
+
+<ng-template #manualTemplate>
+    <span class="validator validator--neutral mt-1">
+        <app-svg [width]="17" [height]="17" [icon]="'validator_neutral'"></app-svg>
+        <div class="ml-1">Photo/comment required</div>
+    </span>
+</ng-template>

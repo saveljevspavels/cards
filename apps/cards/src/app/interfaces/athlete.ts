@@ -11,4 +11,5 @@ export interface BaseWorkout {
     time_3k: number;
     time_5k: number;
     time_10k: number;
+    time_40k: number;
 }

@@ -9,6 +9,7 @@ import {BoardService} from "../../../../services/board.service";
 import {map} from "rxjs/operators";
 import {AthleteService} from "../../../../services/athlete.service";
 import {Observable} from "rxjs";
+import {ActivityTypePipe} from "../../../../pipes/activity-type.pipe";
 
 @Component({
     selector: 'app-validator',
@@ -17,17 +18,12 @@ import {Observable} from "rxjs";
 })
 export class ValidatorComponent implements OnInit {
 
-    @Input() validator: Validator
+    @Input() validator: Validator;
+    @Input() manual = false;
     public readableValidator: Observable<string>;
 
     public selectedActivity = this.boardService.selectedActivity$
-    public validatorStatus = this.selectedActivity.pipe(map((activity) =>
-            !activity
-                ? 'neutral'
-                : this.validationService.validateRule(activity, this.validator)
-                    ? 'pass'
-                    : 'fail'
-    ))
+    public validatorStatus: Observable<string>;
 
     public icons = {
         neutral: 'pi-exclamation-circle'
@@ -48,13 +44,24 @@ export class ValidatorComponent implements OnInit {
                 private pacePipe: PacePipe,
                 private distancePipe: DistancePipe,
                 private timePipe: TimePipe,
+                private activityType: ActivityTypePipe,
                 private boardService: BoardService,
                 private athleteService: AthleteService) { }
 
     ngOnInit(): void {
-        this.readableValidator = this.athleteService.me.asObservable().pipe(map((_) =>
-            `Activity ${this.propertyNameMapping.get(this.validator.property)} must be ${this.comparatorToText()} ${this.transformValue()}`
-        ))
+        if(!this.manual) {
+            this.readableValidator = this.athleteService.me.asObservable().pipe(map((_) =>
+                `Activity ${this.propertyNameMapping.get(this.validator.property)}: ${this.comparatorToText()} ${this.transformValue()}`
+            ))
+
+            this.validatorStatus = this.selectedActivity.pipe(map((activity) =>
+                !activity
+                    ? 'neutral'
+                    : this.validationService.validateRule(activity, this.validator)
+                        ? 'pass'
+                        : 'fail'
+            ))
+        }
     }
 
     comparatorToText(): string {
@@ -69,13 +76,13 @@ export class ValidatorComponent implements OnInit {
                     case CONST.COMPARATORS.GREATER:
                         return 'at least';
                     case CONST.COMPARATORS.LESS:
-                        return 'not more than'
+                        return 'less than'
                     case CONST.COMPARATORS.EQUALS:
                         return 'exactly'
                     case CONST.COMPARATORS.IN:
-                        return 'must be either of following:'
+                        return ''
                     case CONST.COMPARATORS.NOT_IN:
-                        return 'must be neither of following:'
+                        return 'any except'
                     default: return ''
                 }
             case CONST.ACTIVITY_PROPERTIES.AVERAGE_SPEED: {
@@ -113,6 +120,8 @@ export class ValidatorComponent implements OnInit {
             case CONST.ACTIVITY_PROPERTIES.MOVING_TIME:
             case CONST.ACTIVITY_PROPERTIES.START_DATE:
                 return this.timePipe.transform(<number>this.validationService.resolveValidationValue(this.validator))
+            case CONST.ACTIVITY_PROPERTIES.TYPE:
+                return this.activityType.transform(<string>this.validationService.resolveValidationValue(this.validator))
             case CONST.ACTIVITY_PROPERTIES.ATHLETE_COUNT:
             case CONST.ACTIVITY_PROPERTIES.ACHIEVEMENT_COUNT:
             default: return this.validator.formula.toString()

@@ -5,7 +5,8 @@
         "average_speed": 2.220,
         "time_3k": 1620,
         "time_5k": 2700,
-        "time_10k": 5400
+        "time_10k": 5400,
+        "time_40k": 7200
     },
     "ESTIMATION_ACCURACY": {
         "distance": 1000,
@@ -14,7 +15,8 @@
     "UPDATABLE_PROPERTIES": [
         "time_3k",
         "time_5k",
-        "time_10k"
+        "time_10k",
+        "time_40k"
     ],
     "QUEUE": {
         "LENGTH": 7,

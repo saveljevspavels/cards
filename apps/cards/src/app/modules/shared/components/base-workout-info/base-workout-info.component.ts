@@ -10,8 +10,28 @@ export class BaseWorkoutInfoComponent implements OnInit {
 
     rules = RULES;
 
+    @Input() public showPersonalBests = true;
     @Input() public baseWorkout: any;
     @Input() public self = false;
+
+    public personalBests = [
+        {
+            title: '3km distance',
+            property: 'time_3k'
+        },
+        {
+            title: '5km distance',
+            property: 'time_5k'
+        },
+        {
+            title: '10km distance',
+            property: 'time_10k'
+        },
+        {
+            title: '40km distance',
+            property: 'time_40k'
+        }
+    ]
 
     constructor() { }
 
