@@ -6,6 +6,7 @@
     &:hover {
         .deck__cards {
             display: flex;
+            flex-wrap: wrap;
         }
     }
     &__cards {

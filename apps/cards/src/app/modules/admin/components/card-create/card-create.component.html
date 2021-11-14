@@ -15,7 +15,7 @@
     <app-input [label]="'Title'" [fc]="form.get('title')"></app-input>
     <app-select [label]="'Progression'" [fc]="form.get('progression')" [options]="CONST.PROGRESSION | keyvalue"></app-select>
 
-    <div style="display: flex; margin: 15px;">
+    <div class="d-flex flex-wrap mr-3">
         <ng-container
             *ngFor="let card of cardAmountIterator"
             [ngTemplateOutlet]="cardTemplate"
