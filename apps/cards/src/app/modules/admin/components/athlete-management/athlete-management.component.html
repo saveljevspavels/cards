@@ -9,7 +9,6 @@
                     [athlete]="dataItem"
                     [small]="true"
                 ></app-athlete>
-                <app-base-workout-info [baseWorkout]="dataItem.baseWorkout"></app-base-workout-info>
                 Current Permissions: {{dataItem.permissions | json}}
             </div>
         </ng-template>
@@ -18,6 +17,10 @@
     <div>
         <app-input [fc]="form.get('distance')" [label]="'Distance ' + (form.value.distance | distance)"></app-input>
         <app-input [fc]="form.get('average_speed')" [label]="'Pace ' + (form.value.average_speed | pace)"></app-input>
+        <app-input [fc]="form.get('time_3k')" [label]="'PB 3k ' + (form.value.time_3k | time)"></app-input>
+        <app-input [fc]="form.get('time_5k')" [label]="'PB 5k ' + (form.value.time_5k | time)"></app-input>
+        <app-input [fc]="form.get('time_10k')" [label]="'PB 10k ' + (form.value.time_10k | time)"></app-input>
+        <app-input [fc]="form.get('time_40k')" [label]="'PB 40k ' + (form.value.time_40k | time)"></app-input>
     </div>
 
     <app-button [disabled]="!selectedAthletes.value.length || form.invalid" (click)="updateBaseWorkout()" [label]="'Set Base Workout'"></app-button>
