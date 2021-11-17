@@ -11,4 +11,7 @@
             color: var(--color-danger);
         }
     }
+    &__message {
+        word-break: break-all;
+    }
 }

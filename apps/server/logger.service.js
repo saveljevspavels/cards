@@ -18,12 +18,9 @@ export default class LoggerService {
 
         return winston.createLogger({
             format: winston.format.combine(
-                winston.format.timestamp({
-                    format: 'YYYY-MM-DD HH:mm:ss',
-                }),
                 winston.format.printf((info) =>
                     JSON.stringify({
-                        t: info.timestamp,
+                        t: new Date().toISOString(),
                         l: info.level,
                         m: info.message,
                         s: info.splat !== undefined ? `${info.splat}` : '',
