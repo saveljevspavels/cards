@@ -38,10 +38,10 @@ export class FirestoreService {
                     baseWorkout: RULES.DEFAULT_BASE_WORKOUT,
                     permissions: ['default']
                 })
-            this.logger.info(`Athlete ${athlete.id} saved`)
+            this.logger.info(`Athlete ${athlete.firstname} ${athlete.lastname} ${athlete.id} saved`)
             return true;
         } else {
-            this.logger.info(`Athlete ${athlete.id} logged in`)
+            this.logger.info(`Athlete ${athlete.firstname} ${athlete.lastname} ${athlete.id} logged in`)
             return false;
         }
     }
@@ -49,7 +49,7 @@ export class FirestoreService {
     addPendingActivity(activity){
         return this.pendingActivityCollection.doc(activity.object_id.toString()).set(activity)
             .then(() => {
-                this.logger.info(`Pending activity added!`);
+                this.logger.info(`Pending activity ${activity.object_id.toString()} added!`);
             })
             .catch((error) => {
                 this.logger.error(`Error writing document: ${error}`);
@@ -59,7 +59,7 @@ export class FirestoreService {
     deletePendingActivity(activityId) {
         return this.pendingActivityCollection.doc(activityId.toString()).delete()
             .then(() => {
-                this.logger.info(`Pending activity deleted!`);
+                this.logger.info(`Pending activity ${activityId.toString()} deleted!`);
             })
             .catch((error) => {
                 this.logger.error(`Error deleting document: ${error}`);
@@ -84,7 +84,7 @@ export class FirestoreService {
             ...command
         })
         .then(() => {
-            this.logger.info(`Command added!`);
+            this.logger.info(`Command ${command.type} added for ${athleteId}!`);
         })
         .catch((error) => {
             console.error(`Error writing document: ${error}`);
@@ -94,7 +94,7 @@ export class FirestoreService {
     async deleteCommand(commandId) {
         return this.commandCollection.doc(commandId).delete()
             .then(() => {
-                this.logger.info(`Command deleted!`);
+                this.logger.info(`Command ${commandId} deleted!`);
             })
             .catch((error) => {
                 this.logger.error(`Error writing document: ${error}`);
@@ -143,7 +143,7 @@ export class FirestoreService {
         }
 
         await this.setDeck(shuffledDeck)
-        this.logger.info(`Deck is shuffled, contains ${shuffledDeck} cards`)
+        this.logger.info(`Deck is shuffled, contains ${shuffledDeck.join(', ')} cards`)
     }
 
     async dealCards(athletes, amount) {
@@ -269,7 +269,7 @@ export class FirestoreService {
                 status: CONST.ACTIVITY_STATUSES.NEW,
             }
         })
-        this.logger.info(`Activity ${activityId} was rejected for athlete ${activity.athlete.id.toString()}`)
+        this.logger.info(`Activity ${activity.type} ${activityId} was rejected for athlete ${activity.athlete.id.toString()}`)
     }
 
     async deleteActivity(activityId) {
@@ -291,7 +291,7 @@ export class FirestoreService {
         const activityDoc = this.detailedActivityCollection.doc(activityId.toString())
         const activity = (await activityDoc.get()).data() || {}
         if(!activity.gameData.cardSnapshots[0]) {
-            this.logger.info(`No cards provided on activity, switching to manual validation`)
+            this.logger.info(`No cards provided on activity ${activityId}, switching to manual validation`)
         } else {
             const card = activity.gameData.cardSnapshots[0]
 
@@ -474,7 +474,7 @@ export class FirestoreService {
             id
         })
             .then(() => {
-                this.logger.info(`New card created!`);
+                this.logger.info(`New card ${card.title} ${card.id} factory created!`);
             })
             .catch((error) => {
                 this.logger.error(`Error writing document: ${error}`);
@@ -576,7 +576,7 @@ export class FirestoreService {
                     ...baseWorkoutPatch
                 }
             })
-            this.logger.info(`Base workout updated for athlete ${athlete.id} with ${JSON.stringify(baseWorkoutPatch)}`)
+            this.logger.info(`Base workout updated for ${athlete.data().firstname} ${athlete.data().lastname} ${athlete.id} with ${JSON.stringify(baseWorkoutPatch)}`)
         })
     }
 
