@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {AdminService} from "../../admin.service";
 import {LogItem} from "../../../../interfaces/log-item";
+import {FormControl} from "@angular/forms";
 
 @Component({
   selector: 'app-logs',
@@ -12,13 +13,15 @@ export class LogsComponent implements OnInit {
     public activeDay = '';
     public days: any = {};
     public allLogs: LogItem[] = [];
+    public searchControl = new FormControl('');
+    public searchResult: any = [];
 
     constructor(private adminService: AdminService) { }
 
     ngOnInit(): void {
         this.adminService.getLogs().subscribe((logs) => {
             // @ts-ignore
-            this.allLogs = logs.reverse();
+            this.allLogs = logs;
             // @ts-ignore
             this.days = logs.reduce((acc, log) => {
                 const day = log.t.slice(0, 10);
@@ -29,7 +32,11 @@ export class LogsComponent implements OnInit {
                 return acc;
             }, {})
             // @ts-ignore
-            this.activeDay = Object.keys(this.days)[0];
+            this.activeDay = Object.keys(this.days)[Object.keys(this.days).length - 1];
+        })
+
+        this.searchControl.valueChanges.subscribe((value) => {
+            this.searchResult = this.allLogs.filter(item => item.m.toUpperCase().indexOf(value.toUpperCase()) !== -1);
         })
     }
 

@@ -1,12 +1,26 @@
 <div class="logs">
-    <div class="d-flex flex-wrap">
-        <div class="mr-3 mb-2" *ngFor="let day of days | keyvalue">
-            <app-button [label]="day.key" [type]="activeDay === day.key && 'action'" (click)="changeDay(day.key)"></app-button>
+    <div class="mb-3">
+        <app-input [fc]="searchControl" [label]="'Search'"></app-input>
+    </div>
+
+    <div *ngIf="searchControl.value; else noSearch">
+        <div class="m-3" *ngFor="let item of searchResult">
+            <app-log-item [item]="item">
+            </app-log-item>
         </div>
     </div>
 
-    <div class="m-3" *ngFor="let item of days[activeDay]">
-        <app-log-item [item]="item">
-        </app-log-item>
-    </div>
+    <ng-template #noSearch>
+        <div class="d-flex flex-wrap">
+            <div class="mr-3 mb-2" *ngFor="let day of days | keyvalue">
+                <app-button [label]="day.key" [type]="activeDay === day.key && 'action'" (click)="changeDay(day.key)"></app-button>
+            </div>
+        </div>
+
+        <div class="m-3" *ngFor="let item of days[activeDay]">
+            <app-log-item [item]="item">
+            </app-log-item>
+        </div>
+    </ng-template>
+
 </div>
