@@ -3,7 +3,6 @@ import {AthleteService} from "../../../../services/athlete.service";
 import {AuthService} from "../../../../services/auth.service";
 import {ActivatedRoute} from "@angular/router";
 import {LocalStorageService} from "../../../../services/local-storage.service";
-import {of} from "rxjs";
 
 @Component({
   selector: 'app-profile',

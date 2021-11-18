@@ -64,7 +64,6 @@ const routes: Routes = [
   ],
   exports: [RouterModule],
   providers: [
-    AthleteService,
     ActivityService,
     ScoreService
   ]

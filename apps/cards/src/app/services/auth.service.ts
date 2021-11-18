@@ -9,6 +9,7 @@ import {CONST, STRAVA_CONFIG} from "../app.module";
 import {environment} from "../../environments/environment";
 import {LocalStorageService} from "./local-storage.service";
 import sampleUser from "../../../../../definitions/sampleUser.json"
+import {BehaviorSubject} from "rxjs";
 
 @Injectable({
   providedIn: 'root'
@@ -16,6 +17,7 @@ import sampleUser from "../../../../../definitions/sampleUser.json"
 export class AuthService {
 
   responseParams: any;
+  loggedIn = new BehaviorSubject<boolean>(false);
 
   constructor(private httpClient: HttpClient,
               private router: Router) {
@@ -54,6 +56,7 @@ export class AuthService {
     return this.httpClient.post('https://' + CONST.STRAVA_BASE + '/oauth/token', null, { params })
       .pipe(tap(async (res: any) => {
         LocalStorageService.setObject(res);
+        this.loggedIn.next(true);
         if(res.athlete) {
           await this.storeAthlete(res.athlete)
         }
@@ -73,6 +76,7 @@ export class AuthService {
 
   logout() {
     localStorage.clear()
+    this.loggedIn.next(false);
     this.router.navigateByUrl('/login')
   }
 }

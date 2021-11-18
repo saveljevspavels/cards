@@ -7,6 +7,7 @@ import {COMMANDS} from "../constants/commands";
 import {ActivityService} from "./activity.service";
 import {GameService} from "./game.service";
 import {combineLatest} from "rxjs";
+import {AthleteService} from "./athlete.service";
 
 @Injectable({
     providedIn: 'root'
@@ -18,6 +19,7 @@ export class CommandsService {
 
     constructor(private db: AngularFirestore,
                 private activityService: ActivityService,
+                private athleteService: AthleteService,
                 private gameService: GameService) {
     }
 
@@ -34,6 +36,11 @@ export class CommandsService {
                             from: (+new Date(game?.startDate)),
                             commandId: command.id
                         }).subscribe()
+                        break;
+                    case COMMANDS.CALCULATE_BASE_WORKOUT:
+                        this.activityService.calculateBaseWorkout(
+                            this.athleteService.me.value?.id || ''
+                        ).subscribe()
                         break;
                 }
             })

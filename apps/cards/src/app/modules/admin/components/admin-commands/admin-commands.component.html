@@ -12,6 +12,7 @@
 
   <div class="admin-commands__buttons">
     <app-button [disabled]="!selectedAthletes.value.length" (click)="requestActivities()" label="Request Activities"></app-button>
+    <app-button styleClass="mt-3" [disabled]="!selectedAthletes.value.length" (click)="calculateBaseWorkout()" label="Recalculate Base Workout"></app-button>
   </div>
 </div>
 

@@ -48,6 +48,12 @@ export class AdminService {
         }).subscribe()
     }
 
+    public calculateBaseWorkout(athleteIds: string[]) {
+        return this.postCommands(athleteIds, {
+            type: COMMANDS.CALCULATE_BASE_WORKOUT,
+        }).subscribe()
+    }
+
     public setDeck(cardIds: string[]) {
         return this.http.post(`${environment.baseBE}/set-deck`, cardIds).subscribe()
     }

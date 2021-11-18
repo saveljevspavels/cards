@@ -25,4 +25,8 @@ export class AdminCommandsComponent implements OnInit {
     requestActivities() {
         this.adminService.requestActivities(this.selectedAthletes.value)
     }
+
+    calculateBaseWorkout() {
+        this.adminService.calculateBaseWorkout(this.selectedAthletes.value)
+    }
 }

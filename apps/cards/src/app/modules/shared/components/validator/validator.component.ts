@@ -6,7 +6,7 @@ import {DistancePipe} from "../../../../pipes/distance.pipe";
 import {TimePipe} from "../../../../pipes/time.pipe";
 import {CONST} from "../../../../app.module";
 import {BoardService} from "../../../../services/board.service";
-import {map} from "rxjs/operators";
+import {filter, map, take} from "rxjs/operators";
 import {AthleteService} from "../../../../services/athlete.service";
 import {Observable} from "rxjs";
 import {ActivityTypePipe} from "../../../../pipes/activity-type.pipe";
@@ -49,7 +49,8 @@ export class ValidatorComponent implements OnInit {
                 private athleteService: AthleteService) { }
 
     ngOnInit(): void {
-        if(!this.manual) {
+        this.athleteService.me.pipe(filter(me => !!me && !this.manual), take(1)).subscribe((me) => {
+            console.log('me', me)
             this.readableValidator = this.athleteService.me.asObservable().pipe(map((_) =>
                 `Activity ${this.propertyNameMapping.get(this.validator.property)}: ${this.comparatorToText()} ${this.transformValue()}`
             ))
@@ -61,7 +62,7 @@ export class ValidatorComponent implements OnInit {
                         ? 'pass'
                         : 'fail'
             ))
-        }
+        })
     }
 
     comparatorToText(): string {
