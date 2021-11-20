@@ -38,9 +38,10 @@ export class CommandsService {
                         }).subscribe()
                         break;
                     case COMMANDS.CALCULATE_BASE_WORKOUT:
-                        this.activityService.calculateBaseWorkout(
-                            this.athleteService.me.value?.id || ''
-                        ).subscribe()
+                        this.activityService.calculateBaseWorkout({
+                            athleteId: this.athleteService.me.value?.id || '',
+                            commandId: command.id
+                        }).subscribe()
                         break;
                 }
             })

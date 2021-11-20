@@ -1,4 +1,4 @@
-import {Component, Input, OnInit, ViewEncapsulation} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output, ViewEncapsulation} from '@angular/core';
 
 @Component({
     selector: 'app-button',
@@ -15,9 +15,17 @@ export class ButtonComponent implements OnInit {
     @Input() transparent = false;
     @Input() styleClass = '';
 
+    @Output() buttonClick = new EventEmitter()
+
     constructor() { }
 
     ngOnInit(): void {
+    }
+
+    click() {
+        if(!this.disabled) {
+            this.buttonClick.emit()
+        }
     }
 
 }

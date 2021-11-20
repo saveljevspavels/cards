@@ -66,9 +66,9 @@ export class ActivityService {
         })
     }
 
-    calculateBaseWorkout(athleteId: string) {
+    calculateBaseWorkout(body: any) {
         return this.http.post(`${environment.baseBE}/calculate-base-workout`, {
-            athleteId,
+            ...body,
             accessToken: LocalStorageService.accessToken
         })
     }

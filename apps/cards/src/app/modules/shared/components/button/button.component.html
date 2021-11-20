@@ -1,4 +1,4 @@
-<div class="button {{styleClass}}" [ngClass]="{
+<div class="button {{styleClass}}" (click)="click()" [ngClass]="{
         'button--disabled': disabled,
         'button--danger': type === 'danger',
         'button--success': type === 'success',

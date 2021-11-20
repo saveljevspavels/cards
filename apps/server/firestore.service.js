@@ -59,7 +59,7 @@ export class FirestoreService {
     deletePendingActivity(activityId) {
         return this.pendingActivityCollection.doc(activityId.toString()).delete()
             .then(() => {
-                this.logger.info(`Pending activity ${activityId.toString()} deleted!`);
+                // this.logger.info(`Pending activity ${activityId.toString()} deleted!`); // Too much spam
             })
             .catch((error) => {
                 this.logger.error(`Error deleting document: ${error}`);
@@ -70,8 +70,9 @@ export class FirestoreService {
         const activityDoc = this.detailedActivityCollection.doc(activity.id.toString())
         const activityExists = (await activityDoc.get()).exists
         if(activityExists) {
-            this.logger.error(`Activity ${activity.id} already exists`);
+            // this.logger.error(`Activity ${activity.id} already exists`); Too much spam
         } else {
+            this.logger.info(`Activity ${activity.id} added for athlete ${activity.athlete.id}`);
             return this.detailedActivityCollection.doc(activity.id.toString()).set(activity)
         }
     }
@@ -228,6 +229,12 @@ export class FirestoreService {
         const activity = (await activityDoc.get()).data() || {}
         const athleteId = activity.athlete.id.toString();
 
+        if(activity.gameData.status !== CONST.ACTIVITY_STATUSES.NEW
+            && activity.gameData.status !== CONST.ACTIVITY_STATUSES.REJECTED) {
+            this.logger.info(`Athlete ${athleteId} submitted activity ${activityId} with invalid status ${activity.gameData.status}`)
+            return RESPONSES.ERROR.WRONG_ACTIVITY_STATUS
+        }
+
         if(cardIds.length > RULES.MAX_CARDS_SUBMIT) {
             this.logger.info(`Athlete ${athleteId} submitted activity with too many cards ${cardIds}`)
             return RESPONSES.ERROR.MAX_CARDS_SUBMIT
@@ -319,6 +326,11 @@ export class FirestoreService {
     async approveActivity(activityId, cardIds = []) {
         const activityDoc = this.detailedActivityCollection.doc(activityId.toString())
         const activity = (await activityDoc.get()).data() || {}
+        if(activity.gameData.status === CONST.ACTIVITY_STATUSES.APPROVED) {
+            this.logger.error(`Activity ${activityId} was already approved for athlete ${activity.athlete.id.toString()}`)
+            return;
+        }
+
         await activityDoc.set({
             ...activity,
             gameData: {
@@ -389,7 +401,7 @@ export class FirestoreService {
                 nextTier = nextTier + 1;
                 break;
         }
-        this.logger.info(`Progressing card ${cardId} to ${card.progression} nextTier`)
+        this.logger.info(`Progressing card ${cardId} to ${card.progression} ${nextTier}`)
         const factory = (await this.cardFactoryCollection.doc(card.factoryId).get()).data() || {}
         await this.createCardFromFactory(factory, nextTier, card.id);
     }
@@ -420,6 +432,7 @@ export class FirestoreService {
             cardUses: newCardUses,
             shifts: newShifts
         })
+        this.logger.info(`Card uses updated to ${newCardUses}, total shifts now ${newShifts}`)
     }
 
     async resetDiscardPile() {
@@ -524,7 +537,7 @@ export class FirestoreService {
         delete card.usesToProgress;
         await this.cardCollection.doc(id).set(card)
 
-        this.logger.info(`Created ${factory.title} card ${tier} tier`)
+        this.logger.info(`Created ${factory.title} card ${id}, ${tier} tier`)
     }
 
     async combineCards(athleteId, cardIds) {
@@ -570,10 +583,14 @@ export class FirestoreService {
         const athleteDocs = await athleteQuery.get()
         athleteDocs.forEach((athlete) => {
             const athleteDoc = this.athleteCollection.doc(athlete.id.toString())
+            const currentBaseWorkout = athlete.data().baseWorkout;
             athleteDoc.update({
                 baseWorkout: {
-                    ...athlete.data().baseWorkout,
-                    ...baseWorkoutPatch
+                    ...currentBaseWorkout,
+                    ...Object.keys(baseWorkoutPatch).reduce((acc, type) => {
+                        acc[type] = {...currentBaseWorkout[type], ...baseWorkoutPatch[type]}
+                        return acc;
+                    }, {})
                 }
             })
             this.logger.info(`Base workout updated for ${athlete.data().firstname} ${athlete.data().lastname} ${athlete.id} with ${JSON.stringify(baseWorkoutPatch)}`)

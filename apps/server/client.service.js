@@ -31,7 +31,9 @@ export default class ClientService {
 
         app.post(`${CONST.API_PREFIX}calculate-base-workout`,async (req, res) => {
             this.calculateBaseWorkout(req.body.accessToken, req.body.athleteId)
-
+            if(req.body.commandId) {
+                await this.fireStoreService.deleteCommand(req.body.commandId)
+            }
             res.status(200).send({});
         });
 
@@ -67,14 +69,21 @@ export default class ClientService {
         console.log(accessToken, athleteId)
         https.get(this.getActivityOptions(accessToken), response => {
             parseResponse(response, {}, (reqBody, responseData) => {
-                const baseWorkout = {}
+                const baseWorkoutPatch = {};
                 const properties = [
                     CONST.ACTIVITY_PROPERTIES.DISTANCE,
                     CONST.ACTIVITY_PROPERTIES.AVERAGE_SPEED
                 ]
-                const total = responseData
-                    .filter(activity => activity.type.toUpperCase() === 'run'.toUpperCase())
-                    .reduce((acc, activity) => {
+                const types = [
+                    CONST.ACTIVITY_TYPES.RUN,
+                    CONST.ACTIVITY_TYPES.RIDE,
+                ]
+
+                types.forEach(type => {
+                    const typedActivities = responseData
+                        .filter(activity => activity.type.toUpperCase().indexOf(type.toUpperCase()) !== -1)
+
+                    const total = typedActivities.reduce((acc, activity) => {
                         properties.forEach(prop => {
                             if(!acc[prop]) {
                                 acc[prop] = []
@@ -83,21 +92,30 @@ export default class ClientService {
                         })
                         return acc
                     }, {})
-                if(!total[properties[0]]) {
-                    return
-                }
+                    console.log('total', JSON.stringify(total))
 
-                properties.forEach(prop => {
-                    total[prop] = total[prop].sort((a,b) => a - b);
-                    while (total[prop].length > 4) {
-                        total[prop].length % 2 ? total[prop].pop() : total[prop].shift()
-                    }
-                    const sum = total[prop].reduce((acc, item) => acc + item, 0)
-                    baseWorkout[prop] = (sum/total[prop].length);
-                    baseWorkout[prop] = baseWorkout[prop] - baseWorkout[prop] % RULES.ESTIMATION_ACCURACY[prop];
+
+                    properties.forEach(prop => {
+                        let values = total[prop];
+                        if(!baseWorkoutPatch[type]) {
+                            baseWorkoutPatch[type] = {}
+                        }
+                        if(values && values.length >= 4) {
+                            values = values.sort((a,b) => a - b);
+                            while (values.length > 4) {
+                                values.length % 2 ? values.pop() : values.shift()
+                            }
+                            const sum = values.reduce((acc, item) => acc + item, 0)
+                            baseWorkoutPatch[type][prop] = (sum/values.length);
+                            baseWorkoutPatch[type][prop] = baseWorkoutPatch[type][prop] - baseWorkoutPatch[type][prop] % RULES.ESTIMATION_ACCURACY[prop];
+                        } else {
+                            baseWorkoutPatch[type][prop] = RULES.DEFAULT_BASE_WORKOUT[type][prop]
+                        }
+                    })
                 })
+                console.log('base', JSON.stringify(baseWorkoutPatch))
 
-                this.fireStoreService.updateBaseWorkout([athleteId], baseWorkout)
+                this.fireStoreService.updateBaseWorkout([athleteId], baseWorkoutPatch)
             })
         })
     }

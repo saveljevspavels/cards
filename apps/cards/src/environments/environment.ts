@@ -3,7 +3,7 @@ import * as RULES from '../../../../definitions/rules.json';
 import STRAVA_CONFIG from '../../../../definitions/stravaConfig.json';
 
 export const environment: any = {
-    production: false,
+    production: true,
     const: CONST,
     rules: RULES,
     stravaConfig: STRAVA_CONFIG,

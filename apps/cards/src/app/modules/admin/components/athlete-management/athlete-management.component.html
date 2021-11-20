@@ -15,6 +15,21 @@
     </app-selection-wrapper>
 
     <div>
+        <app-selection-wrapper
+            [formControl]="selectedType"
+            [template]="typeTemplate"
+            [dataItems]="ACTIVITY_TYPES | keyvalue"
+            [idKey]="'value'"
+            [singleSelection]="true"
+        >
+            <ng-template #typeTemplate let-dataItem="dataItem">
+                <div>
+                    {{dataItem.value}}
+                </div>
+            </ng-template>
+        </app-selection-wrapper>
+    </div>
+    <div>
         <app-input [fc]="form.get('distance')" [label]="'Distance ' + (form.value.distance | distance)"></app-input>
         <app-input [fc]="form.get('average_speed')" [label]="'Pace ' + (form.value.average_speed | pace)"></app-input>
         <app-input [fc]="form.get('time_3k')" [label]="'PB 3k ' + (form.value.time_3k | time)"></app-input>
@@ -23,7 +38,10 @@
         <app-input [fc]="form.get('time_40k')" [label]="'PB 40k ' + (form.value.time_40k | time)"></app-input>
     </div>
 
-    <app-button [disabled]="!selectedAthletes.value.length || form.invalid" (click)="updateBaseWorkout()" [label]="'Set Base Workout'"></app-button>
+    <app-button [disabled]="
+        !selectedAthletes.value.length
+        || !selectedType.value.length
+        || form.invalid" (buttonClick)="updateBaseWorkout()" [label]="'Set Base Workout'"></app-button>
 
     <app-selection-wrapper
         [formControl]="selectedPermissions"
@@ -38,5 +56,5 @@
         </ng-template>
     </app-selection-wrapper>
 
-    <app-button [disabled]="!selectedAthletes.value.length || !selectedPermissions.value.length" (click)="setPermissions()" [label]="'Set Permissions'"></app-button>
+    <app-button [disabled]="!selectedAthletes.value.length || !selectedPermissions.value.length" (buttonClick)="setPermissions()" [label]="'Set Permissions'"></app-button>
 </div>

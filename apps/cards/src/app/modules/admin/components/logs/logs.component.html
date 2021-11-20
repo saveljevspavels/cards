@@ -13,7 +13,7 @@
     <ng-template #noSearch>
         <div class="d-flex flex-wrap">
             <div class="mr-3 mb-2" *ngFor="let day of days | keyvalue">
-                <app-button [label]="day.key" [type]="activeDay === day.key && 'action'" (click)="changeDay(day.key)"></app-button>
+                <app-button [label]="day.key" [type]="activeDay === day.key && 'action'" (buttonClick)="changeDay(day.key)"></app-button>
             </div>
         </div>
 

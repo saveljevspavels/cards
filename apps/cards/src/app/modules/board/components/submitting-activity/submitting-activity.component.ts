@@ -18,6 +18,7 @@ export class SubmittingActivityComponent implements OnInit, OnDestroy {
     @ViewChild('submitPopup', { static: true }) submitPopup: ElementRef;
     @ViewChild('deletePopup', { static: true }) deletePopup: ElementRef;
 
+    public loading = false;
     public selectedActivity = this.boardService.selectedActivity$;
 
     public form: FormGroup;
@@ -37,6 +38,7 @@ export class SubmittingActivityComponent implements OnInit, OnDestroy {
     }
 
     async submitSelectedActivity() {
+        this.loading = true;
         const uploadedImages = await this.fileService.uploadImages(this.form.value.selectedImages)
         this.activityService.submitActivity(
             this.boardService.activity.id.toString(),
@@ -45,6 +47,7 @@ export class SubmittingActivityComponent implements OnInit, OnDestroy {
             this.form.value.comments.slice(0, CONST.COMMENT_LENGTH),
         ).pipe(mergeMap(() => this.popupService.showPopup(this.submitPopup, 2500)))
         .subscribe(() => {
+            this.loading = false;
             this.initForm()
             this.exitSubmitMode();
         })

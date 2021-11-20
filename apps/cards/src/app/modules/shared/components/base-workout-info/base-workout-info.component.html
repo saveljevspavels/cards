@@ -1,22 +1,29 @@
 <div class="base-workout" *ngIf="baseWorkout">
-    <div class="stat-item">
-        <div class="stat-item__property">Base workout distance:</div>
-        <div class="stat-item__value">{{baseWorkout?.distance | distance}}</div>
-    </div>
-    <div class="stat-item">
-        <div class="stat-item__property">Base workout pace:</div>
-        <div class="stat-item__value">{{baseWorkout?.average_speed | pace}}</div>
-    </div>
-    <ng-container *ngIf="showPersonalBests">
+    <ng-container *ngFor="let type of baseWorkout | keyvalue">
         <div class="text-bold text-blue mt-3">
-            Personal Best:
+            {{type.key + '' | titlecase}}:
         </div>
-        <div class="stat-item" *ngFor="let pb of personalBests">
-            <div class="stat-item__property">{{pb.title}}:</div>
-            <div class="stat-item__value">{{baseWorkout[pb.property] | time}}{{baseWorkout[pb.property] === rules.DEFAULT_BASE_WORKOUT[pb.property] ? '*' : ''}}</div>
+        <div class="stat-item" *ngIf="type.value.distance">
+            <div class="stat-item__property">Base workout distance:</div>
+            <div class="stat-item__value">{{type.value.distance | distance}}</div>
         </div>
-        <div class="mt-2 text-small light">
-            <span class="text-bold">*</span> Default value for all athletes. It's time to beat it!
+        <div class="stat-item" *ngIf="type.value.average_speed">
+            <div class="stat-item__property">Base workout pace:</div>
+            <div class="stat-item__value">{{type.value.average_speed | pace}}</div>
         </div>
+        <ng-container *ngIf="showPersonalBests">
+            <div class="text-bold text-blue mt-3">
+                Personal Best:
+            </div>
+            <ng-container *ngFor="let pb of personalBests">
+                <div class="stat-item" *ngIf="type.value[pb.property]">
+                    <div class="stat-item__property">{{pb.title}}:</div>
+                    <div class="stat-item__value">{{type.value[pb.property] | time}}{{type.value[pb.property] === rules.DEFAULT_BASE_WORKOUT[type.key][pb.property] ? '*' : ''}}</div>
+                </div>
+            </ng-container>
+        </ng-container>
     </ng-container>
+    <div class="mt-2 text-small light" *ngIf="showPersonalBests">
+        <span class="text-bold">*</span> Default value for all athletes. It's time to beat it!
+    </div>
 </div>

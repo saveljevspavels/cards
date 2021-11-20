@@ -29,7 +29,7 @@
                             <ng-template #activityTemplate let-dataItem="dataItem">
                                 <ng-container *ngIf="dataItem.gameData.status === 'submitted'">
                                     <p class="mt-0 mb-0 light" style="text-align: center">Waiting for approval</p>
-                                    <app-button (click)="rejectActivity(dataItem.id)" type="danger" label="Cancel Submission"></app-button>
+                                    <app-button (buttonClick)="rejectActivity(dataItem.id)" type="danger" label="Cancel Submission"></app-button>
                                 </ng-container>
                                 <app-activity
                                     [activity]="dataItem"
@@ -56,7 +56,7 @@
     </div>
 
     <div class="order-2" [ngClass]="{'order-2': !openStates.rules, 'order-0 mb-2': openStates.rules}">
-        <app-button icon="rules" label="Rules" (click)="openRules()"></app-button>
+        <app-button icon="rules" label="Rules" (buttonClick)="openRules()"></app-button>
     </div>
 
 </div>

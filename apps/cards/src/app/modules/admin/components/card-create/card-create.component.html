@@ -29,7 +29,7 @@
                       [formControl]="imageControl"
     ></app-image-upload>
 
-    <app-button (click)="submit()" label="Save"></app-button>
+    <app-button (buttonClick)="submit()" label="Save"></app-button>
 </div>
 
 <ng-template #cardTemplate let-cardGroup="cardGroup" let-index="index">
@@ -44,7 +44,7 @@
             [ngTemplateOutlet]="validatorTemplate"
             [ngTemplateOutletContext]="{index: validator, validatorGroup: cardGroup.get('validators.' + validator)}">
         </ng-container>
-        <app-button (click)="copyCards(cardGroup.value)" label="Copy"></app-button>
+        <app-button (buttonClick)="copyCards(cardGroup.value)" label="Copy"></app-button>
     </div>
 </ng-template>
 

@@ -1,12 +1,21 @@
 {
     "HAND_SIZE": 3,
     "DEFAULT_BASE_WORKOUT":{
-        "distance": 3000,
-        "average_speed": 2.220,
-        "time_3k": 1620,
-        "time_5k": 2700,
-        "time_10k": 5400,
-        "time_40k": 7200
+        "run": {
+            "distance": 3000,
+            "average_speed": 2.220,
+            "time_3k": 1620,
+            "time_5k": 2700,
+            "time_10k": 5400
+        },
+        "ride": {
+            "distance": 15000,
+            "average_speed": 5.55,
+            "time_40k": 7200
+        },
+        "walk": {
+            "distance": 6000
+        }
     },
     "ESTIMATION_ACCURACY": {
         "distance": 1000,

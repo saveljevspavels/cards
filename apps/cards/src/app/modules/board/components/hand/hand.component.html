@@ -15,16 +15,16 @@
         </ng-template>
       </app-selection-wrapper>
     </div>
-    <app-button [disabled]="!selectedCards.value.length" (click)="discardCards()" type="danger" label="Discard"></app-button>
+    <app-button [disabled]="!selectedCards.value.length" (buttonClick)="discardCards()" type="danger" label="Discard"></app-button>
   </div>
   <ng-template #noCards>
     <div>No cards</div>
   </ng-template>
   <app-button [disabled]="(cards | async).length >= rules.HAND_SIZE"
-            (click)="drawCard()"
+            (buttonClick)="drawCard()"
             label="Draw a card"></app-button>
   <app-button *ngIf="possibleCombinations.value.length"
-            (click)="combineCards()"
+            (buttonClick)="combineCards()"
             label="Combine Identical Cards"
             type="action"
   ></app-button>

@@ -25,6 +25,9 @@
         }
     }
     &--disabled {
+        &:host {
+            pointer-events: none;
+        }
         pointer-events: none;
         background-color: var(--color-disabled);
         color: var(--color-text-lighter);

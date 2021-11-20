@@ -10,6 +10,8 @@ export class BaseWorkoutInfoComponent implements OnInit {
 
     rules = RULES;
 
+    activityTypes: string[] = [];
+
     @Input() public showPersonalBests = true;
     @Input() public baseWorkout: any;
     @Input() public self = false;

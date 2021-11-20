@@ -50,7 +50,6 @@ export class ValidatorComponent implements OnInit {
 
     ngOnInit(): void {
         this.athleteService.me.pipe(filter(me => !!me && !this.manual), take(1)).subscribe((me) => {
-            console.log('me', me)
             this.readableValidator = this.athleteService.me.asObservable().pipe(map((_) =>
                 `Activity ${this.propertyNameMapping.get(this.validator.property)}: ${this.comparatorToText()} ${this.transformValue()}`
             ))

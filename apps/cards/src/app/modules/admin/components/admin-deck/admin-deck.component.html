@@ -15,10 +15,10 @@
 <app-deck></app-deck>
 
 <div class="admin-commands__buttons">
-    <app-button [disabled]="!selectedCards.value.length" (click)="setDeck()" label="Set Deck"></app-button>
-    <app-button [disabled]="!selectedCards.value.length" (click)="addToDeck()" label="Add to Deck"></app-button>
-    <app-button [disabled]="!selectedCards.value.length" (click)="deleteCards()" type="danger" label="Delete Cards"></app-button>
-    <app-button (click)="shuffleDeck()" label="Shuffle Deck"></app-button>
-    <app-button (click)="dealQueue()" label="Deal Queue"></app-button>
-    <app-button (click)="startGame()" type="action" label="Start Game"></app-button>
+    <app-button [disabled]="!selectedCards.value.length" (buttonClick)="setDeck()" label="Set Deck"></app-button>
+    <app-button [disabled]="!selectedCards.value.length" (buttonClick)="addToDeck()" label="Add to Deck"></app-button>
+    <app-button [disabled]="!selectedCards.value.length" (buttonClick)="deleteCards()" type="danger" label="Delete Cards"></app-button>
+    <app-button (buttonClick)="shuffleDeck()" label="Shuffle Deck"></app-button>
+    <app-button (buttonClick)="dealQueue()" label="Deal Queue"></app-button>
+    <app-button (buttonClick)="startGame()" type="action" label="Start Game"></app-button>
 </div>

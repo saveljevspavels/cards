@@ -13,7 +13,7 @@ export default class ActivityService {
             if(response === RESPONSES.SUCCESS) {
                 response = await fireStoreService.tryAutoApprove(req.body.activityId)
             }
-            res.status(200).send({response: response});
+            res.status(response === RESPONSES.SUCCESS ? 200 : 400).send({response: response});
         });
 
         app.post(`${CONST.API_PREFIX}reject-activity`, async (req, res) => {
