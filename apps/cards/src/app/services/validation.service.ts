@@ -21,13 +21,12 @@ export class ValidationService {
 
     resolveValidationValue(validator: Validator, baseWorkout: any = this.baseWorkout ): any {
         if(baseWorkout !== null) {
-            const res = Object.keys(this.RULES.DEFAULT_BASE_WORKOUT).reduce((acc: any, type) => {
+            return Object.keys(this.RULES.DEFAULT_BASE_WORKOUT).reduce((acc: any, type) => {
                 try {
                     acc[type] = this.evaluateFormula(validator.formula, validator.property, baseWorkout[type])
                 } catch (err) {}
                 return acc
             }, {})
-            return res;
         } else return 0;
     }
 

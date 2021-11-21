@@ -9,6 +9,6 @@ export class UtilService {
     }
 
     static normalizeActivityType = (type: string): any => {
-        return Object.values(CONST.ACTIVITY_TYPES).find((activityType: any) => type.toUpperCase().indexOf(activityType.toUpperCase()) !== -1)
+        return Object.values(CONST.ACTIVITY_TYPES).find((activityType: any) => type.toUpperCase().indexOf(activityType.toUpperCase()) !== -1) || CONST.ACTIVITY_TYPES.OTHER
     }
 }

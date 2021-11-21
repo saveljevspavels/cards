@@ -15,7 +15,8 @@
         },
         "walk": {
             "distance": 6000
-        }
+        },
+        "other": {}
     },
     "ESTIMATION_ACCURACY": {
         "distance": 1000,

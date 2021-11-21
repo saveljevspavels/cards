@@ -1,3 +1,5 @@
+import CONST from "../../definitions/constants.json";
+
 export const generateId = () => {
     return Math.random().toString(36).substring(7);
 }
@@ -42,4 +44,8 @@ export const updateScoreValues = (score, values, cardAmount) => {
     activities: score.activities ? parseInt(score.activities + 1) : 1,
     cardsPlayed: score.cardsPlayed ? parseInt(score.cardsPlayed + cardAmount) : cardAmount
   }
+}
+
+export const normalizeActivityType = (type) => {
+    return Object.values(CONST.ACTIVITY_TYPES).find((activityType) => type.toUpperCase().indexOf(activityType.toUpperCase()) !== -1) || CONST.ACTIVITY_TYPES.OTHER
 }

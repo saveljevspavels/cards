@@ -1,31 +1,44 @@
 import CONST from "../../../definitions/constants.json";
 import RULES from "../../../definitions/rules.json";
+import {normalizeActivityType} from "../util.js";
 
 export class ValidationService {
-    static resolveValidationValue(validator, baseWorkout ) {
+
+    static resolveValidationValue(validator, baseWorkout) {
         if(baseWorkout !== null) {
-            let formula = validator.formula;
-            Object.entries(baseWorkout).forEach(([key, value]) => {
-                formula = formula.replace(key, value)
-            })
-            switch (validator.property) {
-                case CONST.ACTIVITY_PROPERTIES.TYPE:
-                    return formula;
-                case CONST.ACTIVITY_PROPERTIES.DISTANCE:
-                    const value = eval(formula);
-                    return value - (value % 100)
-                case CONST.ACTIVITY_PROPERTIES.START_DATE:
-                    return eval(formula) * 60 * 60
-                default: return eval(formula);
-            }
+            return Object.keys(RULES.DEFAULT_BASE_WORKOUT).reduce((acc, type) => {
+                try {
+                    acc[type] = this.evaluateFormula(validator.formula, validator.property, baseWorkout[type])
+                } catch (err) {}
+                return acc
+            }, {})
         } else return 0;
     }
 
+    static evaluateFormula(formula, property, values = {}) {
+        Object.entries(values).forEach(([key, value]) => {
+            formula = formula.replace(key, value)
+        })
+
+        switch (property) {
+            case CONST.ACTIVITY_PROPERTIES.TYPE:
+                return formula;
+            case CONST.ACTIVITY_PROPERTIES.DISTANCE:
+                const value = eval(formula);
+                return value - (value % 100);
+            case CONST.ACTIVITY_PROPERTIES.START_DATE:
+                return eval(formula) * 60 * 60;
+            default: return eval(formula);
+        }
+    }
+
     static validateRule(activity, validator, baseWorkout) {
+        const type = normalizeActivityType(activity.type);
+
         const activityVal = validator.property === CONST.ACTIVITY_PROPERTIES.START_DATE
-            ? ValidationService.getTimeInSeconds(activity[validator.property])
+            ? this.getTimeInSeconds(activity[validator.property])
             : activity[validator.property]
-        const validatorVal = this.resolveValidationValue(validator, baseWorkout)
+        const validatorVal = this.resolveValidationValue(validator, baseWorkout)[type]
 
         switch (validator.comparator) {
             case CONST.COMPARATORS.GREATER:

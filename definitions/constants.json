@@ -37,7 +37,8 @@
     "ACTIVITY_TYPES": {
         "RUN": "run",
         "RIDE": "ride",
-        "WALK": "walk"
+        "WALK": "walk",
+        "OTHER": "other"
     },
     "PROGRESSION": {
         "TIERS": "tiers",
