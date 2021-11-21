@@ -39,8 +39,8 @@ export class AthleteManagementComponent implements OnInit {
     updateBaseWorkout() {
         const baseWorkoutPatch: any = {};
         baseWorkoutPatch[this.selectedType.value[0]] = Object.entries(this.form.value).reduce((acc: any, entry: any) => {
-            if(entry[1]) {
-                acc[entry[0]] = parseInt(entry[1], 10);
+            if(entry[1] > 0) {
+                acc[entry[0]] = parseFloat(entry[1]);
             }
             return acc;
         }, {})

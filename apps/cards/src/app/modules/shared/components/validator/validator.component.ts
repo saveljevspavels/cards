@@ -127,21 +127,7 @@ export class ValidatorComponent implements OnInit {
     }
 
     resolveValues(): string {
-        switch (this.validator.property) {
-            case CONST.ACTIVITY_PROPERTIES.AVERAGE_SPEED:
-                return this.validationService.resolveValidationValue(this.validator)
-            case CONST.ACTIVITY_PROPERTIES.DISTANCE:
-                return this.validationService.resolveValidationValue(this.validator)
-            case CONST.ACTIVITY_PROPERTIES.ELAPSED_TIME:
-            case CONST.ACTIVITY_PROPERTIES.MOVING_TIME:
-            case CONST.ACTIVITY_PROPERTIES.START_DATE:
-                return this.validationService.resolveValidationValue(this.validator)
-            case CONST.ACTIVITY_PROPERTIES.TYPE:
-                return this.validationService.resolveValidationValue(this.validator)
-            case CONST.ACTIVITY_PROPERTIES.ATHLETE_COUNT:
-            case CONST.ACTIVITY_PROPERTIES.ACHIEVEMENT_COUNT:
-            default: return this.validator.formula.toString()
-        }
+        return this.validationService.resolveValidationValue(this.validator)
     }
 
 }

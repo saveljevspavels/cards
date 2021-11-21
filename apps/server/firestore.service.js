@@ -1,5 +1,5 @@
 import firebase from "firebase";
-import {generateId, getRandomInt, updateScoreValues} from "./util.js";
+import {generateId, getRandomInt, normalizeActivityType, updateScoreValues} from "./util.js";
 import CONST from "../../definitions/constants.json";
 import RULES from "../../definitions/rules.json";
 import {RESPONSES} from "./response-codes.js";
@@ -357,11 +357,12 @@ export class FirestoreService {
             const cardQuery = this.cardCollection.where('id', 'in', cardIds)
             const cardDocs = await cardQuery.get()
             const baseWorkoutPatch = {};
+            baseWorkoutPatch[normalizeActivityType(activity.type)] = {};
             cardDocs.forEach((card) => {
                 card.data().validators.forEach(validator => {
                     RULES.UPDATABLE_PROPERTIES.forEach(property => {
                         if(validator.formula.indexOf(property) !== -1) {
-                            baseWorkoutPatch[property] = activity[validator.property]
+                            baseWorkoutPatch[normalizeActivityType(activity.type)][property] = activity[validator.property]
                         }
                     })
                 })
