@@ -1,7 +1,8 @@
 <div class="base-workout" *ngIf="baseWorkout">
     <ng-container *ngFor="let type of baseWorkout | keyvalue">
-        <div class="text-bold text-blue mt-3">
-            {{type.key + '' | titlecase}}:
+        <div class="text-bold text-blue mt-3 d-flex align-items-center activity-type--{{type.key}}">
+            <app-svg [icon]="'activity_' + type.key"></app-svg>
+            <span class="pl-1">{{type.key + '' | titlecase}}:</span>
         </div>
         <div class="stat-item" *ngIf="type.value.distance">
             <div class="stat-item__property">Base workout distance:</div>
@@ -12,7 +13,7 @@
             <div class="stat-item__value">{{type.value.average_speed | pace}}</div>
         </div>
         <ng-container *ngIf="showPersonalBests">
-            <div class="text-bold text-blue mt-3">
+            <div class="text-bold text-small mt-3">
                 Personal Best:
             </div>
             <ng-container *ngFor="let pb of personalBests">
