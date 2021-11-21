@@ -4,8 +4,8 @@
 <ng-container *ngIf="validatorAmount.value > 0">
     Base properties for comparison:
     <ul>
-        <li *ngFor="let property of RULES.DEFAULT_BASE_WORKOUT | keyvalue">
-            {{property.key}}
+        <li *ngFor="let property of workoutProperties">
+            {{property}}
         </li>
     </ul>
 </ng-container>

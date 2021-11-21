@@ -3,6 +3,7 @@ import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {AdminService} from "../../admin.service";
 import {FileService} from "../../../../services/file.service";
 import {CONST, RULES} from "../../../../app.module";
+import {UtilService} from "../../../../services/util.service";
 
 @Component({
   selector: 'app-card-create',
@@ -10,7 +11,7 @@ import {CONST, RULES} from "../../../../app.module";
   styleUrls: ['./card-create.component.scss']
 })
 export class CardCreateComponent implements OnInit, OnChanges {
-    public RULES = RULES
+    public workoutProperties = UtilService.getFlatKeys(RULES.DEFAULT_BASE_WORKOUT)
     public CONST = CONST
 
     @Input()

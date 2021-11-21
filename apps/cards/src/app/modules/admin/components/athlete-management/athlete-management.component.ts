@@ -4,7 +4,7 @@ import {AthleteService} from "../../../../services/athlete.service";
 import {FormBuilder, FormControl, Validators} from "@angular/forms";
 import {PERMISSIONS} from "../../../../constants/permissions";
 import {CONST, RULES} from "../../../../app.module";
-import {BaseWorkout} from "../../../../interfaces/athlete";
+import {UtilService} from "../../../../services/util.service";
 
 @Component({
     selector: 'app-athlete-management',
@@ -21,16 +21,11 @@ export class AthleteManagementComponent implements OnInit {
     public allAthletes: BehaviorSubject<any> = this.athleteService.athletes;
 
     // @ts-ignore
-    public form = this.formBuilder.group(Object.values(RULES.DEFAULT_BASE_WORKOUT)
-        .reduce((acc: any, properties: any) => {
-                acc = {...acc, ...Object.keys(properties).reduce((acc: any, property: string) => {
-                        acc[property] = [0, [Validators.min(0)]]
-                        return acc
-                    }, {}) }
-                return acc
-            },
-            {}
-        )
+    public form = this.formBuilder.group(
+        UtilService.getFlatKeys(RULES.DEFAULT_BASE_WORKOUT).reduce((acc: any, property: string) => {
+            acc[property] = [0, [Validators.min(0)]]
+            return acc
+        }, {})
     )
 
     constructor(
