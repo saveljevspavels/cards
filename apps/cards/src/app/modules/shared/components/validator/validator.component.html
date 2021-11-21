@@ -1,11 +1,50 @@
-<span *ngIf="!manual; else manualTemplate" class="validator validator--{{validatorStatus | async}} mt-1">
-    <app-svg [width]="17" [height]="17" [icon]="'validator_' + (validatorStatus | async)"></app-svg>
-    <div class="ml-1">{{readableValidator | async}}</div>
-</span>
+<div *ngIf="!manual; else manualTemplate" class="validator mt-1">
+
+    <div class="validator__text validator__color--{{(activeValidator | async)?.status}}">
+        <app-svg [width]="17" [height]="17" [icon]="'validator_' + (activeValidator | async)?.status"></app-svg>
+
+        <span class="ml-1 validator__readable-validator">{{readableValidator | async}}</span>
+    </div>
+
+
+    <div class="validator__properties" [ngClass]="{'validator__properties--typed': typedValidator}">
+        <span *ngFor="let value of (resolvedValues | async) | keyvalue; let i = index;">
+            <span *ngIf="typedValidator; else simpleValidator"
+                  class="validator__type text-bold validator__color--{{(activeValidator | async)?.type ? ((activeValidator | async)?.type === value.key ? (activeValidator | async)?.status : 'inactive') : ''}}"
+                  [ngStyle]="{'marginLeft.px': i > 0 ? 12 : 0}"
+            >
+                <span class="activity-type--{{value.key}}">
+                    <app-svg [icon]="'activity_' + value.key"></app-svg>
+                </span>
+
+                <span class="pl-1">
+                    <span *ngIf="validator.property === CONST.ACTIVITY_PROPERTIES.DISTANCE">{{value.value | distance}}</span>
+                    <span *ngIf="validator.property === CONST.ACTIVITY_PROPERTIES.AVERAGE_SPEED">{{value.value | pace}}</span>
+                </span>
+            </span>
+
+            <ng-template #simpleValidator>
+                <span class="validator__readable-validator validator__color--{{(activeValidator | async)?.status}} pl-1" *ngIf="i === 0">
+                    <span *ngIf="validator.property === CONST.ACTIVITY_PROPERTIES.TYPE">{{value.value | types}}</span>
+
+                    <span *ngIf="validator.property === CONST.ACTIVITY_PROPERTIES.MOVING_TIME
+                          || validator.property === CONST.ACTIVITY_PROPERTIES.ELAPSED_TIME
+                          || validator.property === CONST.ACTIVITY_PROPERTIES.START_DATE">{{value.value | time}}</span>
+
+                    <span *ngIf="validator.property === CONST.ACTIVITY_PROPERTIES.ATHLETE_COUNT
+                          || validator.property === CONST.ACTIVITY_PROPERTIES.ACHIEVEMENT_COUNT">{{value.value}}</span>
+                </span>
+            </ng-template>
+        </span>
+    </div>
+
+</div>
 
 <ng-template #manualTemplate>
-    <span class="validator validator--neutral mt-1">
-        <app-svg [width]="17" [height]="17" [icon]="'validator_neutral'"></app-svg>
-        <div class="ml-1">Photo/comment required</div>
-    </span>
+    <div class="validator validator--neutral mt-1">
+        <div class="validator__text">
+            <app-svg [width]="17" [height]="17" [icon]="'validator_neutral'"></app-svg>
+            <span class="validator__readable-validator ml-1">Photo/comment required</span>
+        </div>
+    </div>
 </ng-template>

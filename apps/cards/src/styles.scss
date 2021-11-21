@@ -27,6 +27,7 @@
     --color-main-4: #942F8A;
     --color-blue: #494ADB;
     --color-blue-light: #494ADB66;
+    --color-pink: #EF79CE;
     --color-danger: var(--color-main-2);
 
     --padding: 14px 14px 14px 14px;
@@ -132,4 +133,31 @@ body {
 
 .pointer {
     cursor: pointer;
+}
+
+.activity-type {
+    &--run {
+        color: var(--color-main-2)!important;
+        app-svg {
+            fill: var(--color-main-2)!important;
+        }
+    }
+    &--walk {
+        color: var(--color-main-0)!important;;
+        app-svg {
+            fill: var(--color-main-0)!important;
+        }
+    }
+    &--ride {
+        color: var(--color-blue)!important;;
+        app-svg {
+            fill: var(--color-blue)!important;
+        }
+    }
+    &--other {
+        color: var(--color-pink);
+        app-svg {
+            fill: var(--color-pink)!important;
+        }
+    }
 }

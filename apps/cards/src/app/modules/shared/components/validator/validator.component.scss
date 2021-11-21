@@ -1,14 +1,57 @@
 .validator {
-    display: flex;
-    align-items: center;
     font-size: var(--text-size-small);
-    &--pass {
-        color: var(--color-pass);
+
+    &__text {
+        display: inline-block;
     }
-    &--fail {
-        color: var(--color-danger);
+
+    &__readable-validator {
+        position: relative;
+        bottom: 4px;
     }
-    &--neutral {
-        color: initial;
+
+    &__properties {
+        display: inline;
+        &--typed {
+            margin-left: 24px;
+            height: 22px;
+            justify-content: space-between;
+            display: flex;
+            align-items: center;
+        }
+    }
+
+    &__type {
+        display: flex;
+        align-items: center;
+    }
+
+    &__color {
+        &--pass {
+            app-svg {
+                fill: var(--color-pass) !important;;
+            }
+            span {
+                color: var(--color-pass) !important;
+            }
+        }
+        &--fail {
+            app-svg {
+                fill: var(--color-danger) !important;;
+            }
+            span {
+                color: var(--color-danger) !important;
+            }
+        }
+        &--inactive {
+            opacity: 0.5;
+        }
+        &--neutral {
+            color: initial;
+        }
+    }
+
+    span {
+        color: var(--color-text-light)
     }
 }

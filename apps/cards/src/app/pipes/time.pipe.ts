@@ -7,7 +7,7 @@ import {Injectable, Pipe, PipeTransform} from '@angular/core';
   name: 'time',
 })
 export class TimePipe implements PipeTransform {
-  transform(millis: number): string {
+  transform(millis: any): string {
     const totalSeconds = Math.floor(millis);
     const seconds = totalSeconds % 60;
     const minutes = Math.floor(totalSeconds / 60) % 60;

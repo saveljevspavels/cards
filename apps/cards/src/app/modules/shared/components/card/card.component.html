@@ -6,16 +6,19 @@
         <div class="card__image"
              [style.background-image]="'url(' + card.image + ')'">
         </div>
-        <div class="ml-2 mt-2 pb-3 pr-3">
+        <div class="ml-2 mt-2 pb-2 pr-3">
             <div class="card__title">
                 {{card.title}}
             </div>
-            <div class="card__description mt-2">
+            <div class="card__description light mt-2">
                 {{card.description}}
             </div>
             <div class="card__validation mt-2">
                 <app-validator *ngIf="card.manualValidation" [manual]="true"></app-validator>
-                <app-validator *ngFor="let validator of card.validators" [validator]="validator"></app-validator>
+                <app-validator *ngFor="let validator of card.validators"
+                               [validator]="validator"
+                               [activityTypes]="activityTypes"
+                ></app-validator>
             </div>
         </div>
     </div>

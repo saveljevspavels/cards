@@ -29,11 +29,11 @@
         <div class="text-small lighter">
             Type:
         </div>
-        <div class="activity__type mt-1"
+        <div class="activity__type mt-1 activity-type--other"
              [ngClass]="{
-                'activity__type--run': activity.type === 'Run',
-                'activity__type--walk': activity.type === 'Walk',
-                'activity__type--other': activity.type !== 'Run' && activity.type !== 'Walk'
+                'activity-type--run': activity.type === 'Run',
+                'activity-type--walk': activity.type === 'Walk',
+                'activity-type--ride': activity.type === 'Ride'
              }"
         >{{activity.type}}</div>
         <div class="stat-item" *ngIf="activity.gameData.submittedAt && activity.gameData.status === CONST.ACTIVITY_STATUSES.APPROVED">
