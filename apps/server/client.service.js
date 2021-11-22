@@ -92,7 +92,6 @@ export default class ClientService {
                         })
                         return acc
                     }, {})
-                    console.log('total', JSON.stringify(total))
 
 
                     properties.forEach(prop => {
@@ -113,7 +112,6 @@ export default class ClientService {
                         }
                     })
                 })
-                console.log('base', JSON.stringify(baseWorkoutPatch))
 
                 this.fireStoreService.updateBaseWorkout([athleteId], baseWorkoutPatch)
             })

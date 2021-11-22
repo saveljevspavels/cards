@@ -10,7 +10,7 @@
         },
         "ride": {
             "distance": 15000,
-            "average_speed": 5.55,
+            "average_speed": 5.56,
             "time_40k": 7200
         },
         "walk": {

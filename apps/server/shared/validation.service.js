@@ -46,9 +46,9 @@ export class ValidationService {
             case CONST.COMPARATORS.LESS:
                 return activityVal < validatorVal
             case CONST.COMPARATORS.IN:
-                return validatorVal.toString().toUpperCase().indexOf(activityVal.toUpperCase()) !== -1
+                return validatorVal.toString().toUpperCase().indexOf(normalizeActivityType(activityVal).toUpperCase()) !== -1
             case CONST.COMPARATORS.NOT_IN:
-                return validatorVal.toString().toUpperCase().indexOf(activityVal.toUpperCase()) === -1
+                return validatorVal.toString().toUpperCase().indexOf(normalizeActivityType(activityVal).toUpperCase()) === -1
             case CONST.COMPARATORS.EQUALS:
             default:
                 return activityVal === validatorVal

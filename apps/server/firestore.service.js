@@ -357,17 +357,18 @@ export class FirestoreService {
             const cardQuery = this.cardCollection.where('id', 'in', cardIds)
             const cardDocs = await cardQuery.get()
             const baseWorkoutPatch = {};
-            baseWorkoutPatch[normalizeActivityType(activity.type)] = {};
+            const normalizedType = normalizeActivityType(activity.type);
+            baseWorkoutPatch[normalizedType] = {};
             cardDocs.forEach((card) => {
                 card.data().validators.forEach(validator => {
                     RULES.UPDATABLE_PROPERTIES.forEach(property => {
                         if(validator.formula.indexOf(property) !== -1) {
-                            baseWorkoutPatch[normalizeActivityType(activity.type)][property] = activity[validator.property]
+                            baseWorkoutPatch[normalizedType][property] = activity[validator.property]
                         }
                     })
                 })
             })
-            if(Object.keys(baseWorkoutPatch).length) {
+            if(Object.keys(baseWorkoutPatch[normalizedType]).length) {
                 await this.updateBaseWorkout([activity.athlete.id.toString()], baseWorkoutPatch)
             }
         }
