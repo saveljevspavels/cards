@@ -66,22 +66,19 @@ body {
 .lighter {
     color: var(--color-text-lighter);
     app-svg {
-        fill: var(--color-text-lighter)!important;
+        fill: var(--color-text-lighter);
     }
 }
 
 .light {
     color: var(--color-text-light);
     app-svg {
-        fill: var(--color-text-light)!important;
+        fill: var(--color-text-light);
     }
 }
 
 .text-blue {
     color: var(--color-blue);
-    app-svg {
-        fill: var(--color-blue)!important;
-    }
 }
 
 .text-bold {
