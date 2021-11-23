@@ -23,9 +23,9 @@
             <app-button type="action" [disabled]="!form.get('selectedCards')?.value?.length || loading" (buttonClick)="submitSelectedActivity()" label="Submit"></app-button>
         </div>
         <div class="col-md-6 order-md-1">
-            <app-button type="danger" [transparent]="true" (buttonClick)="exitSubmitMode()" label="Cancel"></app-button>
+            <app-button (buttonClick)="exitSubmitMode()" label="Cancel"></app-button>
         </div>
-        <div class="col-md-6 order-md-3 mt-4">
+        <div class="col-md-6 order-md-3 mt-2">
             <app-button type="danger" [transparent]="true" (buttonClick)="openDeletePopup()" label="Delete Activity"></app-button>
         </div>
     </div>
@@ -48,8 +48,8 @@
             <p class="mt-4 mb-1">
                 Are you sure you want to delete the activity?
             </p>
-            <div class="mt-4 mb-2">
-                <app-button type="danger" [label]="'Delete'" (buttonClick)="deleteActivity()"></app-button>
+            <div class="mt-4 mb-2 full-width">
+                <app-button type="danger-filled" [label]="'Delete'" (buttonClick)="deleteActivity()"></app-button>
             </div>
             <div class="mb-3">
                 <app-button (buttonClick)="cancelDelete()" [label]="'Cancel'"></app-button>

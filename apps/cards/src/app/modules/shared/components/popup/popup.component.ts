@@ -17,7 +17,7 @@ export class PopupComponent implements OnInit {
     }
 
     public closePopup() {
-        this.popupService.popup = null;
+        this.popupService.closePopup();
     }
 
 }

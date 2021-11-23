@@ -13,9 +13,13 @@ export class PopupService {
     public showPopup(template: ElementRef, timeout = 0) {
         this.popup = template;
         if(timeout) {
-            setTimeout(() => this.popup = null, timeout)
+            setTimeout(() => this.closePopup(), timeout)
         }
         return this.popup$.pipe(filter((res) => res === null), take(1));
+    }
+
+    public closePopup() {
+        this.popup = null;
     }
 
     public set popup(popup: ElementRef | null) {

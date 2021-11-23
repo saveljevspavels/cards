@@ -24,6 +24,13 @@
             fill: var(--color-danger);
         }
     }
+    &--danger-filled {
+        background-color: var(--color-danger);
+        color: var(--acticity-background);
+        app-svg {
+            fill: var(--acticity-background);
+        }
+    }
     &--disabled {
         &:host {
             pointer-events: none;

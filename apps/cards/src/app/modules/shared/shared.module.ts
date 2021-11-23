@@ -54,6 +54,12 @@ const COMPS = [
     TextareaComponent,
     SwiperComponent,
     TierBadgeComponent,
+    SvgComponent,
+    PageTitleComponent,
+    MobileMenuComponent,
+    SvgTemplatesComponent,
+    ScoreItemComponent,
+    PopupComponent,
 ]
 
 const MODULES = [
@@ -69,12 +75,6 @@ const MODULES = [
 @NgModule({
     declarations: [
         COMPS,
-        PageTitleComponent,
-        MobileMenuComponent,
-        SvgComponent,
-        SvgTemplatesComponent,
-        ScoreItemComponent,
-        PopupComponent,
     ],
     imports: [
         CommonModule,
@@ -82,16 +82,10 @@ const MODULES = [
         ReactiveFormsModule,
         RouterModule,
         ...MODULES,
-        CommonModule,
     ],
     exports: [
         ...COMPS,
         ...MODULES,
-        PageTitleComponent,
-        MobileMenuComponent,
-        SvgTemplatesComponent,
-        ScoreItemComponent,
-        PopupComponent,
     ],
     providers: [
         FileService

@@ -23,7 +23,7 @@ export class SwiperComponent {
     }
 
     close() {
-        this.popupService.popup = null;
+        this.popupService.closePopup();
     }
 
 }

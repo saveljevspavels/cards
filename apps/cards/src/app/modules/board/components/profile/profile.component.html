@@ -17,5 +17,22 @@
 </div>
 
 <div class="mt-5" *ngIf="self">
-    <app-button (buttonClick)="logout()" icon="logout" [label]="'Logout'" type="danger"></app-button>
+    <app-button (buttonClick)="openLogoutPopup()" icon="logout" [label]="'Logout'" type="danger"></app-button>
 </div>
+
+<ng-template #logoutPopup>
+    <div class="popup box">
+        <div class="d-flex flex-column align-items-center">
+            <img src="../../../../../assets/images/blanket_sticker.png" class="mt-4">
+            <p class="mt-4 mb-1">
+                Are you sure you want to logout?
+            </p>
+            <div class="mt-4 mb-2 full-width">
+                <app-button type="danger-filled" [label]="'Logout'" (buttonClick)="logout()"></app-button>
+            </div>
+            <div class="mb-3">
+                <app-button (buttonClick)="cancelLogout()" [label]="'Cancel'"></app-button>
+            </div>
+        </div>
+    </div>
+</ng-template>

@@ -28,8 +28,13 @@
                         >
                             <ng-template #activityTemplate let-dataItem="dataItem">
                                 <ng-container *ngIf="dataItem.gameData.status === 'submitted'">
-                                    <p class="mt-0 mb-0 light" style="text-align: center">Waiting for approval</p>
-                                    <app-button (buttonClick)="rejectActivity(dataItem.id)" type="danger" label="Cancel Submission"></app-button>
+                                    <div class="pr-3 pl-3 light pt-1 d-flex align-items-center justify-content-between">
+                                        <div class="d-flex align-items-center">
+                                            <app-svg [icon]="'clock'"></app-svg>
+                                            <span class="pl-1 pb-1 title text-bold">Waiting for approval</span>
+                                        </div>
+                                        <app-button styleClass="p-0 pb-1" (buttonClick)="rejectActivity(dataItem.id)" type="danger" label="Cancel"></app-button>
+                                    </div>
                                 </ng-container>
                                 <app-activity
                                     [activity]="dataItem"

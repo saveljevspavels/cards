@@ -64,15 +64,24 @@ body {
 }
 
 .lighter {
-    color: var(--color-text-lighter)
+    color: var(--color-text-lighter);
+    app-svg {
+        fill: var(--color-text-lighter)!important;
+    }
 }
 
 .light {
-    color: var(--color-text-light)
+    color: var(--color-text-light);
+    app-svg {
+        fill: var(--color-text-light)!important;
+    }
 }
 
 .text-blue {
-    color: var(--color-blue)
+    color: var(--color-blue);
+    app-svg {
+        fill: var(--color-blue)!important;
+    }
 }
 
 .text-bold {

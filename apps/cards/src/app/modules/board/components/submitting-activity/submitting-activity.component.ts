@@ -63,12 +63,12 @@ export class SubmittingActivityComponent implements OnInit, OnDestroy {
     }
 
     cancelDelete() {
-        this.popupService.popup = null;
+        this.popupService.closePopup();
     }
 
     deleteActivity() {
         this.activityService.deleteActivity(this.boardService.activity.id).subscribe(() => {
-            this.popupService.popup = null;
+            this.popupService.closePopup();
             this.router.navigateByUrl('board');
             this.boardService.deselectActivity();
         });
