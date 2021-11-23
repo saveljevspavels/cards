@@ -20,6 +20,9 @@ export class CardComponent implements OnInit {
     @Input()
     small: boolean = false;
 
+    @Input()
+    submittedType = '';
+
     imageObservable: any;
 
     activityTypes: string;

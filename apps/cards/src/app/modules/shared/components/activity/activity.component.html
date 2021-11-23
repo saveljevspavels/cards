@@ -1,4 +1,27 @@
 <div class="activity">
+    <ng-container *ngIf="collapsible">
+        <ng-container [ngTemplateOutlet]="collapsibleActivityTemplate" [ngTemplateOutletContext]="{activity: activity}"></ng-container>
+    </ng-container>
+    <ng-container *ngIf="!collapsible">
+        <ng-container [ngTemplateOutlet]="activityTemplate" [ngTemplateOutletContext]="{activity: activity}"></ng-container>
+    </ng-container>
+</div>
+
+<ng-template #activityTemplate>
+    <ng-container *ngTemplateOutlet="athleteTemplate"></ng-container>
+    <ng-container *ngTemplateOutlet="cardsTemplate"></ng-container>
+    <ng-container *ngTemplateOutlet="contentTemplate"></ng-container>
+</ng-template>
+
+<ng-template #collapsibleActivityTemplate>
+    <app-collapsible [customHeader]="true">
+        <ng-container headerContent *ngTemplateOutlet="athleteTemplate"></ng-container>
+        <ng-container visibleContent *ngTemplateOutlet="cardsTemplate"></ng-container>
+        <ng-container hiddenContent *ngTemplateOutlet="contentTemplate"></ng-container>
+    </app-collapsible>
+</ng-template>
+
+<ng-template #athleteTemplate>
     <div *ngIf="showAthlete"
          class="d-flex align-items-center"
     >
@@ -8,6 +31,9 @@
             </app-athlete>
         </div>
     </div>
+</ng-template>
+
+<ng-template #cardsTemplate>
     <div *ngIf="activity.gameData.cardSnapshots?.length">
         <app-selection-wrapper
             [selectionEnabled]="selection"
@@ -18,10 +44,14 @@
             <ng-template #cardTemplate let-dataItem="dataItem">
                 <app-card
                     [card]="dataItem"
+                    [submittedType]="activityType"
                 ></app-card>
             </ng-template>
         </app-selection-wrapper>
     </div>
+</ng-template>
+
+<ng-template #contentTemplate>
     <div class="activity__content" [ngClass]="{'full-width': !activity.gameData.cardSnapshots?.length}">
         <div class="activity__id text-small lighter">
             {{activity.id}}
@@ -29,13 +59,9 @@
         <div class="text-small lighter">
             Type:
         </div>
-        <div class="activity__type mt-1 activity-type--other"
-             [ngClass]="{
-                'activity-type--run': activity.type === 'Run',
-                'activity-type--walk': activity.type === 'Walk',
-                'activity-type--ride': activity.type === 'Ride'
-             }"
-        >{{activity.type}}</div>
+        <div class="activity__type mt-1 activity-type--{{activityType}}">
+            {{activity.type}}
+        </div>
         <div class="stat-item" *ngIf="activity.gameData.submittedAt && activity.gameData.status === CONST.ACTIVITY_STATUSES.APPROVED">
             <div class="stat-item__property">Submitted at</div>
             <div class="stat-item__value">{{activity.gameData.submittedAt | date : 'dd MMM, HH:mm'}}</div>
@@ -61,19 +87,19 @@
             <div class="stat-item__value">{{activity.gameData.comments}}</div>
         </div>
     </div>
-    <div *ngIf="showImages && this.activity.gameData?.images?.length"
+    <div *ngIf="showImages && activity.gameData?.images?.length"
          class="activity__images mt-n3"
     >
         <div class="activity__image mr-1"
              (click)="openGallery(i)"
-             *ngFor="let image of this.activity.gameData?.images; let i = index;"
+             *ngFor="let image of activity.gameData?.images; let i = index;"
              [style.background-image]="'url(' + image + ')'">
         </div>
     </div>
-</div>
+</ng-template>
 
 <ng-template #gallery>
     <div class="popup box">
-        <app-swiper [images]="this.activity.gameData?.images" [slideIndex]="slideIndex"></app-swiper>
+        <app-swiper [images]="activity.gameData?.images" [slideIndex]="slideIndex"></app-swiper>
     </div>
 </ng-template>

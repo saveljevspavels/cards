@@ -16,4 +16,12 @@
         background: var(--acticity-background);
         border-radius: var(--radius);
     }
+    &--custom-header {
+        .collapsible__header {
+            padding: 0;
+        }
+        .collapsible__icon {
+            padding-right: var(--padding-value);
+        }
+    }
 }

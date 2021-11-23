@@ -13,6 +13,7 @@
         }
         .athlete__name {
             font-size: var(--text-size);
+            display: inline-block;
         }
     }
     &--medium {
@@ -26,6 +27,7 @@
         .athlete__name {
             font-size: var(--text-size);
             font-weight: 600;
+            display: inline-block;
         }
     }
     &--big {

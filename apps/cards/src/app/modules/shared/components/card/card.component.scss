@@ -60,6 +60,11 @@
             font-size: var(--text-size-small);
         }
     }
+    &--submitted {
+        .card__image {
+            min-height: 82px;
+        }
+    }
     &__image {
         width: 100px;
         min-height: 140px;

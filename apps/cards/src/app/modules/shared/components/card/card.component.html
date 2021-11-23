@@ -1,4 +1,7 @@
-<div class="card {{small && 'card--small'}} card--tier-{{card.progression === 'tiers' ? card.tier : (card.value | tier)}}" *ngIf="card">
+<div class="card card--tier-{{card.progression === 'tiers' ? card.tier : (card.value | tier)}}"
+     *ngIf="card"
+     [ngClass]="{'card--small': small, 'card--submitted': submittedType}"
+>
     <div class="card__id">
         {{card.id}}
     </div>
@@ -6,29 +9,41 @@
         <div class="card__image"
              [style.background-image]="'url(' + card.image + ')'">
         </div>
-        <div class="ml-2 mt-2 pb-2 pr-3">
+        <div class="ml-2 mt-2 pr-3" [ngClass]="{'pb-2': !submittedType, 'pb-0': submittedType}">
             <div class="card__title">
                 {{card.title}}
             </div>
             <div class="card__description light mt-2">
                 {{card.description}}
             </div>
-            <div class="card__validation mt-2">
+            <div class="card__validation mt-2" *ngIf="!submittedType; else submittedCardValue">
                 <app-validator *ngIf="card.manualValidation" [manual]="true"></app-validator>
                 <app-validator *ngFor="let validator of card.validators"
                                [validator]="validator"
                                [activityTypes]="activityTypes"
                 ></app-validator>
             </div>
+            <ng-template #submittedCardValue>
+                <div class="mt-1 d-flex align-items-center">
+                    <app-svg styleClass="activity-type--{{submittedType}}" [icon]="'activity_' + submittedType"></app-svg>
+                    <div class="ml-1 mb-1">
+                        <ng-container *ngTemplateOutlet="cardValue"></ng-container>
+                    </div>
+                </div>
+            </ng-template>
         </div>
     </div>
-    <div class="card__bonuses">
+    <div class="card__bonuses" *ngIf="!submittedType">
         <div class="card__progression" *ngIf="card.cardUses.usesToProgress !== 0; else placeholder">
             To {{card.progression === 'tiers' ? 'level up' : 'change'}}: {{card.cardUses.progression}}/{{card.cardUses.usesToProgress}}
         </div>
         <ng-template #placeholder><div></div></ng-template>
-        <div class="card__value" *ngIf="card.value !== 0">
-            <span class="card__value-number">{{card.value}}</span> points
-        </div>
+        <ng-container *ngTemplateOutlet="cardValue"></ng-container>
     </div>
 </div>
+
+<ng-template #cardValue>
+    <div class="card__value" *ngIf="card.value !== 0">
+        <span class="card__value-number">{{card.value}}</span> points
+    </div>
+</ng-template>

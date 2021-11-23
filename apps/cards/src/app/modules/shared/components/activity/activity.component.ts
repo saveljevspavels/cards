@@ -3,6 +3,7 @@ import {ControlValueAccessor, FormControl, NG_VALUE_ACCESSOR} from "@angular/for
 import {FileService} from "../../../../services/file.service";
 import {PopupService} from "../../../../services/popup.service";
 import {CONST} from "../../../../app.module";
+import {UtilService} from "../../../../services/util.service";
 
 @Component({
     selector: 'app-activity',
@@ -23,12 +24,14 @@ export class ActivityComponent implements OnInit, ControlValueAccessor {
 
     public selectedCards = new FormControl([])
     public imageObservables: any;
+    public activityType = '';
 
     @Input() public activity: any;
     @Input() public selection = false;
     @Input() public showImages = true;
     @Input() public showComments = false;
     @Input() public showAthlete = false;
+    @Input() public collapsible = false;
 
     constructor(private popupService: PopupService) { }
 
@@ -36,6 +39,7 @@ export class ActivityComponent implements OnInit, ControlValueAccessor {
         this.selectedCards.valueChanges.subscribe((value) => {
             this._onChange(value)
         })
+        this.activityType = UtilService.normalizeActivityType(this.activity.type);
     }
 
     _onChange: any = () => {};

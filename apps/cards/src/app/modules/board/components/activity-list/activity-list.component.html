@@ -15,6 +15,9 @@
 <ng-template #activityTemplate let-activities="activities">
     <div class="mb-2" *ngFor="let activity of activities | sort: 'gameData.submittedAt' : { order: 'desc', type: 'date' } ">
         <app-activity
-            [activity]="activity" [showAthlete]="true"></app-activity>
+            [activity]="activity"
+            [showAthlete]="true"
+            [collapsible]="true"
+        ></app-activity>
     </div>
 </ng-template>
