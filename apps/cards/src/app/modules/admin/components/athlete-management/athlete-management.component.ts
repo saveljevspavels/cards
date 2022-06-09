@@ -3,8 +3,8 @@ import {BehaviorSubject} from "rxjs";
 import {AthleteService} from "../../../../services/athlete.service";
 import {FormBuilder, FormControl, Validators} from "@angular/forms";
 import {PERMISSIONS} from "../../../../constants/permissions";
-import {CONST, RULES} from "../../../../app.module";
 import {UtilService} from "../../../../services/util.service";
+import {ConstService} from "../../../../services/const.service";
 
 @Component({
     selector: 'app-athlete-management',
@@ -14,7 +14,7 @@ import {UtilService} from "../../../../services/util.service";
 export class AthleteManagementComponent implements OnInit {
 
     public PERMISSIONS = PERMISSIONS;
-    public ACTIVITY_TYPES = CONST.ACTIVITY_TYPES;
+    public ACTIVITY_TYPES = ConstService.CONST.ACTIVITY_TYPES;
     public selectedAthletes = new FormControl([]);
     public selectedType = new FormControl([]);
     public selectedPermissions = new FormControl([]);
@@ -22,7 +22,7 @@ export class AthleteManagementComponent implements OnInit {
 
     // @ts-ignore
     public form = this.formBuilder.group(
-        UtilService.getFlatKeys(RULES.DEFAULT_BASE_WORKOUT).reduce((acc: any, property: string) => {
+        UtilService.getFlatKeys(ConstService.RULES.DEFAULT_BASE_WORKOUT).reduce((acc: any, property: string) => {
             acc[property] = [0, [Validators.min(0)]]
             return acc
         }, {})

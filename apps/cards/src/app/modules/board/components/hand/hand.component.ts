@@ -4,8 +4,8 @@ import {LocalStorageService} from "../../../../services/local-storage.service";
 import {ControlValueAccessor, FormControl, NG_VALUE_ACCESSOR} from "@angular/forms";
 import {DeckService} from "../../../../services/deck.service";
 import {BehaviorSubject, combineLatest} from "rxjs";
-import {CONST, RULES} from "../../../../app.module";
 import {map} from "rxjs/operators";
+import {ConstService} from "../../../../services/const.service";
 
 @Component({
   selector: 'app-hand',
@@ -19,7 +19,7 @@ import {map} from "rxjs/operators";
 })
 export class HandComponent implements OnInit, ControlValueAccessor {
 
-    public rules = RULES;
+    public rules = ConstService.RULES;
     public possibleCombinations = new BehaviorSubject<any[]>([])
     public cards = new BehaviorSubject<any[]>([]);
     public selectedCards = new FormControl([]);
@@ -27,7 +27,7 @@ export class HandComponent implements OnInit, ControlValueAccessor {
     constructor(private db: AngularFirestore,
     private deckService: DeckService) {
         combineLatest([
-            db.collection(CONST.COLLECTIONS.HANDS).doc(LocalStorageService.athleteId).valueChanges(),
+            db.collection(ConstService.CONST.COLLECTIONS.HANDS).doc(LocalStorageService.athleteId).valueChanges(),
             this.deckService.cards.asObservable()]
         )
         .pipe(map(([athleteCards, allCards]: any) => {

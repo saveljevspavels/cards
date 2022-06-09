@@ -1,15 +1,16 @@
 import {Injectable} from "@angular/core";
-import {CONST} from "../app.module";
+import {ConstService} from "./const.service";
 
 
 @Injectable()
 export class UtilService {
+
     static generateId = () => {
         return Math.random().toString(36).substring(7);
     }
 
     static normalizeActivityType = (type: string): any => {
-        return Object.values(CONST.ACTIVITY_TYPES).find((activityType: any) => type.toUpperCase().indexOf(activityType.toUpperCase()) !== -1) || CONST.ACTIVITY_TYPES.OTHER
+        return Object.values(ConstService.CONST.ACTIVITY_TYPES).find((activityType: any) => type.toUpperCase().indexOf(activityType.toUpperCase()) !== -1) || ConstService.CONST.ACTIVITY_TYPES.OTHER
     }
 
     static getFlatKeys(object: any): any {

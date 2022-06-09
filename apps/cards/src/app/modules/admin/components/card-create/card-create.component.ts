@@ -2,8 +2,8 @@ import {Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core'
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {AdminService} from "../../admin.service";
 import {FileService} from "../../../../services/file.service";
-import {CONST, RULES} from "../../../../app.module";
 import {UtilService} from "../../../../services/util.service";
+import {ConstService} from "../../../../services/const.service";
 
 @Component({
   selector: 'app-card-create',
@@ -11,8 +11,8 @@ import {UtilService} from "../../../../services/util.service";
   styleUrls: ['./card-create.component.scss']
 })
 export class CardCreateComponent implements OnInit, OnChanges {
-    public workoutProperties = UtilService.getFlatKeys(RULES.DEFAULT_BASE_WORKOUT)
-    public CONST = CONST
+    public workoutProperties = UtilService.getFlatKeys(ConstService.RULES.DEFAULT_BASE_WORKOUT)
+    public CONST = ConstService.CONST
 
     @Input()
     public selectedCardFactory: any;
@@ -41,7 +41,7 @@ export class CardCreateComponent implements OnInit, OnChanges {
         if(factory) {
             this.validatorAmount.setValue(Object.keys(factory.cards[0]?.validators).length);
             this.cardAmount.setValue(Object.keys(factory.cards).length);
-            setTimeout(() => this.form.setValue(changes.selectedCardFactory.currentValue))
+            setTimeout(() => this.form.patchValue(changes.selectedCardFactory.currentValue))
         }
     }
 
@@ -74,7 +74,7 @@ export class CardCreateComponent implements OnInit, OnChanges {
         this.updateFormCardAmount(form, this.cardAmount.value)
         form.get('progression')?.valueChanges.subscribe(progression => {
             switch (progression) {
-                case 'tiers':
+                case ConstService.CONST.PROGRESSION.TIERS:
                     for(let i = 0; i < this.cardAmount.value; i++) {
                         this.form.get('cards.' + i + '.tier')?.setValue(i)
                     }

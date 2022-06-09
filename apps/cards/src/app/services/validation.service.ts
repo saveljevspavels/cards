@@ -2,15 +2,13 @@ import {Injectable} from "@angular/core";
 import {Validator} from "../interfaces/card";
 import {AthleteService} from "./athlete.service";
 import {BaseWorkout} from "../interfaces/athlete";
-import {CONST, RULES} from "../app.module";
 import {UtilService} from "./util.service";
+import {ConstService} from "./const.service";
 
 @Injectable({
     providedIn: 'root'
 })
 export class ValidationService {
-
-    private RULES = RULES;
     private baseWorkout: BaseWorkout | null;
 
     constructor(private athleteService: AthleteService) {
@@ -21,7 +19,7 @@ export class ValidationService {
 
     resolveValidationValue(validator: Validator, baseWorkout: any = this.baseWorkout ): any {
         if(baseWorkout !== null) {
-            return Object.keys(this.RULES.DEFAULT_BASE_WORKOUT).reduce((acc: any, type) => {
+            return Object.keys(ConstService.RULES.DEFAULT_BASE_WORKOUT).reduce((acc: any, type) => {
                 try {
                     acc[type] = this.evaluateFormula(validator.formula, validator.property, baseWorkout[type])
                 } catch (err) {}
@@ -36,12 +34,12 @@ export class ValidationService {
         })
 
         switch (property) {
-            case CONST.ACTIVITY_PROPERTIES.TYPE:
+            case ConstService.CONST.ACTIVITY_PROPERTIES.TYPE:
                 return formula;
-            case CONST.ACTIVITY_PROPERTIES.DISTANCE:
+            case ConstService.CONST.ACTIVITY_PROPERTIES.DISTANCE:
                 const value = eval(formula);
                 return value - (value % 100);
-            case CONST.ACTIVITY_PROPERTIES.START_DATE:
+            case ConstService.CONST.ACTIVITY_PROPERTIES.START_DATE:
                 return eval(formula) * 60 * 60;
             default: return eval(formula);
         }
@@ -50,21 +48,21 @@ export class ValidationService {
     validateRule(activity: any, validator: Validator, baseWorkout = this.baseWorkout) {
         const type = UtilService.normalizeActivityType(activity.type);
 
-        const activityVal = validator.property === CONST.ACTIVITY_PROPERTIES.START_DATE
+        const activityVal = validator.property === ConstService.CONST.ACTIVITY_PROPERTIES.START_DATE
             ? this.getTimeInSeconds(activity[validator.property])
             : activity[validator.property]
         const validatorVal = this.resolveValidationValue(validator, baseWorkout)[type]
 
         switch (validator.comparator) {
-            case CONST.COMPARATORS.GREATER:
+            case ConstService.CONST.COMPARATORS.GREATER:
                 return activityVal >= validatorVal;
-            case CONST.COMPARATORS.LESS:
+            case ConstService.CONST.COMPARATORS.LESS:
                 return activityVal < validatorVal
-            case CONST.COMPARATORS.IN:
+            case ConstService.CONST.COMPARATORS.IN:
                 return validatorVal.toString().toUpperCase().indexOf(UtilService.normalizeActivityType(activityVal).toUpperCase()) !== -1
-            case CONST.COMPARATORS.NOT_IN:
+            case ConstService.CONST.COMPARATORS.NOT_IN:
                 return validatorVal.toString().toUpperCase().indexOf(UtilService.normalizeActivityType(activityVal).toUpperCase()) === -1
-            case CONST.COMPARATORS.EQUALS:
+            case ConstService.CONST.COMPARATORS.EQUALS:
             default:
                 return activityVal === validatorVal
         }

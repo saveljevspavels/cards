@@ -4,10 +4,10 @@ import {BehaviorSubject} from "rxjs";
 import {HttpClient} from "@angular/common/http";
 import {debounceTime, distinctUntilChanged, filter} from "rxjs/operators";
 import {LocalStorageService} from "./local-storage.service";
-import {CONST} from "../app.module";
 import {environment} from "../../environments/environment";
 import {AthleteService} from "./athlete.service";
 import Athlete from "../interfaces/athlete";
+import {ConstService} from "./const.service";
 
 @Injectable({
     providedIn: 'root'
@@ -26,17 +26,17 @@ export class ActivityService {
             distinctUntilChanged()
         ).subscribe((me: Athlete | null) => {
             db.collection(
-                CONST.COLLECTIONS.PENDING_ACTIVITIES,
+                ConstService.CONST.COLLECTIONS.PENDING_ACTIVITIES,
                 (ref: any) => ref.where('owner_id', '==', me?.id)
             ).valueChanges().subscribe((activities: any) => {
                 this.pendingActivities.next(activities)
             });
 
-            db.collection(CONST.COLLECTIONS.DETAILED_ACTIVITIES,
+            db.collection(ConstService.CONST.COLLECTIONS.DETAILED_ACTIVITIES,
                 (ref: any) => (
                     ref
                         .where('athlete.id', '==', me?.id)
-                        .where('gameData.status', 'in', [CONST.ACTIVITY_STATUSES.NEW, CONST.ACTIVITY_STATUSES.SUBMITTED])
+                        .where('gameData.status', 'in', [ConstService.CONST.ACTIVITY_STATUSES.NEW, ConstService.CONST.ACTIVITY_STATUSES.SUBMITTED])
                 )
             ).valueChanges().subscribe((activities: any) => {
                 this.newActivities.next(activities)
@@ -44,8 +44,8 @@ export class ActivityService {
         })
 
         db.collection(
-            CONST.COLLECTIONS.DETAILED_ACTIVITIES,
-            (ref: any) => ref.where('gameData.status', '==', CONST.ACTIVITY_STATUSES.APPROVED)
+            ConstService.CONST.COLLECTIONS.DETAILED_ACTIVITIES,
+            (ref: any) => ref.where('gameData.status', '==', ConstService.CONST.ACTIVITY_STATUSES.APPROVED)
         ).valueChanges().subscribe((activities: any) => {
             this.approvedActivities.next(activities)
         });

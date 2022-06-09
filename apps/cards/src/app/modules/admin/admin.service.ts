@@ -3,9 +3,8 @@ import {AngularFirestore} from "@angular/fire/firestore";
 import {BehaviorSubject, Observable} from "rxjs";
 import {HttpClient} from "@angular/common/http";
 import {COMMANDS} from "../../constants/commands";
-import {CONST} from "../../app.module";
 import {environment} from "../../../environments/environment";
-import {LogItem} from "../../interfaces/log-item";
+import {ConstService} from "../../services/const.service";
 
 @Injectable()
 export class AdminService {
@@ -14,11 +13,11 @@ export class AdminService {
     public cardFactories = new BehaviorSubject<any>([])
 
     public deck = new BehaviorSubject<string[]>([]);
-    private deckDocument = this.db.collection(CONST.COLLECTIONS.HANDS)
+    private deckDocument = this.db.collection(ConstService.CONST.COLLECTIONS.HANDS)
 
     constructor(private http: HttpClient,
                 private db: AngularFirestore,) {
-        db.collection(CONST.COLLECTIONS.DETAILED_ACTIVITIES,
+        db.collection(ConstService.CONST.COLLECTIONS.DETAILED_ACTIVITIES,
             (ref: any) => (
                 ref.where('gameData.status', '==', 'submitted')
             )
@@ -26,11 +25,11 @@ export class AdminService {
             this.submittedActivities.next(activities)
         });
 
-        this.deckDocument.doc(CONST.HANDS.DECK).valueChanges().subscribe((deck: any) => {
+        this.deckDocument.doc(ConstService.CONST.HANDS.DECK).valueChanges().subscribe((deck: any) => {
             this.deck.next(deck?.cardIds || [])
         });
 
-        db.collection(CONST.COLLECTIONS.CARD_FACTORIES).valueChanges().subscribe((cardFactories: any) => {
+        db.collection(ConstService.CONST.COLLECTIONS.CARD_FACTORIES).valueChanges().subscribe((cardFactories: any) => {
         this.cardFactories.next(cardFactories)
     });
     }

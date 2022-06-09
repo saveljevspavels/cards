@@ -523,7 +523,7 @@ export class FirestoreService {
         card = {
             id,
             title: factory.title,
-            image: factory.image,
+            image: factory.image || '',
             factoryId: factory.id,
             progression: factory.progression,
             manualValidation: factory.manualValidation,

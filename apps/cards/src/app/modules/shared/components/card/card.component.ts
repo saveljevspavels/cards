@@ -2,7 +2,7 @@ import {Component, Input, OnInit} from '@angular/core';
 import Card, {Validator} from "../../../../interfaces/card";
 import {filter} from "rxjs/operators";
 import {DeckService} from "../../../../services/deck.service";
-import {CONST} from "../../../../app.module";
+import {ConstService} from "../../../../services/const.service";
 
 @Component({
   selector: 'app-card',
@@ -42,7 +42,7 @@ export class CardComponent implements OnInit {
     }
 
     resolveActivityTypes(validators: Validator[]): string {
-        return (validators.find(validator => validator.property === CONST.ACTIVITY_PROPERTIES.TYPE)?.formula) || '';
+        return (validators.find(validator => validator.property === ConstService.CONST.ACTIVITY_PROPERTIES.TYPE)?.formula) || '';
     }
 
 }

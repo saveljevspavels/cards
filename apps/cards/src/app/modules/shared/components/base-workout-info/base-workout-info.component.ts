@@ -1,5 +1,5 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {RULES} from "../../../../app.module";
+import * as RULES from 'definitions/rules.json';
 
 @Component({
     selector: 'app-base-workout-info',

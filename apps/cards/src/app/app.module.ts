@@ -56,7 +56,3 @@ const firebaseConfig = FIREBASE_CONFIG;
     bootstrap: [AppComponent]
 })
 export class AppModule { }
-
-export const CONST: any = environment.const;
-export const RULES: any = environment.rules;
-export const STRAVA_CONFIG: any = environment.stravaConfig;

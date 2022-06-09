@@ -12,7 +12,7 @@ export default interface CardFactory {
     }[]
 }
 
-export type Progression = 'tiers' | 'flat' | 'none'
+export type Progression = 'chain' | 'tiers' | 'flat' | 'none'
 
 export type CardValidation = {
     property: string;

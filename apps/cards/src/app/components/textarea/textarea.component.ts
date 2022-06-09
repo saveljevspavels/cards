@@ -1,6 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {FormControl} from "@angular/forms";
-import {CONST} from "../../app.module";
+import {ConstService} from "../../services/const.service";
 
 @Component({
   selector: 'app-textarea',
@@ -13,7 +13,7 @@ export class TextareaComponent implements OnInit {
     public rows = 7;
 
     @Input()
-    public maxLength = CONST.COMMENT_LENGTH;
+    public maxLength = ConstService.CONST.COMMENT_LENGTH;
 
     @Input()
     public fc: FormControl;

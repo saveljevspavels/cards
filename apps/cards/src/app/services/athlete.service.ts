@@ -2,12 +2,12 @@ import { Injectable } from '@angular/core';
 import {BehaviorSubject, combineLatest, forkJoin} from "rxjs";
 import {AngularFirestore} from "@angular/fire/firestore";
 import {LocalStorageService} from "./local-storage.service";
-import {CONST} from "../app.module";
 import {filter, map, mergeMap} from "rxjs/operators";
 import {HttpClient} from "@angular/common/http";
 import {environment} from "../../environments/environment";
 import Athlete from "../interfaces/athlete";
 import {AuthService} from "./auth.service";
+import {ConstService} from "./const.service";
 
 @Injectable({
     providedIn: 'root'
@@ -17,7 +17,7 @@ export class AthleteService {
     public athletes = new BehaviorSubject<Athlete[]>([]);
     public me = new BehaviorSubject<Athlete | null>(null);
     public permissions = new BehaviorSubject<string[] | null>(null);
-    private athleteCollection = this.db.collection(CONST.COLLECTIONS.ATHLETES);
+    private athleteCollection = this.db.collection(ConstService.CONST.COLLECTIONS.ATHLETES);
 
     constructor(private db: AngularFirestore,
                 private http: HttpClient,

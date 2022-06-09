@@ -43,6 +43,7 @@
     "PROGRESSION": {
         "TIERS": "tiers",
         "FLAT": "flat",
+        "CHAIN": "chain",
         "NONE": "none"
     },
     "COMPARATORS": {

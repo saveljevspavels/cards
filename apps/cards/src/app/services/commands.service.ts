@@ -1,5 +1,4 @@
 import {Injectable} from "@angular/core";
-import {CONST} from "../app.module";
 import {AngularFirestore} from "@angular/fire/firestore";
 import {LocalStorageService} from "./local-storage.service";
 import {distinctUntilChanged} from "rxjs/operators";
@@ -8,13 +7,14 @@ import {ActivityService} from "./activity.service";
 import {GameService} from "./game.service";
 import {combineLatest} from "rxjs";
 import {AthleteService} from "./athlete.service";
+import {ConstService} from "./const.service";
 
 @Injectable({
     providedIn: 'root'
 })
 export class CommandsService {
     private commandCollection = LocalStorageService.athlete && this.db.collection(
-        CONST.COLLECTIONS.COMMANDS,
+        ConstService.CONST.COLLECTIONS.COMMANDS,
         (ref) => ref.where('athleteId', '==', LocalStorageService.athlete.id.toString()));
 
     constructor(private db: AngularFirestore,
