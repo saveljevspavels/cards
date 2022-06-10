@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import {Observable} from "rxjs";
+import {combineLatest, Observable} from "rxjs";
 import {GameService} from "../../../../services/game.service";
 import Game from "../../../../interfaces/game";
 import {ConstService} from "../../../../services/const.service";
+import {DeckService} from "../../../../services/deck.service";
 
 @Component({
   selector: 'app-card-counter',
@@ -14,13 +15,22 @@ export class CardCounterComponent implements OnInit {
 
     public gameData: Observable<Game | null> = this.gameService.gameData.asObservable()
     public indicatorData: any[] = [];
+    public deckLength = 0;
 
-    constructor(public gameService: GameService) { }
+    constructor(public gameService: GameService,
+                public deckService: DeckService) { }
 
     ngOnInit(): void {
-        this.gameData.subscribe((game: Game | null) => {
-            this.indicatorData = [...Array(ConstService.RULES.QUEUE.CARDS_TO_SHIFT).keys()].map(index => (game?.cardUses || 0) > index)
+        combineLatest([
+            this.gameData,
+            this.deckService.cardQueue
+        ]).subscribe(([gameData, deck]) => {
+            this.indicatorData = this.generateIndicatorData(deck.cardIds.length, gameData?.cardUses || 0)
         })
+    }
+
+    generateIndicatorData(total: number, filled: number) {
+        return [...Array(total).keys()].map(index => (filled || 0) > index)
     }
 
 }

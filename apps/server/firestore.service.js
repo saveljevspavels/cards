@@ -150,6 +150,9 @@ export class FirestoreService {
     async dealCards(athletes, amount) {
         const deck = this.handCollection.doc(CONST.HANDS.DECK);
         const currentDeck = (await deck.get()).data()?.cardIds || []
+        if(!amount) {
+            amount = currentDeck.length;
+        }
         this.logger.info(`Cards in deck: ${currentDeck.length} dealing ${amount * athletes.length} cards`)
         if(currentDeck.length >= amount * athletes.length) {
             const athleteCards = {}
@@ -176,12 +179,14 @@ export class FirestoreService {
         const queueHand = this.handCollection.doc(CONST.HANDS.QUEUE);
         const currentQueue = (await queueHand.get()).data()?.cardIds || []
         this.logger.info(`There are ${currentQueue.length} cards in the queue, trying to draw a card`)
-        if(currentQueue.length < RULES.QUEUE.LENGTH) {
-            return await this.dealCards([CONST.HANDS.QUEUE], RULES.QUEUE.LENGTH - currentQueue.length);
-        } else {
-            this.logger.info(`Queue hand is full (${currentQueue.length})`)
-            return RESPONSES.ERROR.QUEUE_FULL
-        }
+        // Queue length check is disabled, dealing all
+        // if(currentQueue.length < RULES.QUEUE.LENGTH) {
+        //     return await this.dealCards([CONST.HANDS.QUEUE], RULES.QUEUE.LENGTH - currentQueue.length);
+        // } else {
+        //     this.logger.info(`Queue hand is full (${currentQueue.length})`)
+        //     return RESPONSES.ERROR.QUEUE_FULL
+        // }
+        return await this.dealCards([CONST.HANDS.QUEUE], 0);
     }
 
     async discardFromHand(hand, cards) {
@@ -415,26 +420,28 @@ export class FirestoreService {
         const game = (await gameDoc.get()).data() || {}
         let newCardUses = game.cardUses + amount;
         let newShifts = game.shifts;
-        if(newCardUses >= RULES.QUEUE.CARDS_TO_SHIFT) {
-            newCardUses = newCardUses - RULES.QUEUE.CARDS_TO_SHIFT;
+        // Queue behavior is disabled
+        // Use RULES.QUEUE.CARDS_TO_SHIFT for fixed queue length
+        if(newCardUses >= queue.cardIds.length) {
+            newCardUses = newCardUses - queue.cardIds.length;
             newShifts++;
-            const lastQueueCardId = queue.cardIds[queue.cardIds.length - 1];
-            await this.discardFromHand(CONST.HANDS.QUEUE, [lastQueueCardId])
-            await this.addToHand(CONST.HANDS.DISCARD, [lastQueueCardId])
-            await this.updateCardValue(lastQueueCardId)
+            // const lastQueueCardId = queue.cardIds[queue.cardIds.length - 1];
+            // await this.discardFromHand(CONST.HANDS.QUEUE, [lastQueueCardId])
+            // await this.addToHand(CONST.HANDS.DISCARD, [lastQueueCardId])
+            await this.updateCardValues(queue.cardIds)
 
-            const response = await this.dealQueue()
-            switch (response) {
-                case RESPONSES.ERROR.NOT_ENOUGH_CARDS:
-                    await this.resetDiscardPile()
-                    await this.dealQueue()
-            }
+            // const response = await this.dealQueue()
+            // switch (response) {
+            //     case RESPONSES.ERROR.NOT_ENOUGH_CARDS:
+            //         await this.resetDiscardPile()
+            //         await this.dealQueue()
+            // }
         }
         await gameDoc.update({
             cardUses: newCardUses,
             shifts: newShifts
         })
-        this.logger.info(`Card uses updated to ${newCardUses}, total shifts now ${newShifts}`)
+        this.logger.info(`Card uses updated to ${newCardUses}, total shifts (recalculations) now ${newShifts}`)
     }
 
     async resetDiscardPile() {
@@ -468,18 +475,23 @@ export class FirestoreService {
         });
     }
 
-    async updateCardValue(cardId) {
-        const cardDoc = this.cardCollection.doc(cardId)
-        const card = (await cardDoc.get()).data() || {}
-        const valueDelta = (RULES.CARD_VALUE_STEP * (RULES.QUEUE.CARDS_TO_SHIFT - card.cardUses.queue));
-        await cardDoc.update({
-            value: parseInt(card.value) + valueDelta,
-            cardUses: {
-                ...card.cardUses,
-                queue: 0
-            }
-        })
-        this.logger.info(`Card ${cardId} value changed by ${valueDelta}`)
+    async updateCardValues(cardIds) {
+        if(cardIds.length) {
+            const cardQuery = this.cardCollection.where('id', 'in', cardIds)
+            const cardDocs = await cardQuery.get()
+            cardDocs.forEach( card => {
+                const valueDelta = (RULES.CARD_VALUE_STEP * (1 - card.data().cardUses.queue));
+                const newValue = parseInt(card.data().value) + valueDelta
+                card.ref.update({
+                    value: newValue,
+                    cardUses: {
+                        ...card.data().cardUses,
+                        queue: 0
+                    }
+                })
+                this.logger.info(`Card ${card.data().id} (${card.data().title}) value changed by ${valueDelta}, now ${newValue}`)
+            })
+        }
     }
 
     async createCardFactory(card) {
