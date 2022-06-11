@@ -1,8 +1,11 @@
 export default interface Athlete {
     name: string;
+    firstname: string;
+    lastname: string;
     id: string;
     baseWorkout: BaseWorkout;
     permissions: string[];
+    achievements: string[];
 }
 
 export interface BaseWorkout {

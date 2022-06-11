@@ -4,6 +4,10 @@ import {AuthService} from "../../../../services/auth.service";
 import {ActivatedRoute} from "@angular/router";
 import {LocalStorageService} from "../../../../services/local-storage.service";
 import {PopupService} from "../../../../services/popup.service";
+import {AchievementService} from "../../../../services/achievement.service";
+import {Achievement} from "../../../../interfaces/achievement";
+import {Observable} from "rxjs";
+import Athlete from "../../../../interfaces/athlete";
 
 @Component({
   selector: 'app-profile',
@@ -12,14 +16,18 @@ import {PopupService} from "../../../../services/popup.service";
 })
 export class ProfileComponent implements OnInit {
 
-    public athlete: any = null;
+    public athlete$: Observable<Athlete | null>;
+    public athlete: Athlete | null;
     public athleteId: string = '';
     public self = false;
+
+    public achievements$: Observable<(Achievement | null)[]>;
 
     @ViewChild('logoutPopup', { static: true }) logoutPopup: ElementRef;
 
     constructor(private athleteService: AthleteService,
                 private authService: AuthService,
+                private achievementsService: AchievementService,
                 private route: ActivatedRoute,
                 private popupService: PopupService) {
     }
@@ -27,7 +35,11 @@ export class ProfileComponent implements OnInit {
     ngOnInit(): void {
         this.athleteId = this.route.snapshot.params.athleteId;
         this.self = !this.athleteId || LocalStorageService.athleteId === this.athleteId;
-        this.athlete = this.self ? this.athleteService.me : this.athleteService.getAthlete$(this.athleteId)
+        this.athlete$ = this.self ? this.athleteService.me : this.athleteService.getAthlete$(this.athleteId)
+        this.athlete$.subscribe((athlete) => {
+            this.athlete = athlete;
+            this.achievements$ = this.achievementsService.getAchievements(athlete?.achievements || []);
+        })
     }
 
     openLogoutPopup() {

@@ -34,6 +34,7 @@ import { PopupComponent } from './components/popup/popup.component';
 import { TierBadgeComponent } from './components/tier-badge/tier-badge.component';
 import {SwiperModule} from "swiper/angular";
 import { SwiperComponent } from './components/swiper/swiper.component';
+import { AchievementComponent } from './components/achievement/achievement.component';
 
 const COMPS = [
     InputComponent,
@@ -75,6 +76,7 @@ const MODULES = [
 @NgModule({
     declarations: [
         COMPS,
+        AchievementComponent,
     ],
     imports: [
         CommonModule,
@@ -86,6 +88,7 @@ const MODULES = [
     exports: [
         ...COMPS,
         ...MODULES,
+        AchievementComponent,
     ],
     providers: [
         FileService

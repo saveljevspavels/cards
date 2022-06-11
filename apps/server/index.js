@@ -13,6 +13,7 @@ import ImageService from "./images.service.js";
 import AthleteService from "./athlete.service.js";
 import GameService from "./game.service.js";
 import LoggerService from "./logger.service.js";
+import AchievementService from "./achievement.service.js";
 
 const app = express().use(bodyParser.json(), cors());
 const logger = new LoggerService(app);
@@ -26,4 +27,5 @@ const cardService = new CardService(app, fireStoreService);
 const imageService = new ImageService(app, fireStoreService);
 const athleteService = new AthleteService(app, fireStoreService);
 const gameService = new GameService(app, fireStoreService);
+const achievementService = new AchievementService(app, fireStoreService);
 

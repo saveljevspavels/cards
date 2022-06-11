@@ -17,6 +17,7 @@ import { LogsComponent } from './components/logs/logs.component';
 import { LogItemComponent } from './components/log-item/log-item.component';
 import { AdminParentComponent } from './components/admin-parent/admin-parent.component';
 import { AdminDeckComponent } from './components/admin-deck/admin-deck.component';
+import { AchievementManagementComponent } from './components/achievement-management/achievement-management.component';
 
 
 @NgModule({
@@ -33,7 +34,8 @@ import { AdminDeckComponent } from './components/admin-deck/admin-deck.component
     LogsComponent,
     LogItemComponent,
     AdminParentComponent,
-    AdminDeckComponent
+    AdminDeckComponent,
+    AchievementManagementComponent
   ],
     imports: [
         CommonModule,

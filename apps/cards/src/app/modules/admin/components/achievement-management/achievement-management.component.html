@@ -1,0 +1,31 @@
+<h4>Create new achievement</h4>
+
+<div [formGroup]="form" *ngIf="form">
+    <app-input [label]="'Id (leave blank for creating new achievement)'" [fc]="form.get('id')"></app-input>
+    <app-input [label]="'Tier'" [fc]="form.get('tier')"></app-input>
+    <app-input [label]="'Title'" [fc]="form.get('title')"></app-input>
+    <app-textarea [label]="'Text'" [fc]="form.get('text')"></app-textarea>
+    <app-input [label]="'Value'" [fc]="form.get('value')"></app-input>
+
+    <app-button (buttonClick)="save()" label="Save"></app-button>
+</div>
+
+<div class="mt-4">
+
+    <app-select [options]="athleteOptions"
+                [fc]="athleteControl"
+                [label]="'Athlete (to assign achievement to)'"
+    ></app-select>
+</div>
+
+<div class="mt-4">
+    <div *ngFor="let achievement of achievements | async" class="d-flex align-items-center justify-content-between">
+        <div class="d-flex">
+            <app-achievement [achievement]="achievement"></app-achievement>
+            <app-button (buttonClick)="editAchievement(achievement)" class="ml-4" label="Edit"></app-button>
+            <app-button [disabled]="!athleteControl.value" (buttonClick)="assign(achievement.id)" class="ml-4" label="Assign"></app-button>
+        </div>
+        <app-button (buttonClick)="delete(achievement.id)" class="button--danger" label="Delete"></app-button>
+    </div>
+</div>
+

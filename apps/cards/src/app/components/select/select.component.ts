@@ -15,11 +15,16 @@ export class SelectComponent implements OnInit {
   public label: string;
 
   @Input()
-  public options: {key: any, value: string}[]
+  public options: Option[]
 
   constructor() { }
 
   ngOnInit(): void {
   }
 
+}
+
+export interface Option {
+    key: string,
+    value: any
 }

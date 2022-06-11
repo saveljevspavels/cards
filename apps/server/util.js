@@ -37,12 +37,12 @@ export const getRandomInt = (max) => {
     return Math.floor(Math.random() * max);
 }
 
-export const updateScoreValues = (score, values, cardAmount) => {
+export const updateScoreValues = (score, values, cardAmount, achievementsAmount) => {
   const finalValue = values;
   return {
     value: score.value ? parseInt(score.value + finalValue) : finalValue,
-    activities: score.activities ? parseInt(score.activities + 1) : 1,
-    cardsPlayed: score.cardsPlayed ? parseInt(score.cardsPlayed + cardAmount) : cardAmount
+    cardsPlayed: score.cardsPlayed ? parseInt(score.cardsPlayed + cardAmount) : cardAmount,
+    achievementsAmount: score.achievementsAmount ? parseInt(score.achievementsAmount + achievementsAmount) : achievementsAmount,
   }
 }
 

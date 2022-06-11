@@ -1,0 +1,11 @@
+.achievement {
+    background-color: var(--card-background);
+    position: relative;
+    width: 100%;
+    border: 3px solid black;
+    border-radius: var(--radius);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    overflow: hidden;
+}

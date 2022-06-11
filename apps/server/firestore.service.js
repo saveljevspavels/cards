@@ -21,6 +21,7 @@ export class FirestoreService {
     handCollection = this.db.collection(CONST.COLLECTIONS.HANDS)
     cardCollection = this.db.collection(CONST.COLLECTIONS.CARDS)
     cardFactoryCollection = this.db.collection(CONST.COLLECTIONS.CARD_FACTORIES)
+    achievementCollection = this.db.collection(CONST.COLLECTIONS.ACHIEVEMENTS)
     scoreCollection = this.db.collection(CONST.COLLECTIONS.SCORES)
     gameCollection = this.db.collection(CONST.COLLECTIONS.GAME)
 
@@ -36,7 +37,8 @@ export class FirestoreService {
                 {
                     ...athlete,
                     baseWorkout: RULES.DEFAULT_BASE_WORKOUT,
-                    permissions: ['default']
+                    permissions: ['default'],
+                    achievements: []
                 })
             this.logger.info(`Athlete ${athlete.firstname} ${athlete.lastname} ${athlete.id} saved`)
             return true;
@@ -464,28 +466,44 @@ export class FirestoreService {
         await this.shuffleDeck()
     }
 
-    async updateScore(athleteId, cardIds) {
-        const scoreDoc = this.scoreCollection.doc(athleteId)
+    async updateScore(athleteId, cardIds, achievementIds) {
+        const scoreDoc = this.scoreCollection.doc(athleteId.toString())
         const score = (await scoreDoc.get()).data() || {}
 
-        const playedCards = [];
-        if(cardIds.length) {
-            const cardQuery = this.cardCollection.where('id', 'in', cardIds)
-            const cardDocs = await cardQuery.get()
-            cardDocs.forEach(card => {
-                playedCards.push(card.data())
-            })
+        const calculateTotals = async (ids, collection) => {
+            const items = [];
+            let totalValue = 0;
+            if(ids?.length) {
+                const itemQuery = collection.where('id', 'in', ids)
+                const itemDocs = await itemQuery.get()
+                itemDocs.forEach(item => {
+                    items.push(item.data())
+                })
+                totalValue = items.reduce((acc, item) => acc + parseInt(item.value), 0);
+            }
+            return {
+                amount: items.length || 0,
+                totalValue
+            }
         }
+
+        const cardTotals = calculateTotals(cardIds, this.cardCollection);
+        const achievementTotals = calculateTotals(achievementIds, this.achievementCollection);
+        console.log('cardTotals', (await cardTotals))
+        console.log('achievementTotals', (await achievementTotals))
 
         const newScore = updateScoreValues(
             score,
-            cardIds.length ? playedCards.reduce((acc, card) => acc + parseInt(card.value), 0) : 0,
-            cardIds.length ? playedCards.length : 0
+            (await cardTotals).totalValue + (await achievementTotals).totalValue,
+            (await cardTotals).amount,
+            (await achievementTotals).amount
         )
         await scoreDoc.set({
             ...newScore,
             athleteId: athleteId
         });
+
+        this.logger.info(`Athlete ${athleteId} new score: ${JSON.stringify(newScore)}, was ${JSON.stringify(score)}`)
     }
 
     async updateCardValues(cardIds) {
@@ -642,4 +660,47 @@ export class FirestoreService {
         })
         return await this.dealQueue()
     }
+
+
+    async createAchievement(achievement) {
+        const id = achievement.id || generateId()
+        return this.achievementCollection.doc(id).set({
+            ...achievement,
+            id
+        })
+            .then(() => {
+                this.logger.info(`New achievement ${achievement.title} ${achievement.id} created!`);
+            })
+            .catch((error) => {
+                this.logger.error(`Error writing document: ${error}`);
+            });
+    }
+
+    deleteAchievement(achievementId) {
+        return this.achievementCollection.doc(achievementId.toString()).delete()
+            .then(() => {
+                this.logger.info(`Achievement ${achievementId.toString()} deleted!`); // Too much spam
+            })
+            .catch((error) => {
+                this.logger.error(`Error deleting document: ${error}`);
+            });
+    }
+
+    async assignAchievement(athleteId, achievementId) {
+        const athleteDoc = this.athleteCollection.doc(athleteId.toString())
+        const athleteExists = (await athleteDoc.get()).exists
+        if(athleteExists) {
+            const athlete = (await athleteDoc.get()).data() || {}
+            await athleteDoc.update(
+                {
+                    achievements: [...(athlete.achievements || []), achievementId]
+                })
+            this.logger.info(`Athlete ${athlete.firstname} ${athlete.lastname} got new achievement ${achievementId}`)
+            return true;
+        } else {
+            this.logger.info(`Athlete ${athleteId} doesn't exist`)
+            return false;
+        }
+    }
+
 }

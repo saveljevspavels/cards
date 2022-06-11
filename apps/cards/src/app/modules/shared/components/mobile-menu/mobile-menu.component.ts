@@ -69,6 +69,12 @@ export class MobileMenuComponent implements OnInit {
                 permission: 'admin-panel'
             },
             {
+                label: 'Achievement Management',
+                icon: 'pi pi-fw pi-star',
+                path: '/admin/achievement-management',
+                permission: 'admin-panel'
+            },
+            {
                 label: 'Logs',
                 icon: 'pi pi-fw pi-list',
                 path: '/admin/logs',

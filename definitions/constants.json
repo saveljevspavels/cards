@@ -17,6 +17,7 @@
         "CARDS": "cards",
         "SCORES": "scores",
         "CARD_FACTORIES": "card_factories",
+        "ACHIEVEMENTS": "achievements",
         "GAME": "game"
     },
     "HANDS": {
