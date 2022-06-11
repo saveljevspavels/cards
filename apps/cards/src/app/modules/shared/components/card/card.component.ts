@@ -10,6 +10,7 @@ import {ConstService} from "../../../../services/const.service";
   styleUrls: ['./card.component.scss']
 })
 export class CardComponent implements OnInit {
+    public CONST = ConstService.CONST;
 
     @Input()
     public card: Card;

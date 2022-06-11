@@ -404,13 +404,26 @@ export class FirestoreService {
         const card = (await cardDoc.get()).data() || {}
         let nextTier = card.tier;
         switch (card.progression) {
-            case 'tiers':
+            case CONST.PROGRESSION.TIERS:
+            case CONST.PROGRESSION.CHAIN:
                 nextTier = nextTier + 1;
                 break;
         }
         this.logger.info(`Progressing card ${cardId} to ${card.progression} ${nextTier}`)
         const factory = (await this.cardFactoryCollection.doc(card.factoryId).get()).data() || {}
-        await this.createCardFromFactory(factory, nextTier, card.id);
+
+        switch (card.progression) {
+            case CONST.PROGRESSION.CHAIN:
+                const newCardId = generateId();
+                await cardDoc.update({
+                    progression: CONST.PROGRESSION.FLAT
+                })
+                await this.createCardFromFactory(factory, nextTier, newCardId);
+                await this.addToHand(CONST.HANDS.QUEUE, [newCardId]);
+                break;
+            default:
+                await this.createCardFromFactory(factory, nextTier, card.id);
+        }
     }
 
     async updateQueueUses(amount) {
@@ -525,7 +538,7 @@ export class FirestoreService {
     }
 
     async createCardFromFactory(factory, tier, id = generateId()) {
-        let card = factory.progression === 'flat'
+        let card = factory.progression === CONST.PROGRESSION.FLAT
             ? factory.cards[getRandomInt(Object.keys(factory.cards).length)] // Random card for flat progression
             : factory.cards[tier]
         if(!card) {

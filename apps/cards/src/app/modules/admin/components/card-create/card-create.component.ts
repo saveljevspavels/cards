@@ -75,16 +75,17 @@ export class CardCreateComponent implements OnInit, OnChanges {
         form.get('progression')?.valueChanges.subscribe(progression => {
             switch (progression) {
                 case ConstService.CONST.PROGRESSION.TIERS:
+                case ConstService.CONST.PROGRESSION.CHAIN:
                     for(let i = 0; i < this.cardAmount.value; i++) {
                         this.form.get('cards.' + i + '.tier')?.setValue(i)
                     }
                     break;
-                case 'flat':
+                case ConstService.CONST.PROGRESSION.FLAT:
                     for(let i = 0; i < this.cardAmount.value; i++) {
                         this.form.get('cards.' + i + '.tier')?.setValue(0)
                     }
                     break;
-                case 'none':
+                case ConstService.CONST.PROGRESSION.NONE:
                     this.form.get('cards.0.tier')?.setValue(0)
                     this.cardAmount.setValue(1);
                     break;

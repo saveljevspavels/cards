@@ -52,7 +52,7 @@
             <div class="mb-2">
                 <app-card-counter></app-card-counter>
             </div>
-            <app-collapsible [title]="'Card Queue'" [expanded]="openStates.cardQueue" (stateChange)="saveState($event, 'cardQueue')">
+            <app-collapsible [title]="'Card Deck'" [expanded]="openStates.cardQueue" (stateChange)="saveState($event, 'cardQueue')">
                 <div hiddenContent class="card-queue">
                     <app-card-queue [selectionEnabled]="false"></app-card-queue>
                 </div>

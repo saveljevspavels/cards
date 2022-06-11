@@ -1,4 +1,4 @@
-<div class="card card--tier-{{card.progression === 'tiers' ? card.tier : (card.value | tier)}}"
+<div class="card card--tier-{{card.progression === CONST.PROGRESSION.TIERS || card.progression === CONST.PROGRESSION.CHAIN ? card.tier : (card.value | tier)}}"
      *ngIf="card"
      [ngClass]="{'card--small': small, 'card--submitted': submittedType}"
 >
@@ -34,8 +34,11 @@
         </div>
     </div>
     <div class="card__bonuses" *ngIf="!submittedType">
-        <div class="card__progression" *ngIf="card.cardUses.usesToProgress !== 0; else placeholder">
-            To {{card.progression === 'tiers' ? 'level up' : 'change'}}: {{card.cardUses.progression}}/{{card.cardUses.usesToProgress}}
+        <div class="card__progression" *ngIf="card.cardUses.usesToProgress !== 0 && card.progression !== CONST.PROGRESSION.FLAT; else placeholder">
+            <span *ngIf="card.progression === CONST.PROGRESSION.TIERS">Uses to level up</span>
+            <span *ngIf="card.progression === CONST.PROGRESSION.CHAIN">Uses to spawn new card</span>
+            <span *ngIf="card.progression === CONST.PROGRESSION.FLAT">Uses to change for new card</span>
+            <span> {{card.cardUses.progression}}/{{card.cardUses.usesToProgress}}</span>
         </div>
         <ng-template #placeholder><div></div></ng-template>
         <ng-container *ngTemplateOutlet="cardValue"></ng-container>
