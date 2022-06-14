@@ -1,4 +1,4 @@
-<div class="collapsible" [ngClass]="{'collapsible--inclusive': inclusive, 'collapsible--custom-header': customHeader}">
+<div class="collapsible {{styleClass}}" [ngClass]="{'collapsible--inclusive': inclusive, 'collapsible--custom-header': customHeader}">
     <div class="collapsible__header" (click)="toggle()">
         <h3 class="collapsible__title title" *ngIf="title">{{title}}</h3>
         <ng-content select="[headerContent]"></ng-content>

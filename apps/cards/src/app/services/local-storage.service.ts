@@ -26,4 +26,8 @@ export class LocalStorageService {
     static getState(item: string) {
         return (JSON.parse(localStorage.getItem(item) || 'true'))
     }
+
+    static getValue(item: string) {
+        return localStorage.getItem(item)
+    }
 }

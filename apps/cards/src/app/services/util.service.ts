@@ -1,5 +1,6 @@
 import {Injectable} from "@angular/core";
 import {ConstService} from "./const.service";
+import {LocalStorageService} from "./local-storage.service";
 
 
 @Injectable()
@@ -22,5 +23,19 @@ export class UtilService {
         return properties.filter((item: any, i: number) => {
             return properties.indexOf(item) === i;
         })
+    }
+
+    static saveState(state: string | boolean, item: string) {
+        const obj: any = {};
+        obj[item] = state;
+        LocalStorageService.setObject(obj);
+    }
+
+    static getTier(value: number) {
+        if(value >= ConstService.RULES.LEVELS["0"].min && value <= ConstService.RULES.LEVELS["0"].max) return 0
+        if(value >= ConstService.RULES.LEVELS["1"].min && value <= ConstService.RULES.LEVELS["1"].max) return 1
+        if(value >= ConstService.RULES.LEVELS["2"].min && value <= ConstService.RULES.LEVELS["2"].max) return 2
+        if(value >= ConstService.RULES.LEVELS["3"].min && value <= ConstService.RULES.LEVELS["3"].max) return 3
+        return 0;
     }
 }

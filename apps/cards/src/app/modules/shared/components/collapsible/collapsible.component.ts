@@ -26,6 +26,7 @@ export class CollapsibleComponent implements AfterViewInit {
     @Input() expanded = false;
     @Input() inclusive = false;
     @Input() customHeader = false;
+    @Input() styleClass = '';
 
     @Output() public stateChange = new EventEmitter();
 

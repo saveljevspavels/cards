@@ -1,0 +1,45 @@
+/* Customize the label (the container) */
+.radio {
+    display: flex;
+    align-items: center;
+    position: relative;
+    margin: 4px 0 4px 0;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+
+    &__checkmark {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 30px;
+        height: 30px;
+        &:after {
+            content: url("../../../assets/icons/checkmark-black.svg");
+            padding: 3px;
+            position: relative;
+            top: 3px;
+            height: 30px;
+            width: 30px;
+        }
+    }
+
+    &__checkmark-container {
+        width: 30px;
+        height: 30px;
+        border-radius: 4px;
+        top: 6px;
+        left: 6px;
+        background-color: var(--card-background);
+    }
+
+    input {
+        position: absolute;
+        opacity: 0;
+        cursor: pointer;
+        height: 0;
+        width: 0;
+    }
+}

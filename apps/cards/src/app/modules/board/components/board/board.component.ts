@@ -3,6 +3,7 @@ import {ActivityService} from "../../../../services/activity.service";
 import {BoardService} from "../../../../services/board.service";
 import {Router} from "@angular/router";
 import {LocalStorageService} from "../../../../services/local-storage.service";
+import {UtilService} from "../../../../services/util.service";
 
 @Component({
   selector: 'app-board',
@@ -15,8 +16,13 @@ export class BoardComponent implements OnInit {
     public openStates: any = {
         pendingActivities: true,
         cardQueue: true,
+        cardFilter: true,
         rules: true,
     }
+
+    public filterData: any;
+
+    public saveState = UtilService.saveState;
 
     constructor(private activityService: ActivityService,
                 private boardService: BoardService,
@@ -42,10 +48,8 @@ export class BoardComponent implements OnInit {
         this.activityService.rejectActivity(activityId, 'Cancelled by athlete').subscribe()
     }
 
-    saveState(state: boolean, item: string) {
-        const obj: any = {};
-        obj[item] = state;
-        LocalStorageService.setObject(obj);
+    setFilterData(data: any) {
+        this.filterData = data;
     }
 
 }

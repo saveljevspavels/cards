@@ -1,0 +1,78 @@
+@mixin checkbox($level) {
+    .checkbox__checkmark-container {
+        border: 2px solid var(--color-main-#{$level});
+        width: 36px!important;
+        height: 36px!important;
+        margin-right: 12px;
+    }
+    .checkbox__checkmark {
+        width: 36px!important;
+        height: 36px!important;
+        background-color: var(--color-main-#{$level});
+        border-radius: 4px;
+        &:after {
+            content: url(/assets/icons/checkmark.svg);
+            padding: 9px;
+            position: relative;
+            top: 11px;
+        }
+    }
+
+}
+
+@mixin radio($type) {
+    .radio__checkmark-container {
+        border: 2px solid var(--color-text);
+        width: 36px!important;
+        height: 36px!important;
+        margin-right: 12px;
+        border-radius: 50%;
+    }
+    .radio__checkmark {
+        width: 28px!important;
+        height: 28px!important;
+        background-color: var(--color-#{$type});
+        border-radius: 50%;
+        top: 4px;
+        left: 4px;
+        &:after {
+            content: '';
+            padding: 9px;
+            position: relative;
+            top: 11px;
+        }
+    }
+
+}
+
+.card-filter {
+    padding: var(--padding);
+    .card-filter__checkbox--0 { @include checkbox(0); }
+    .card-filter__checkbox--1 { @include checkbox(1); }
+    .card-filter__checkbox--2 { @include checkbox(2); }
+    .card-filter__checkbox--3 { @include checkbox(3); }
+    .card-filter__radio--all { @include radio('all'); }
+    .card-filter__radio--run { @include radio('run'); }
+    .card-filter__radio--walk { @include radio('walk'); }
+    .card-filter__radio--ride { @include radio('ride'); }
+    .card-filter__radio--other { @include radio('other'); }
+}
+
+.card-filter-collapsible {
+    .collapsible {
+        &__header {
+            background-color: var(--color-blue);
+            img {
+                display: none;
+            }
+        }
+        &__icon {
+            background-image: url(/assets/icons/filter.svg);
+            height: 24px;
+            width: 24px;
+        }
+        &__title {
+            color: white;
+        }
+    }
+}

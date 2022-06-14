@@ -1,5 +1,5 @@
-<div class="card card--tier-{{card.progression === CONST.PROGRESSION.TIERS || card.progression === CONST.PROGRESSION.CHAIN ? card.tier : (card.value | tier)}}"
-     *ngIf="card"
+<div class="card card--tier-{{(card.value | tier)}}"
+     *ngIf="card && visible"
      [ngClass]="{'card--small': small, 'card--submitted': submittedType}"
 >
     <div class="card__id">

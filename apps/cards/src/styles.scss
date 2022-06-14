@@ -15,7 +15,7 @@
     --background: #EDEAE4;
     --popup-background: #00000066;
     --card-shadow: 2px 5px 7px rgba(0, 0, 0, 0.1);
-    --color-text: #000;
+    --color-text: #0F0F31;
     --color-disabled: #ddd;
     --color-text-lighter: #0F0F3180;
     --color-text-light: #00000080;
@@ -29,6 +29,12 @@
     --color-blue-light: #494ADB66;
     --color-pink: #B754F3;
     --color-danger: var(--color-main-2);
+
+    --color-run: var(--color-main-2);
+    --color-walk: var(--color-main-0);
+    --color-ride: var(--color-blue);
+    --color-other: var(--color-pink);
+    --color-all: var(--color-main-1);
 
     --padding: 14px 14px 14px 14px;
     --padding-value: 14px;
@@ -147,19 +153,28 @@ body {
 
 .activity-type {
     &--run {
-        color: var(--color-main-2)!important;
-        fill: var(--color-main-2)!important;
+        color: var(--color-run)!important;
+        fill: var(--color-run)!important;
     }
     &--walk {
-        color: var(--color-main-0)!important;
-        fill: var(--color-main-0)!important;
+        color: var(--color-walk)!important;
+        fill: var(--color-walk)!important;
     }
     &--ride {
-        color: var(--color-blue)!important;
-        fill: var(--color-blue)!important;
+        color: var(--color-ride)!important;
+        fill: var(--color-ride)!important;
     }
     &--other {
-        color: var(--color-pink);
-        fill: var(--color-pink)!important;
+        color: var(--color-other);
+        fill: var(--color-other)!important;
+    }
+    &--all {
+        color: var(--color-all);
+        fill: var(--color-all)!important;
+        svg {
+            margin-top: 6px;
+            width: 32px;
+            height: 32px;
+        }
     }
 }

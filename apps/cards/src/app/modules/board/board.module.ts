@@ -16,6 +16,7 @@ import { CounterItemComponent } from './components/card-counter/counter-item/cou
 import { BoardParentComponent } from './components/board-parent/board-parent.component';
 import { SubmittingActivityComponent } from './components/submitting-activity/submitting-activity.component';
 import {CounterLineComponent} from "./components/counter-line/counter-line.component";
+import { CardFilterComponent } from './components/card-filter/card-filter.component';
 
 @NgModule({
     declarations: [
@@ -32,6 +33,7 @@ import {CounterLineComponent} from "./components/counter-line/counter-line.compo
         CounterItemComponent,
         BoardParentComponent,
         SubmittingActivityComponent,
+        CardFilterComponent,
     ],
     imports: [
         CommonModule,

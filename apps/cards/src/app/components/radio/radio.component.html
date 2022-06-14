@@ -1,0 +1,7 @@
+<label class="radio">
+    <span class="radio__checkmark-container">
+        <input type="radio" [formControl]="fc" name="{{name}}" value="{{value}}" id="{{value}}">
+        <span *ngIf="fc.value === value" class="radio__checkmark"></span>
+    </span>
+    <span>{{label}}</span>
+</label>

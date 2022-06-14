@@ -54,7 +54,19 @@
             </div>
             <app-collapsible [title]="'Card Deck'" [expanded]="openStates.cardQueue" (stateChange)="saveState($event, 'cardQueue')">
                 <div hiddenContent class="card-queue">
-                    <app-card-queue [selectionEnabled]="false"></app-card-queue>
+                    <div class="mb-2 mt-2">
+                        <app-collapsible [expanded]="openStates.cardFilter"
+                                         [title]="'Card Filter'"
+                                         (stateChange)="saveState($event, 'cardFilter')"
+                                         [inclusive]="true"
+                                         styleClass="card-filter-collapsible"
+                        >
+                            <div hiddenContent>
+                                <app-card-filter (filterChange)="setFilterData($event)"></app-card-filter>
+                            </div>
+                        </app-collapsible>
+                    </div>
+                    <app-card-queue [selectionEnabled]="false" [filterData]="filterData"></app-card-queue>
                 </div>
             </app-collapsible>
         </div>

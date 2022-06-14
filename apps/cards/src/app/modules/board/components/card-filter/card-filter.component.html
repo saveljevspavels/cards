@@ -1,0 +1,28 @@
+<div class="card-filter">
+    <p class="text-small light">Level:</p>
+    <div class="row">
+        <div *ngFor="let level of levels; let i = index;" class="col-md-6 card-filter__checkbox--{{i}}">
+            <div class="d-flex align-items-center">
+                <app-checkbox [fc]="form.get('filterLevel_' + i)"></app-checkbox>
+                <div>
+                    <p class="m-0">{{level.title}}</p>
+                    <p class="text-small m-0">{{level.description}}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <p class="text-small light">Activities:</p>
+    <div class="row">
+        <div *ngFor="let activity of activities;" class="col-md-6 card-filter__radio--{{activity.key}}">
+            <div class="d-flex align-items-center">
+                <app-radio [fc]="form.get('filterActivity')" [name]="'filterActivity'" [value]="activity.key"></app-radio>
+                <div class="d-flex align-items-center">
+                    <span class="activity-type--{{activity.key}} mr-1">
+                        <app-svg [icon]="'activity_' + activity.key"></app-svg>
+                    </span>
+                    <p class="m-0">{{activity.title}}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
