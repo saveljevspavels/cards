@@ -489,8 +489,6 @@ export class FirestoreService {
 
         const cardTotals = calculateTotals(cardIds, this.cardCollection);
         const achievementTotals = calculateTotals(achievementIds, this.achievementCollection);
-        console.log('cardTotals', (await cardTotals))
-        console.log('achievementTotals', (await achievementTotals))
 
         const newScore = updateScoreValues(
             score,
@@ -514,7 +512,7 @@ export class FirestoreService {
                 const valueDelta = (RULES.CARD_VALUE_STEP * (1 - card.data().cardUses.queue));
                 const newValue = parseInt(card.data().value) + valueDelta
                 card.ref.update({
-                    value: newValue,
+                    value: newValue < RULES.CARD_VALUE_STEP ? RULES.CARD_VALUE_STEP : newValue,
                     cardUses: {
                         ...card.data().cardUses,
                         queue: 0

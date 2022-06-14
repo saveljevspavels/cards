@@ -1,0 +1,27 @@
+@mixin background($number) {
+    background-color: var(--color-main-#{$number});
+}
+
+.counter-line {
+    padding: var(--padding);
+    background-color: var(--acticity-background);
+    border-radius: var(--radius);
+    &__indicator {
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        height: 8px;
+        border: 2px solid black;
+        border-radius: 5px;
+    }
+    &__indicator-fill {
+        height: 100%;
+        width: 0;
+        &--0 { @include background(0); }
+        &--1 { @include background(1); }
+        &--2 { @include background(2); }
+        &--3 { @include background(3); }
+        &--4 { @include background(4); }
+    }
+}

@@ -22,7 +22,6 @@ export class RulesComponent implements OnInit {
         'Normal',
         'Hard',
         'Very Hard',
-        'Interesting',
     ]
 
     constructor() { }

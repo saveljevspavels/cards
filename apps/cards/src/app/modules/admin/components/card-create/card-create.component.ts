@@ -17,7 +17,7 @@ export class CardCreateComponent implements OnInit, OnChanges {
     @Input()
     public selectedCardFactory: any;
 
-    public cardAmount = new FormControl(5, [Validators.min(1)])
+    public cardAmount = new FormControl(4, [Validators.min(1)])
     public validatorAmount = new FormControl(0, [Validators.min(0)])
     public form: FormGroup;
     public imageControl = new FormControl([]);

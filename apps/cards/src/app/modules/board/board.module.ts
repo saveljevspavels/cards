@@ -15,6 +15,7 @@ import { CardCounterComponent } from './components/card-counter/card-counter.com
 import { CounterItemComponent } from './components/card-counter/counter-item/counter-item.component';
 import { BoardParentComponent } from './components/board-parent/board-parent.component';
 import { SubmittingActivityComponent } from './components/submitting-activity/submitting-activity.component';
+import {CounterLineComponent} from "./components/counter-line/counter-line.component";
 
 @NgModule({
     declarations: [
@@ -27,6 +28,7 @@ import { SubmittingActivityComponent } from './components/submitting-activity/su
         CardQueueComponent,
         RulesComponent,
         CardCounterComponent,
+        CounterLineComponent,
         CounterItemComponent,
         BoardParentComponent,
         SubmittingActivityComponent,
