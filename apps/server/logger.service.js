@@ -28,8 +28,8 @@ export default class LoggerService {
                 )
             ),
             transports: [
-                new winston.transports.Console(),
-                new winston.transports.File({ filename: 'log.log', timestamp: true })
+                // new winston.transports.Console(),
+                // new winston.transports.File({ filename: 'log.log', timestamp: true })
             ]
         });
     }
