@@ -16,6 +16,13 @@ export default class LoggerService {
             }
         });
 
+        const transports = [
+            new winston.transports.File({ filename: 'log.log', timestamp: true })
+        ]
+        if(process.env.NODE_ENV !== 'prod') {
+            transports.push(new winston.transports.Console())
+        }
+
         return winston.createLogger({
             format: winston.format.combine(
                 winston.format.printf((info) =>
@@ -27,10 +34,7 @@ export default class LoggerService {
                     }) + ','
                 )
             ),
-            transports: [
-                // new winston.transports.Console(),
-                new winston.transports.File({ filename: 'log.log', timestamp: true })
-            ]
+            transports
         });
     }
 }
