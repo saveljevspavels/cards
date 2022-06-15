@@ -9,7 +9,8 @@
     "start:cards:prod": "ng serve cards --port=4600 --disable-host-check --prod",
     "start:server": "node --experimental-json-modules ./apps/server/index.js",
     "start:server:prod": "set NODE_ENV=prod&& node --experimental-json-modules ./apps/server/index.js",
-    "restart:server": "sudo kill -9 `sudo lsof -t -i:3000` && npm run start:server:prod",
+    "server": "export NODE_ENV=prod&& node --experimental-json-modules ./apps/server/index.js",
+    "restart:server": "sudo kill -9 `sudo lsof -t -i:3000` && npm run server",
     "build": "ng build --base-href http://kurkudos.lv/",
     "test": "ng test",
     "lint": "nx workspace-lint && ng lint",
@@ -45,6 +46,7 @@
     "@nrwl/angular": "12.5.7",
     "body-parser": "^1.19.0",
     "cors": "^2.8.5",
+    "cross-env": "^7.0.3",
     "express": "^4.17.1",
     "express-winston": "^4.2.0",
     "firebase": "^8.7.0",
@@ -81,8 +83,8 @@
     "jest": "27.0.3",
     "jest-preset-angular": "9.0.3",
     "prettier": "^2.3.1",
-    "typescript": "~4.2.4",
     "ts-jest": "27.0.3",
-    "ts-node": "~9.1.1"
+    "ts-node": "~9.1.1",
+    "typescript": "~4.2.4"
   }
 }
