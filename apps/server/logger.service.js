@@ -16,6 +16,9 @@ export default class LoggerService {
             }
         });
 
+        console.log('process.env.NODE_ENV', process.env.NODE_ENV)
+        console.log('equals', process.env.NODE_ENV === 'prod')
+
         const transports = [
             new winston.transports.File({ filename: 'log.log', timestamp: true })
         ]
