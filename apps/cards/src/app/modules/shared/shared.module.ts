@@ -32,7 +32,6 @@ import { SvgTemplatesComponent } from './components/svg-templates/svg-templates.
 import { ScoreItemComponent } from './components/scores/score-item/score-item.component';
 import { PopupComponent } from './components/popup/popup.component';
 import { TierBadgeComponent } from './components/tier-badge/tier-badge.component';
-import {SwiperModule} from "swiper/angular";
 import { SwiperComponent } from './components/swiper/swiper.component';
 import { AchievementComponent } from './components/achievement/achievement.component';
 import {RadioComponent} from "../../components/radio/radio.component";
@@ -72,7 +71,6 @@ const MODULES = [
     InputTextareaModule,
     TabMenuModule,
     ObserversModule,
-    SwiperModule
 ]
 
 @NgModule({

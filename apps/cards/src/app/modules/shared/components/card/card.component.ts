@@ -69,7 +69,7 @@ export class CardComponent implements OnInit, OnChanges {
     }
 
     resolveActivityTypes(validators: Validator[]): string {
-        return (validators.find(validator => validator.property === ConstService.CONST.ACTIVITY_PROPERTIES.TYPE)?.formula) || '';
+        return (validators?.find(validator => validator.property === ConstService.CONST.ACTIVITY_PROPERTIES.TYPE)?.formula) || '';
     }
 
 }

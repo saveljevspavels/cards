@@ -27,6 +27,22 @@ export class FirestoreService {
 
     constructor(logger) {
         this.logger = logger;
+        Object.getOwnPropertyNames(FirestoreService.prototype).forEach(method => {
+            if(['constructor', 'errorHandlerWrap'].indexOf(method) === -1) {
+                this[method] = this.errorHandlerWrap(method, this[method]);
+            }
+        })
+    }
+
+    errorHandlerWrap(methodName, method) {
+        return async (...args) => {
+            try {
+                return await method.bind(this).call(this, ...args)
+            } catch (err) {
+                this.logger.error(methodName, err)
+            }
+
+        }
     }
 
     async saveAthlete(athlete) {
@@ -394,7 +410,7 @@ export class FirestoreService {
                         queue: card.data().cardUses.queue + 1,
                     }
                 })
-                if(card.data().progression !== 'none' && newProgression >= card.data().cardUses.usesToProgress) {
+                if(card.data().progression !== CONST.PROGRESSION.NONE && newProgression >= card.data().cardUses.usesToProgress) {
                     this.progressCard(card.data().id)
                 }
             })
@@ -418,7 +434,7 @@ export class FirestoreService {
             case CONST.PROGRESSION.CHAIN:
                 const newCardId = generateId();
                 await cardDoc.update({
-                    progression: CONST.PROGRESSION.FLAT
+                    progression: CONST.PROGRESSION.NONE
                 })
                 await this.createCardFromFactory(factory, nextTier, newCardId);
                 await this.addToHand(CONST.HANDS.QUEUE, [newCardId]);
@@ -560,6 +576,10 @@ export class FirestoreService {
         if(!card) {
             this.logger.error(`Card ${factory.title} tier ${tier} not defined`)
             return;
+        }
+        if ((factory.progression === CONST.PROGRESSION.CHAIN || factory.progression === CONST.PROGRESSION.TIERS) && Object.keys(factory.cards).length === parseInt(tier) + 1) {
+            this.logger.info(`Card ${factory.title} tier ${tier} is final, switching progression to ${CONST.PROGRESSION.NONE}`)
+            factory.progression = CONST.PROGRESSION.NONE;
         }
         card = {
             id,

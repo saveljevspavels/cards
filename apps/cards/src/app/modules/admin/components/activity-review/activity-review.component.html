@@ -2,15 +2,13 @@
   <h3>Submitted Activities</h3>
   <div *ngFor="let activity of submittedActivities | async; let i = index" class="activity-review__activities">
     <app-activity
-        [selection]="true"
-        [(ngModel)]="selectedCards[i]"
         [activity]="activity"
         [showComments]="true"
         [showImages]="true"
         [showAthlete]="true"
     ></app-activity>
     <app-button (buttonClick)="rejectActivity(activity.id)" [disabled]="!rejectionComment.value" label="Reject"></app-button>
-    <app-button (buttonClick)="approveActivity(activity.id, selectedCards[i])" label="Approve"></app-button>
+    <app-button (buttonClick)="approveActivity(activity.id, activity.gameData.cardIds)" label="Approve"></app-button>
   </div>
   <app-textarea [label]="'Rejection Comment'" [fc]="rejectionComment"></app-textarea>
 </div>
