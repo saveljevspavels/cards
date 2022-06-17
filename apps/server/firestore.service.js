@@ -1,5 +1,5 @@
 import firebase from "firebase";
-import {generateId, getRandomInt, normalizeActivityType, updateScoreValues} from "./util.js";
+import {generateId, getRandomInt, normalizeActivityType, tierToRoman, updateScoreValues} from "./util.js";
 import CONST from "../../definitions/constants.json";
 import RULES from "../../definitions/rules.json";
 import {RESPONSES} from "./response-codes.js";
@@ -577,16 +577,17 @@ export class FirestoreService {
             this.logger.error(`Card ${factory.title} tier ${tier} not defined`)
             return;
         }
+        let newProgression = factory.progression;
         if ((factory.progression === CONST.PROGRESSION.CHAIN || factory.progression === CONST.PROGRESSION.TIERS) && Object.keys(factory.cards).length === parseInt(tier) + 1) {
             this.logger.info(`Card ${factory.title} tier ${tier} is final, switching progression to ${CONST.PROGRESSION.NONE}`)
-            factory.progression = CONST.PROGRESSION.NONE;
+            newProgression = CONST.PROGRESSION.NONE;
         }
         card = {
             id,
-            title: factory.title,
+            title: factory.title + ((factory.progression === CONST.PROGRESSION.CHAIN || factory.progression === CONST.PROGRESSION.TIERS) ? ' ' + tierToRoman(tier) : ''),
             image: factory.image || '',
             factoryId: factory.id,
-            progression: factory.progression,
+            progression: newProgression,
             manualValidation: factory.manualValidation,
             tier,
             ...card,

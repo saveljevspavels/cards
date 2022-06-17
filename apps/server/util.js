@@ -49,3 +49,13 @@ export const updateScoreValues = (score, values, cardAmount, achievementsAmount)
 export const normalizeActivityType = (type) => {
     return Object.values(CONST.ACTIVITY_TYPES).find((activityType) => type.toUpperCase().indexOf(activityType.toUpperCase()) !== -1) || CONST.ACTIVITY_TYPES.OTHER
 }
+
+export const tierToRoman = (number) => {
+    switch (number) {
+        case 0: return 'I';
+        case 1: return 'II';
+        case 2: return 'III';
+        case 3: return 'IV';
+        case 4: return 'V';
+    }
+}
