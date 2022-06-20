@@ -66,7 +66,6 @@ export default class ClientService {
     }
 
     calculateBaseWorkout(accessToken, athleteId) {
-        console.log(accessToken, athleteId)
         https.get(this.getActivityOptions(accessToken), response => {
             parseResponse(response, {}, (reqBody, responseData) => {
                 const baseWorkoutPatch = {};

@@ -106,7 +106,7 @@ export class FirestoreService {
             this.logger.info(`Command ${command.type} added for ${athleteId}!`);
         })
         .catch((error) => {
-            console.error(`Error writing document: ${error}`);
+            this.logger.error(`Error writing document: ${error}`);
         });
     }
 

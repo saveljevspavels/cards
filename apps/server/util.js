@@ -23,7 +23,6 @@ export const parseResponse = (response, reqBody, callback) => {
             try {
                 responseData = JSON.parse(responseData);
             } catch (error) {
-                console.error('Error parsing response', error)
                 res.status(500).send(error);
                 callback(reqBody, [])
             }
