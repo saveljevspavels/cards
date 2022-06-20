@@ -10,7 +10,7 @@ export default class AchievementService {
         });
 
         app.post(`${CONST.API_PREFIX}delete-achievement`, (req, res) => {
-            fireStoreService.deleteAchievement(req.body)
+            fireStoreService.deleteAchievement(req.body.achievementId)
             res.status(200).send({});
         });
 

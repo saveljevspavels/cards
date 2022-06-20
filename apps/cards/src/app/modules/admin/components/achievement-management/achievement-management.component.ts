@@ -1,5 +1,4 @@
 import {Component, OnInit} from '@angular/core';
-import {UtilService} from "../../../../services/util.service";
 import {ConstService} from "../../../../services/const.service";
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {FileService} from "../../../../services/file.service";
@@ -20,10 +19,12 @@ export class AchievementManagementComponent implements OnInit {
     public form: FormGroup;
     public athleteOptions: Option[] = [];
     public athleteControl = new FormControl('');
+    public imageControl = new FormControl([]);
 
     constructor(private formBuilder: FormBuilder,
                 private achievementService: AchievementService,
-                private athleteService: AthleteService) { }
+                private athleteService: AthleteService,
+                private fileService: FileService) { }
 
     ngOnInit(): void {
         this.form = this.initForm();
@@ -37,8 +38,12 @@ export class AchievementManagementComponent implements OnInit {
         })
     }
 
-    save() {
-        this.achievementService.createAchievement(this.form.value).subscribe(() => {
+    async save() {
+        const image = this.imageControl.value.length ? (await this.fileService.uploadImages(this.imageControl.value))[0] : this.form.value?.image;
+        this.achievementService.createAchievement({
+            ...this.form.value,
+            image: image ? image : null
+        }).subscribe(() => {
             this.form = this.initForm()
         })
     }
@@ -58,10 +63,14 @@ export class AchievementManagementComponent implements OnInit {
             text: ['', [Validators.required]],
             value: [0, [Validators.required]],
             tier: [0, [Validators.required]],
+            image: ['', [Validators.required]],
         })
     }
 
     editAchievement(achievement: Achievement) {
-        this.form.setValue(achievement);
+        this.form.patchValue({
+            ...achievement,
+            image: achievement.image || ''
+        });
     }
 }

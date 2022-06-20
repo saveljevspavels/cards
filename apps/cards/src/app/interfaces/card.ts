@@ -2,7 +2,7 @@ import {Progression} from "./card-factory";
 
 export default interface Card {
     title: string;
-    image: '';
+    image: string;
     tier: number;
     id: string;
     description: string;

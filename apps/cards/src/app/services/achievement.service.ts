@@ -8,6 +8,7 @@ import Hand from "../interfaces/hand";
 import {ConstService} from "./const.service";
 import {Achievement} from "../interfaces/achievement";
 import {filter, map} from "rxjs/operators";
+import {UtilService} from "./util.service";
 
 @Injectable({
   providedIn: 'root'
@@ -27,8 +28,12 @@ export class AchievementService {
     getAchievements(achievementIds: string[]): Observable<(Achievement | null)[]> {
         return this.achievements.pipe(
             filter((achievements) => !!achievements.length),
-            map((achievements) =>
-                achievementIds.map((achievementId: string) => achievements.find(achievement => achievement.id === achievementId) || null)
+            map((achievements) => {
+                return UtilService.sortByProp(achievements.map(item => {
+                    item.timesCompleted = achievementIds.filter(id => id === item.id).length;
+                    return item;
+                }))
+            }
         ))
     }
 
@@ -37,7 +42,9 @@ export class AchievementService {
     }
 
     deleteAchievement(achievementId: string) {
-        return this.http.post(`${environment.baseBE}/delete-achievement`, achievementId)
+        return this.http.post(`${environment.baseBE}/delete-achievement`, {
+            achievementId
+        })
     }
 
     assignAchievement(athleteId: string, achievementId: string) {

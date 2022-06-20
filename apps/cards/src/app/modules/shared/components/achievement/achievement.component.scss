@@ -1,11 +1,21 @@
 .achievement {
-    background-color: var(--card-background);
+    height: 60px;
     position: relative;
     width: 100%;
-    border: 3px solid black;
-    border-radius: var(--radius);
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     overflow: hidden;
+    &--not-completed {
+        filter: grayscale(1);
+    }
+    &__content {
+        height: 100%;
+    }
+    &__logo {
+        img {
+            width: 60px;
+            height: 60px;
+        }
+    }
 }

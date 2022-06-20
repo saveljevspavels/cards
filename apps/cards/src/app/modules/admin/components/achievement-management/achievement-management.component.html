@@ -7,6 +7,12 @@
     <app-textarea [label]="'Text'" [fc]="form.get('text')"></app-textarea>
     <app-input [label]="'Value'" [fc]="form.get('value')"></app-input>
 
+    <img style="max-height: 100px; max-width: 100px;" src="{{form.get('image')?.value}}">
+
+    <app-image-upload [multiple]="false"
+                      [formControl]="imageControl"
+    ></app-image-upload>
+
     <app-button (buttonClick)="save()" label="Save"></app-button>
 </div>
 

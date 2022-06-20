@@ -1,19 +1,22 @@
-<div class="achievement">
-    <div class="achievement__body pt-1 pb-1 pl-3 pr-3 d-flex align-items-center">
+<div class="achievement" [ngClass]="{'achievement--not-completed': achievement.timesCompleted === 0}">
+    <div class="achievement__body pl-3 pr-3 d-flex">
         <div class="achievement__logo mr-4">
-            logo here {{achievement.tier}}
+            <img src="{{achievement.image}}">
         </div>
-        <div class="justify-content-between d-flex flex-grow-1 align-items-center">
-            <div>
-                <div class="achievement__title text-bold">
+        <div class="d-flex flex-grow-1 align-content-between flex-column">
+            <div class="d-flex justify-content-between">
+                <div class="achievement__title text-medium text-bold">
                     {{achievement.title}}
                 </div>
-                <div class="achievement__text">
-                    {{achievement.text}}
+                <div class="achievement__value text-medium text-bold color--tier-{{achievement.value | tier}}">
+                    {{achievement.value}}<span class=""> points</span>
                 </div>
             </div>
-            <div class="achievement__value text-bold ml-4">
-                {{achievement.value}}<span class=""> points</span>
+            <div class="achievement__text text-small light flex-grow-1 align-items-center d-flex justify-content-between">
+                <div>
+                    {{achievement.text}}
+                </div>
+                <div class="text-medium" *ngIf="achievement?.timesCompleted > 1">x{{achievement.timesCompleted}}</div>
             </div>
         </div>
     </div>

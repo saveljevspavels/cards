@@ -4,4 +4,6 @@ export interface Achievement {
     text: string;
     value: number;
     tier: number;
+    image: string;
+    timesCompleted?: number;
 }
