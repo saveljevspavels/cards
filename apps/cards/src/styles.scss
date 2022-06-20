@@ -55,6 +55,12 @@ body {
     background-color: var(--background);
 }
 
+hr {
+    border: none;
+    height: 1px;
+    background-color: #00000030;
+}
+
 .no-scroll {
     overflow: hidden;
 }

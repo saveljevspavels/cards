@@ -21,7 +21,7 @@ export class AchievementService {
     constructor(private db: AngularFirestore,
                 private http: HttpClient) {
         this.achievementCollection.valueChanges().subscribe((achievements: any[]) => {
-            this.achievements.next(achievements)
+            this.achievements.next(UtilService.sortByProp(achievements))
         });
     }
 
@@ -29,10 +29,10 @@ export class AchievementService {
         return this.achievements.pipe(
             filter((achievements) => !!achievements.length),
             map((achievements) => {
-                return UtilService.sortByProp(achievements.map(item => {
+                return achievements.map(item => {
                     item.timesCompleted = achievementIds.filter(id => id === item.id).length;
                     return item;
-                }))
+                })
             }
         ))
     }
