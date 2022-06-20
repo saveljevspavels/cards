@@ -28,7 +28,7 @@ export class CounterLineComponent implements OnInit {
             this.gameData,
             this.deckService.cardQueue
         ]).subscribe(([gameData, deck]) => {
-            this.indicatorData = this.generateIndicatorData(deck.cardIds.length, gameData?.cardUses || 0)
+            this.indicatorData = this.generateIndicatorData(deck.length, gameData?.cardUses || 0)
         })
     }
 

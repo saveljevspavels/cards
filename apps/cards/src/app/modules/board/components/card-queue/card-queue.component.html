@@ -1,4 +1,4 @@
-<div *ngIf="(cardQueue | async)?.cardIds?.length;">
+<div *ngIf="(cardQueue | async)?.length;">
     <div class="hand__cards">
         <app-selection-wrapper
             [singleSelection]="true"
@@ -6,11 +6,11 @@
             [template]="cardTemplate"
             [selfSelectable]="true"
             [selectionEnabled]="selectionEnabled"
-            [dataItems]="(cardQueue | async).cardIds"
+            [dataItems]="(cardQueue | async)"
         >
             <ng-template #cardTemplate let-dataItem="dataItem">
                 <app-card
-                    [cardId]="dataItem"
+                    [card]="dataItem"
                     [filterData]="filterData"
                 ></app-card>
             </ng-template>

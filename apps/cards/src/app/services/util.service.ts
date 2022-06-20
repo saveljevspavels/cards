@@ -38,4 +38,12 @@ export class UtilService {
         if(value >= ConstService.RULES.LEVELS["3"].min && value <= ConstService.RULES.LEVELS["3"].max) return 3
         return 0;
     }
+
+    static sortByProp(array: any[], prop = 'title'){
+        return array.sort((a, b) => {
+            const textA = a[prop].toUpperCase();
+            const textB = b[prop].toUpperCase();
+            return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
+        });
+    }
 }

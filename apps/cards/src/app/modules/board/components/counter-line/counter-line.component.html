@@ -1,6 +1,6 @@
 <div class="counter-line">
-    <h4 class="title">Cards played: {{(gameData | async)?.cardUses}}/{{(deckService.cardQueue | async)?.cardIds.length}}</h4>
-    <p class="text-small light m-0">Each time athletes collectively play {{(deckService.cardQueue | async)?.cardIds.length}} cards, card values are adjusted</p>
+    <h4 class="title">Cards played: {{(gameData | async)?.cardUses}}/{{(deckService.cardQueue | async)?.length}}</h4>
+    <p class="text-small light m-0">Each time athletes collectively play {{(deckService.cardQueue | async)?.length}} cards, card values are adjusted</p>
     <div class="counter-line__indicator mt-2">
         <div class="counter-line__indicator-fill counter-line__indicator-fill--{{indicatorData.stage}}" [ngStyle]="{'width.%': indicatorData.width}"></div>
     </div>
