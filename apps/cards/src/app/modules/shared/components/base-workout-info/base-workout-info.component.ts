@@ -1,5 +1,7 @@
 import {Component, Input, OnInit} from '@angular/core';
 import * as RULES from 'definitions/rules.json';
+import {ConstService} from "../../../../services/const.service";
+import {UtilService} from "../../../../services/util.service";
 
 @Component({
     selector: 'app-base-workout-info',
@@ -8,9 +10,10 @@ import * as RULES from 'definitions/rules.json';
 })
 export class BaseWorkoutInfoComponent implements OnInit {
 
-    rules = RULES;
+    noSort = UtilService.noSort;
+    rules = ConstService.RULES;
 
-    activityTypes: string[] = [];
+    activityTypes = ConstService.CONST.ACTIVITY_TYPES;
 
     @Input() public showPersonalBests = true;
     @Input() public baseWorkout: any;

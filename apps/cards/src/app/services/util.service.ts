@@ -6,6 +6,8 @@ import {LocalStorageService} from "./local-storage.service";
 @Injectable()
 export class UtilService {
 
+    static noSort = () => 0;
+
     static generateId = () => {
         return Math.random().toString(36).substring(7);
     }

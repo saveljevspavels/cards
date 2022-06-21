@@ -1,25 +1,25 @@
 <div class="base-workout pt-0" *ngIf="baseWorkout">
-    <ng-container *ngFor="let type of baseWorkout | keyvalue">
-        <div class="text-bold text-blue mt-3 d-flex align-items-center activity-type--{{type.key}}">
-            <app-svg [icon]="'activity_' + type.key"></app-svg>
-            <span class="pl-1">{{type.key + '' | titlecase}}:</span>
+    <ng-container *ngFor="let type of activityTypes | keyvalue: noSort">
+        <div class="text-bold text-blue mt-3 d-flex align-items-center activity-type--{{type.value}}">
+            <app-svg [icon]="'activity_' + type.value"></app-svg>
+            <span class="pl-1">{{type.value + '' | titlecase}}:</span>
         </div>
-        <div class="stat-item" *ngIf="type.value.distance">
+        <div class="stat-item" *ngIf="baseWorkout[type.value].distance">
             <div class="stat-item__property">Base workout distance:</div>
-            <div class="stat-item__value">{{type.value.distance | distance}}</div>
+            <div class="stat-item__value">{{baseWorkout[type.value].distance | distance}}</div>
         </div>
-        <div class="stat-item" *ngIf="type.value.average_speed">
+        <div class="stat-item" *ngIf="baseWorkout[type.value].average_speed">
             <div class="stat-item__property">Base workout pace:</div>
-            <div class="stat-item__value">{{type.value.average_speed | pace}}</div>
+            <div class="stat-item__value">{{baseWorkout[type.value].average_speed | pace}}</div>
         </div>
         <ng-container *ngIf="showPersonalBests">
             <div class="text-bold text-small mt-3">
                 Personal Best:
             </div>
             <ng-container *ngFor="let pb of personalBests">
-                <div class="stat-item" *ngIf="type.value[pb.property]">
+                <div class="stat-item" *ngIf="baseWorkout[type.value][pb.property]">
                     <div class="stat-item__property">{{pb.title}}:</div>
-                    <div class="stat-item__value">{{type.value[pb.property] | time}}{{type.value[pb.property] === rules.DEFAULT_BASE_WORKOUT[type.key][pb.property] ? '*' : ''}}</div>
+                    <div class="stat-item__value">{{baseWorkout[type.value][pb.property] | time}}{{baseWorkout[type.value][pb.property] === rules.DEFAULT_BASE_WORKOUT[type.value][pb.property] ? '*' : ''}}</div>
                 </div>
             </ng-container>
         </ng-container>

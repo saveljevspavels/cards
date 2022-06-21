@@ -16,7 +16,9 @@
         "walk": {
             "distance": 6000
         },
-        "other": {}
+        "other": {
+            "distance": 10000
+        }
     },
     "LEVELS": {
         "0": {

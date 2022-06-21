@@ -15,6 +15,7 @@ import {ConstService} from "../../../../services/const.service";
     encapsulation: ViewEncapsulation.None
 })
 export class ValidatorComponent implements OnInit {
+    noSort = UtilService.noSort;
     public CONST = ConstService.CONST;
 
     @Input() validator: Validator;
