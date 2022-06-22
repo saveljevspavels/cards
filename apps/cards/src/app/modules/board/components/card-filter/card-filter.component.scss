@@ -51,6 +51,7 @@
     .card-filter__checkbox--1 { @include checkbox(1); }
     .card-filter__checkbox--2 { @include checkbox(2); }
     .card-filter__checkbox--3 { @include checkbox(3); }
+    .card-filter__checkbox--4 { @include checkbox(4); }
     .card-filter__radio--all { @include radio('all'); }
     .card-filter__radio--run { @include radio('run'); }
     .card-filter__radio--walk { @include radio('walk'); }

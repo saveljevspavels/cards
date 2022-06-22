@@ -29,7 +29,11 @@ export class CardFilterComponent implements OnInit {
         },
         {
             title: 'Very Hard',
-            description: `${ConstService.RULES.LEVELS["3"].min}+ points`
+            description: `${ConstService.RULES.LEVELS["3"].min}-${ConstService.RULES.LEVELS["3"].max} points`
+        },
+        {
+            title: 'Help me Jesus',
+            description: `${ConstService.RULES.LEVELS["4"].min}+ points`
         }
     ]
 

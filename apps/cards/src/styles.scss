@@ -97,7 +97,7 @@ hr {
     &--tier-0 { color: var(--color-main-0); }
     &--tier-1 { color: var(--color-main-1); }
     &--tier-2 { color: var(--color-main-2); }
-    &--tier-3 { color: var(--color-main-4); }
+    &--tier-3 { color: var(--color-main-3); }
     &--tier-4 { color: var(--color-main-4); }
 }
 
@@ -191,4 +191,8 @@ hr {
             height: 32px;
         }
     }
+}
+
+.h-50 {
+    height: 50px!important;
 }
