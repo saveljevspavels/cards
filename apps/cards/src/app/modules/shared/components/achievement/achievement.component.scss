@@ -8,6 +8,13 @@
     overflow: hidden;
     &--not-completed {
         filter: grayscale(1);
+        opacity: 0.5;
+        .achievement__value {
+            color: var(--color-text)!important;
+        }
+        .achievement__text {
+            color: var(--color-text)!important;
+        }
     }
     &__content {
         height: 100%;

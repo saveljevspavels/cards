@@ -30,6 +30,7 @@ export class CardComponent implements OnInit, OnChanges {
 
     imageObservable: any;
     visible = true;
+    staticActivity = true;
 
     activityTypes: string;
 
@@ -54,6 +55,7 @@ export class CardComponent implements OnInit, OnChanges {
     initCard() {
         this.checkFilter();
         this.activityTypes = this.resolveActivityTypes(this.card.validators)
+        this.staticActivity = !this.card.validators.find(validator => validator.property === ConstService.CONST.ACTIVITY_PROPERTIES.DISTANCE);
     }
 
     checkFilter() {

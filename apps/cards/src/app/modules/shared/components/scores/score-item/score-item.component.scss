@@ -24,10 +24,12 @@
     &__athlete {
         flex-grow: 1;
     }
-    &__cards-played {
+    &__cards-played, &__achievements-amount {
         font-size: var(--text-size-big);
         color: var(--color-text-light);
         font-weight: 700;
+        min-width: 65px;
+        text-align: right;
     }
     &__points {
         font-size: var(--text-size-big);

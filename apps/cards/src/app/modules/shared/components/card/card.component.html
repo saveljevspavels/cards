@@ -25,7 +25,7 @@
             </div>
             <ng-template #submittedCardValue>
                 <div class="mt-1 d-flex align-items-center">
-                    <app-svg styleClass="activity-type--{{submittedType}}" [icon]="'activity_' + submittedType"></app-svg>
+                    <app-svg styleClass="activity-type--{{submittedType}}" [icon]="'activity_' + submittedType + (staticActivity ? '_static' : '')"></app-svg>
                     <div class="ml-1 mb-1">
                         <ng-container *ngTemplateOutlet="cardValue"></ng-container>
                     </div>
