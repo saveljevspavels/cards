@@ -5,7 +5,7 @@
 <div class="mt-3">
     <app-collapsible [title]="'Base Workout Stats'"
                      [inclusive]="true"
-                     [expanded]="true"
+                     [id]="'baseWorkout'"
     >
         <div hiddenContent>
             <app-base-workout-info [self]="self" [baseWorkout]="athlete?.baseWorkout"></app-base-workout-info>
@@ -17,7 +17,7 @@
 <div class="mt-3">
     <app-collapsible [title]="'Achievements'"
                      [inclusive]="true"
-                     [expanded]="true"
+                     [id]="'achievements'"
     >
         <div hiddenContent>
             <div class="mb-3">

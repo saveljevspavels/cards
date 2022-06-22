@@ -57,6 +57,16 @@
     .card-filter__radio--walk { @include radio('walk'); }
     .card-filter__radio--ride { @include radio('ride'); }
     .card-filter__radio--other { @include radio('other'); }
+
+    &__box {
+        height: 132px;
+        display: flex;
+        flex-direction: column;
+        flex-wrap: wrap;
+    }
+    &__item {
+        flex: 0 1;
+    }
 }
 
 .card-filter-collapsible {

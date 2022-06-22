@@ -14,9 +14,6 @@ export class BoardComponent implements OnInit {
 
     public newActivities = this.activityService.newActivities;
     public openStates: any = {
-        pendingActivities: true,
-        cardQueue: true,
-        cardFilter: true,
         rules: true,
     }
 

@@ -66,5 +66,6 @@ export class CardFilterComponent implements OnInit {
                 UtilService.saveState(val[1], val[0])
             })
         })
+        this.form.updateValueAndValidity();
     }
 }

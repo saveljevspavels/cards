@@ -1,5 +1,7 @@
 import {AfterViewInit, Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
 import {animate, state, style, transition, trigger} from "@angular/animations";
+import {LocalStorageService} from "../../../../services/local-storage.service";
+import {UtilService} from "../../../../services/util.service";
 
 @Component({
     selector: 'app-collapsible',
@@ -20,8 +22,8 @@ import {animate, state, style, transition, trigger} from "@angular/animations";
         ])
     ]
 })
-export class CollapsibleComponent implements AfterViewInit {
-
+export class CollapsibleComponent implements OnInit {
+    @Input() id: string;
     @Input() title: string = '';
     @Input() expanded = false;
     @Input() inclusive = false;
@@ -32,11 +34,17 @@ export class CollapsibleComponent implements AfterViewInit {
 
     constructor() { }
 
-    ngAfterViewInit(): void {
+    ngOnInit(): void {
+        if(this.id) {
+            this.expanded = LocalStorageService.getState(this.id);
+        }
     }
 
     toggle() {
         this.expanded = !this.expanded;
         this.stateChange.emit(this.expanded);
+        if(this.id) {
+            UtilService.saveState(this.expanded, this.id)
+        }
     }
 }

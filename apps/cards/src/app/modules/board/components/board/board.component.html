@@ -3,9 +3,9 @@
         <div class="col-lg-6 mb-2">
             <div>
                 <app-collapsible [title]="'Your Pending Activities'"
-                                 (stateChange)="saveState($event, 'pendingActivities')"
                                  [inclusive]="true"
-                                 [expanded]="openStates.pendingActivities">
+                                 [id]="'pendingActivities'"
+                >
                     <div hiddenContent>
                         <p class="pl-3 mt-0 pr-3 text-small">
                             <ng-container *ngIf="(newActivities | async).length; else noActivities">
@@ -52,12 +52,11 @@
             <div class="mb-2">
                 <app-counter-line></app-counter-line>
             </div>
-            <app-collapsible [title]="'Card Deck'" [expanded]="openStates.cardQueue" (stateChange)="saveState($event, 'cardQueue')">
+            <app-collapsible [title]="'Card Deck'" [id]="'cardQueue'">
                 <div hiddenContent class="card-queue">
                     <div class="mb-2 mt-2">
-                        <app-collapsible [expanded]="openStates.cardFilter"
+                        <app-collapsible [id]="'cardFilter'"
                                          [title]="'Card Filter'"
-                                         (stateChange)="saveState($event, 'cardFilter')"
                                          [inclusive]="true"
                                          styleClass="card-filter-collapsible"
                         >
