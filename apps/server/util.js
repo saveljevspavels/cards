@@ -50,7 +50,7 @@ export const normalizeActivityType = (type) => {
 }
 
 export const tierToRoman = (number) => {
-    switch (number) {
+    switch (parseInt(number)) {
         case 0: return 'I';
         case 1: return 'II';
         case 2: return 'III';
