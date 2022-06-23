@@ -6,8 +6,9 @@
         {{card.id}}
     </div>
     <div class="card__content">
-        <div class="card__image"
-             [style.background-image]="'url(' + card.image + ')'">
+        <div class="card__image card--tier-{{(card.value | tier)}}"
+             [style.background-image]="'url(' + card.image + ')'"
+        >
         </div>
         <div class="ml-2 mt-2 pr-3" [ngClass]="{'pb-2': !submittedType, 'pb-0': submittedType}">
             <div class="card__title">
