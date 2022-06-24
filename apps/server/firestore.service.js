@@ -327,7 +327,7 @@ export class FirestoreService {
 
             if(activity.gameData.cardSnapshots.find(card => card.manualValidation)) {
                 this.logger.info(`Manual validation required for card ${card.id}`)
-                return;
+                return RESPONSES.SUCCESS;
             }
 
             const athleteDoc = this.athleteCollection.doc(activity.athlete.id.toString())
@@ -343,7 +343,7 @@ export class FirestoreService {
                 this.logger.info(`Validator(s) failed, switching for manual approve ${activityId}`)
             }
         }
-        return RESPONSES.SUCCESS
+        return RESPONSES.SUCCESS;
     }
 
     async approveActivity(activityId, cardIds = []) {
