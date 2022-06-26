@@ -55,5 +55,20 @@
                 }
             }
         }
+        &.selection-wrapper--single-selection {
+            .selection-wrapper__data-item {
+                &:before {
+                    border-radius: 50%!important;
+                    border: 2px solid var(--color-text);
+                    width: 36px !important;
+                    height: 36px !important;
+                }
+                &--selected {
+                    &:before {
+                        content: url("../../../../../assets/icons/radio-checkmark.svg") !important;
+                    }
+                }
+            }
+        }
     }
 }

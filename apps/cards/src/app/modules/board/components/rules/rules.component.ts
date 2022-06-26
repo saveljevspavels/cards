@@ -8,9 +8,11 @@ import {ConstService} from "../../../../services/const.service";
 })
 export class RulesComponent implements OnInit {
     public rules = [
+        'All activities and scores will be cleared at the start of the competition (27.06 00:00)',
         'The goal is to get the most points.',
-        'Points are gained by playing cards and getting achievements.',
+        'Points are gained by playing cards and getting achievements. You can see all achievements in your profile',
         'To play a card, you should record an activity that meets all requirements stated on a card.',
+        'For each activity you can play only one card, but get multiple achievements',
         'New activities are automatically synchronized with Strava and appear in the "Your Pending Activities" list.',
         'To submit an activity from the list, you need to click on activity, then select a card to play, add photos/comments if necessary.',
         'Some cards require manual validation, so it might take some time for approval',

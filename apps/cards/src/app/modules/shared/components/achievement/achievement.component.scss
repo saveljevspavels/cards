@@ -1,5 +1,5 @@
 .achievement {
-    height: 60px;
+    min-height: 60px;
     position: relative;
     width: 100%;
     display: flex;
@@ -20,6 +20,7 @@
         height: 100%;
     }
     &__logo {
+        height: 60px;
         img {
             width: 60px;
             height: 60px;

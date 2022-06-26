@@ -1,7 +1,8 @@
 <div class="selection-wrapper"
      [ngClass]="{
          'selection-wrapper--wrap': wrap,
-         'selection-wrapper--self-selectable': selfSelectable
+         'selection-wrapper--self-selectable': selfSelectable,
+         'selection-wrapper--single-selection': singleSelection
      }"
      [formGroup]="innerForm"
      *ngIf="innerForm && dataItems.length">

@@ -17,7 +17,15 @@
             "polyfills": "apps/cards/src/polyfills.ts",
             "tsConfig": "apps/cards/tsconfig.app.json",
             "inlineStyleLanguage": "scss",
-            "assets": ["apps/cards/src/favicon.ico", "apps/cards/src/assets"],
+            "assets": [
+                "apps/cards/src/favicon.ico",
+                "apps/cards/src/apple-touch-icon.png",
+                "apps/cards/src/icon.svg",
+                "apps/cards/src/icon-192.png",
+                "apps/cards/src/icon-512.png",
+                "apps/cards/src/manifest.webmanifest",
+                "apps/cards/src/assets"
+            ],
             "styles": [
                 "apps/cards/src/styles.scss",
                 "node_modules/primeng/resources/themes/saga-blue/theme.css",
