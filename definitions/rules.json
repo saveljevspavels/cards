@@ -9,13 +9,13 @@
             "time_10k": 5400
         },
         "ride": {
-            "distance": 15000,
-            "average_speed": 5.56,
+            "distance": 12000,
+            "average_speed": 4.17,
             "time_10k": 2400,
             "time_40k": 10800
         },
         "walk": {
-            "distance": 6000
+            "distance": 7000
         },
         "other": {
             "distance": 10000
