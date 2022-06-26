@@ -22,9 +22,9 @@ export default class ClientService {
         app.post(`${CONST.API_PREFIX}save-athlete`,async (req, res) => {
             const newAthlete = await this.fireStoreService.saveAthlete(req.body.athlete)
 
-            if(newAthlete) {
-                this.calculateBaseWorkout(req.body.accessToken, req.body.athlete.id)
-            }
+            // if(newAthlete) { // Let's do it manually for now
+            //     this.calculateBaseWorkout(req.body.accessToken, req.body.athlete.id)
+            // }
 
             res.status(200).send({});
         });
