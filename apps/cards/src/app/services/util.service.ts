@@ -38,6 +38,7 @@ export class UtilService {
         if(value >= ConstService.RULES.LEVELS["1"].min && value <= ConstService.RULES.LEVELS["1"].max) return 1
         if(value >= ConstService.RULES.LEVELS["2"].min && value <= ConstService.RULES.LEVELS["2"].max) return 2
         if(value >= ConstService.RULES.LEVELS["3"].min && value <= ConstService.RULES.LEVELS["3"].max) return 3
+        if(value >= ConstService.RULES.LEVELS["4"].min && value <= ConstService.RULES.LEVELS["4"].max) return 4
         return 0;
     }
 

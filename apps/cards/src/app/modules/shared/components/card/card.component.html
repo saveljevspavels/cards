@@ -14,7 +14,7 @@
             <div class="card__title">
                 {{card.title}}
             </div>
-            <div class="card__description light mt-2">
+            <div class="card__description light mt-2" *ngIf="!submittedType">
                 {{card.description}}
             </div>
             <div class="card__validation mt-2" *ngIf="!submittedType; else submittedCardValue">
@@ -25,7 +25,7 @@
                 ></app-validator>
             </div>
             <ng-template #submittedCardValue>
-                <div class="mt-1 d-flex align-items-center">
+                <div class="d-flex align-items-center">
                     <app-svg styleClass="activity-type--{{submittedType}}" [icon]="'activity_' + submittedType + (staticActivity ? '_static' : '')"></app-svg>
                     <div class="ml-1 mb-1">
                         <ng-container *ngTemplateOutlet="cardValue"></ng-container>
