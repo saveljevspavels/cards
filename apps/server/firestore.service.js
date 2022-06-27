@@ -533,7 +533,7 @@ export class FirestoreService {
             const valueDelta = (RULES.CARD_VALUE_STEP * (1 - card.cardUses.queue));
             const newValue = parseInt(card.value) + valueDelta
             cardDoc.update({
-                value: newValue < RULES.CARD_VALUE_STEP ? RULES.CARD_VALUE_STEP : newValue,
+                value: newValue < RULES.CARD_VALUE_MIN ? RULES.CARD_VALUE_MIN : newValue > RULES.CARD_VALUE_MAX ? RULES.CARD_VALUE_MAX : newValue,
                 cardUses: {
                     ...card.cardUses,
                     queue: 0

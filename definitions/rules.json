@@ -58,5 +58,7 @@
         "CARDS_TO_SHIFT": 4
     },
     "CARD_VALUE_STEP": 1,
+    "CARD_VALUE_MIN": 1,
+    "CARD_VALUE_MAX": 1,
     "MAX_CARDS_SUBMIT": 1
 }
