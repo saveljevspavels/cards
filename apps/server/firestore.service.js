@@ -521,21 +521,25 @@ export class FirestoreService {
     }
 
     async updateCardValues(cardIds) {
-        if(cardIds.length) {
-            const cardQuery = this.cardCollection.where('id', 'in', cardIds)
-            const cardDocs = await cardQuery.get()
-            cardDocs.forEach( card => {
-                const valueDelta = (RULES.CARD_VALUE_STEP * (1 - card.data().cardUses.queue));
-                const newValue = parseInt(card.data().value) + valueDelta
-                card.ref.update({
-                    value: newValue < RULES.CARD_VALUE_STEP ? RULES.CARD_VALUE_STEP : newValue,
-                    cardUses: {
-                        ...card.data().cardUses,
-                        queue: 0
-                    }
-                })
-                this.logger.info(`Card ${card.data().id} (${card.data().title}) value changed by ${valueDelta}, now ${newValue}`)
+        if(!cardIds.length) {
+            this.logger.error(`No cardIds for updateCardValues`)
+            return;
+        }
+
+        for(let i = 0; i < cardIds.length; i++) {
+            const cardDoc = await this.cardCollection.doc(cardIds[i].toString())
+            const card = (await cardDoc.get()).data() || {}
+
+            const valueDelta = (RULES.CARD_VALUE_STEP * (1 - card.cardUses.queue));
+            const newValue = parseInt(card.value) + valueDelta
+            cardDoc.update({
+                value: newValue < RULES.CARD_VALUE_STEP ? RULES.CARD_VALUE_STEP : newValue,
+                cardUses: {
+                    ...card.cardUses,
+                    queue: 0
+                }
             })
+            this.logger.info(`Card ${card.id} (${card.title}) value changed by ${valueDelta}, now ${newValue}`)
         }
     }
 
