@@ -530,7 +530,11 @@ export class FirestoreService {
             const cardDoc = await this.cardCollection.doc(cardIds[i].toString())
             const card = (await cardDoc.get()).data() || {}
 
-            const valueDelta = (RULES.CARD_VALUE_STEP * (1 - card.cardUses.queue));
+            let cardUses = card.cardUses.queue;
+            if(parseInt(card.value) >= 7 && cardUses > 0) { // Additional point dump
+                cardUses = cardUses + 1;
+            }
+            const valueDelta = (RULES.CARD_VALUE_STEP * (1 - cardUses));
             const newValue = parseInt(card.value) + valueDelta
             cardDoc.update({
                 value: newValue < RULES.CARD_VALUE_MIN ? RULES.CARD_VALUE_MIN : newValue > RULES.CARD_VALUE_MAX ? RULES.CARD_VALUE_MAX : newValue,

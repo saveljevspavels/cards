@@ -9,7 +9,8 @@
         width: 322px;
         height: 322px;
         background-repeat: no-repeat;
-        background-size: cover;
+        background-size: contain;
+        background-position: center;
     }
     &__controls {
         display: flex;
