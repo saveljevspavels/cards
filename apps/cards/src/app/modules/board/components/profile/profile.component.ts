@@ -6,8 +6,10 @@ import {LocalStorageService} from "../../../../services/local-storage.service";
 import {PopupService} from "../../../../services/popup.service";
 import {AchievementService} from "../../../../services/achievement.service";
 import {Achievement} from "../../../../interfaces/achievement";
-import {Observable} from "rxjs";
+import {BehaviorSubject, Observable} from "rxjs";
 import Athlete from "../../../../interfaces/athlete";
+import {ActivityService} from "../../../../services/activity.service";
+import {map} from "rxjs/operators";
 
 @Component({
   selector: 'app-profile',
@@ -21,12 +23,15 @@ export class ProfileComponent implements OnInit {
     public athleteId: string = '';
     public self = false;
 
+    public athleteActivities$: Observable<any>;
+
     public achievements$: Observable<(Achievement | null)[]>;
 
     @ViewChild('logoutPopup', { static: true }) logoutPopup: ElementRef;
 
     constructor(private athleteService: AthleteService,
                 private authService: AuthService,
+                private activityService: ActivityService,
                 private achievementsService: AchievementService,
                 private route: ActivatedRoute,
                 private popupService: PopupService) {
@@ -38,6 +43,7 @@ export class ProfileComponent implements OnInit {
         this.athlete$ = this.self ? this.athleteService.me : this.athleteService.getAthlete$(this.athleteId)
         this.athlete$.subscribe((athlete) => {
             this.athlete = athlete;
+            this.athleteActivities$ = this.activityService.approvedActivities.pipe(map((activities => activities.filter((activity: any) => activity.athlete.id === athlete?.id).reverse())))
             this.achievements$ = this.achievementsService.getAchievements(athlete?.achievements || []);
         })
     }

@@ -8,27 +8,36 @@
 </div>
 
 <ng-template #activityTemplate>
-    <ng-container *ngTemplateOutlet="athleteTemplate"></ng-container>
+    <ng-container *ngTemplateOutlet="headerTemplate"></ng-container>
     <ng-container *ngTemplateOutlet="cardsTemplate"></ng-container>
     <ng-container *ngTemplateOutlet="contentTemplate"></ng-container>
 </ng-template>
 
 <ng-template #collapsibleActivityTemplate>
     <app-collapsible [customHeader]="true">
-        <ng-container headerContent *ngTemplateOutlet="athleteTemplate"></ng-container>
+        <ng-container headerContent *ngTemplateOutlet="headerTemplate"></ng-container>
         <ng-container visibleContent *ngTemplateOutlet="cardsTemplate"></ng-container>
         <ng-container hiddenContent *ngTemplateOutlet="contentTemplate"></ng-container>
     </app-collapsible>
 </ng-template>
 
-<ng-template #athleteTemplate>
-    <div *ngIf="showAthlete"
-         class="d-flex align-items-center"
-    >
-        <div class="ml-1">
-            <app-athlete *ngIf="activity?.athlete" [size]="'small'" [athleteId]="activity?.athlete.id">
-                <span class="text-medium">gained {{(activity.gameData?.cardSnapshots && activity.gameData?.cardSnapshots[0]?.value) || 0}} points by playing a card:</span>
-            </app-athlete>
+<ng-template #headerTemplate>
+    <div>
+        <div *ngIf="showAthlete"
+             class="d-flex align-items-center"
+        >
+            <div class="ml-1">
+                <app-athlete *ngIf="activity?.athlete" [size]="'small'" [athleteId]="activity?.athlete.id">
+                    <span class="text-medium">gained {{(activity.gameData?.cardSnapshots && activity.gameData?.cardSnapshots[0]?.value) || 0}} points by playing a card:</span>
+                </app-athlete>
+            </div>
+        </div>
+        <div *ngIf="showStartedAt"
+             class="d-flex align-items-center"
+        >
+            <div class="ml-1 mt-2 mb-2">
+                <div class="text-medium">Started at {{activity.start_date | date : 'dd MMM, HH:mm'}}</div>
+            </div>
         </div>
     </div>
 </ng-template>

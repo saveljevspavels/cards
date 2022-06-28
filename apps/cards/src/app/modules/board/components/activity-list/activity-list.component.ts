@@ -11,7 +11,7 @@ export class ActivityListComponent implements OnInit {
     public categories = [
         'today',
         'yesterday',
-        'previously'
+        // 'previously' // Showing only last 2 days
     ]
 
     public approvedActivities: any = this.getEmptyContainer();

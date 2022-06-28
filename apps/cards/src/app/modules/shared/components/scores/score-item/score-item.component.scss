@@ -31,6 +31,9 @@
         min-width: 65px;
         text-align: right;
     }
+    &__achievements-amount {
+        min-width: unset;
+    }
     &__points {
         font-size: var(--text-size-big);
         font-weight: 700;

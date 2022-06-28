@@ -30,6 +30,7 @@ export class ActivityComponent implements OnInit, ControlValueAccessor {
     @Input() public showImages = true;
     @Input() public showComments = false;
     @Input() public showAthlete = false;
+    @Input() public showStartedAt = false;
     @Input() public collapsible = false;
 
     constructor(private popupService: PopupService) { }
