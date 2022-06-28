@@ -386,7 +386,7 @@ export class FirestoreService {
                 card.data().validators.forEach(validator => {
                     RULES.UPDATABLE_PROPERTIES.forEach(property => {
                         if(validator.formula.indexOf(property) !== -1) {
-                            baseWorkoutPatch[normalizedType][property] = activity[validator.property]
+                            baseWorkoutPatch[normalizedType][property] = (activity[validator.property] - RULES.UPDATABLE_PROPERTIES_DELTA[property])
                         }
                     })
                 })

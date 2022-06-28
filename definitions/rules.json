@@ -53,6 +53,12 @@
         "time_10k",
         "time_40k"
     ],
+    "UPDATABLE_PROPERTIES_DELTA": {
+        "time_3k": 30,
+        "time_5k": 60,
+        "time_10k": 90,
+        "time_40k": 240
+    },
     "QUEUE": {
         "LENGTH": 7,
         "CARDS_TO_SHIFT": 4
