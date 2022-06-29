@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {ConstService} from "../../../../services/const.service";
+import {GameService} from "../../../../services/game.service";
 
 @Component({
   selector: 'app-rules',
@@ -32,9 +33,17 @@ export class RulesComponent implements OnInit {
         `Help me Jesus (${ConstService.RULES.LEVELS["4"].min}+ points)`,
     ]
 
-    constructor() { }
+    constructor(private gameService: GameService) { }
+
+    public creatures = {
+        animals: [],
+        birds: []
+    }
 
     ngOnInit(): void {
+        this.gameService.getCreatures().subscribe((res: any) => {
+            this.creatures = res;
+        })
     }
 
 }

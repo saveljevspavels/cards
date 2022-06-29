@@ -1,0 +1,14 @@
+.rules {
+    &__creatures-list {
+        .title {
+            text-align: center;
+            border-bottom: 2px solid var(--color-main-0);
+            padding: 8px;
+        }
+        &:nth-child(2) {
+            .title {
+                border-bottom: 2px solid var(--color-main-2);
+            }
+        }
+    }
+}
