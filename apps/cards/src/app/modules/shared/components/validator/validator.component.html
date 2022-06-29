@@ -8,6 +8,7 @@
 
 
     <div class="validator__properties" [ngClass]="{'validator__properties--typed': typedValidator}">
+        <div class="validator__property-margin" *ngIf="typedValidator"></div>
         <span *ngFor="let value of (resolvedValues | async) | keyvalue: noSort; let i = index;">
             <span *ngIf="typedValidator; else simpleValidator"
                   class="validator__type text-bold validator__color--{{(activeValidator | async)?.type ? ((activeValidator | async)?.type === value.key ? (activeValidator | async)?.status : 'inactive') : ''}}"

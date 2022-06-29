@@ -32,7 +32,9 @@
                 "node_modules/primeng/resources/primeng.min.css",
                 "node_modules/primeicons/primeicons.css"
             ],
-            "scripts": []
+            "scripts": [],
+            "serviceWorker": true,
+            "ngswConfigPath": "apps/cards/ngsw-config.json"
           },
           "configurations": {
             "production": {

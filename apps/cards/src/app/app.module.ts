@@ -20,6 +20,7 @@ import {MessageService} from "primeng/api";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import {AthleteService} from "./services/athlete.service";
 import {SharedModule} from "./modules/shared/shared.module";
+import { ServiceWorkerModule } from '@angular/service-worker';
 
 const firebaseConfig = FIREBASE_CONFIG;
 
@@ -41,7 +42,13 @@ const firebaseConfig = FIREBASE_CONFIG;
         MessagesModule,
         MessageModule,
         BrowserAnimationsModule,
-        SharedModule
+        SharedModule,
+        ServiceWorkerModule.register('ngsw-worker.js', {
+          enabled: environment.production,
+          // Register the ServiceWorker as soon as the app is stable
+          // or after 30 seconds (whichever comes first).
+          registrationStrategy: 'registerWhenStable:30000'
+        })
     ],
     providers: [
         {provide: HTTP_INTERCEPTORS, useClass: HttpMainInterceptor, multi: true},
