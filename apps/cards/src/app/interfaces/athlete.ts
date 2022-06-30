@@ -6,6 +6,7 @@ export default interface Athlete {
     baseWorkout: BaseWorkout;
     permissions: string[];
     achievements: string[];
+    energy: number;
 }
 
 export interface BaseWorkout {

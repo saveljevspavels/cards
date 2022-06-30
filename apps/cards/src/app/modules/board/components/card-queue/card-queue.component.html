@@ -12,6 +12,7 @@
                 <app-card
                     [card]="dataItem"
                     [filterData]="filterData"
+                    [energy]="(athleteService.me | async).energy"
                 ></app-card>
             </ng-template>
         </app-selection-wrapper>

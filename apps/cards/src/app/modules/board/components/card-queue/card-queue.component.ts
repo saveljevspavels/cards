@@ -5,6 +5,7 @@ import {Observable} from "rxjs";
 import {ControlValueAccessor, FormControl, NG_VALUE_ACCESSOR} from "@angular/forms";
 import {map} from "rxjs/operators";
 import Card from "../../../../interfaces/card";
+import {AthleteService} from "../../../../services/athlete.service";
 
 @Component({
   selector: 'app-card-queue',
@@ -25,7 +26,8 @@ export class CardQueueComponent implements OnInit, ControlValueAccessor {
     public cardQueue: Observable<Card[]> = this.deckService.cardQueue.asObservable()
     public selectedCards = new FormControl([]);
 
-    constructor(public deckService: DeckService) { }
+    constructor(public deckService: DeckService,
+                public athleteService: AthleteService) { }
 
     ngOnInit(): void {
         this.selectedCards.valueChanges.subscribe((values: any) => {

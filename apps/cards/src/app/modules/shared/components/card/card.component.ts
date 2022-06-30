@@ -4,6 +4,7 @@ import {filter} from "rxjs/operators";
 import {DeckService} from "../../../../services/deck.service";
 import {ConstService} from "../../../../services/const.service";
 import {UtilService} from "../../../../services/util.service";
+import {AthleteService} from "../../../../services/athlete.service";
 
 @Component({
   selector: 'app-card',
@@ -12,6 +13,7 @@ import {UtilService} from "../../../../services/util.service";
 })
 export class CardComponent implements OnInit, OnChanges {
     public CONST = ConstService.CONST;
+    public RULES = ConstService.RULES;
 
     @Input()
     public card: Card;
@@ -26,6 +28,9 @@ export class CardComponent implements OnInit, OnChanges {
     small: boolean = false;
 
     @Input()
+    energy: number;
+
+    @Input()
     submittedType = '';
 
     imageObservable: any;
@@ -34,7 +39,12 @@ export class CardComponent implements OnInit, OnChanges {
 
     activityTypes: string;
 
-    constructor(private deckService: DeckService) { }
+    constructor(private deckService: DeckService,
+                private athleteService: AthleteService) { }
+
+    get energyAdjustedValue() {
+        return this.card.earnedValue || Math.ceil(this.card.value * (1 - (this.RULES.ENERGY.REDUCTION_STEP * (this.RULES.ENERGY.MAX - ((this.energy || this.energy === 0) ? this.energy : this.RULES.ENERGY.MAX )))))
+    }
 
     ngOnInit() {
         if(this.card) {
@@ -46,6 +56,7 @@ export class CardComponent implements OnInit, OnChanges {
                 this.initCard();
             })
         }
+
     }
 
     ngOnChanges() {

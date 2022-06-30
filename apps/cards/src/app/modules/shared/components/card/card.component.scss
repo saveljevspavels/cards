@@ -32,9 +32,20 @@
         justify-content: space-between;
         align-items: flex-end;
     }
-    &__progression, &__value {
+    &__progression, &__value, &__energy-price {
         font-size: 14px;
         font-weight: bold;
+    }
+    &__energy-price {
+        color: white!important;
+        opacity: 0.9;
+        fill: white!important;
+        position: relative;
+        app-svg {
+            position: absolute;
+            right: 9px;
+            top: 1px;
+        }
     }
     &--small {
         width: 250px;

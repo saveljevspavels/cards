@@ -28,7 +28,7 @@
         >
             <div class="ml-1">
                 <app-athlete *ngIf="activity?.athlete" [size]="'small'" [athleteId]="activity?.athlete.id">
-                    <span class="text-medium">gained {{(activity.gameData?.cardSnapshots && activity.gameData?.cardSnapshots[0]?.value) || 0}} points by playing a card:</span>
+                    <span class="text-medium">gained {{(activity.gameData?.cardSnapshots && activity.gameData?.cardSnapshots[0]?.earnedValue || activity.gameData?.cardSnapshots[0]?.value) || 0}} points by playing a card:</span>
                 </app-athlete>
             </div>
         </div>

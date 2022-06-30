@@ -17,6 +17,8 @@ import { BoardParentComponent } from './components/board-parent/board-parent.com
 import { SubmittingActivityComponent } from './components/submitting-activity/submitting-activity.component';
 import {CounterLineComponent} from "./components/counter-line/counter-line.component";
 import { CardFilterComponent } from './components/card-filter/card-filter.component';
+import { GenericCounterComponent } from './components/generic-counter/generic-counter.component';
+import {EnergyLineComponent} from "./components/energy-line/energy-line.component";
 
 @NgModule({
     declarations: [
@@ -34,6 +36,9 @@ import { CardFilterComponent } from './components/card-filter/card-filter.compon
         BoardParentComponent,
         SubmittingActivityComponent,
         CardFilterComponent,
+        GenericCounterComponent,
+        GenericCounterComponent,
+        EnergyLineComponent,
     ],
     imports: [
         CommonModule,

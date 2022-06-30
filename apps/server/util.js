@@ -1,4 +1,5 @@
 import CONST from "../../definitions/constants.json";
+import RULES from "../../definitions/rules.json";
 
 export const generateId = () => {
     return Math.random().toString(36).substring(7);
@@ -36,10 +37,10 @@ export const getRandomInt = (max) => {
     return Math.floor(Math.random() * max);
 }
 
-export const updateScoreValues = (score, values, cardAmount, achievementsAmount) => {
-  const finalValue = values;
+export const updateScoreValues = (score, earnedValues, reducedValues, cardAmount, achievementsAmount) => {
   return {
-    value: score.value ? parseInt(score.value + finalValue) : finalValue,
+    value: score.value ? parseInt(score.value + earnedValues) : earnedValues,
+    reduced: score.reduced ? parseInt(score.reduced + reducedValues) : reducedValues,
     cardsPlayed: score.cardsPlayed ? parseInt(score.cardsPlayed + cardAmount) : cardAmount,
     achievementsAmount: score.achievementsAmount ? parseInt(score.achievementsAmount + achievementsAmount) : achievementsAmount,
   }
@@ -57,4 +58,17 @@ export const tierToRoman = (number) => {
         case 3: return 'IV';
         case 4: return 'V';
     }
+}
+
+export const getTier = (value) => {
+    if(value >= RULES.LEVELS["0"].min && value <= RULES.LEVELS["0"].max) return 0
+    if(value >= RULES.LEVELS["1"].min && value <= RULES.LEVELS["1"].max) return 1
+    if(value >= RULES.LEVELS["2"].min && value <= RULES.LEVELS["2"].max) return 2
+    if(value >= RULES.LEVELS["3"].min && value <= RULES.LEVELS["3"].max) return 3
+    if(value >= RULES.LEVELS["4"].min && value <= RULES.LEVELS["4"].max) return 4
+    return 0;
+}
+
+export const getEnergyAdjustedValue = (value, energy) => {
+    return Math.ceil(parseInt(value) * (1 - (RULES.ENERGY.REDUCTION_STEP * (RULES.ENERGY.MAX - energy))))
 }
