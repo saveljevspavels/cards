@@ -612,7 +612,7 @@ export class FirestoreService {
     async restoreAthletesEnergy(value) {
         const athleteQuery = await this.athleteCollection.get()
         athleteQuery.docs.forEach((athlete) => {
-            const newVal = Math.min((athlete.data().energy || 0) + value, 8)
+            const newVal = Math.min((athlete.data().energy || 0) + value, RULES.ENERGY.MAX)
             this.athleteCollection.doc(athlete.data().id.toString()).update({
                 energy: newVal
             })
