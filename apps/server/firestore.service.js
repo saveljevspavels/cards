@@ -45,6 +45,7 @@ export class FirestoreService {
 
         const rule = new schedule.RecurrenceRule();
         rule.hour = 21;
+        rule.minute = 0;
         rule.tz = 'Etc/UTC';
 
         const job = schedule.scheduleJob(rule, async () => {
