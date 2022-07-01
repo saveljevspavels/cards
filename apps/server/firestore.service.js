@@ -43,14 +43,14 @@ export class FirestoreService {
         })
 
 
-        const rule = new schedule.RecurrenceRule();
-        rule.hour = 21;
-        rule.tz = 'Etc/UTC';
-
-        const job = schedule.scheduleJob(rule, async () => {
-            this.logger.error(`It's midnight`);
-            await this.restoreAthletesEnergy(RULES.ENERGY.TIMED_RESTORE);
-        })
+        // const rule = new schedule.RecurrenceRule();
+        // rule.hour = 21;
+        // rule.tz = 'Etc/UTC';
+        //
+        // const job = schedule.scheduleJob(rule, async () => {
+        //     this.logger.error(`It's midnight`);
+        //     await this.restoreAthletesEnergy(RULES.ENERGY.TIMED_RESTORE);
+        // })
     }
 
     errorHandlerWrap(methodName, method) {
