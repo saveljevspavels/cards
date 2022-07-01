@@ -7,6 +7,7 @@ export default class WebhookService {
 
         // Creates the endpoint for our webhook
         app.post(`${CONST.API_PREFIX}webhook`, (req, res) => {
+            console.log('req', JSON.stringify(req));
             switch(req.body.aspect_type) {
                 case 'create': fireStoreService.addPendingActivity(req.body); break;
                 case 'delete': fireStoreService.deletePendingActivity(req.body.object_id); break;
