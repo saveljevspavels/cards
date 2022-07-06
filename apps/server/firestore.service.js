@@ -479,7 +479,7 @@ export class FirestoreService {
         switch (card.progression) {
             case CONST.PROGRESSION.TIERS:
             case CONST.PROGRESSION.CHAIN:
-                nextTier = nextTier + 1;
+                nextTier = parseInt(nextTier) + 1;
                 break;
         }
         this.logger.info(`Progressing card ${cardId} to ${card.progression} ${nextTier}`)
