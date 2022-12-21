@@ -1,0 +1,26 @@
+.map {
+  height: 168px;
+  width: 100%;
+  border-radius: var(--input-radius);
+}
+
+.map__wrapper {
+  position: relative;
+}
+
+.map__content {
+  position: absolute;
+  bottom: 12px;
+  right: 12px;
+  left: 12px;
+}
+
+a[href^="http://maps.google.com/maps"]{display:none !important}
+a[href^="https://maps.google.com/maps"]{display:none !important}
+
+.gmnoprint a, .gmnoprint span, .gm-style-cc {
+    display:none;
+}
+.gmnoprint div {
+    background:none !important;
+}

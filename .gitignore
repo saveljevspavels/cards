@@ -13,6 +13,7 @@
 /definitions/firebaseConfig.prod.json
 /definitions/sampleUser.json
 /definitions/stravaConfig.json
+/definitions/mapConfig.json
 
 # IDEs and editors
 /.idea

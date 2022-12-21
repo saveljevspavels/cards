@@ -35,6 +35,7 @@ import { TierBadgeComponent } from './components/tier-badge/tier-badge.component
 import { SwiperComponent } from './components/swiper/swiper.component';
 import { AchievementComponent } from './components/achievement/achievement.component';
 import {RadioComponent} from "../../components/radio/radio.component";
+import {GoogleMapComponent} from "./components/google-map/google-map.component";
 
 const COMPS = [
     InputComponent,
@@ -62,6 +63,7 @@ const COMPS = [
     SvgTemplatesComponent,
     ScoreItemComponent,
     PopupComponent,
+    GoogleMapComponent
 ]
 
 const MODULES = [
