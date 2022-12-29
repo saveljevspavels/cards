@@ -24,7 +24,9 @@
                 "apps/cards/src/icon-192.png",
                 "apps/cards/src/icon-512.png",
                 "apps/cards/src/manifest.webmanifest",
-                "apps/cards/src/assets"
+                "apps/cards/src/assets",
+                "apps/cards/src/sw.js",
+                "apps/cards/src/fallback.html"
             ],
             "styles": [
                 "apps/cards/src/styles.scss",

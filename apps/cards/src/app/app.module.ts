@@ -33,7 +33,7 @@ const firebaseConfig = FIREBASE_CONFIG;
         AppRoutingModule,
         RouterModule,
         AngularFireModule.initializeApp(firebaseConfig),
-        AngularFirestoreModule, // firestore
+        AngularFirestoreModule.enablePersistence(), // firestore
         AngularFireAuthModule, // auth
         AngularFireStorageModule, // storage,
         FormsModule,
@@ -43,7 +43,7 @@ const firebaseConfig = FIREBASE_CONFIG;
         MessageModule,
         BrowserAnimationsModule,
         SharedModule,
-        ServiceWorkerModule.register('ngsw-worker.js', {
+        ServiceWorkerModule.register('sw.js', {
           enabled: environment.production,
           // Register the ServiceWorker as soon as the app is stable
           // or after 30 seconds (whichever comes first).
