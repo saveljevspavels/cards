@@ -8,6 +8,7 @@ import Hand from "../interfaces/hand";
 import {ConstService} from "./const.service";
 import Card from "../interfaces/card";
 import {UtilService} from "./util.service";
+import {AuthService} from "./auth.service";
 
 @Injectable({
   providedIn: 'root'
@@ -20,8 +21,11 @@ export class DeckService {
     private cardCollection = this.db.collection(ConstService.CONST.COLLECTIONS.CARDS);
     private cardQueueDocument = this.db.collection(ConstService.CONST.COLLECTIONS.HANDS).doc(ConstService.CONST.HANDS.QUEUE);
 
-    constructor(private db: AngularFirestore,
-                private http: HttpClient) {
+    constructor(
+        private db: AngularFirestore,
+        private http: HttpClient,
+        private authService: AuthService
+        ) {
         this.cardCollection.valueChanges().subscribe((cards: any[]) => {
             this.cards.next(cards)
         });
@@ -42,19 +46,19 @@ export class DeckService {
     discardCards(cardIds: string[]) {
         return this.http.post(`${environment.baseBE}/discard-cards`, {
             cardIds,
-            athleteId: LocalStorageService.athleteId
+            athleteId: this.authService.myId.value
         })
     }
 
     drawCard() {
         return this.http.post(`${environment.baseBE}/draw-card`, {
-            athleteId: LocalStorageService.athleteId
+            athleteId: this.authService.myId.value
         })
     }
 
     combineCards(cardIds: string[]) {
         return this.http.post(`${environment.baseBE}/combine-cards`, {
-            athleteId: LocalStorageService.athleteId,
+            athleteId: this.authService.myId.value,
             cardIds
         })
     }

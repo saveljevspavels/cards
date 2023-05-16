@@ -1,9 +1,7 @@
-import {Component, forwardRef, Input, OnChanges, OnInit, ViewEncapsulation} from '@angular/core';
+import {Component, forwardRef, Input, OnInit, ViewEncapsulation} from '@angular/core';
 import {DeckService} from "../../../../services/deck.service";
-import Hand from "../../../../interfaces/hand";
 import {Observable} from "rxjs";
 import {ControlValueAccessor, FormControl, NG_VALUE_ACCESSOR} from "@angular/forms";
-import {map} from "rxjs/operators";
 import Card from "../../../../interfaces/card";
 import {AthleteService} from "../../../../services/athlete.service";
 

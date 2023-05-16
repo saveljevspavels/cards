@@ -1,12 +1,14 @@
 import https from "https";
-import CONST from "../../definitions/constants.json";
-import RULES from "../../definitions/rules.json";
-import {parseResponse} from "./util.js";
+import {parseResponse} from "./helpers/util";
+import {Express} from "express";
+import {FirestoreService} from "./firestore.service";
+import {CONST} from "../../definitions/constants";
+import {RULES} from "../../definitions/rules";
 
 export default class ClientService {
     fireStoreService;
 
-    getActivityOptions(accessToken) {
+    getActivityOptions(accessToken: string) {
         return {
             host: CONST.STRAVA_BASE,
             path: `/api/v3/activities`,
@@ -16,18 +18,8 @@ export default class ClientService {
         }
     }
 
-    constructor(app, fireStoreService) {
+    constructor(app: Express, fireStoreService: FirestoreService) {
         this.fireStoreService = fireStoreService;
-
-        app.post(`${CONST.API_PREFIX}save-athlete`,async (req, res) => {
-            const newAthlete = await this.fireStoreService.saveAthlete(req.body.athlete)
-
-            // if(newAthlete) { // Let's do it manually for now
-            //     this.calculateBaseWorkout(req.body.accessToken, req.body.athlete.id)
-            // }
-
-            res.status(200).send({});
-        });
 
         app.post(`${CONST.API_PREFIX}calculate-base-workout`,async (req, res) => {
             this.calculateBaseWorkout(req.body.accessToken, req.body.athleteId)
@@ -39,18 +31,18 @@ export default class ClientService {
 
         app.post(`${CONST.API_PREFIX}activities`, (req, res) => {
             https.get(this.getActivityOptions(req.body.accessToken), response => {
-                parseResponse(response, req.body, (reqBody, responseData) => {
+                parseResponse(response, req.body, (reqBody: any, responseData: any) => {
                     responseData = responseData?.length ? responseData : [];
                     if(reqBody.activityIds?.length) {
-                        responseData = responseData.filter(activity => reqBody.activityIds.indexOf(activity.id) !== -1)
+                        responseData = responseData.filter((activity: any) => reqBody.activityIds.indexOf(activity.id) !== -1)
                     }
                     if(reqBody.from) {
-                        responseData = responseData.filter(activity => (+ new Date(activity.start_date)) > reqBody.from)
+                        responseData = responseData.filter((activity: any) => (+ new Date(activity.start_date)) > reqBody.from)
                     }
                     if(reqBody.commandId) {
                         this.fireStoreService.deleteCommand(reqBody.commandId)
                     }
-                    responseData.forEach((activity) => {
+                    responseData.forEach((activity: any) => {
                         this.fireStoreService.deletePendingActivity(activity.id);
                         this.fireStoreService.addDetailedActivity({ ...activity,
                             gameData: {
@@ -65,10 +57,10 @@ export default class ClientService {
         });
     }
 
-    calculateBaseWorkout(accessToken, athleteId) {
+    calculateBaseWorkout(accessToken: string, athleteId: string) {
         https.get(this.getActivityOptions(accessToken), response => {
-            parseResponse(response, {}, (reqBody, responseData) => {
-                const baseWorkoutPatch = {};
+            parseResponse(response, {}, (reqBody: any, responseData: any) => {
+                const baseWorkoutPatch: any = {};
                 const properties = [
                     CONST.ACTIVITY_PROPERTIES.DISTANCE,
                     CONST.ACTIVITY_PROPERTIES.AVERAGE_SPEED
@@ -80,9 +72,9 @@ export default class ClientService {
 
                 types.forEach(type => {
                     const typedActivities = responseData
-                        .filter(activity => activity.type.toUpperCase().indexOf(type.toUpperCase()) !== -1)
+                        .filter((activity: any) => activity.type.toUpperCase().indexOf(type.toUpperCase()) !== -1)
 
-                    const total = typedActivities.reduce((acc, activity) => {
+                    const total = typedActivities.reduce((acc: any, activity: any) => {
                         properties.forEach(prop => {
                             if(!acc[prop]) {
                                 acc[prop] = []
@@ -99,14 +91,16 @@ export default class ClientService {
                             baseWorkoutPatch[type] = {}
                         }
                         if(values && values.length >= 4) {
-                            values = values.sort((a,b) => a - b);
+                            values = values.sort((a: number, b: number) => a - b);
                             while (values.length > 4) {
                                 values.length % 2 ? values.pop() : values.shift()
                             }
-                            const sum = values.reduce((acc, item) => acc + item, 0)
+                            const sum = values.reduce((acc: any, item: any) => acc + item, 0)
                             baseWorkoutPatch[type][prop] = (sum/values.length);
+                            // @ts-ignore
                             baseWorkoutPatch[type][prop] = baseWorkoutPatch[type][prop] - baseWorkoutPatch[type][prop] % RULES.ESTIMATION_ACCURACY[prop];
                         } else {
+                            // @ts-ignore
                             baseWorkoutPatch[type][prop] = RULES.DEFAULT_BASE_WORKOUT[type][prop]
                         }
                     })

@@ -1,7 +1,7 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {AthleteService} from "../../../../services/athlete.service";
 import {filter} from "rxjs/operators";
-import Athlete from "../../../../interfaces/athlete";
+import Athlete from "../../../../../../../shared/interfaces/athlete.interface";
 
 @Component({
   selector: 'app-athlete',

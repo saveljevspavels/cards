@@ -1,8 +1,10 @@
-import CONST from "../../definitions/constants.json";
-import {RESPONSES} from "./response-codes.js";
+import {RESPONSES} from "./response-codes";
+import {Express} from "express";
+import {FirestoreService} from "./firestore.service";
+import {CONST} from "../../definitions/constants";
 
 export default class CardService {
-    constructor(app, fireStoreService) {
+    constructor(app: Express, fireStoreService: FirestoreService) {
 
         app.post(`${CONST.API_PREFIX}create-card-factory`, (req, res) => {
             fireStoreService.createCardFactory(req.body)

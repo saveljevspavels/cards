@@ -1,5 +1,5 @@
 import {Component, Input, OnInit} from '@angular/core';
-import * as RULES from 'definitions/rules.json';
+import * as RULES from 'definitions/rules';
 import {ConstService} from "../../../../services/const.service";
 import {UtilService} from "../../../../services/util.service";
 

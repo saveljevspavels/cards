@@ -1,7 +1,9 @@
-import CONST from "../../definitions/constants.json";
+import {Express} from "express";
+import {FirestoreService} from "./firestore.service";
+import {CONST} from "../../definitions/constants";
 
 export default class WebhookService {
-    constructor(app, fireStoreService) {
+    constructor(app: Express, fireStoreService: FirestoreService) {
         // Sets server port and logs message on success
         app.listen(process.env.PORT || 3000, () => console.log('webhook is listening'));
 

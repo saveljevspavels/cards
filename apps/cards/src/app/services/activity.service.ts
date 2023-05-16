@@ -6,8 +6,8 @@ import {debounceTime, distinctUntilChanged, filter} from "rxjs/operators";
 import {LocalStorageService} from "./local-storage.service";
 import {environment} from "../../environments/environment";
 import {AthleteService} from "./athlete.service";
-import Athlete from "../interfaces/athlete";
 import {ConstService} from "./const.service";
+import Athlete from "../../../../shared/interfaces/athlete.interface";
 
 @Injectable({
     providedIn: 'root'

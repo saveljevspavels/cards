@@ -1,12 +1,12 @@
-import CONST from "../../../definitions/constants.json";
-import RULES from "../../../definitions/rules.json";
-import {normalizeActivityType} from "../util.js";
+import {normalizeActivityType} from "../helpers/util";
+import {RULES} from "../../../definitions/rules";
+import {CONST} from "../../../definitions/constants";
 
 export class ValidationService {
 
-    static resolveValidationValue(validator, baseWorkout) {
+    static resolveValidationValue(validator: any, baseWorkout: any) {
         if(baseWorkout !== null) {
-            return Object.keys(RULES.DEFAULT_BASE_WORKOUT).reduce((acc, type) => {
+            return Object.keys(RULES.DEFAULT_BASE_WORKOUT).reduce((acc: any, type) => {
                 try {
                     acc[type] = this.evaluateFormula(validator.formula, validator.property, baseWorkout[type])
                 } catch (err) {}
@@ -15,7 +15,7 @@ export class ValidationService {
         } else return 0;
     }
 
-    static evaluateFormula(formula, property, values = {}) {
+    static evaluateFormula(formula: any, property: any, values = {}) {
         Object.entries(values).forEach(([key, value]) => {
             formula = formula.replace(key, value)
         })
@@ -32,7 +32,7 @@ export class ValidationService {
         }
     }
 
-    static validateRule(activity, validator, baseWorkout) {
+    static validateRule(activity: any, validator: any, baseWorkout: any) {
         const type = normalizeActivityType(activity.type);
 
         const activityVal = validator.property === CONST.ACTIVITY_PROPERTIES.START_DATE
@@ -55,7 +55,7 @@ export class ValidationService {
         }
     }
 
-    static getTimeInSeconds(ISODate) {
+    static getTimeInSeconds(ISODate: any) {
         const date = new Date(ISODate)
         return date.getHours() * 60 * 60 + date.getMinutes() * 60 + date.getSeconds();
     }

@@ -3,10 +3,18 @@ export default interface Athlete {
     firstname: string;
     lastname: string;
     id: string;
+    profile: string;
     baseWorkout: BaseWorkout;
     permissions: string[];
     achievements: string[];
     energy: number;
+}
+
+export interface AthletePatch {
+    name: string;
+    firstname: string;
+    lastname: string;
+    profile: string;
 }
 
 export interface BaseWorkout {

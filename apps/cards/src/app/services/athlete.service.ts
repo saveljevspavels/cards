@@ -1,13 +1,12 @@
 import { Injectable } from '@angular/core';
 import {BehaviorSubject, combineLatest, forkJoin} from "rxjs";
 import {AngularFirestore} from "@angular/fire/firestore";
-import {LocalStorageService} from "./local-storage.service";
 import {filter, map, mergeMap} from "rxjs/operators";
 import {HttpClient} from "@angular/common/http";
 import {environment} from "../../environments/environment";
-import Athlete from "../interfaces/athlete";
 import {AuthService} from "./auth.service";
 import {ConstService} from "./const.service";
+import Athlete from "../../../../shared/interfaces/athlete.interface";
 
 @Injectable({
     providedIn: 'root'
@@ -24,11 +23,11 @@ export class AthleteService {
                 private authService: AuthService) {
 
         combineLatest([
-            this.authService.loggedIn,
+            this.authService.myId,
             this.athleteCollection.valueChanges()
-        ]).subscribe(([logged, athletes]: any) => {
+        ]).subscribe(([myId, athletes]: any) => {
             this.athletes.next(athletes)
-            this.me.next(athletes.find((athlete: Athlete) => athlete.id === LocalStorageService.athlete?.id) || null)
+            this.me.next(athletes.find((athlete: Athlete) => athlete.id === myId) || null)
             this.permissions.next(this.me.value?.permissions || ['default'])
         });
     }

@@ -1,9 +1,11 @@
-import CONST from "../../definitions/constants.json";
-import {RESPONSES} from "./response-codes.js";
+import {RESPONSES} from "./response-codes";
 import fs from "fs";
+import {Express} from "express";
+import {FirestoreService} from "./firestore.service";
+import {CONST} from "../../definitions/constants";
 
 export default class GameService {
-    constructor(app, fireStoreService) {
+    constructor(app: Express, fireStoreService: FirestoreService) {
         app.post(`${CONST.API_PREFIX}start-game`, async (req, res) => {
             await fireStoreService.startGame()
             res.status(200).send({response: RESPONSES.SUCCESS});

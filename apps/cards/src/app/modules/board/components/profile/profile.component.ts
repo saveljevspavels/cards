@@ -7,9 +7,9 @@ import {PopupService} from "../../../../services/popup.service";
 import {AchievementService} from "../../../../services/achievement.service";
 import {Achievement} from "../../../../interfaces/achievement";
 import {BehaviorSubject, Observable} from "rxjs";
-import Athlete from "../../../../interfaces/athlete";
 import {ActivityService} from "../../../../services/activity.service";
 import {map} from "rxjs/operators";
+import Athlete from "../../../../../../../shared/interfaces/athlete.interface";
 
 @Component({
   selector: 'app-profile',
@@ -39,7 +39,7 @@ export class ProfileComponent implements OnInit {
 
     ngOnInit(): void {
         this.athleteId = this.route.snapshot.params.athleteId;
-        this.self = !this.athleteId || LocalStorageService.athleteId === this.athleteId;
+        this.self = !this.athleteId || this.authService.myId.value === this.athleteId;
         this.athlete$ = this.self ? this.athleteService.me : this.athleteService.getAthlete$(this.athleteId)
         this.athlete$.subscribe((athlete) => {
             this.athlete = athlete;

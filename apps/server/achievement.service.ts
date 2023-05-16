@@ -1,8 +1,9 @@
-import CONST from "../../definitions/constants.json";
-import {RESPONSES} from "./response-codes.js";
+import {Express} from "express";
+import {FirestoreService} from "./firestore.service";
+import {CONST} from "../../definitions/constants";
 
 export default class AchievementService {
-    constructor(app, fireStoreService) {
+    constructor(app: Express, fireStoreService: FirestoreService) {
 
         app.post(`${CONST.API_PREFIX}create-achievement`, async (req, res) => {
             await fireStoreService.createAchievement(req.body)

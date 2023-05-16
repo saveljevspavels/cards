@@ -1,17 +1,17 @@
-import CONST from "../../definitions/constants.json";
-import RULES from "../../definitions/rules.json";
+import {RULES} from "../../../definitions/rules";
+import {CONST} from "../../../definitions/constants";
 
 export const generateId = () => {
     return Math.random().toString(36).substring(7);
 }
 
-export const parseResponse = (response, reqBody, callback) => {
+export const parseResponse = (response: any, reqBody: any, callback: any) => {
     response.setEncoding('utf8');
 
     let responseData = '';
     let headers = response.headers;
 
-    response.on('data', function(chunk) {
+    response.on('data', function(chunk: any) {
         responseData += chunk;
     });
 
@@ -24,7 +24,6 @@ export const parseResponse = (response, reqBody, callback) => {
             try {
                 responseData = JSON.parse(responseData);
             } catch (error) {
-                res.status(500).send(error);
                 callback(reqBody, [])
             }
         }
@@ -33,11 +32,11 @@ export const parseResponse = (response, reqBody, callback) => {
     });
 }
 
-export const getRandomInt = (max) => {
+export const getRandomInt = (max: number) => {
     return Math.floor(Math.random() * max);
 }
 
-export const updateScoreValues = (score, earnedValues, reducedValues, cardAmount, achievementsAmount) => {
+export const updateScoreValues = (score: any, earnedValues: number, reducedValues: number, cardAmount: number, achievementsAmount: number) => {
   return {
     value: score.value ? parseInt(score.value + earnedValues) : earnedValues,
     reduced: score.reduced ? parseInt(score.reduced + reducedValues) : reducedValues,
@@ -46,11 +45,11 @@ export const updateScoreValues = (score, earnedValues, reducedValues, cardAmount
   }
 }
 
-export const normalizeActivityType = (type) => {
-    return Object.values(CONST.ACTIVITY_TYPES).find((activityType) => type.toUpperCase().indexOf(activityType.toUpperCase()) !== -1) || CONST.ACTIVITY_TYPES.OTHER
+export const normalizeActivityType = (type: string) => {
+    return Object.values(CONST.ACTIVITY_TYPES as {[key: string]: string}).find((activityType) => type.toUpperCase().indexOf(activityType.toUpperCase()) !== -1) || CONST.ACTIVITY_TYPES.OTHER
 }
 
-export const tierToRoman = (number) => {
+export const tierToRoman = (number: string) => {
     switch (parseInt(number)) {
         case 0: return 'I';
         case 1: return 'II';
@@ -60,7 +59,7 @@ export const tierToRoman = (number) => {
     }
 }
 
-export const getTier = (value) => {
+export const getTier = (value: number) => {
     if(value >= RULES.LEVELS["0"].min && value <= RULES.LEVELS["0"].max) return 0
     if(value >= RULES.LEVELS["1"].min && value <= RULES.LEVELS["1"].max) return 1
     if(value >= RULES.LEVELS["2"].min && value <= RULES.LEVELS["2"].max) return 2
@@ -69,6 +68,6 @@ export const getTier = (value) => {
     return 0;
 }
 
-export const getEnergyAdjustedValue = (value, energy) => {
+export const getEnergyAdjustedValue = (value: string, energy: number) => {
     return Math.ceil(parseInt(value) * (1 - (RULES.ENERGY.REDUCTION_STEP * (RULES.ENERGY.MAX - energy))))
 }

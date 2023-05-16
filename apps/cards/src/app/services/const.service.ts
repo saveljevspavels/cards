@@ -1,8 +1,8 @@
 import {Injectable} from "@angular/core";
-import * as CONST from 'definitions/constants.json';
-import * as RULES from 'definitions/rules.json';
-import * as STRAVA_CONFIG from 'definitions/stravaConfig.json';
-import * as MAP_CONFIG from 'definitions/mapConfig.json';
+import {CONST} from 'definitions/constants';
+import {RULES} from 'definitions/rules';
+import {STRAVA_CONFIG} from 'definitions/stravaConfig';
+import {MAP_CONFIG} from 'definitions/mapConfig';
 
 @Injectable({
     providedIn: 'root'

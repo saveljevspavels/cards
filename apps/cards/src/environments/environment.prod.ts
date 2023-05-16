@@ -1,6 +1,6 @@
-import CONST from '../../../../definitions/constants.json';
-import * as RULES from '../../../../definitions/rules.json';
-import STRAVA_CONFIG from '../../../../definitions/stravaConfig.json';
+import {CONST} from '../../../../definitions/constants';
+import {RULES} from '../../../../definitions/rules';
+import {STRAVA_CONFIG} from '../../../../definitions/stravaConfig';
 
 const baseUrl = 'http://kurkudos.lv';
 

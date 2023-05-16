@@ -7,41 +7,44 @@ import {
     normalizeActivityType,
     tierToRoman,
     updateScoreValues
-} from "./util.js";
-import CONST from "../../definitions/constants.json";
-import RULES from "../../definitions/rules.json";
-import {RESPONSES} from "./response-codes.js";
-import {ValidationService} from "./shared/validation.service.js";
+} from "./helpers/util";
+import {RESPONSES} from "./response-codes";
+import {ValidationService} from "./shared/validation.service";
 import fs from "fs";
 import schedule from "node-schedule";
+import {Logger} from "winston";
+import {CONST} from "../../definitions/constants";
+import {RULES} from "../../definitions/rules";
 
 export class FirestoreService {
-    logger;
+    logger: Logger;
 
     db = firebase.initializeApp(
         JSON.parse(fs.readFileSync(
             `definitions/firebaseConfig${process.env.NODE_ENV ? '.' + process.env.NODE_ENV : ''}.json`,
             'utf8'))
     ).firestore();
-    athleteCollection = this.db.collection(CONST.COLLECTIONS.ATHLETES)
-    pendingActivityCollection = this.db.collection(CONST.COLLECTIONS.PENDING_ACTIVITIES)
-    detailedActivityCollection = this.db.collection(CONST.COLLECTIONS.DETAILED_ACTIVITIES)
-    commandCollection = this.db.collection(CONST.COLLECTIONS.COMMANDS)
-    handCollection = this.db.collection(CONST.COLLECTIONS.HANDS)
-    cardCollection = this.db.collection(CONST.COLLECTIONS.CARDS)
-    cardFactoryCollection = this.db.collection(CONST.COLLECTIONS.CARD_FACTORIES)
-    achievementCollection = this.db.collection(CONST.COLLECTIONS.ACHIEVEMENTS)
-    scoreCollection = this.db.collection(CONST.COLLECTIONS.SCORES)
-    gameCollection = this.db.collection(CONST.COLLECTIONS.GAME)
 
-    constructor(logger) {
+    public athleteCollection = this.db.collection(CONST.COLLECTIONS.ATHLETES)
+    public pendingActivityCollection = this.db.collection(CONST.COLLECTIONS.PENDING_ACTIVITIES)
+    public detailedActivityCollection = this.db.collection(CONST.COLLECTIONS.DETAILED_ACTIVITIES)
+    public commandCollection = this.db.collection(CONST.COLLECTIONS.COMMANDS)
+    public handCollection = this.db.collection(CONST.COLLECTIONS.HANDS)
+    public cardCollection = this.db.collection(CONST.COLLECTIONS.CARDS)
+    public cardFactoryCollection = this.db.collection(CONST.COLLECTIONS.CARD_FACTORIES)
+    public achievementCollection = this.db.collection(CONST.COLLECTIONS.ACHIEVEMENTS)
+    public scoreCollection = this.db.collection(CONST.COLLECTIONS.SCORES)
+    public gameCollection = this.db.collection(CONST.COLLECTIONS.GAME)
+    public sessionCollection = this.db.collection(CONST.COLLECTIONS.SESSIONS)
+
+    constructor(logger: Logger) {
         this.logger = logger;
         Object.getOwnPropertyNames(FirestoreService.prototype).forEach(method => {
             if(['constructor', 'errorHandlerWrap'].indexOf(method) === -1) {
+                // @ts-ignore
                 this[method] = this.errorHandlerWrap(method, this[method]);
             }
         })
-
 
         const rule = new schedule.RecurrenceRule();
         rule.hour = 21;
@@ -54,8 +57,8 @@ export class FirestoreService {
         })
     }
 
-    errorHandlerWrap(methodName, method) {
-        return async (...args) => {
+    errorHandlerWrap(methodName: string, method: any) {
+        return async (...args: any[]) => {
             try {
                 return await method.bind(this).call(this, ...args)
             } catch (err) {
@@ -65,27 +68,7 @@ export class FirestoreService {
         }
     }
 
-    async saveAthlete(athlete) {
-        const athleteDoc = this.athleteCollection.doc(athlete.id.toString())
-        const athleteExists = (await athleteDoc.get()).exists
-        if(!athleteExists) {
-            await athleteDoc.set(
-                {
-                    ...athlete,
-                    baseWorkout: RULES.DEFAULT_BASE_WORKOUT,
-                    permissions: ['default'],
-                    achievements: [],
-                    energy: RULES.ENERGY.BASE
-                })
-            this.logger.info(`Athlete ${athlete.firstname} ${athlete.lastname} ${athlete.id} saved`)
-            return true;
-        } else {
-            this.logger.info(`Athlete ${athlete.firstname} ${athlete.lastname} ${athlete.id} logged in`)
-            return false;
-        }
-    }
-
-    addPendingActivity(activity){
+    addPendingActivity(activity: any){
         return this.pendingActivityCollection.doc(activity.object_id.toString()).set(activity)
             .then(() => {
                 this.logger.info(`Pending activity ${activity.object_id.toString()} added!`);
@@ -95,7 +78,7 @@ export class FirestoreService {
             });
     }
 
-    deletePendingActivity(activityId) {
+    deletePendingActivity(activityId: string) {
         return this.pendingActivityCollection.doc(activityId.toString()).delete()
             .then(() => {
                 // this.logger.info(`Pending activity ${activityId.toString()} deleted!`); // Too much spam
@@ -105,7 +88,7 @@ export class FirestoreService {
             });
     }
 
-    async addDetailedActivity(activity) {
+    async addDetailedActivity(activity: any) {
         const activityDoc = this.detailedActivityCollection.doc(activity.id.toString())
         const activityExists = (await activityDoc.get()).exists
         if(activityExists) {
@@ -116,7 +99,7 @@ export class FirestoreService {
         }
     }
 
-    async addCommand(athleteId, command) {
+    async addCommand(athleteId: string, command: any) {
         const id = generateId();
         return this.commandCollection.doc(id).set({
             athleteId,
@@ -131,7 +114,7 @@ export class FirestoreService {
         });
     }
 
-    async deleteCommand(commandId) {
+    async deleteCommand(commandId: string) {
         return this.commandCollection.doc(commandId).delete()
             .then(() => {
                 this.logger.info(`Command ${commandId} deleted!`);
@@ -141,24 +124,25 @@ export class FirestoreService {
             });
     }
 
-    async setDeck(cards) {
+    async setDeck(cards: any[]) {
         const deck = this.handCollection.doc(CONST.HANDS.DECK);
         await deck.set({cardIds: cards})
     }
 
-    async addToHand(hand, cards) {
+    async addToHand(hand: string, cards: any[]) {
         const handDoc = this.handCollection.doc(hand);
         const currentDeck = (await handDoc.get()).data()?.cardIds || []
         await handDoc.set({cardIds: [...cards, ...currentDeck || []]})
         this.logger.info(`Adding ${cards.length} cards to hand ${hand} (now ${currentDeck.length + cards.length})`)
     }
 
-    async deleteCards(cards) {
+    async deleteCards(cards: any[]) {
         const handsToCheck = ['deck', 'discard', 'queue']
         for(let i = 0; i < handsToCheck.length; i++) {
+            // @ts-ignore
             const handDocument = this.handCollection.doc(CONST.HANDS[handsToCheck[i].toUpperCase()]);
             const currentHand = (await handDocument.get()).data()?.cardIds || []
-            cards.forEach(card => {
+            cards.forEach((card: any) => {
                 if(currentHand.indexOf(card) !== -1) {
                     currentHand.splice(currentHand.indexOf(card), 1);
                     this.logger.info(`Card ${card} deleted from ${handsToCheck[i]}`)
@@ -186,7 +170,7 @@ export class FirestoreService {
         this.logger.info(`Deck is shuffled, contains ${shuffledDeck.join(', ')} cards`)
     }
 
-    async dealCards(athletes, amount) {
+    async dealCards(athletes: any[], amount: number) {
         const deck = this.handCollection.doc(CONST.HANDS.DECK);
         const currentDeck = (await deck.get()).data()?.cardIds || []
         if(!amount) {
@@ -194,7 +178,7 @@ export class FirestoreService {
         }
         this.logger.info(`Cards in deck: ${currentDeck.length} dealing ${amount * athletes.length} cards`)
         if(currentDeck.length >= amount * athletes.length) {
-            const athleteCards = {}
+            const athleteCards: any = {}
             for(let i = 0; i < amount; i++) {
                 athletes.forEach(athlete => {
                     if(!athleteCards[athlete]) {
@@ -228,7 +212,7 @@ export class FirestoreService {
         return await this.dealCards([CONST.HANDS.QUEUE], 0);
     }
 
-    async discardFromHand(hand, cards) {
+    async discardFromHand(hand: any, cards: any[]) {
         const handDoc = this.handCollection.doc(hand);
         const currentHand = (await handDoc.get()).data()?.cardIds || []
         const handSize = currentHand.length;
@@ -248,15 +232,15 @@ export class FirestoreService {
         }
     }
 
-    async discardCards(hand, cards) {
+    async discardCards(hand: any, cards: any[]) {
         this.logger.info(`Discarding ${cards.length} cards from ${hand}`)
         const result = await this.discardFromHand(hand, cards)
         if(result) {
-            await this.addToHand(CONST.HANDS.DISCARD)
+            // await this.addToHand(CONST.HANDS.DISCARD)
         }
     }
 
-    async drawCard(athlete) {
+    async drawCard(athlete: string) {
         const athleteHand = this.handCollection.doc(athlete);
         const currentHand = (await athleteHand.get()).data()?.cardIds || []
         this.logger.info(`Athlete ${athlete} has ${currentHand.length} cards, tries to draw a card`)
@@ -268,7 +252,7 @@ export class FirestoreService {
         }
     }
 
-    async submitActivity(activityId, cardIds, imageIds, comments) {
+    async submitActivity(activityId: string, cardIds: string[], imageIds: string[], comments: string) {
         const activityDoc = this.detailedActivityCollection.doc(activityId.toString())
         const activity = (await activityDoc.get()).data() || {}
         const athleteDoc = this.athleteCollection.doc(activity.athlete.id.toString())
@@ -287,7 +271,7 @@ export class FirestoreService {
 
         const cardQuery = this.cardCollection.where('id', 'in', cardIds)
         const cardDocs = await cardQuery.get()
-        const cardSnapshots = [];
+        const cardSnapshots: any[] = [];
         cardDocs.forEach((card) => {
             const cardSnapshot = card.data();
             cardSnapshot.earnedValue = getEnergyAdjustedValue(cardSnapshot.value, athlete.energy)
@@ -310,7 +294,7 @@ export class FirestoreService {
         return RESPONSES.SUCCESS
     }
 
-    async rejectActivity(activityId, comments) {
+    async rejectActivity(activityId: string, comments: string) {
         const activityDoc = this.detailedActivityCollection.doc(activityId.toString())
         const activity = (await activityDoc.get()).data() || {}
         await activityDoc.update({
@@ -326,7 +310,7 @@ export class FirestoreService {
         this.logger.info(`Activity ${activity.type} ${activityId} was rejected for athlete ${activity.athlete.id.toString()}`)
     }
 
-    async deleteActivity(activityId) {
+    async deleteActivity(activityId: string) {
         const activityDoc = this.detailedActivityCollection.doc(activityId.toString())
         const activity = (await activityDoc.get()).data() || {}
         await activityDoc.update({
@@ -340,7 +324,7 @@ export class FirestoreService {
         this.logger.info(`Activity ${activityId} was deleted for athlete ${activity.athlete.id.toString()}`)
     }
 
-    async tryAutoApprove(activityId) {
+    async tryAutoApprove(activityId: string) {
         this.logger.info(`Attempting auto approve for activity ${activityId}`)
         const activityDoc = this.detailedActivityCollection.doc(activityId.toString())
         const activity = (await activityDoc.get()).data() || {}
@@ -349,7 +333,7 @@ export class FirestoreService {
         } else {
             const card = activity.gameData.cardSnapshots[0]
 
-            if(activity.gameData.cardSnapshots.find(card => card.manualValidation)) {
+            if(activity.gameData.cardSnapshots.find((card: any) => card.manualValidation)) {
                 this.logger.info(`Manual validation required for card ${card.id}`)
                 return RESPONSES.SUCCESS;
             }
@@ -358,8 +342,8 @@ export class FirestoreService {
             const athlete = (await athleteDoc.get()).data() || {}
 
             if(activity.gameData.cardSnapshots
-                .reduce((acc, card) => [...acc, ...card.validators], [])
-                .reduce((acc, validator) => acc && ValidationService.validateRule(activity, validator, athlete.baseWorkout), true)
+                .reduce((acc: any, card: any) => [...acc, ...card.validators], [])
+                .reduce((acc: any, validator: any) => acc && ValidationService.validateRule(activity, validator, athlete.baseWorkout), true)
             ) { // Checks all validators
                 this.logger.info(`All validators passed for ${activityId}`)
                 await this.approveActivity(activityId, [card.id])
@@ -370,7 +354,7 @@ export class FirestoreService {
         return RESPONSES.SUCCESS;
     }
 
-    async approveActivity(activityId, cardIds = []) {
+    async approveActivity(activityId: string, cardIds: string[] = []) {
         const activityDoc = this.detailedActivityCollection.doc(activityId.toString())
         const activity = (await activityDoc.get()).data() || {}
         if(activity.gameData.status === CONST.ACTIVITY_STATUSES.APPROVED) {
@@ -384,7 +368,7 @@ export class FirestoreService {
               ...activity.gameData,
               status: CONST.ACTIVITY_STATUSES.APPROVED,
               cardIds,
-              cardSnapshots: activity.gameData.cardSnapshots.filter(snapshot => cardIds.indexOf(snapshot.id) !== -1)
+              cardSnapshots: activity.gameData.cardSnapshots.filter((snapshot: any) => cardIds.indexOf(snapshot.id) !== -1)
             }
         })
 
@@ -402,17 +386,18 @@ export class FirestoreService {
         ])
     }
 
-    async updatePersonalBests(activity, cardIds) {
+    async updatePersonalBests(activity: any, cardIds: string[]) {
         if(cardIds.length) {
             const cardQuery = this.cardCollection.where('id', 'in', cardIds)
             const cardDocs = await cardQuery.get()
-            const baseWorkoutPatch = {};
+            const baseWorkoutPatch: any = {};
             const normalizedType = normalizeActivityType(activity.type);
             baseWorkoutPatch[normalizedType] = {};
             cardDocs.forEach((card) => {
-                card.data().validators.forEach(validator => {
-                    RULES.UPDATABLE_PROPERTIES.forEach(property => {
+                card.data().validators.forEach((validator: any) => {
+                    RULES.UPDATABLE_PROPERTIES.forEach((property: any) => {
                         if(validator.formula.indexOf(property) !== -1) {
+                            // @ts-ignore
                             baseWorkoutPatch[normalizedType][property] = (activity[validator.property] - RULES.UPDATABLE_PROPERTIES_DELTA[property])
                         }
                     })
@@ -424,7 +409,7 @@ export class FirestoreService {
         }
     }
 
-    async spendEnergy(athleteId, cardIds) {
+    async spendEnergy(athleteId: string, cardIds: string[]) {
         let energySpent = 0;
         if(cardIds?.length) {
             const itemQuery = this.cardCollection.where('id', 'in', cardIds)
@@ -451,7 +436,7 @@ export class FirestoreService {
         }
     }
 
-    async updateCardUses(cardIds) {
+    async updateCardUses(cardIds: string[]) {
         if(cardIds.length) {
             const cardQuery = this.cardCollection.where('id', 'in', cardIds)
             const cardDocs = await cardQuery.get()
@@ -472,7 +457,7 @@ export class FirestoreService {
         }
     }
 
-    async progressCard(cardId) {
+    async progressCard(cardId: string) {
         const cardDoc = this.cardCollection.doc(cardId)
         const card = (await cardDoc.get()).data() || {}
         let nextTier = card.tier;
@@ -499,7 +484,7 @@ export class FirestoreService {
         }
     }
 
-    async updateQueueUses(amount) {
+    async updateQueueUses(amount: number) {
         const queueDoc = await this.handCollection.doc(CONST.HANDS.QUEUE)
         const queue = (await queueDoc.get()).data() || {}
         const gameDoc = this.gameCollection.doc(CONST.GAME_ID)
@@ -538,11 +523,11 @@ export class FirestoreService {
         await this.shuffleDeck()
     }
 
-    async updateScore(athleteId, cardIds, achievementIds, energy) {
+    async updateScore(athleteId: string, cardIds: string[], achievementIds: string[], energy: number = RULES.ENERGY.MAX) {
         const scoreDoc = this.scoreCollection.doc(athleteId.toString())
         const score = (await scoreDoc.get()).data() || {}
-        const calculateTotals = async (ids, collection, energy) => {
-            const items = [];
+        const calculateTotals = async (ids: string[], collection: any, energy: number) => {
+            const items: any[] = [];
             const values = {
                 earned: 0,
                 reduced: 0
@@ -550,7 +535,7 @@ export class FirestoreService {
             if(ids?.length) {
                 const itemQuery = collection.where('id', 'in', ids)
                 const itemDocs = await itemQuery.get()
-                itemDocs.forEach(item => {
+                itemDocs.forEach((item: any) => {
                     items.push(item.data())
                 })
                 items.reduce((acc, item) => {
@@ -583,7 +568,7 @@ export class FirestoreService {
         this.logger.info(`Athlete ${athleteId} new score: ${JSON.stringify(newScore)}, was ${JSON.stringify(score)}`)
     }
 
-    async updateCardValues(cardIds) {
+    async updateCardValues(cardIds: string[]) {
         if(!cardIds.length) {
             this.logger.error(`No cardIds for updateCardValues`)
             return;
@@ -610,7 +595,7 @@ export class FirestoreService {
         }
     }
 
-    async restoreAthletesEnergy(value) {
+    async restoreAthletesEnergy(value: number) {
         const athleteQuery = await this.athleteCollection.get()
         athleteQuery.docs.forEach((athlete) => {
             const newVal = Math.min((athlete.data().energy || 0) + value, RULES.ENERGY.MAX)
@@ -621,7 +606,7 @@ export class FirestoreService {
         })
     }
 
-    async createCardFactory(card) {
+    async createCardFactory(card: any) {
         const id = card.id || generateId()
         return this.cardFactoryCollection.doc(id).set({
             ...card,
@@ -635,8 +620,8 @@ export class FirestoreService {
             });
     }
 
-    async createCardInstances(tier, amount, cardFactoryIds) {
-        const cardFactories = [];
+    async createCardInstances(tier: string, amount: number, cardFactoryIds: string[]) {
+        const cardFactories: any[] = [];
         if(cardFactoryIds.length) {
             const factoryQuery = this.cardFactoryCollection.where('id', 'in', cardFactoryIds)
             const factoryDocs = await factoryQuery.get()
@@ -651,7 +636,7 @@ export class FirestoreService {
         }))
     }
 
-    async createCardFromFactory(factory, tier, id = generateId()) {
+    async createCardFromFactory(factory: any, tier: string, id = generateId()) {
         let card = factory.progression === CONST.PROGRESSION.FLAT
             ? factory.cards[getRandomInt(Object.keys(factory.cards).length)] // Random card for flat progression
             : factory.cards[tier]
@@ -686,8 +671,8 @@ export class FirestoreService {
         this.logger.info(`Created ${factory.title} card ${id}, ${tier} tier`)
     }
 
-    async combineCards(athleteId, cardIds) {
-        const cards = [];
+    async combineCards(athleteId: string, cardIds: string[]) {
+        const cards: any[] = [];
         if(cardIds.length) {
             const cardQuery = this.cardCollection.where('id', 'in', cardIds)
             const cardDocs = await cardQuery.get()
@@ -707,7 +692,7 @@ export class FirestoreService {
         }
     }
 
-    async setCardTier(card, tier) {
+    async setCardTier(card: any, tier: number) {
         const factoryDoc = this.cardFactoryCollection.doc(card.factoryId.toString())
         const factory = (await factoryDoc.get()).data() || {}
 
@@ -723,7 +708,7 @@ export class FirestoreService {
         }
     }
 
-    async updateBaseWorkout(athleteIds, baseWorkoutPatch) {
+    async updateBaseWorkout(athleteIds: any[], baseWorkoutPatch: any) {
         athleteIds = athleteIds.map(id => parseInt(id, 10))
         const athleteQuery = this.athleteCollection.where('id', 'in', athleteIds)
         const athleteDocs = await athleteQuery.get()
@@ -733,7 +718,7 @@ export class FirestoreService {
             athleteDoc.update({
                 baseWorkout: {
                     ...currentBaseWorkout,
-                    ...Object.keys(baseWorkoutPatch).reduce((acc, type) => {
+                    ...Object.keys(baseWorkoutPatch).reduce((acc: any, type) => {
                         acc[type] = {...currentBaseWorkout[type], ...baseWorkoutPatch[type]}
                         return acc;
                     }, {})
@@ -743,7 +728,7 @@ export class FirestoreService {
         })
     }
 
-    async setPermissions(athleteIds, permissions) {
+    async setPermissions(athleteIds: string[], permissions: string[]) {
         for(let id of athleteIds) {
             await this.athleteCollection.doc(id.toString()).update({
                 permissions
@@ -763,7 +748,7 @@ export class FirestoreService {
     }
 
 
-    async createAchievement(achievement) {
+    async createAchievement(achievement: any) {
         const id = achievement.id || generateId()
         return this.achievementCollection.doc(id).set({
             ...achievement,
@@ -777,7 +762,7 @@ export class FirestoreService {
             });
     }
 
-    deleteAchievement(achievementId) {
+    deleteAchievement(achievementId: string) {
         return this.achievementCollection.doc(achievementId.toString()).delete()
             .then(() => {
                 this.logger.info(`Achievement ${achievementId.toString()} deleted!`); // Too much spam
@@ -787,7 +772,7 @@ export class FirestoreService {
             });
     }
 
-    async assignAchievement(athleteId, achievementId) {
+    async assignAchievement(athleteId: string, achievementId: string) {
         const athleteDoc = this.athleteCollection.doc(athleteId.toString())
         const athleteExists = (await athleteDoc.get()).exists
         if(athleteExists) {

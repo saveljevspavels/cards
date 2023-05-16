@@ -18,6 +18,8 @@ import { LogItemComponent } from './components/log-item/log-item.component';
 import { AdminParentComponent } from './components/admin-parent/admin-parent.component';
 import { AdminDeckComponent } from './components/admin-deck/admin-deck.component';
 import { AchievementManagementComponent } from './components/achievement-management/achievement-management.component';
+import {HTTP_INTERCEPTORS} from "@angular/common/http";
+import {HttpMainInterceptor} from "../../services/http.interceptor";
 
 
 @NgModule({
@@ -51,6 +53,7 @@ import { AchievementManagementComponent } from './components/achievement-managem
         ReactiveFormsModule
     ],
   providers: [
+    {provide: HTTP_INTERCEPTORS, useClass: HttpMainInterceptor, multi: true},
     {
       provide: AdminService
     }

@@ -2,7 +2,8 @@ import { Injectable } from '@angular/core';
 import {ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot, UrlTree} from '@angular/router';
 import {Observable, of} from 'rxjs';
 import {AuthService} from "../services/auth.service";
-import {catchError, map} from "rxjs/operators";
+import {LocalStorageService} from "../services/local-storage.service";
+import {decodeJwt} from "../../../../shared/utils/decodeJwt";
 
 @Injectable({
   providedIn: 'root'
@@ -15,22 +16,12 @@ export class AuthGuard implements CanActivate {
   canActivate(
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
-    if(tokenExpired(parseInt(localStorage.getItem('expires_at') || '0', 10))) {
-      console.log(' expired!')
-      const refreshToken = localStorage.getItem('refresh_token') || ''
-      if(refreshToken) {
-        return this.authService.refreshToken(refreshToken).pipe(
-          map((_) => true),
-          catchError((err) => of(this.router.parseUrl('/login'))))
-      }
-      return this.router.parseUrl('/login');
-    } else {
-      this.authService.loggedIn.next(true);
+    if(LocalStorageService.jwt) {
+      this.authService.decodeId();
       return true;
+    } else {
+      return this.router.parseUrl('/login');
     }
   }
 }
 
-export const tokenExpired = (expiresAt: number) => {
-  return + new Date > ( expiresAt * 1000 );
-}

@@ -8,15 +8,6 @@ export class LocalStorageService {
         return (localStorage.getItem('access_token') || '').toString()
     }
 
-    static get athlete() {
-        const stored = (JSON.parse(localStorage.getItem('athlete') || '{}'));
-        return Object.keys(stored).length ? stored : null
-    }
-
-    static get athleteId() {
-        return (JSON.parse(localStorage.getItem('athlete') || '{}'))?.id?.toString()
-    }
-
     static setObject(data: any) {
         Object.keys(data).forEach(key => {
             localStorage.setItem(key, typeof data[key] === 'object' ? JSON.stringify(data[key]) : data[key])
@@ -29,5 +20,13 @@ export class LocalStorageService {
 
     static getValue(item: string) {
         return localStorage.getItem(item)
+    }
+
+    static get jwt(): string {
+        return (localStorage.getItem('jwt') || '');
+    }
+
+    static set jwt(id: string) {
+        localStorage.setItem('jwt', id);
     }
 }

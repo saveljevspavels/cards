@@ -1,4 +1,4 @@
-import {decodeJwt} from "./decodeJwt";
+import {decodeJwt} from "../../../../shared/utils/decodeJwt";
 
 export function getJwtExp(token: string): number {
     const jwtData = decodeJwt(token);

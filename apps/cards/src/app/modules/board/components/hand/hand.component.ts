@@ -6,6 +6,7 @@ import {DeckService} from "../../../../services/deck.service";
 import {BehaviorSubject, combineLatest} from "rxjs";
 import {map} from "rxjs/operators";
 import {ConstService} from "../../../../services/const.service";
+import {AuthService} from "../../../../services/auth.service";
 
 @Component({
   selector: 'app-hand',
@@ -24,10 +25,13 @@ export class HandComponent implements OnInit, ControlValueAccessor {
     public cards = new BehaviorSubject<any[]>([]);
     public selectedCards = new FormControl([]);
 
-    constructor(private db: AngularFirestore,
-    private deckService: DeckService) {
+    constructor(
+        private db: AngularFirestore,
+        private deckService: DeckService,
+        private authService: AuthService
+    ) {
         combineLatest([
-            db.collection(ConstService.CONST.COLLECTIONS.HANDS).doc(LocalStorageService.athleteId).valueChanges(),
+            db.collection(ConstService.CONST.COLLECTIONS.HANDS).doc(this.authService.myId.value).valueChanges(),
             this.deckService.cards.asObservable()]
         )
         .pipe(map(([athleteCards, allCards]: any) => {

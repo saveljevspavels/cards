@@ -1,9 +1,9 @@
 import {Injectable} from "@angular/core";
 import {Validator} from "../interfaces/card";
 import {AthleteService} from "./athlete.service";
-import {BaseWorkout} from "../interfaces/athlete";
 import {UtilService} from "./util.service";
 import {ConstService} from "./const.service";
+import {BaseWorkout} from "../../../../shared/interfaces/athlete.interface";
 
 @Injectable({
     providedIn: 'root'

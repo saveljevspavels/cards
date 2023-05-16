@@ -18,7 +18,3 @@ export class AdminGuard implements CanActivate {
     return this.athleteService.hasPermission(PERMISSIONS.ADMIN) || this.router.navigateByUrl('/login')
   }
 }
-
-export const tokenExpired = (expiresAt: number) => {
-  return + new Date > ( expiresAt * 1000 );
-}

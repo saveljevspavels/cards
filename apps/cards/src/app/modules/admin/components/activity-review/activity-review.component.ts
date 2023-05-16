@@ -4,7 +4,7 @@ import {AdminService} from "../../admin.service";
 import {FormControl} from "@angular/forms";
 import {SwPush} from "@angular/service-worker";
 import {PushNotificationsService} from "../../../../services/pushNotifications.service";
-import CONST from "../../../../../../../../definitions/constants.json";
+import {CONST} from "../../../../../../../../definitions/constants";
 import {DeckService} from "../../../../services/deck.service";
 import Card from "../../../../interfaces/card";
 import {UtilService} from "../../../../services/util.service";
