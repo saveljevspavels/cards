@@ -8,18 +8,23 @@ export class AuthInterceptor {
             next();
             return;
         }
-        const jwt: {[key: string]: any} = decodeJwt(req.header('jwt') || '');
+        let jwt = req.header('jwt') || '';
         if(!jwt) {
             res.status(401).send();
         }
-        const expired: boolean = AuthHelper.tokenExpired(jwt.expiresAt);
+        const decodedJwt = decodeJwt(jwt);
+        const expired: boolean = AuthHelper.tokenExpired(decodedJwt.expiresAt);
         if(expired) {
-            const refreshedJwt: string = AuthHelper.createJwt(
-                await AuthInterceptor.refreshToken(jwt.refreshToken),
-                jwt.athleteId
+            jwt = AuthHelper.createJwt(
+                await AuthInterceptor.refreshToken(decodedJwt.refreshToken),
+                decodedJwt.athleteId
             );
-            res.set('Refreshed-Jwt', refreshedJwt);
+            res.set('Refreshed-Jwt', jwt);
         }
+        if(!req.body) {
+            req.body = {}
+        }
+        req.body.accessToken = decodeJwt(jwt).accessToken;
         next();
     }
 

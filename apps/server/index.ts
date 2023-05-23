@@ -19,8 +19,8 @@ import {Logger} from "winston";
 import {AuthInterceptor} from "./helpers/auth.interceptor";
 
 const app: Express = express().use(
-    AuthInterceptor.interceptRequest,
     bodyParser.json(),
+    AuthInterceptor.interceptRequest,
     cors({
         exposedHeaders: 'Refreshed-Jwt'
     })

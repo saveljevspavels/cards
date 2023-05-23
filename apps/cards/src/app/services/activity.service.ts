@@ -61,15 +61,13 @@ export class ActivityService {
 
     requestActivities(body: any) {
         return this.http.post(`${environment.baseBE}/activities`, {
-            ...body,
-            accessToken: LocalStorageService.accessToken
+            ...body
         })
     }
 
     calculateBaseWorkout(body: any) {
         return this.http.post(`${environment.baseBE}/calculate-base-workout`, {
-            ...body,
-            accessToken: LocalStorageService.accessToken
+            ...body
         })
     }
 

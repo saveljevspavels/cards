@@ -4,10 +4,6 @@ import {Injectable} from "@angular/core";
     providedIn: 'root'
 })
 export class LocalStorageService {
-    static get accessToken() {
-        return (localStorage.getItem('access_token') || '').toString()
-    }
-
     static setObject(data: any) {
         Object.keys(data).forEach(key => {
             localStorage.setItem(key, typeof data[key] === 'object' ? JSON.stringify(data[key]) : data[key])
