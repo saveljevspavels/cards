@@ -67,7 +67,3 @@ export const getTier = (value: number) => {
     if(value >= RULES.LEVELS["4"].min && value <= RULES.LEVELS["4"].max) return 4
     return 0;
 }
-
-export const getEnergyAdjustedValue = (value: string, energy: number) => {
-    return Math.ceil(parseInt(value) * (1 - (RULES.ENERGY.REDUCTION_STEP * (RULES.ENERGY.MAX - energy))))
-}

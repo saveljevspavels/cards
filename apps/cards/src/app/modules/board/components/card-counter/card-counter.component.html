@@ -1,8 +1,0 @@
-<div class="card-counter">
-    <h4 class="title">Cards played: {{(gameData | async)?.cardUses}}/{{(deckService.cardQueue | async)?.cardIds.length}}</h4>
-    <p class="text-small light m-0">Each time athletes collectively play {{(deckService.cardQueue | async)?.cardIds.length}} cards, card values are adjusted</p>
-    <div class="card-counter__indicator mt-2">
-        <app-counter-item *ngFor="let item of indicatorData" [checked]="item"></app-counter-item>
-        <div class="card-counter__indicator-line"></div>
-    </div>
-</div>

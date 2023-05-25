@@ -8,6 +8,7 @@ export default interface Athlete {
     permissions: string[];
     achievements: string[];
     energy: number;
+    coins: number;
 }
 
 export interface AthletePatch {

@@ -4,7 +4,6 @@ import {Express} from "express";
 import {FirestoreService} from "./firestore.service";
 import {CONST} from "../../definitions/constants";
 import {RULES} from "../../definitions/rules";
-import {AuthInterceptor} from "./helpers/auth.interceptor";
 
 export default class ClientService {
     fireStoreService;

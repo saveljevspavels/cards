@@ -49,6 +49,6 @@
 <ng-template #cardValue>
     <div class="card__value" *ngIf="card.value !== 0">
         <span class="card__energy-price pr-3" *ngIf="(card.value | tier)"><app-svg [icon]="'energy'"></app-svg>{{(card.value | tier)}}</span>
-        <span class="card__value-number">{{energyAdjustedValue}} <span *ngIf="energyAdjustedValue != card.value" style="opacity: .5; text-decoration: line-through">{{card.value}}</span></span> points
+        <span class="card__value-number">{{card.value}}</span> points
     </div>
 </ng-template>

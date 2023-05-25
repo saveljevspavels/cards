@@ -27,7 +27,7 @@ export class ActivityService {
         ).subscribe((me: Athlete | null) => {
             db.collection(
                 ConstService.CONST.COLLECTIONS.PENDING_ACTIVITIES,
-                (ref: any) => ref.where('owner_id', '==', me?.id)
+                (ref: any) => ref.where('owner_id', '==', parseInt(me?.id || '', 10))
             ).valueChanges().subscribe((activities: any) => {
                 this.pendingActivities.next(activities)
             });
@@ -35,7 +35,7 @@ export class ActivityService {
             db.collection(ConstService.CONST.COLLECTIONS.DETAILED_ACTIVITIES,
                 (ref: any) => (
                     ref
-                        .where('athlete.id', '==', me?.id)
+                        .where('athlete.id', '==', parseInt(me?.id || '', 10))
                         .where('gameData.status', 'in', [ConstService.CONST.ACTIVITY_STATUSES.NEW, ConstService.CONST.ACTIVITY_STATUSES.SUBMITTED])
                 )
             ).valueChanges().subscribe((activities: any) => {

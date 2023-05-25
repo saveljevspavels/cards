@@ -25,8 +25,6 @@ export class HttpMainInterceptor implements HttpInterceptor {
         const jwt = LocalStorageService.jwt;
         const jwtExp = getJwtExp(jwt);
 
-        console.log('intercept', request)
-        console.log('jwt', jwt)
         if (jwt) {
             request = request.clone({
                 headers: request.headers.set("jwt", jwt)
@@ -35,11 +33,8 @@ export class HttpMainInterceptor implements HttpInterceptor {
 
         return next.handle(request).pipe(
             tap((response) => {
-                console.log('response', response)
-                console.log('head', (response as HttpResponse<any>).headers?.get('Refreshed-Jwt'))
                 const jwt: string = (response as HttpResponse<any>)?.headers?.get('Refreshed-Jwt') || '';
                 if(jwt) {
-                    console.log('got refreshed jwt', jwt)
                     LocalStorageService.jwt = jwt;
                 }
             }),

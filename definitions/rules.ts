@@ -69,11 +69,14 @@ export const RULES = {
     MAX_CARDS_SUBMIT: 1,
     ENERGY: {
         MIN: 0,
-        MAX: 10,
-        BASE: 6,
-        SHUFFLE_RESTORE: 1,
-        TIMED_RESTORE: 2,
-        NEW_CARD_RESTORE: 1,
-        REDUCTION_STEP: 0.065
+        MAX: 3,
+        BASE: 3,
+        TIMED_RESTORE: 3
+    },
+    COINS: {
+        BASE: 0,
+        MIN: 0,
+        MAX: 999,
+        PER_ENERGY_CONVERSION: 2
     }
 }

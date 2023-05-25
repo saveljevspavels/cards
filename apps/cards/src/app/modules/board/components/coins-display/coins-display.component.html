@@ -1,0 +1,10 @@
+<div class="counter-line">
+    <div class="d-flex full-width justify-content-center mt-1 mb-2">
+        <img class="counter-line__image" src="assets/icons/deck.png">
+    </div>
+    <h4 class="title full-width justify-content-center d-flex">Your coins: {{(athlete$ | async)?.coins}}</h4>
+    <p class="text-small light m-0">Coins are mostly used for unlocking new tasks. You are earning coins for basic activities</p>
+    <div class="mt-2">
+        <app-generic-counter [indicatorData]="indicatorData" [energyColors]="true"></app-generic-counter>
+    </div>
+</div>

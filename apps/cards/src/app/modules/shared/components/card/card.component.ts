@@ -39,12 +39,7 @@ export class CardComponent implements OnInit, OnChanges {
 
     activityTypes: string;
 
-    constructor(private deckService: DeckService,
-                private athleteService: AthleteService) { }
-
-    get energyAdjustedValue() {
-        return this.card.earnedValue || Math.ceil(this.card.value * (1 - (this.RULES.ENERGY.REDUCTION_STEP * (this.RULES.ENERGY.MAX - ((this.energy || this.energy === 0) ? this.energy : this.RULES.ENERGY.MAX )))))
-    }
+    constructor(private deckService: DeckService) { }
 
     ngOnInit() {
         if(this.card) {

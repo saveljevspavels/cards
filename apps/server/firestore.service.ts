@@ -1,7 +1,6 @@
 import firebase from "firebase";
 import {
     generateId,
-    getEnergyAdjustedValue,
     getRandomInt,
     getTier,
     normalizeActivityType,
@@ -274,7 +273,7 @@ export class FirestoreService {
         const cardSnapshots: any[] = [];
         cardDocs.forEach((card) => {
             const cardSnapshot = card.data();
-            cardSnapshot.earnedValue = getEnergyAdjustedValue(cardSnapshot.value, athlete.energy)
+            cardSnapshot.earnedValue = cardSnapshot.value
             cardSnapshots.push(cardSnapshot)
         })
 
@@ -377,7 +376,7 @@ export class FirestoreService {
 
         this.logger.info(`Activity ${activityId} was approved for athlete ${athlete.firstname} ${athlete.lastname} with cards ${cardIds}`)
 
-        await this.updateScore(activity.athlete.id.toString(), cardIds, [], athlete.energy);
+        await this.updateScore(activity.athlete.id.toString(), cardIds, []);
         await this.spendEnergy(activity.athlete.id.toString(), cardIds);
         await this.updateCardUses(cardIds);
         await Promise.all([
@@ -451,7 +450,6 @@ export class FirestoreService {
                 })
                 if(card.data().progression !== CONST.PROGRESSION.NONE && newProgression >= card.data().cardUses.usesToProgress) {
                     this.progressCard(card.data().id)
-                    this.restoreAthletesEnergy(RULES.ENERGY.NEW_CARD_RESTORE);
                 }
             })
         }
@@ -500,7 +498,6 @@ export class FirestoreService {
             // await this.discardFromHand(CONST.HANDS.QUEUE, [lastQueueCardId])
             // await this.addToHand(CONST.HANDS.DISCARD, [lastQueueCardId])
             await this.updateCardValues(queue.cardIds)
-            await this.restoreAthletesEnergy(RULES.ENERGY.SHUFFLE_RESTORE);
 
             // const response = await this.dealQueue()
             // switch (response) {
@@ -523,10 +520,10 @@ export class FirestoreService {
         await this.shuffleDeck()
     }
 
-    async updateScore(athleteId: string, cardIds: string[], achievementIds: string[], energy: number = RULES.ENERGY.MAX) {
+    async updateScore(athleteId: string, cardIds: string[], achievementIds: string[]) {
         const scoreDoc = this.scoreCollection.doc(athleteId.toString())
         const score = (await scoreDoc.get()).data() || {}
-        const calculateTotals = async (ids: string[], collection: any, energy: number) => {
+        const calculateTotals = async (ids: string[], collection: any) => {
             const items: any[] = [];
             const values = {
                 earned: 0,
@@ -539,7 +536,7 @@ export class FirestoreService {
                     items.push(item.data())
                 })
                 items.reduce((acc, item) => {
-                    acc.earned = acc.earned + getEnergyAdjustedValue(item.value, energy)
+                    acc.earned = acc.earned + item.value;
                     acc.reduced = acc.reduced + (parseInt(item.value) - acc.earned);
                     return acc;
                 }, values);
@@ -551,8 +548,8 @@ export class FirestoreService {
             }
         }
 
-        const cardTotals = calculateTotals(cardIds, this.cardCollection, energy);
-        const achievementTotals = calculateTotals(achievementIds, this.achievementCollection, RULES.ENERGY.MAX);
+        const cardTotals = calculateTotals(cardIds, this.cardCollection);
+        const achievementTotals = calculateTotals(achievementIds, this.achievementCollection);
         const newScore = updateScoreValues(
             score,
             (await cardTotals).totalEarned + (await achievementTotals).totalEarned,
@@ -598,11 +595,13 @@ export class FirestoreService {
     async restoreAthletesEnergy(value: number) {
         const athleteQuery = await this.athleteCollection.get()
         athleteQuery.docs.forEach((athlete) => {
+            const excessEnergy = ((athlete.data().energy || 0) + value) - RULES.ENERGY.MAX;
             const newVal = Math.min((athlete.data().energy || 0) + value, RULES.ENERGY.MAX)
             this.athleteCollection.doc(athlete.data().id.toString()).update({
-                energy: newVal
+                energy: newVal,
+                coins: (athlete.data().coins || 0) + (excessEnergy > 0 ? excessEnergy * RULES.COINS.PER_ENERGY_CONVERSION : 0)
             })
-            this.logger.info(`Athlete ${athlete.data().firstname} ${athlete.data().lastname} ${athlete.data().id} restored ${value} energy, now ${newVal}`)
+            this.logger.info(`Athlete ${athlete.data().firstname} ${athlete.data().lastname} ${athlete.data().id} restored ${value} energy, now ${newVal}, and ${(excessEnergy > 0 ? excessEnergy * RULES.COINS.PER_ENERGY_CONVERSION : 0)} coins`)
         })
     }
 

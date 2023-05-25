@@ -4,11 +4,11 @@ import {IndicatorData} from "../generic-counter/generic-counter.component";
 import {AthleteService} from "../../../../services/athlete.service";
 
 @Component({
-  selector: 'app-energy-line',
-  templateUrl: './energy-line.component.html',
-  styleUrls: ['./energy-line.component.scss']
+  selector: 'app-coins-display',
+  templateUrl: './coins-display.component.html',
+  styleUrls: ['./coins-display.component.scss']
 })
-export class EnergyLineComponent implements OnInit {
+export class CoinsDisplayComponent implements OnInit {
     public RULES = ConstService.RULES;
     public athlete$ = this.athleteService.me;
 
@@ -16,20 +16,19 @@ export class EnergyLineComponent implements OnInit {
         width: 0,
         stage: 0
     };
-    public deckLength = 0;
 
     constructor(public athleteService: AthleteService) { }
 
     ngOnInit(): void {
         this.athlete$.subscribe((athlete) => {
-            this.indicatorData = this.generateIndicatorData(athlete?.energy || 0)
+            this.indicatorData = this.generateIndicatorData(athlete?.coins || 0)
         })
     }
 
-    generateIndicatorData(energy: number) {
+    generateIndicatorData(coins: number) {
         return {
-            width: Math.floor((energy / this.RULES.ENERGY.MAX) * 100),
-            stage: Math.floor(energy / this.RULES.ENERGY.MAX * 5)
+            width: Math.floor(coins * 100),
+            stage: Math.floor(coins * 5)
         }
     }
 

@@ -1,6 +1,6 @@
 <div class="counter-line">
     <div class="d-flex full-width justify-content-center mt-1 mb-2">
-        <img class="counter-line__image" src="assets/icons/deck.png">
+        <img class="counter-line__image" src="../../../../../../assets/icons/deck.png">
     </div>
     <h4 class="title full-width justify-content-center d-flex">Cards played: {{(gameData | async)?.cardUses}}/{{(deckService.cardQueue | async)?.length}}</h4>
     <p class="text-small light m-0">Each time athletes collectively play {{(deckService.cardQueue | async)?.length}} cards, card values are adjusted</p>

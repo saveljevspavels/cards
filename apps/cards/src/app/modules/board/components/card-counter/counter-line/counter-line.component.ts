@@ -1,10 +1,10 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {combineLatest, Observable} from "rxjs";
-import {GameService} from "../../../../services/game.service";
-import Game from "../../../../interfaces/game";
-import {ConstService} from "../../../../services/const.service";
-import {DeckService} from "../../../../services/deck.service";
-import {IndicatorData} from "../generic-counter/generic-counter.component";
+import {GameService} from "../../../../../services/game.service";
+import Game from "../../../../../interfaces/game";
+import {ConstService} from "../../../../../services/const.service";
+import {DeckService} from "../../../../../services/deck.service";
+import {IndicatorData} from "../../generic-counter/generic-counter.component";
 
 @Component({
   selector: 'app-counter-line',

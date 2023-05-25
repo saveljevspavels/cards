@@ -49,7 +49,8 @@ export default class AthleteService {
             baseWorkout: RULES.DEFAULT_BASE_WORKOUT,
             permissions: ['default'],
             achievements: [],
-            energy: RULES.ENERGY.BASE
+            energy: RULES.ENERGY.BASE,
+            coins: RULES.COINS.BASE
         }
     }
 
