@@ -6,7 +6,7 @@ import {SwPush} from "@angular/service-worker";
 import {PushNotificationsService} from "../../../../services/pushNotifications.service";
 import {CONST} from "../../../../../../../../definitions/constants";
 import {DeckService} from "../../../../services/deck.service";
-import Card from "../../../../interfaces/card";
+import Card from "../../../../../../../shared/interfaces/card";
 import {UtilService} from "../../../../services/util.service";
 
 @Component({

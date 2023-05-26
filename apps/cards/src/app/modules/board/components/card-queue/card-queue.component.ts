@@ -2,7 +2,7 @@ import {Component, forwardRef, Input, OnInit, ViewEncapsulation} from '@angular/
 import {DeckService} from "../../../../services/deck.service";
 import {Observable} from "rxjs";
 import {ControlValueAccessor, FormControl, NG_VALUE_ACCESSOR} from "@angular/forms";
-import Card from "../../../../interfaces/card";
+import Card from "../../../../../../../shared/interfaces/card";
 import {AthleteService} from "../../../../services/athlete.service";
 
 @Component({

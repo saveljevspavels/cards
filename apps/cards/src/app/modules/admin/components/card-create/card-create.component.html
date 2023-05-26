@@ -37,7 +37,11 @@
         <h3>Card #{{index}}</h3>
         <app-textarea [label]="'Description'" [fc]="cardGroup.get('description')"></app-textarea>
         <app-input [label]="'Tier'" [fc]="cardGroup.get('tier')"></app-input>
-        <app-input [label]="'Value'" [fc]="cardGroup.get('value')"></app-input>
+        <app-input [label]="'Value (Points)'" [fc]="cardGroup.get('value')"></app-input>
+        <app-input [label]="'Energy Cost'" [fc]="cardGroup.get('energyCost')"></app-input>
+        <app-input [label]="'Energy Reward'" [fc]="cardGroup.get('energyReward')"></app-input>
+        <app-input [label]="'Coins Cost'" [fc]="cardGroup.get('coinsCost')"></app-input>
+        <app-input [label]="'Coins Reward'" [fc]="cardGroup.get('coinsReward')"></app-input>
         <app-input [label]="'Uses to Progress'" [fc]="cardGroup.get('usesToProgress')"></app-input>
         <ng-container
             *ngFor="let validator of validatorAmountIterator"

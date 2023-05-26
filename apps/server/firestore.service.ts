@@ -273,7 +273,6 @@ export class FirestoreService {
         const cardSnapshots: any[] = [];
         cardDocs.forEach((card) => {
             const cardSnapshot = card.data();
-            cardSnapshot.earnedValue = cardSnapshot.value
             cardSnapshots.push(cardSnapshot)
         })
 
@@ -323,91 +322,6 @@ export class FirestoreService {
         this.logger.info(`Activity ${activityId} was deleted for athlete ${activity.athlete.id.toString()}`)
     }
 
-    async tryAutoApprove(activityId: string) {
-        this.logger.info(`Attempting auto approve for activity ${activityId}`)
-        const activityDoc = this.detailedActivityCollection.doc(activityId.toString())
-        const activity = (await activityDoc.get()).data() || {}
-        if(!activity.gameData.cardSnapshots[0]) {
-            this.logger.info(`No cards provided on activity ${activityId}, switching to manual validation`)
-        } else {
-            const card = activity.gameData.cardSnapshots[0]
-
-            if(activity.gameData.cardSnapshots.find((card: any) => card.manualValidation)) {
-                this.logger.info(`Manual validation required for card ${card.id}`)
-                return RESPONSES.SUCCESS;
-            }
-
-            const athleteDoc = this.athleteCollection.doc(activity.athlete.id.toString())
-            const athlete = (await athleteDoc.get()).data() || {}
-
-            if(activity.gameData.cardSnapshots
-                .reduce((acc: any, card: any) => [...acc, ...card.validators], [])
-                .reduce((acc: any, validator: any) => acc && ValidationService.validateRule(activity, validator, athlete.baseWorkout), true)
-            ) { // Checks all validators
-                this.logger.info(`All validators passed for ${activityId}`)
-                await this.approveActivity(activityId, [card.id])
-            } else {
-                this.logger.info(`Validator(s) failed, switching for manual approve ${activityId}`)
-            }
-        }
-        return RESPONSES.SUCCESS;
-    }
-
-    async approveActivity(activityId: string, cardIds: string[] = []) {
-        const activityDoc = this.detailedActivityCollection.doc(activityId.toString())
-        const activity = (await activityDoc.get()).data() || {}
-        if(activity.gameData.status === CONST.ACTIVITY_STATUSES.APPROVED) {
-            this.logger.error(`Activity ${activityId} was already approved for athlete ${activity.athlete.id.toString()}`)
-            return;
-        }
-
-        await activityDoc.set({
-            ...activity,
-            gameData: {
-              ...activity.gameData,
-              status: CONST.ACTIVITY_STATUSES.APPROVED,
-              cardIds,
-              cardSnapshots: activity.gameData.cardSnapshots.filter((snapshot: any) => cardIds.indexOf(snapshot.id) !== -1)
-            }
-        })
-
-        const athleteDoc = this.athleteCollection.doc(activity.athlete.id.toString())
-        const athlete = (await athleteDoc.get()).data() || {}
-
-        this.logger.info(`Activity ${activityId} was approved for athlete ${athlete.firstname} ${athlete.lastname} with cards ${cardIds}`)
-
-        await this.updateScore(activity.athlete.id.toString(), cardIds, []);
-        await this.spendEnergy(activity.athlete.id.toString(), cardIds);
-        await this.updateCardUses(cardIds);
-        await Promise.all([
-            this.updatePersonalBests(activity, cardIds),
-            this.updateQueueUses(cardIds.length)
-        ])
-    }
-
-    async updatePersonalBests(activity: any, cardIds: string[]) {
-        if(cardIds.length) {
-            const cardQuery = this.cardCollection.where('id', 'in', cardIds)
-            const cardDocs = await cardQuery.get()
-            const baseWorkoutPatch: any = {};
-            const normalizedType = normalizeActivityType(activity.type);
-            baseWorkoutPatch[normalizedType] = {};
-            cardDocs.forEach((card) => {
-                card.data().validators.forEach((validator: any) => {
-                    RULES.UPDATABLE_PROPERTIES.forEach((property: any) => {
-                        if(validator.formula.indexOf(property) !== -1) {
-                            // @ts-ignore
-                            baseWorkoutPatch[normalizedType][property] = (activity[validator.property] - RULES.UPDATABLE_PROPERTIES_DELTA[property])
-                        }
-                    })
-                })
-            })
-            if(Object.keys(baseWorkoutPatch[normalizedType]).length) {
-                await this.updateBaseWorkout([activity.athlete.id.toString()], baseWorkoutPatch)
-            }
-        }
-    }
-
     async spendEnergy(athleteId: string, cardIds: string[]) {
         let energySpent = 0;
         if(cardIds?.length) {
@@ -435,52 +349,6 @@ export class FirestoreService {
         }
     }
 
-    async updateCardUses(cardIds: string[]) {
-        if(cardIds.length) {
-            const cardQuery = this.cardCollection.where('id', 'in', cardIds)
-            const cardDocs = await cardQuery.get()
-            cardDocs.forEach((card) => {
-                const newProgression = card.data().cardUses.progression + 1;
-                card.ref.update({
-                    cardUses: {
-                        ...card.data().cardUses,
-                        progression: newProgression,
-                        queue: card.data().cardUses.queue + 1,
-                    }
-                })
-                if(card.data().progression !== CONST.PROGRESSION.NONE && newProgression >= card.data().cardUses.usesToProgress) {
-                    this.progressCard(card.data().id)
-                }
-            })
-        }
-    }
-
-    async progressCard(cardId: string) {
-        const cardDoc = this.cardCollection.doc(cardId)
-        const card = (await cardDoc.get()).data() || {}
-        let nextTier = card.tier;
-        switch (card.progression) {
-            case CONST.PROGRESSION.TIERS:
-            case CONST.PROGRESSION.CHAIN:
-                nextTier = parseInt(nextTier) + 1;
-                break;
-        }
-        this.logger.info(`Progressing card ${cardId} to ${card.progression} ${nextTier}`)
-        const factory = (await this.cardFactoryCollection.doc(card.factoryId).get()).data() || {}
-
-        switch (card.progression) {
-            case CONST.PROGRESSION.CHAIN:
-                const newCardId = generateId();
-                await cardDoc.update({
-                    progression: CONST.PROGRESSION.NONE
-                })
-                await this.createCardFromFactory(factory, nextTier, newCardId);
-                await this.addToHand(CONST.HANDS.QUEUE, [newCardId]);
-                break;
-            default:
-                await this.createCardFromFactory(factory, nextTier, card.id);
-        }
-    }
 
     async updateQueueUses(amount: number) {
         const queueDoc = await this.handCollection.doc(CONST.HANDS.QUEUE)
@@ -525,10 +393,7 @@ export class FirestoreService {
         const score = (await scoreDoc.get()).data() || {}
         const calculateTotals = async (ids: string[], collection: any) => {
             const items: any[] = [];
-            const values = {
-                earned: 0,
-                reduced: 0
-            }
+            const value = 0;
             if(ids?.length) {
                 const itemQuery = collection.where('id', 'in', ids)
                 const itemDocs = await itemQuery.get()
@@ -536,15 +401,13 @@ export class FirestoreService {
                     items.push(item.data())
                 })
                 items.reduce((acc, item) => {
-                    acc.earned = acc.earned + item.value;
-                    acc.reduced = acc.reduced + (parseInt(item.value) - acc.earned);
+                    acc = acc + item.value;
                     return acc;
-                }, values);
+                }, value);
             }
             return {
                 amount: items.length || 0,
-                totalEarned: values.earned,
-                totalReduced: values.reduced,
+                total: value
             }
         }
 
@@ -552,8 +415,7 @@ export class FirestoreService {
         const achievementTotals = calculateTotals(achievementIds, this.achievementCollection);
         const newScore = updateScoreValues(
             score,
-            (await cardTotals).totalEarned + (await achievementTotals).totalEarned,
-            (await cardTotals).totalReduced + (await achievementTotals).totalReduced,
+            (await cardTotals).total + (await achievementTotals).total,
             (await cardTotals).amount,
             (await achievementTotals).amount
         )
@@ -603,108 +465,6 @@ export class FirestoreService {
             })
             this.logger.info(`Athlete ${athlete.data().firstname} ${athlete.data().lastname} ${athlete.data().id} restored ${value} energy, now ${newVal}, and ${(excessEnergy > 0 ? excessEnergy * RULES.COINS.PER_ENERGY_CONVERSION : 0)} coins`)
         })
-    }
-
-    async createCardFactory(card: any) {
-        const id = card.id || generateId()
-        return this.cardFactoryCollection.doc(id).set({
-            ...card,
-            id
-        })
-            .then(() => {
-                this.logger.info(`New card ${card.title} ${card.id} factory created!`);
-            })
-            .catch((error) => {
-                this.logger.error(`Error writing document: ${error}`);
-            });
-    }
-
-    async createCardInstances(tier: string, amount: number, cardFactoryIds: string[]) {
-        const cardFactories: any[] = [];
-        if(cardFactoryIds.length) {
-            const factoryQuery = this.cardFactoryCollection.where('id', 'in', cardFactoryIds)
-            const factoryDocs = await factoryQuery.get()
-            factoryDocs.forEach(factory => {
-                cardFactories.push(factory.data())
-            })
-        }
-        cardFactories.forEach((factory => {
-            for(let i = 0; i < amount; i++) {
-                this.createCardFromFactory(factory, tier)
-            }
-        }))
-    }
-
-    async createCardFromFactory(factory: any, tier: string, id = generateId()) {
-        let card = factory.progression === CONST.PROGRESSION.FLAT
-            ? factory.cards[getRandomInt(Object.keys(factory.cards).length)] // Random card for flat progression
-            : factory.cards[tier]
-        if(!card) {
-            this.logger.error(`Card ${factory.title} tier ${tier} not defined`)
-            return;
-        }
-        let newProgression = factory.progression;
-        if ((factory.progression === CONST.PROGRESSION.CHAIN || factory.progression === CONST.PROGRESSION.TIERS) && Object.keys(factory.cards).length === parseInt(tier) + 1) {
-            this.logger.info(`Card ${factory.title} tier ${tier} is final, switching progression to ${CONST.PROGRESSION.NONE}`)
-            newProgression = CONST.PROGRESSION.NONE;
-        }
-        card = {
-            id,
-            title: factory.title + ((factory.progression === CONST.PROGRESSION.CHAIN || factory.progression === CONST.PROGRESSION.TIERS) ? ' ' + tierToRoman(tier) : ''),
-            image: factory.image || '',
-            factoryId: factory.id,
-            progression: newProgression,
-            manualValidation: factory.manualValidation,
-            tier,
-            ...card,
-            validators: Object.values(card.validators)
-        }
-        card.cardUses = {
-            usesToProgress: parseInt(card.usesToProgress, 10),
-            queue: 0,
-            progression: 0
-        }
-        delete card.usesToProgress;
-        await this.cardCollection.doc(id).set(card)
-
-        this.logger.info(`Created ${factory.title} card ${id}, ${tier} tier`)
-    }
-
-    async combineCards(athleteId: string, cardIds: string[]) {
-        const cards: any[] = [];
-        if(cardIds.length) {
-            const cardQuery = this.cardCollection.where('id', 'in', cardIds)
-            const cardDocs = await cardQuery.get()
-            cardDocs.forEach(card => {
-                cards.push(card.data())
-            })
-        }
-        if(cards.length !== 2) {
-            return 'Invalid card ids'
-        } else if (cards[0].tier !== cards[1].tier){
-            return 'Cards are different tiers'
-        } else if (cards[0].factoryId !== cards[1].factoryId) {
-            return 'Cards are different type'
-        } else {
-            await this.discardFromHand(athleteId, [cards[1].id])
-            return await this.setCardTier(cards[0], ++cards[0].tier)
-        }
-    }
-
-    async setCardTier(card: any, tier: number) {
-        const factoryDoc = this.cardFactoryCollection.doc(card.factoryId.toString())
-        const factory = (await factoryDoc.get()).data() || {}
-
-        if(factory) {
-            await this.cardCollection.doc(card.id).set({
-                ...card,
-                tier,
-                ...factory.tiers[tier]
-            })
-            return RESPONSES.SUCCESS
-        } else {
-            return 'Invalid factory'
-        }
     }
 
     async updateBaseWorkout(athleteIds: any[], baseWorkoutPatch: any) {

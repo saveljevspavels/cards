@@ -1,5 +1,5 @@
 import {Injectable} from "@angular/core";
-import {Validator} from "../interfaces/card";
+import {Validator} from "../../../../shared/interfaces/card";
 import {AthleteService} from "./athlete.service";
 import {UtilService} from "./util.service";
 import {ConstService} from "./const.service";

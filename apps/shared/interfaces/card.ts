@@ -7,7 +7,10 @@ export default interface Card {
     id: string;
     description: string;
     value: number;
-    earnedValue: number;
+    energyCost: number;
+    energyReward: number;
+    coinsCost: number;
+    coinsReward: number;
     cardUses: CardUses;
     factoryId: string;
     progression: Progression;

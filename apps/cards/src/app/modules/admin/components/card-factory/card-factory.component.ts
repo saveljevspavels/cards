@@ -1,5 +1,5 @@
 import {Component, Input, OnInit, Output, EventEmitter} from '@angular/core';
-import CardFactory from "../../../../interfaces/card-factory";
+import CardFactory from "../../../../../../../shared/interfaces/card-factory";
 
 @Component({
   selector: 'app-card-factory',

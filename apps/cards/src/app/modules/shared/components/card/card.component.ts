@@ -1,10 +1,11 @@
 import {Component, Input, OnChanges, OnInit} from '@angular/core';
-import Card, {Validator} from "../../../../interfaces/card";
+import Card, {Validator} from "../../../../../../../shared/interfaces/card";
 import {filter} from "rxjs/operators";
 import {DeckService} from "../../../../services/deck.service";
 import {ConstService} from "../../../../services/const.service";
 import {UtilService} from "../../../../services/util.service";
 import {AthleteService} from "../../../../services/athlete.service";
+import {Progression} from "../../../../../../../shared/interfaces/card-factory";
 
 @Component({
   selector: 'app-card',
@@ -12,7 +13,7 @@ import {AthleteService} from "../../../../services/athlete.service";
   styleUrls: ['./card.component.scss']
 })
 export class CardComponent implements OnInit, OnChanges {
-    public CONST = ConstService.CONST;
+    public PROGRESSION = Progression;
     public RULES = ConstService.RULES;
 
     @Input()

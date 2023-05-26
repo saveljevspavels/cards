@@ -35,10 +35,10 @@
         </div>
     </div>
     <div class="card__bonuses" *ngIf="!submittedType">
-        <div class="card__progression" *ngIf="card.cardUses.usesToProgress !== 0 && card.progression !== CONST.PROGRESSION.NONE; else placeholder">
-            <span *ngIf="card.progression === CONST.PROGRESSION.TIERS">Uses to level up</span>
-            <span *ngIf="card.progression === CONST.PROGRESSION.CHAIN">Uses to get new card</span>
-            <span *ngIf="card.progression === CONST.PROGRESSION.FLAT">Uses to change for new card</span>
+        <div class="card__progression" *ngIf="card.cardUses.usesToProgress !== 0 && card.progression !== PROGRESSION.NONE; else placeholder">
+            <span *ngIf="card.progression === PROGRESSION.TIERS">Uses to level up</span>
+            <span *ngIf="card.progression === PROGRESSION.CHAIN">Uses to get new card</span>
+            <span *ngIf="card.progression === PROGRESSION.FLAT">Uses to change for new card</span>
             <span> {{card.cardUses?.progression}}/{{card.cardUses?.usesToProgress}}</span>
         </div>
         <ng-template #placeholder><div></div></ng-template>

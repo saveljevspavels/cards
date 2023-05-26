@@ -6,7 +6,7 @@ import {HttpClient} from "@angular/common/http";
 import {environment} from "../../environments/environment";
 import Hand from "../interfaces/hand";
 import {ConstService} from "./const.service";
-import Card from "../interfaces/card";
+import Card from "../../../../shared/interfaces/card";
 import {UtilService} from "./util.service";
 import {AuthService} from "./auth.service";
 

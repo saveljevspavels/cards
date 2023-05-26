@@ -42,12 +42,6 @@ export const CONST = {
         WALK: "walk",
         OTHER: "other"
     },
-    PROGRESSION: {
-        TIERS: "tiers",
-        FLAT: "flat",
-        CHAIN: "chain",
-        NONE: "none"
-    },
     COMPARATORS: {
         GREATER: "greater",
         LESS: "less",

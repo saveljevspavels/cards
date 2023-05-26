@@ -4,6 +4,7 @@ import {AdminService} from "../../admin.service";
 import {FileService} from "../../../../services/file.service";
 import {UtilService} from "../../../../services/util.service";
 import {ConstService} from "../../../../services/const.service";
+import CardFactory, {CardPrototype, Progression} from "../../../../../../../shared/interfaces/card-factory";
 
 @Component({
   selector: 'app-card-create',
@@ -17,8 +18,8 @@ export class CardCreateComponent implements OnInit, OnChanges {
     @Input()
     public selectedCardFactory: any;
 
-    public cardAmount = new FormControl(4, [Validators.min(1)])
-    public validatorAmount = new FormControl(0, [Validators.min(0)])
+    public cardAmount = new FormControl(1, [Validators.min(1)])
+    public validatorAmount = new FormControl(1, [Validators.min(0)])
     public form: FormGroup;
     public imageControl = new FormControl([]);
 
@@ -55,10 +56,15 @@ export class CardCreateComponent implements OnInit, OnChanges {
 
     async submit() {
         const image = this.imageControl.value.length ? (await this.fileService.uploadImages(this.imageControl.value))[0] : this.selectedCardFactory?.image;
-        this.adminService.createCardFactory({
+        const newFactory: CardFactory = {
             ...this.form.value,
             image: image ? image : null
-        }).subscribe(() => {
+        };
+        newFactory.cards = Object.values(newFactory.cards)
+        newFactory.cards.forEach((prototype: CardPrototype) => {
+            prototype.validators = Object.values(prototype.validators)
+        })
+        this.adminService.createCardFactory(newFactory).subscribe(() => {
             this.form = this.initForm()
         })
     }
@@ -69,23 +75,23 @@ export class CardCreateComponent implements OnInit, OnChanges {
             title: ['', [Validators.required]],
             image: ['', [Validators.required]],
             manualValidation: [false],
-            progression: ['']
+            progression: [Progression.NONE]
         })
         this.updateFormCardAmount(form, this.cardAmount.value)
         form.get('progression')?.valueChanges.subscribe(progression => {
             switch (progression) {
-                case ConstService.CONST.PROGRESSION.TIERS:
-                case ConstService.CONST.PROGRESSION.CHAIN:
+                case Progression.TIERS:
+                case Progression.CHAIN:
                     for(let i = 0; i < this.cardAmount.value; i++) {
                         this.form.get('cards.' + i + '.tier')?.setValue(i)
                     }
                     break;
-                case ConstService.CONST.PROGRESSION.FLAT:
+                case Progression.FLAT:
                     for(let i = 0; i < this.cardAmount.value; i++) {
                         this.form.get('cards.' + i + '.tier')?.setValue(0)
                     }
                     break;
-                case ConstService.CONST.PROGRESSION.NONE:
+                case Progression.NONE:
                     this.form.get('cards.0.tier')?.setValue(0)
                     this.cardAmount.setValue(1);
                     break;
@@ -99,7 +105,11 @@ export class CardCreateComponent implements OnInit, OnChanges {
             description: ['', [Validators.required]],
             tier: ['0', [Validators.required]],
             usesToProgress: ['0', [Validators.required]],
-            value: ['0', [Validators.required]],
+            value: ['1', [Validators.required]],
+            energyCost: ['1', [Validators.required]],
+            energyReward: ['0', [Validators.required]],
+            coinsCost: ['0', [Validators.required]],
+            coinsReward: ['1', [Validators.required]],
         })
         this.setValidatorsToCardGroup(cardGroup, this.validatorAmount.value)
         return cardGroup;
