@@ -13,7 +13,7 @@
     <app-checkbox [label]="'Manual validation required'" [fc]="form.get('manualValidation')"></app-checkbox>
     <app-input [label]="'Id (leave blank for creating new card factory)'" [fc]="form.get('id')"></app-input>
     <app-input [label]="'Title'" [fc]="form.get('title')"></app-input>
-    <app-select [label]="'Progression'" [fc]="form.get('progression')" [options]="CONST.PROGRESSION | keyvalue"></app-select>
+    <app-select [label]="'Progression'" [fc]="form.get('progression')" [options]="PROGRESSION | keyvalue"></app-select>
 
     <div class="d-flex flex-wrap mr-3">
         <ng-container

@@ -19,7 +19,8 @@ export const CONST = {
         CARD_FACTORIES: "card_factories",
         ACHIEVEMENTS: "achievements",
         GAME: "game",
-        SESSIONS: "sessions"
+        SESSIONS: "sessions",
+        SCHEME: "scheme"
     },
     HANDS: {
         DECK: "deck",
@@ -50,5 +51,6 @@ export const CONST = {
         NOT_IN: "notIn"
     },
     GAME_ID: "game1",
+    SCHEME_ID: "main",
     COMMENT_LENGTH: 300
 }

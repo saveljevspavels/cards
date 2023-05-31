@@ -14,6 +14,7 @@ import CardFactory, {CardPrototype, Progression} from "../../../../../../../shar
 export class CardCreateComponent implements OnInit, OnChanges {
     public workoutProperties = UtilService.getFlatKeys(ConstService.RULES.DEFAULT_BASE_WORKOUT)
     public CONST = ConstService.CONST
+    public PROGRESSION = Progression;
 
     @Input()
     public selectedCardFactory: any;

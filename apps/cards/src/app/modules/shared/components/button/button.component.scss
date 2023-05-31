@@ -42,4 +42,13 @@
     &--transparent {
         background-color: #00000000!important;
     }
+    &.technical {
+        padding: 2px;
+        height: 22px;
+        width: 100px;
+        border-radius: var(--radius / 4);
+        .title {
+            font-size: 12px;
+        }
+    }
 }

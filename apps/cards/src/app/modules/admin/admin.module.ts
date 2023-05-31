@@ -20,6 +20,7 @@ import { AdminDeckComponent } from './components/admin-deck/admin-deck.component
 import { AchievementManagementComponent } from './components/achievement-management/achievement-management.component';
 import {HTTP_INTERCEPTORS} from "@angular/common/http";
 import {HttpMainInterceptor} from "../../services/http.interceptor";
+import {CardSchemeComponent} from "./components/card-scheme/card-scheme.component";
 
 
 @NgModule({
@@ -30,6 +31,7 @@ import {HttpMainInterceptor} from "../../services/http.interceptor";
     ActivityReviewComponent,
     CardManagementComponent,
     CardFactoryComponent,
+    CardSchemeComponent,
     CardInstanceCreateComponent,
     AthleteManagementComponent,
     DeckComponent,

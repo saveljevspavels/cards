@@ -1,0 +1,46 @@
+<h4>Card scheme management</h4>
+
+<app-selection-wrapper
+        [formControl]="selectedCards"
+        [template]="cardTemplate"
+        [dataItems]="allCards | async"
+        [wrap]="true"
+>
+    <ng-template #cardTemplate let-dataItem="dataItem">
+        <ng-container [ngTemplateOutlet]="cardShortHand" [ngTemplateOutletContext]="{card: dataItem}"></ng-container>
+    </ng-template>
+</app-selection-wrapper>
+
+<ng-template #cardShortHand let-card="card">
+<pre class="m-0">
+<b>{{card.title}} {{card.value}}p</b>
+-{{card.energyCost}}e +{{card.coinsReward}}c
+-{{card.coinsCost}}c +{{card.energyReward}}e
+</pre>
+</ng-template>
+
+<div *ngIf="form" class="d-flex justify-content-between">
+    <div *ngFor="let board of form.controls">
+        <app-input [label]="'Title'" [fc]="board.get('title')"></app-input>
+        <div *ngFor="let level of board.get('levels').controls; let i = index" class="mt-2">
+            <hr>
+            Level {{i + 1}}
+            <div class="d-flex">
+                <div *ngFor="let card of level.get('cards').value">
+                    <ng-container [ngTemplateOutlet]="cardShortHand" [ngTemplateOutletContext]="{card: cardMap.get(card)}"></ng-container>
+                    <app-button label="Remove"
+                                styleClass="technical"
+                                [type]="'danger'"
+                                (buttonClick)="removeCard(level, card)">
+                    </app-button>
+                </div>
+            </div>
+            <app-button label="Add cards"
+                        styleClass="technical"
+                        (buttonClick)="addCards(level)">
+            </app-button>
+        </div>
+    </div>
+</div>
+
+<app-button (buttonClick)="saveSchema()" label="Save Schema"></app-button>

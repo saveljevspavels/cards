@@ -6,20 +6,23 @@ import {HttpClient} from "@angular/common/http";
 import {environment} from "../../environments/environment";
 import Hand from "../interfaces/hand";
 import {ConstService} from "./const.service";
-import Card from "../../../../shared/interfaces/card";
+import Card, {NullCard} from "../../../../shared/interfaces/card";
 import {UtilService} from "./util.service";
 import {AuthService} from "./auth.service";
+import {CardScheme} from "../../../../shared/interfaces/card-scheme.interface";
 
 @Injectable({
   providedIn: 'root'
 })
 export class DeckService {
 
-    public cards = new BehaviorSubject<any>([]);
+    public cards = new BehaviorSubject<Card[]>([]);
+    public queueIds = new BehaviorSubject<string[]>([]);
     public cardQueue = new BehaviorSubject<Card[]>([]);
-    public card = new BehaviorSubject<Hand>({cardIds: []});
+    public cardScheme = new BehaviorSubject<CardScheme>({boards: []});
     private cardCollection = this.db.collection(ConstService.CONST.COLLECTIONS.CARDS);
     private cardQueueDocument = this.db.collection(ConstService.CONST.COLLECTIONS.HANDS).doc(ConstService.CONST.HANDS.QUEUE);
+    private cardSchemeDocument = this.db.collection(ConstService.CONST.COLLECTIONS.SCHEME).doc(ConstService.CONST.SCHEME_ID);
 
     constructor(
         private db: AngularFirestore,
@@ -29,18 +32,24 @@ export class DeckService {
         this.cardCollection.valueChanges().subscribe((cards: any[]) => {
             this.cards.next(cards)
         });
+        this.cardQueueDocument.valueChanges().subscribe((queue: any) => {
+            this.queueIds.next(queue.cardIds)
+        });
+        this.cardSchemeDocument.valueChanges().subscribe((cardScheme: any) => {
+            this.cardScheme.next(cardScheme)
+        });
         combineLatest([
-            this.cardQueueDocument.valueChanges(),
+            this.queueIds,
             this.cards
-        ]).subscribe(([queue, cards]: any) => {
+        ]).subscribe(([queue, cards]) => {
             if(cards.length) {
-                this.cardQueue.next(UtilService.sortByProp(cards.filter((card: Card) => queue.cardIds.indexOf(card.id) !== -1)))
+                this.cardQueue.next(UtilService.sortByProp(cards.filter((card: Card) => queue.indexOf(card.id) !== -1)))
             }
         })
     }
 
-    getCard(cardId: string) {
-        return this.cards.value.find((card: any) => card.id === cardId) || {}
+    getCard(cardId: string): Card {
+        return this.cards.value.find((card: Card) => card.id === cardId) || NullCard
     }
 
     discardCards(cardIds: string[]) {

@@ -9,6 +9,7 @@ import {LogsComponent} from "./components/logs/logs.component";
 import {AdminParentComponent} from "./components/admin-parent/admin-parent.component";
 import {AdminDeckComponent} from "./components/admin-deck/admin-deck.component";
 import {AchievementManagementComponent} from "./components/achievement-management/achievement-management.component";
+import {CardSchemeComponent} from "./components/card-scheme/card-scheme.component";
 
 const routes: Routes = [
     {
@@ -31,6 +32,10 @@ const routes: Routes = [
             {
                 path: 'card-management',
                 component: CardManagementComponent
+            },
+            {
+                path: 'card-scheme',
+                component: CardSchemeComponent
             },
             {
                 path: 'athlete-management',

@@ -29,3 +29,25 @@ export interface Validator {
     property: string;
     formula: string;
 }
+
+export const NullCard: Card = {
+    title: '',
+    image: '',
+    tier: 0,
+    id: '',
+    description: '',
+    value: 0,
+    energyCost: 0,
+    energyReward: 0,
+    coinsCost: 0,
+    coinsReward: 0,
+    cardUses: {
+      progression: 0,
+      queue: 0,
+      usesToProgress: 0,
+    },
+    factoryId: '',
+    progression: Progression.NONE,
+    validators: [],
+    manualValidation: false
+}

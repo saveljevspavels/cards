@@ -35,6 +35,7 @@ export class FirestoreService {
     public scoreCollection = this.db.collection(CONST.COLLECTIONS.SCORES)
     public gameCollection = this.db.collection(CONST.COLLECTIONS.GAME)
     public sessionCollection = this.db.collection(CONST.COLLECTIONS.SESSIONS)
+    public schemeCollection = this.db.collection(CONST.COLLECTIONS.SCHEME)
 
     constructor(logger: Logger) {
         this.logger = logger;

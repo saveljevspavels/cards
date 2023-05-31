@@ -47,7 +47,7 @@ export class CardComponent implements OnInit, OnChanges {
             this.initCard();
         }
         if(this.cardId) {
-            this.deckService.cards.pipe(filter(cards => cards.length)).subscribe(async _ =>{
+            this.deckService.cards.pipe(filter(cards => !!cards.length)).subscribe(async _ =>{
                 this.card = this.deckService.getCard(this.cardId)
                 this.initCard();
             })

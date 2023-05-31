@@ -6,6 +6,7 @@ import {COMMANDS} from "../../constants/commands";
 import {environment} from "../../../environments/environment";
 import {ConstService} from "../../services/const.service";
 import CardFactory from "../../../../../shared/interfaces/card-factory";
+import {CardScheme} from "../../../../../shared/interfaces/card-scheme.interface";
 
 @Injectable()
 export class AdminService {
@@ -103,5 +104,9 @@ export class AdminService {
 
     public getLogs(): Observable<Object> {
         return this.http.get(`${environment.baseBE}/admin/logs`)
+    }
+
+    public saveSchema(scheme: CardScheme) {
+        return this.http.post(`${environment.baseBE}/admin/save-schema`, scheme)
     }
 }

@@ -63,6 +63,12 @@ export class MobileMenuComponent implements OnInit {
                 permission: 'card-management'
             },
             {
+                label: 'Card Scheme',
+                icon: 'pi pi-fw pi-cog',
+                path: '/admin/card-scheme',
+                permission: 'card-management'
+            },
+            {
                 label: 'Athlete Management',
                 icon: 'pi pi-fw pi-cog',
                 path: '/admin/athlete-management',
