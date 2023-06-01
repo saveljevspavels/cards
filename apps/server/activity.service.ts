@@ -100,10 +100,7 @@ export default class ActivityService {
         await this.fireStoreService.updateScore(activity.athlete.id.toString(), cardIds, []);
         await this.fireStoreService.spendEnergy(activity.athlete.id.toString(), cardIds);
         await this.cardService.updateCardUses(cardIds);
-        await Promise.all([
-            this.updatePersonalBests(activity, cardIds),
-            this.fireStoreService.updateQueueUses(cardIds.length)
-        ])
+        await this.updatePersonalBests(activity, cardIds);
     }
 
     async updatePersonalBests(activity: any, cardIds: string[]) {

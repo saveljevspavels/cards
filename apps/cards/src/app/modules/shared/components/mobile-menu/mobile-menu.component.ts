@@ -51,12 +51,6 @@ export class MobileMenuComponent implements OnInit {
                 permission: 'admin-panel'
             },
             {
-                label: 'Deck',
-                icon: 'pi pi-fw pi-clone',
-                path: '/admin/deck',
-                permission: 'admin-panel'
-            },
-            {
                 label: 'Card Management',
                 icon: 'pi pi-fw pi-cog',
                 path: '/admin/card-management',

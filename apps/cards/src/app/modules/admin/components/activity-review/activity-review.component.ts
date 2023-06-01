@@ -5,8 +5,7 @@ import {FormControl} from "@angular/forms";
 import {SwPush} from "@angular/service-worker";
 import {PushNotificationsService} from "../../../../services/pushNotifications.service";
 import {CONST} from "../../../../../../../../definitions/constants";
-import {DeckService} from "../../../../services/deck.service";
-import Card from "../../../../../../../shared/interfaces/card";
+import CardInterface from "../../../../../../../shared/interfaces/card";
 import {UtilService} from "../../../../services/util.service";
 
 @Component({
@@ -51,7 +50,6 @@ export class ActivityReviewComponent implements OnInit {
     constructor(private adminService: AdminService,
                 private activityService: ActivityService,
                 private swPush: SwPush,
-                private deckService: DeckService,
                 private pushNotificationsService: PushNotificationsService) { }
 
     ngOnInit() {
@@ -80,17 +78,6 @@ export class ActivityReviewComponent implements OnInit {
             })
             console.log('stats', this.stats)
 
-        })
-
-        this.deckService.cards.subscribe((cards: Card[]) => {
-            this.stats.cards = UtilService.sortByProp(
-                cards.map(card => {
-                    return {
-                        title: card.title,
-                        uses: card.cardUses.progression
-                    }
-                })
-            )
         })
 
     }

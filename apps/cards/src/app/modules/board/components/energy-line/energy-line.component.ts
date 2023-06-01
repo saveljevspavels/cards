@@ -16,7 +16,6 @@ export class EnergyLineComponent implements OnInit {
         width: 0,
         stage: 0
     };
-    public deckLength = 0;
 
     constructor(public athleteService: AthleteService) { }
 

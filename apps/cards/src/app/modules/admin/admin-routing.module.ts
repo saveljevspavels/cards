@@ -7,7 +7,6 @@ import {CardManagementComponent} from "./components/card-management/card-managem
 import {AthleteManagementComponent} from "./components/athlete-management/athlete-management.component";
 import {LogsComponent} from "./components/logs/logs.component";
 import {AdminParentComponent} from "./components/admin-parent/admin-parent.component";
-import {AdminDeckComponent} from "./components/admin-deck/admin-deck.component";
 import {AchievementManagementComponent} from "./components/achievement-management/achievement-management.component";
 import {CardSchemeComponent} from "./components/card-scheme/card-scheme.component";
 
@@ -24,10 +23,6 @@ const routes: Routes = [
             {
                 path: 'activities',
                 component: AdminComponent
-            },
-            {
-                path: 'deck',
-                component: AdminDeckComponent
             },
             {
                 path: 'card-management',

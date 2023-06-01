@@ -3,10 +3,10 @@ import {FormArray, FormBuilder, FormControl, FormGroup} from "@angular/forms";
 import {AdminService} from "../../admin.service";
 import {ConstService} from "../../../../services/const.service";
 import {BehaviorSubject} from "rxjs";
-import {DeckService} from "../../../../services/deck.service";
 import {RULES} from "../../../../../../../../definitions/rules";
-import Card from "../../../../../../../shared/interfaces/card";
+import CardInterface from "../../../../../../../shared/interfaces/card";
 import {CardScheme} from "../../../../../../../shared/interfaces/card-scheme.interface";
+import {CardService} from "../../../../services/card.service";
 
 @Component({
   selector: 'app-card-scheme',
@@ -17,23 +17,23 @@ export class CardSchemeComponent implements OnInit {
     public CONST = ConstService.CONST
     public RULES = ConstService.RULES
     public selectedCards = new FormControl([]);
-    public allCards: BehaviorSubject<Card[]> = this.deckService.cards;
-    public cardScheme: BehaviorSubject<CardScheme> = this.deckService.cardScheme;
+    public allCards: BehaviorSubject<CardInterface[]> = this.cardService.cards;
+    public cardScheme: BehaviorSubject<CardScheme> = this.cardService.cardScheme;
 
-    public cardMap: Map<string, Card>
+    public cardMap: Map<string, CardInterface>
 
     public form: FormArray;
 
     constructor(private formBuilder: FormBuilder,
                 private adminService: AdminService,
-                private deckService: DeckService) { }
+                private cardService: CardService) { }
 
     ngOnInit(): void {
         this.cardScheme.subscribe((cardScheme) => {
             this.form = this.initForm(cardScheme);
         })
         this.allCards.subscribe((cards) => {
-            this.cardMap = new Map<string, Card>(cards.map(card => {
+            this.cardMap = new Map<string, CardInterface>(cards.map(card => {
                 return [card.id, card]
             }))
         })

@@ -3,10 +3,6 @@
 
     <p class="light text-medium mb-4">Please select cards to play, add images/comments</p>
 
-    <app-card-queue
-        [formControl]="form.get('selectedCards')"
-    ></app-card-queue>
-
     <p class="light text-medium mb-0 mt-4">Upload images, if card requires it</p>
     <app-image-upload
         [formControl]="form.get('selectedImages')"

@@ -124,18 +124,6 @@ export class FirestoreService {
             });
     }
 
-    async setDeck(cards: any[]) {
-        const deck = this.handCollection.doc(CONST.HANDS.DECK);
-        await deck.set({cardIds: cards})
-    }
-
-    async addToHand(hand: string, cards: any[]) {
-        const handDoc = this.handCollection.doc(hand);
-        const currentDeck = (await handDoc.get()).data()?.cardIds || []
-        await handDoc.set({cardIds: [...cards, ...currentDeck || []]})
-        this.logger.info(`Adding ${cards.length} cards to hand ${hand} (now ${currentDeck.length + cards.length})`)
-    }
-
     async deleteCards(cards: any[]) {
         const handsToCheck = ['deck', 'discard', 'queue']
         for(let i = 0; i < handsToCheck.length; i++) {
@@ -154,102 +142,6 @@ export class FirestoreService {
             await this.cardCollection.doc(cards[i]).delete()
         }
         this.logger.info(`Cards ${cards} deleted`)
-    }
-
-    async shuffleDeck() {
-        const deck = this.handCollection.doc(CONST.HANDS.DECK);
-        const currentDeck = (await deck.get()).data()?.cardIds
-
-        const shuffledDeck = []
-        while(currentDeck.length) {
-            const i = getRandomInt(currentDeck.length)
-            shuffledDeck.push(...currentDeck.splice(i, 1))
-        }
-
-        await this.setDeck(shuffledDeck)
-        this.logger.info(`Deck is shuffled, contains ${shuffledDeck.join(', ')} cards`)
-    }
-
-    async dealCards(athletes: any[], amount: number) {
-        const deck = this.handCollection.doc(CONST.HANDS.DECK);
-        const currentDeck = (await deck.get()).data()?.cardIds || []
-        if(!amount) {
-            amount = currentDeck.length;
-        }
-        this.logger.info(`Cards in deck: ${currentDeck.length} dealing ${amount * athletes.length} cards`)
-        if(currentDeck.length >= amount * athletes.length) {
-            const athleteCards: any = {}
-            for(let i = 0; i < amount; i++) {
-                athletes.forEach(athlete => {
-                    if(!athleteCards[athlete]) {
-                        athleteCards[athlete] = []
-                    }
-                    athleteCards[athlete].push(currentDeck.shift())
-                })
-            }
-            Object.keys(athleteCards).forEach(key => {
-                this.addToHand(key, athleteCards[key])
-            })
-            await deck.set({cardIds: currentDeck})
-            return RESPONSES.SUCCESS;
-        } else {
-            this.logger.info(`Not enough cards in deck`)
-            return RESPONSES.ERROR.NOT_ENOUGH_CARDS;
-        }
-    }
-
-    async dealQueue() {
-        const queueHand = this.handCollection.doc(CONST.HANDS.QUEUE);
-        const currentQueue = (await queueHand.get()).data()?.cardIds || []
-        this.logger.info(`There are ${currentQueue.length} cards in the queue, trying to draw a card`)
-        // Queue length check is disabled, dealing all
-        // if(currentQueue.length < RULES.QUEUE.LENGTH) {
-        //     return await this.dealCards([CONST.HANDS.QUEUE], RULES.QUEUE.LENGTH - currentQueue.length);
-        // } else {
-        //     this.logger.info(`Queue hand is full (${currentQueue.length})`)
-        //     return RESPONSES.ERROR.QUEUE_FULL
-        // }
-        return await this.dealCards([CONST.HANDS.QUEUE], 0);
-    }
-
-    async discardFromHand(hand: any, cards: any[]) {
-        const handDoc = this.handCollection.doc(hand);
-        const currentHand = (await handDoc.get()).data()?.cardIds || []
-        const handSize = currentHand.length;
-        cards.forEach(card => {
-            const index = currentHand.indexOf(card);
-            if(index !== -1) {
-                currentHand.splice(index, 1)
-            }
-        })
-        if(currentHand.length + cards.length === handSize) {
-            await handDoc.set({cardIds: currentHand})
-            this.logger.info(`Hand ${hand} now has ${currentHand.length} cards, was ${handSize}`)
-            return true
-        } else {
-            this.logger.error(`Hand ${hand} don\'t have required cards`)
-            return false
-        }
-    }
-
-    async discardCards(hand: any, cards: any[]) {
-        this.logger.info(`Discarding ${cards.length} cards from ${hand}`)
-        const result = await this.discardFromHand(hand, cards)
-        if(result) {
-            // await this.addToHand(CONST.HANDS.DISCARD)
-        }
-    }
-
-    async drawCard(athlete: string) {
-        const athleteHand = this.handCollection.doc(athlete);
-        const currentHand = (await athleteHand.get()).data()?.cardIds || []
-        this.logger.info(`Athlete ${athlete} has ${currentHand.length} cards, tries to draw a card`)
-        if(currentHand.length < RULES.HAND_SIZE) {
-            return await this.dealCards([athlete], 1)
-        } else {
-            this.logger.info(`Athlete ${athlete} hand is full (${currentHand})`)
-            return 'Hand is full'
-        }
     }
 
     async submitActivity(activityId: string, cardIds: string[], imageIds: string[], comments: string) {
@@ -348,45 +240,6 @@ export class FirestoreService {
             this.logger.info(`Athlete ${athleteId} doesn't exist`)
             return false;
         }
-    }
-
-
-    async updateQueueUses(amount: number) {
-        const queueDoc = await this.handCollection.doc(CONST.HANDS.QUEUE)
-        const queue = (await queueDoc.get()).data() || {}
-        const gameDoc = this.gameCollection.doc(CONST.GAME_ID)
-        const game = (await gameDoc.get()).data() || {}
-        let newCardUses = game.cardUses + amount;
-        let newShifts = game.shifts;
-        // Queue behavior is disabled
-        // Use RULES.QUEUE.CARDS_TO_SHIFT for fixed queue length
-        if(newCardUses >= queue.cardIds.length) {
-            newCardUses = newCardUses - queue.cardIds.length;
-            newShifts++;
-            // const lastQueueCardId = queue.cardIds[queue.cardIds.length - 1];
-            // await this.discardFromHand(CONST.HANDS.QUEUE, [lastQueueCardId])
-            // await this.addToHand(CONST.HANDS.DISCARD, [lastQueueCardId])
-            await this.updateCardValues(queue.cardIds)
-
-            // const response = await this.dealQueue()
-            // switch (response) {
-            //     case RESPONSES.ERROR.NOT_ENOUGH_CARDS:
-            //         await this.resetDiscardPile()
-            //         await this.dealQueue()
-            // }
-        }
-        await gameDoc.update({
-            cardUses: newCardUses,
-            shifts: newShifts
-        })
-        this.logger.info(`Card uses updated to ${newCardUses}, total shifts (recalculations) now ${newShifts}`)
-    }
-
-    async resetDiscardPile() {
-        const discardDoc = this.handCollection.doc(CONST.HANDS.DISCARD)
-        const discard = (await discardDoc.get()).data() || {}
-        await this.addToHand(CONST.HANDS.DECK, discard.cardIds)
-        await this.shuffleDeck()
     }
 
     async updateScore(athleteId: string, cardIds: string[], achievementIds: string[]) {
@@ -504,7 +357,6 @@ export class FirestoreService {
             shifts: 0,
             startDate: game.startDate
         })
-        return await this.dealQueue()
     }
 
 

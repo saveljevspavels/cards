@@ -4,7 +4,7 @@ import {AdminService} from "../../admin.service";
 import {FileService} from "../../../../services/file.service";
 import {UtilService} from "../../../../services/util.service";
 import {ConstService} from "../../../../services/const.service";
-import CardFactory, {CardPrototype, Progression} from "../../../../../../../shared/interfaces/card-factory";
+import CardFactoryInterface, {CardPrototype, Progression} from "../../../../../../../shared/interfaces/card-factory";
 
 @Component({
   selector: 'app-card-create',
@@ -57,7 +57,7 @@ export class CardCreateComponent implements OnInit, OnChanges {
 
     async submit() {
         const image = this.imageControl.value.length ? (await this.fileService.uploadImages(this.imageControl.value))[0] : this.selectedCardFactory?.image;
-        const newFactory: CardFactory = {
+        const newFactory: CardFactoryInterface = {
             ...this.form.value,
             image: image ? image : null
         };

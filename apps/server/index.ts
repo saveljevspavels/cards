@@ -6,7 +6,6 @@ import cors from 'cors'
 import WebhookService from "./webhook.service";
 import ClientService from "./client.service";
 import AdminService from "./admin.service";
-import DeckService from "./deck.service";
 import ActivityService from "./activity.service";
 import CardService from "./card.service";
 import ImageService from "./images.service";
@@ -30,7 +29,6 @@ const fireStoreService = new FirestoreService(logger);
 const webhookService = new WebhookService(app, fireStoreService);
 const clientService = new ClientService(app, fireStoreService);
 const adminService = new AdminService(app, fireStoreService, logger);
-const deckService = new DeckService(app, fireStoreService);
 const cardService = new CardService(app, fireStoreService, logger);
 const activityService = new ActivityService(app, fireStoreService, logger, cardService);
 const imageService = new ImageService(app, fireStoreService);

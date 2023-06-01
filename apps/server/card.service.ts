@@ -4,8 +4,8 @@ import {FirestoreService} from "./firestore.service";
 import {CONST} from "../../definitions/constants";
 import {generateId, getRandomInt, tierToRoman} from "./helpers/util";
 import {Logger} from "winston";
-import CardFactory, {CardPrototype, Progression} from "../shared/interfaces/card-factory";
-import Card from "../shared/interfaces/card";
+import CardFactoryInterface, {CardPrototype, Progression} from "../shared/interfaces/card-factory";
+import CardInterface from "../shared/interfaces/card";
 
 export default class CardService {
     constructor(
@@ -24,13 +24,9 @@ export default class CardService {
             res.status(200).send({});
         });
 
-        app.post(`${CONST.API_PREFIX}combine-cards`, async (req, res) => {
-            const response = await this.combineCards(req.body.athleteId, req.body.cardIds)
-            res.status(response === RESPONSES.SUCCESS ? 200 : 400).send({response});
-        });
     }
 
-    async createCardFactory(cardFactory: CardFactory) {
+    async createCardFactory(cardFactory: CardFactoryInterface) {
         const id = cardFactory.id || generateId()
         return this.fireStoreService.cardFactoryCollection.doc(id).set({
             ...cardFactory,
@@ -53,14 +49,14 @@ export default class CardService {
                 cardFactories.push(factory.data())
             })
         }
-        cardFactories.forEach(((factory: CardFactory) => {
+        cardFactories.forEach(((factory: CardFactoryInterface) => {
             for(let i = 0; i < amount; i++) {
                 this.createCardFromFactory(factory, tier)
             }
         }))
     }
 
-    async createCardFromFactory(factory: CardFactory, tier: number, id = generateId()) {
+    async createCardFromFactory(factory: CardFactoryInterface, tier: number, id = generateId()) {
         let cardPrototype: CardPrototype = factory.progression === Progression.FLAT
             ? factory.cards[getRandomInt(Object.keys(factory.cards).length)] // Random card for flat progression
             : factory.cards[tier]
@@ -73,7 +69,7 @@ export default class CardService {
             this.logger.info(`Card ${factory.title} tier ${tier} is final, switching progression to ${Progression.NONE}`)
             newProgression = Progression.NONE;
         }
-        const card: Card = {
+        const card: CardInterface = {
             id,
             title: factory.title + ((factory.progression === Progression.CHAIN || factory.progression === Progression.TIERS) ? ' ' + tierToRoman(tier) : ''),
             image: factory.image || '',
@@ -115,7 +111,6 @@ export default class CardService {
         } else if (cards[0].factoryId !== cards[1].factoryId) {
             return 'Cards are different type'
         } else {
-            await this.fireStoreService.discardFromHand(athleteId, [cards[1].id])
             return await this.setCardTier(cards[0], ++cards[0].tier)
         }
     }
@@ -147,7 +142,7 @@ export default class CardService {
                 break;
         }
         this.logger.info(`Progressing card ${cardId} to ${card.progression} ${nextTier}`)
-        const factory: CardFactory | null = ((await this.fireStoreService.cardFactoryCollection.doc(card.factoryId).get()).data() as CardFactory) || null
+        const factory: CardFactoryInterface | null = ((await this.fireStoreService.cardFactoryCollection.doc(card.factoryId).get()).data() as CardFactoryInterface) || null
         if(factory === null) {
             return;
         }
@@ -158,7 +153,6 @@ export default class CardService {
                     progression: Progression.NONE
                 })
                 await this.createCardFromFactory(factory, nextTier, newCardId);
-                await this.fireStoreService.addToHand(CONST.HANDS.QUEUE, [newCardId]);
                 break;
             default:
                 await this.createCardFromFactory(factory, nextTier, card.id);

@@ -3,7 +3,6 @@ import {FormControl} from "@angular/forms";
 import {AdminService} from "../../admin.service";
 import {BehaviorSubject} from "rxjs";
 import {AthleteService} from "../../../../services/athlete.service";
-import {DeckService} from "../../../../services/deck.service";
 
 @Component({
   selector: 'app-admin-commands',

@@ -22,11 +22,6 @@ export const CONST = {
         SESSIONS: "sessions",
         SCHEME: "scheme"
     },
-    HANDS: {
-        DECK: "deck",
-        QUEUE: "queue",
-        DISCARD: "discard"
-    },
     ACTIVITY_PROPERTIES: {
         DISTANCE: "distance",
         TYPE: "type",

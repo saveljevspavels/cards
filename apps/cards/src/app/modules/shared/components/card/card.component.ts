@@ -1,10 +1,9 @@
 import {Component, Input, OnChanges, OnInit} from '@angular/core';
-import Card, {Validator} from "../../../../../../../shared/interfaces/card";
+import CardInterface, {Validator} from "../../../../../../../shared/interfaces/card";
 import {filter} from "rxjs/operators";
-import {DeckService} from "../../../../services/deck.service";
 import {ConstService} from "../../../../services/const.service";
 import {UtilService} from "../../../../services/util.service";
-import {AthleteService} from "../../../../services/athlete.service";
+import {CardService} from "../../../../services/card.service";
 import {Progression} from "../../../../../../../shared/interfaces/card-factory";
 
 @Component({
@@ -17,7 +16,7 @@ export class CardComponent implements OnInit, OnChanges {
     public RULES = ConstService.RULES;
 
     @Input()
-    public card: Card;
+    public card: CardInterface;
 
     @Input()
     public cardId: string;
@@ -40,15 +39,15 @@ export class CardComponent implements OnInit, OnChanges {
 
     activityTypes: string;
 
-    constructor(private deckService: DeckService) { }
+    constructor(private cardService: CardService) { }
 
     ngOnInit() {
         if(this.card) {
             this.initCard();
         }
         if(this.cardId) {
-            this.deckService.cards.pipe(filter(cards => !!cards.length)).subscribe(async _ =>{
-                this.card = this.deckService.getCard(this.cardId)
+            this.cardService.cards.pipe(filter(cards => !!cards.length)).subscribe(async _ =>{
+                this.card = this.cardService.getCard(this.cardId)
                 this.initCard();
             })
         }
