@@ -8,17 +8,18 @@ import {
     updateScoreValues
 } from "./helpers/util";
 import {RESPONSES} from "./response-codes";
-import {ValidationService} from "./shared/validation.service";
 import fs from "fs";
 import schedule from "node-schedule";
 import {Logger} from "winston";
 import {CONST} from "../../definitions/constants";
 import {RULES} from "../../definitions/rules";
+import Card from "../shared/interfaces/card.interface";
+import Athlete from "../shared/interfaces/athlete.interface";
 
 export class FirestoreService {
     logger: Logger;
 
-    db = firebase.initializeApp(
+    db: firebase.firestore.Firestore = firebase.initializeApp(
         JSON.parse(fs.readFileSync(
             `definitions/firebaseConfig${process.env.NODE_ENV ? '.' + process.env.NODE_ENV : ''}.json`,
             'utf8'))
@@ -36,6 +37,9 @@ export class FirestoreService {
     public gameCollection = this.db.collection(CONST.COLLECTIONS.GAME)
     public sessionCollection = this.db.collection(CONST.COLLECTIONS.SESSIONS)
     public schemeCollection = this.db.collection(CONST.COLLECTIONS.SCHEME)
+
+    public newCardCollection = new DataCollection<Card>(this.db, CONST.COLLECTIONS.CARDS)
+    public newAthleteCollection = new DataCollection<Athlete>(this.db, CONST.COLLECTIONS.ATHLETES)
 
     constructor(logger: Logger) {
         this.logger = logger;
@@ -401,4 +405,29 @@ export class FirestoreService {
         }
     }
 
+}
+
+export class DataCollection<T> {
+    private collection: firebase.firestore.CollectionReference<{ [field: string]: T }>;
+    constructor(
+        private db: firebase.firestore.Firestore,
+        private collectionName: string
+    ) {
+        this.collection = this.db.collection(collectionName);
+    }
+    async get(documentName: string): Promise<T | null> {
+        return (await this.collection.doc(documentName).get()).data() as T | undefined || null;
+    }
+
+    async exists(documentName: string): Promise<boolean> {
+        return (await this.collection.doc(documentName).get()).exists;
+    }
+
+    async set(documentName: string, value: T): Promise<void> {
+        return (await this.collection.doc(documentName).set(value as unknown as { [field: string]: T }))
+    }
+
+    async update(documentName: string, value: any): Promise<void> {
+        return (await this.collection.doc(documentName).update(value))
+    }
 }

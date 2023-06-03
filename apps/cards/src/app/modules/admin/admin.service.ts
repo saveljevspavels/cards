@@ -5,7 +5,7 @@ import {HttpClient} from "@angular/common/http";
 import {COMMANDS} from "../../constants/commands";
 import {environment} from "../../../environments/environment";
 import {ConstService} from "../../services/const.service";
-import CardFactoryInterface from "../../../../../shared/interfaces/card-factory";
+import CardFactory from "../../../../../shared/interfaces/card-factory.interface";
 import {CardScheme} from "../../../../../shared/interfaces/card-scheme.interface";
 
 @Injectable()
@@ -59,7 +59,7 @@ export class AdminService {
         })
     }
 
-    public createCardFactory(cardFactory: CardFactoryInterface) {
+    public createCardFactory(cardFactory: CardFactory) {
         return this.http.post(`${environment.baseBE}/create-card-factory`, {
             ...cardFactory
         })

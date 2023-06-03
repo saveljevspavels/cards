@@ -8,7 +8,7 @@ import {AthleteManagementComponent} from "./components/athlete-management/athlet
 import {LogsComponent} from "./components/logs/logs.component";
 import {AdminParentComponent} from "./components/admin-parent/admin-parent.component";
 import {AchievementManagementComponent} from "./components/achievement-management/achievement-management.component";
-import {CardSchemeComponent} from "./components/card-scheme/card-scheme.component";
+import {CardSchemeComponent} from "../board/components/card-scheme/card-scheme.component";
 
 const routes: Routes = [
     {

@@ -15,13 +15,13 @@ export default class AuthService {
         private logger: Logger,
         private athleteService: AthleteService
     ) {
-        this.app.get(`${CONST.API_PREFIX}auth/url`, async (req, res) => {
+        this.app.get(`${CONST.API_PREFIX}/auth/url`, async (req, res) => {
             res.status(200).send({
                 url: `http://${CONST.STRAVA_BASE}/oauth/authorize?client_id=${STRAVA_CONFIG.STRAVA_CLIENT_ID}&response_type=code&redirect_uri=${req.query.returnUrl}?exchange_token&approval_prompt=force&scope=${STRAVA_CONFIG.REQUIRED_PERMISSIONS}`
             });
         });
 
-        this.app.post(`${CONST.API_PREFIX}auth/token`, async (req, res) => {
+        this.app.post(`${CONST.API_PREFIX}/auth/token`, async (req, res) => {
             console.log('code', req.body.code)
             const response: any = await AuthHelper.tokenRequest(
                 AuthHelper.getTokenConfig(req.body.code as string)

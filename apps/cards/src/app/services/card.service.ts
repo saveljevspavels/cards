@@ -1,27 +1,25 @@
 import { Injectable } from '@angular/core';
 import {BehaviorSubject, combineLatest} from "rxjs";
 import {AngularFirestore} from "@angular/fire/firestore";
-import {LocalStorageService} from "./local-storage.service";
-import {HttpClient} from "@angular/common/http";
-import {environment} from "../../environments/environment";
-import Hand from "../interfaces/hand";
 import {ConstService} from "./const.service";
-import CardInterface, {NullCard} from "../../../../shared/interfaces/card";
-import {UtilService} from "./util.service";
-import {AuthService} from "./auth.service";
+import Card, {NullCard} from "../../../../shared/interfaces/card.interface";
 import {CardScheme} from "../../../../shared/interfaces/card-scheme.interface";
+import {environment} from "../../environments/environment";
+import {HttpClient} from "@angular/common/http";
+import {ActiveCard} from "../../../../shared/interfaces/active-card";
 
 @Injectable({
   providedIn: 'root'
 })
 export class CardService {
 
-    public cards = new BehaviorSubject<CardInterface[]>([]);
+    public cards = new BehaviorSubject<Card[]>([]);
     public cardScheme = new BehaviorSubject<CardScheme>({boards: []});
     private cardCollection = this.db.collection(ConstService.CONST.COLLECTIONS.CARDS);
     private cardSchemeDocument = this.db.collection(ConstService.CONST.COLLECTIONS.SCHEME).doc(ConstService.CONST.SCHEME_ID);
 
     constructor(
+        private http: HttpClient,
         private db: AngularFirestore,
         ) {
         this.cardCollection.valueChanges().subscribe((cards: any[]) => {
@@ -32,7 +30,13 @@ export class CardService {
         });
     }
 
-    getCard(cardId: string): CardInterface {
-        return this.cards.value.find((card: CardInterface) => card.id === cardId) || NullCard
+    getCard(cardId: string): Card {
+        return this.cards.value.find((card: Card) => card.id === cardId) || NullCard
+    }
+
+    activateCard(cardId: string) {
+        return this.http.post(`${environment.baseBE}/cards/activate-card`, {
+            cardId
+        })
     }
 }

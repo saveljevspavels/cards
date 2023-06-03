@@ -8,7 +8,7 @@ export default class WebhookService {
         app.listen(process.env.PORT || 3000, () => console.log('webhook is listening'));
 
         // Creates the endpoint for our webhook
-        app.post(`${CONST.API_PREFIX}webhook`, (req, res) => {
+        app.post(`${CONST.API_PREFIX}/webhook`, (req, res) => {
             switch(req.body.aspect_type) {
                 case 'create': fireStoreService.addPendingActivity(req.body); break;
                 case 'delete': fireStoreService.deletePendingActivity(req.body.object_id); break;
@@ -17,7 +17,7 @@ export default class WebhookService {
         });
 
         // Adds support for GET requests to our webhook
-        app.get(`${CONST.API_PREFIX}webhook`, (req, res) => {
+        app.get(`${CONST.API_PREFIX}/webhook`, (req, res) => {
             // Your verify token. Should be a random string.
             const VERIFY_TOKEN = "STRAVA";
             // Parses the query params

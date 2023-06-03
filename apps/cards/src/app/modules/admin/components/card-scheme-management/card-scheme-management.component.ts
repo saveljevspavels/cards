@@ -4,23 +4,23 @@ import {AdminService} from "../../admin.service";
 import {ConstService} from "../../../../services/const.service";
 import {BehaviorSubject} from "rxjs";
 import {RULES} from "../../../../../../../../definitions/rules";
-import CardInterface from "../../../../../../../shared/interfaces/card";
+import Card from "../../../../../../../shared/interfaces/card.interface";
 import {CardScheme} from "../../../../../../../shared/interfaces/card-scheme.interface";
 import {CardService} from "../../../../services/card.service";
 
 @Component({
-  selector: 'app-card-scheme',
-  templateUrl: './card-scheme.component.html',
-  styleUrls: ['./card-scheme.component.scss']
+  selector: 'app-card-scheme-management',
+  templateUrl: './card-scheme-management.component.html',
+  styleUrls: ['./card-scheme-management.component.scss']
 })
-export class CardSchemeComponent implements OnInit {
+export class CardSchemeManagementComponent implements OnInit {
     public CONST = ConstService.CONST
     public RULES = ConstService.RULES
     public selectedCards = new FormControl([]);
-    public allCards: BehaviorSubject<CardInterface[]> = this.cardService.cards;
+    public allCards: BehaviorSubject<Card[]> = this.cardService.cards;
     public cardScheme: BehaviorSubject<CardScheme> = this.cardService.cardScheme;
 
-    public cardMap: Map<string, CardInterface>
+    public cardMap: Map<string, Card>
 
     public form: FormArray;
 
@@ -33,7 +33,7 @@ export class CardSchemeComponent implements OnInit {
             this.form = this.initForm(cardScheme);
         })
         this.allCards.subscribe((cards) => {
-            this.cardMap = new Map<string, CardInterface>(cards.map(card => {
+            this.cardMap = new Map<string, Card>(cards.map(card => {
                 return [card.id, card]
             }))
         })

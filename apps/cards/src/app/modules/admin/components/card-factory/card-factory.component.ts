@@ -1,5 +1,5 @@
 import {Component, Input, OnInit, Output, EventEmitter} from '@angular/core';
-import CardFactoryInterface from "../../../../../../../shared/interfaces/card-factory";
+import CardFactory from "../../../../../../../shared/interfaces/card-factory.interface";
 
 @Component({
   selector: 'app-card-factory',
@@ -9,7 +9,7 @@ import CardFactoryInterface from "../../../../../../../shared/interfaces/card-fa
 export class CardFactoryComponent implements OnInit {
 
     @Input()
-    public cardFactory: CardFactoryInterface;
+    public cardFactory: CardFactory;
 
     @Output()
     public select = new EventEmitter();

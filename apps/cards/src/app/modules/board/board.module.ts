@@ -16,6 +16,8 @@ import { CardFilterComponent } from './components/card-filter/card-filter.compon
 import { GenericCounterComponent } from './components/generic-counter/generic-counter.component';
 import {EnergyLineComponent} from "./components/energy-line/energy-line.component";
 import {CoinsDisplayComponent} from "./components/coins-display/coins-display.component";
+import {CardSchemeComponent} from "./components/card-scheme/card-scheme.component";
+import {AdminModule} from "../admin/admin.module";
 
 @NgModule({
     declarations: [
@@ -33,13 +35,15 @@ import {CoinsDisplayComponent} from "./components/coins-display/coins-display.co
         GenericCounterComponent,
         GenericCounterComponent,
         EnergyLineComponent,
+        CardSchemeComponent
     ],
     imports: [
         CommonModule,
         BoardRoutingModule,
         FormsModule,
         ReactiveFormsModule,
-        SharedModule
+        SharedModule,
+        AdminModule // TODO: remove
     ]
 })
 export class BoardModule { }

@@ -18,25 +18,27 @@ import { AdminParentComponent } from './components/admin-parent/admin-parent.com
 import { AchievementManagementComponent } from './components/achievement-management/achievement-management.component';
 import {HTTP_INTERCEPTORS} from "@angular/common/http";
 import {HttpMainInterceptor} from "../../services/http.interceptor";
-import {CardSchemeComponent} from "./components/card-scheme/card-scheme.component";
+import {CardSchemeManagementComponent} from "./components/card-scheme-management/card-scheme-management.component";
+import {CardTechnicalComponent} from "./components/card-technical.component";
 
 
 @NgModule({
-  declarations: [
-    AdminComponent,
-    CardCreateComponent,
-    AdminCommandsComponent,
-    ActivityReviewComponent,
-    CardManagementComponent,
-    CardFactoryComponent,
-    CardSchemeComponent,
-    CardInstanceCreateComponent,
-    AthleteManagementComponent,
-    LogsComponent,
-    LogItemComponent,
-    AdminParentComponent,
-    AchievementManagementComponent
-  ],
+    declarations: [
+        AdminComponent,
+        CardCreateComponent,
+        AdminCommandsComponent,
+        ActivityReviewComponent,
+        CardManagementComponent,
+        CardFactoryComponent,
+        CardSchemeManagementComponent,
+        CardInstanceCreateComponent,
+        CardTechnicalComponent,
+        AthleteManagementComponent,
+        LogsComponent,
+        LogItemComponent,
+        AdminParentComponent,
+        AchievementManagementComponent
+    ],
     imports: [
         CommonModule,
         AdminRoutingModule,
@@ -50,11 +52,14 @@ import {CardSchemeComponent} from "./components/card-scheme/card-scheme.componen
         ReactiveFormsModule,
         ReactiveFormsModule
     ],
-  providers: [
-    {provide: HTTP_INTERCEPTORS, useClass: HttpMainInterceptor, multi: true},
-    {
-      provide: AdminService
-    }
-  ]
+    exports: [
+        CardTechnicalComponent
+    ],
+    providers: [
+        {provide: HTTP_INTERCEPTORS, useClass: HttpMainInterceptor, multi: true},
+        {
+            provide: AdminService
+        }
+    ]
 })
 export class AdminModule { }

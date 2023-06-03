@@ -1,6 +1,6 @@
-import {Progression} from "./card-factory";
+import {Progression} from "./card-factory.interface";
 
-export default interface CardInterface {
+export default interface Card {
     title: string;
     image: string;
     tier: number;
@@ -30,7 +30,7 @@ export interface Validator {
     formula: string;
 }
 
-export const NullCard: CardInterface = {
+export const NullCard: Card = {
     title: '',
     image: '',
     tier: 0,

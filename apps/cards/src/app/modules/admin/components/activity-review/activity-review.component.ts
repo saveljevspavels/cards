@@ -5,8 +5,6 @@ import {FormControl} from "@angular/forms";
 import {SwPush} from "@angular/service-worker";
 import {PushNotificationsService} from "../../../../services/pushNotifications.service";
 import {CONST} from "../../../../../../../../definitions/constants";
-import CardInterface from "../../../../../../../shared/interfaces/card";
-import {UtilService} from "../../../../services/util.service";
 
 @Component({
   selector: 'app-activity-review',

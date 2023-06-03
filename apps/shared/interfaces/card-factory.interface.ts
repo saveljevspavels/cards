@@ -1,6 +1,6 @@
-import {Validator} from "./card";
+import {Validator} from "./card.interface";
 
-export default interface CardFactoryInterface {
+export default interface CardFactory {
     id: string;
     image: string;
     title: string;

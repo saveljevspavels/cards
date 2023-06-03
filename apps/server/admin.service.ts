@@ -12,7 +12,7 @@ export default class AdminService {
         private logger: Logger
     ) {
 
-        app.post(`${CONST.API_PREFIX}admin/commands`, (req, res) => {
+        app.post(`${CONST.API_PREFIX}/admin/commands`, (req, res) => {
             const athleteIds = req?.body?.athleteIds
             if(athleteIds) {
                 athleteIds.forEach(((id: string) => {
@@ -24,7 +24,7 @@ export default class AdminService {
             res.status(200).send({});
         });
 
-        app.post(`${CONST.API_PREFIX}admin/save-schema`, async (req, res) => {
+        app.post(`${CONST.API_PREFIX}/admin/save-schema`, async (req, res) => {
             await this.saveSchema(req.body)
             res.status(200).send({response: RESPONSES.SUCCESS});
         });

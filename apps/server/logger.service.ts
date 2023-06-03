@@ -6,7 +6,7 @@ import {CONST} from "../../definitions/constants";
 export default class LoggerService {
 
     static init(app: Express) {
-        app.get(`${CONST.API_PREFIX}admin/logs`, (req, res) => {
+        app.get(`${CONST.API_PREFIX}/admin/logs`, (req, res) => {
             try {
                 let data = fs.readFileSync('log.log', 'utf8')
                 data = JSON.parse('[' + data.trim().slice(0, -1) + ']');

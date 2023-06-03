@@ -21,10 +21,9 @@ export class AuthInterceptor {
             );
             res.set('Refreshed-Jwt', jwt);
         }
-        if(!req.body) {
-            req.body = {}
-        }
-        req.body.accessToken = decodeJwt(jwt).accessToken;
+
+        res.append('accessToken', decodeJwt(jwt).accessToken);
+        res.append('athleteId', decodeJwt(jwt).athleteId);
         next();
     }
 

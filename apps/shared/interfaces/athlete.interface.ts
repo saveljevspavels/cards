@@ -1,3 +1,5 @@
+import {ActiveCard} from "./active-card";
+
 export default interface Athlete {
     name: string;
     firstname: string;
@@ -9,6 +11,7 @@ export default interface Athlete {
     achievements: string[];
     energy: number;
     coins: number;
+    activeCards: ActiveCard[];
 }
 
 export interface AthletePatch {

@@ -1,10 +1,10 @@
 import {Component, Input, OnChanges, OnInit} from '@angular/core';
-import CardInterface, {Validator} from "../../../../../../../shared/interfaces/card";
+import Card, {Validator} from "../../../../../../../shared/interfaces/card.interface";
 import {filter} from "rxjs/operators";
 import {ConstService} from "../../../../services/const.service";
 import {UtilService} from "../../../../services/util.service";
 import {CardService} from "../../../../services/card.service";
-import {Progression} from "../../../../../../../shared/interfaces/card-factory";
+import {Progression} from "../../../../../../../shared/interfaces/card-factory.interface";
 
 @Component({
   selector: 'app-card',
@@ -16,7 +16,7 @@ export class CardComponent implements OnInit, OnChanges {
     public RULES = ConstService.RULES;
 
     @Input()
-    public card: CardInterface;
+    public card: Card;
 
     @Input()
     public cardId: string;

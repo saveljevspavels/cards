@@ -21,16 +21,24 @@ export default class ClientService {
     constructor(app: Express, fireStoreService: FirestoreService) {
         this.fireStoreService = fireStoreService;
 
-        app.post(`${CONST.API_PREFIX}calculate-base-workout`,async (req, res) => {
-            this.calculateBaseWorkout(req.body.accessToken, req.body.athleteId)
+        app.post(`${CONST.API_PREFIX}/calculate-base-workout`,async (req, res) => {
+            const token = res.get('accessToken');
+            if(!token) {
+                return;
+            }
+            this.calculateBaseWorkout(token, req.body.athleteId)
             if(req.body.commandId) {
                 await this.fireStoreService.deleteCommand(req.body.commandId)
             }
             res.status(200).send({});
         });
 
-        app.post(`${CONST.API_PREFIX}activities`, (req, res) => {
-            https.get(this.getActivityOptions(req.body.accessToken), response => {
+        app.post(`${CONST.API_PREFIX}/activities`, (req, res) => {
+            const token = res.get('accessToken');
+            if(!token) {
+                return;
+            }
+            https.get(this.getActivityOptions(token), response => {
                 parseResponse(response, req.body, (reqBody: any, responseData: any) => {
                     responseData = responseData?.length ? responseData : [];
                     if(reqBody.activityIds?.length) {

@@ -1,0 +1,30 @@
+selected: {{selectedCard.value}}
+<div class="d-flex justify-content-between">
+    <div *ngFor="let board of (cardScheme | async)?.boards">
+        <h4>{{board.title}}</h4>
+        <div *ngFor="let level of board.levels; let i = index" class="mt-2">
+            <hr>
+            Level {{i + 1}}
+            <div class="d-flex">
+                <div *ngFor="let card of level.cards">
+                    <app-selection-wrapper
+                            [singleSelection]="true"
+                            [formControl]="selectedCard"
+                            [template]="cardTemplate"
+                            [selfSelectable]="true"
+                            [selectionEnabled]="true"
+                            [dataItems]="level.cards"
+                    >
+                        <ng-template #cardTemplate let-dataItem="dataItem">
+                            <app-card-technical [card]="cardMap.get(card)"></app-card-technical>
+                        </ng-template>
+                    </app-selection-wrapper>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<app-button label="Activate" (buttonClick)="activateCard(selectedCard.value[0])"></app-button>
+
+

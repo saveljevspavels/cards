@@ -4,8 +4,9 @@ import {FirestoreService} from "./firestore.service";
 import {CONST} from "../../definitions/constants";
 import {generateId, getRandomInt, tierToRoman} from "./helpers/util";
 import {Logger} from "winston";
-import CardFactoryInterface, {CardPrototype, Progression} from "../shared/interfaces/card-factory";
-import CardInterface from "../shared/interfaces/card";
+import CardFactory, {CardPrototype, Progression} from "../shared/interfaces/card-factory.interface";
+import Card from "../shared/interfaces/card.interface";
+import {ActiveCard} from "../shared/interfaces/active-card";
 
 export default class CardService {
     constructor(
@@ -14,19 +15,53 @@ export default class CardService {
         private logger: Logger
     ) {
 
-        app.post(`${CONST.API_PREFIX}create-card-factory`, async(req, res) => {
+        app.post(`${CONST.API_PREFIX}/create-card-factory`, async(req, res) => {
             await this.createCardFactory(req.body)
             res.status(200).send({});
         });
 
-        app.post(`${CONST.API_PREFIX}create-card-instances`,async (req, res) => {
+        app.post(`${CONST.API_PREFIX}/create-card-instances`,async (req, res) => {
             await this.createCardInstances(req.body.tier, req.body.amount, req.body.cardFactoryIds)
             res.status(200).send({});
         });
 
+        app.post(`${CONST.API_PREFIX}/cards/activate-card`,async (req, res) => {
+            const cardId = req.body?.cardId;
+            const athleteId = res.get('athleteId');
+            if(!cardId || !athleteId) {
+                res.status(400).send('Card Id or Athlete Id missing');
+            } else {
+                const card = await this.getCard(cardId);
+                if(!card) {
+                    res.status(400).send('Card does not exist');
+                } else {
+                    const athlete = await this.fireStoreService.newAthleteCollection.get(athleteId)
+                    if(athlete) {
+                        await this.fireStoreService.newAthleteCollection.update(athleteId, {
+                            activeCards: [...athlete?.activeCards, this.getActiveCard(card)]
+                        })
+                        res.status(200).send();
+                    } else {
+                        res.status(400).send('Athlete does not exist');
+                    }
+                }
+            }
+        });
     }
 
-    async createCardFactory(cardFactory: CardFactoryInterface) {
+    getActiveCard(card: Card): ActiveCard {
+        return {
+            id: card.id,
+            progress: 0,
+            firstUse: true
+        }
+    }
+
+    async getCard(cardId: string): Promise<Card | null> {
+        return await this.fireStoreService.newCardCollection.get(cardId);
+    }
+
+    async createCardFactory(cardFactory: CardFactory) {
         const id = cardFactory.id || generateId()
         return this.fireStoreService.cardFactoryCollection.doc(id).set({
             ...cardFactory,
@@ -49,14 +84,14 @@ export default class CardService {
                 cardFactories.push(factory.data())
             })
         }
-        cardFactories.forEach(((factory: CardFactoryInterface) => {
+        cardFactories.forEach(((factory: CardFactory) => {
             for(let i = 0; i < amount; i++) {
                 this.createCardFromFactory(factory, tier)
             }
         }))
     }
 
-    async createCardFromFactory(factory: CardFactoryInterface, tier: number, id = generateId()) {
+    async createCardFromFactory(factory: CardFactory, tier: number, id = generateId()) {
         let cardPrototype: CardPrototype = factory.progression === Progression.FLAT
             ? factory.cards[getRandomInt(Object.keys(factory.cards).length)] // Random card for flat progression
             : factory.cards[tier]
@@ -69,7 +104,7 @@ export default class CardService {
             this.logger.info(`Card ${factory.title} tier ${tier} is final, switching progression to ${Progression.NONE}`)
             newProgression = Progression.NONE;
         }
-        const card: CardInterface = {
+        const card: Card = {
             id,
             title: factory.title + ((factory.progression === Progression.CHAIN || factory.progression === Progression.TIERS) ? ' ' + tierToRoman(tier) : ''),
             image: factory.image || '',
@@ -142,7 +177,7 @@ export default class CardService {
                 break;
         }
         this.logger.info(`Progressing card ${cardId} to ${card.progression} ${nextTier}`)
-        const factory: CardFactoryInterface | null = ((await this.fireStoreService.cardFactoryCollection.doc(card.factoryId).get()).data() as CardFactoryInterface) || null
+        const factory: CardFactory | null = ((await this.fireStoreService.cardFactoryCollection.doc(card.factoryId).get()).data() as CardFactory) || null
         if(factory === null) {
             return;
         }

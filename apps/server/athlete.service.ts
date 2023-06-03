@@ -12,7 +12,7 @@ export default class AthleteService {
         private fireStoreService: FirestoreService,
         private logger: Logger
     ) {
-        this.app.post(`${CONST.API_PREFIX}update-base-workout`, async (req, res) => {
+        this.app.post(`${CONST.API_PREFIX}/update-base-workout`, async (req, res) => {
             if(!req.body.athleteIds.length) {
                 res.status(400).send({response: RESPONSES.ERROR.INVALID_ATHLETE});
                 return;
@@ -21,7 +21,7 @@ export default class AthleteService {
             res.status(200).send({response: RESPONSES.SUCCESS});
         });
 
-        this.app.post(`${CONST.API_PREFIX}set-permissions`, async (req, res) => {
+        this.app.post(`${CONST.API_PREFIX}/set-permissions`, async (req, res) => {
             await fireStoreService.setPermissions(req.body.athleteIds, req.body.permissions)
             res.status(200).send({response: RESPONSES.SUCCESS});
         });
@@ -50,7 +50,8 @@ export default class AthleteService {
             permissions: ['default'],
             achievements: [],
             energy: RULES.ENERGY.BASE,
-            coins: RULES.COINS.BASE
+            coins: RULES.COINS.BASE,
+            activeCards: []
         }
     }
 

@@ -15,7 +15,7 @@ export default class ActivityService {
         private logger: Logger,
         private cardService: CardService
     ) {
-        app.post(`${CONST.API_PREFIX}submit-activity`, async (req, res) => {
+        app.post(`${CONST.API_PREFIX}/submit-activity`, async (req, res) => {
             let response = await fireStoreService.submitActivity(
                 req.body.activityId,
                 req.body.cards,
@@ -28,17 +28,17 @@ export default class ActivityService {
             res.status(response === RESPONSES.SUCCESS ? 200 : 400).send({response: response});
         });
 
-        app.post(`${CONST.API_PREFIX}reject-activity`, async (req, res) => {
+        app.post(`${CONST.API_PREFIX}/reject-activity`, async (req, res) => {
             await fireStoreService.rejectActivity(req.body.activityId, req.body.comments)
             res.status(200).send({response: RESPONSES.SUCCESS});
         });
 
-        app.post(`${CONST.API_PREFIX}delete-activity`, async (req, res) => {
+        app.post(`${CONST.API_PREFIX}/delete-activity`, async (req, res) => {
             await fireStoreService.deleteActivity(req.body.activityId)
             res.status(200).send({response: RESPONSES.SUCCESS});
         });
 
-        app.post(`${CONST.API_PREFIX}approve-activity`, async (req, res) => {
+        app.post(`${CONST.API_PREFIX}/approve-activity`, async (req, res) => {
           await this.approveActivity(req.body.activityId, req.body.cardIds)
           res.status(200).send({response: RESPONSES.SUCCESS});
         });
