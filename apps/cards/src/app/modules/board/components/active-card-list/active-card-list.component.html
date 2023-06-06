@@ -1,0 +1,13 @@
+<app-selection-wrapper
+        [singleSelection]="true"
+        [template]="activeCardTemplate"
+        [selfSelectable]="true"
+        [selectionEnabled]="false"
+        [dataItems]="(athlete | async)?.activeCards"
+>
+    <ng-template #activeCardTemplate let-dataItem="dataItem">
+        <app-active-card [card]="dataItem"></app-active-card>
+    </ng-template>
+
+
+</app-selection-wrapper>

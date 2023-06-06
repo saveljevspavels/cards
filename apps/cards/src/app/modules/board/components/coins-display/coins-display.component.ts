@@ -27,8 +27,8 @@ export class CoinsDisplayComponent implements OnInit {
 
     generateIndicatorData(coins: number) {
         return {
-            width: Math.floor(coins * 100),
-            stage: Math.floor(coins * 5)
+            width: coins,
+            stage: Math.floor(coins / 20)
         }
     }
 

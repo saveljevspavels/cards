@@ -18,6 +18,8 @@ import {EnergyLineComponent} from "./components/energy-line/energy-line.componen
 import {CoinsDisplayComponent} from "./components/coins-display/coins-display.component";
 import {CardSchemeComponent} from "./components/card-scheme/card-scheme.component";
 import {AdminModule} from "../admin/admin.module";
+import { ActiveCardListComponent } from './components/active-card-list/active-card-list.component';
+import { ActiveCardComponent } from './components/active-card/active-card.component';
 
 @NgModule({
     declarations: [
@@ -35,7 +37,9 @@ import {AdminModule} from "../admin/admin.module";
         GenericCounterComponent,
         GenericCounterComponent,
         EnergyLineComponent,
-        CardSchemeComponent
+        CardSchemeComponent,
+        ActiveCardListComponent,
+        ActiveCardComponent
     ],
     imports: [
         CommonModule,

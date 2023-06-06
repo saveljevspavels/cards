@@ -6,7 +6,6 @@ import Card, {NullCard} from "../../../../shared/interfaces/card.interface";
 import {CardScheme} from "../../../../shared/interfaces/card-scheme.interface";
 import {environment} from "../../environments/environment";
 import {HttpClient} from "@angular/common/http";
-import {ActiveCard} from "../../../../shared/interfaces/active-card";
 
 @Injectable({
   providedIn: 'root'
