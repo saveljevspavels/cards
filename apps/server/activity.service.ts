@@ -58,8 +58,10 @@ export default class ActivityService {
                 return RESPONSES.SUCCESS;
             }
 
-            const athleteDoc = this.fireStoreService.athleteCollection.doc(activity.athlete.id.toString())
-            const athlete = (await athleteDoc.get()).data() || {}
+            const athlete = await this.fireStoreService.athleteCollection.get(activity.athlete.id.toString());
+            if(!athlete) {
+                return;
+            }
 
             if(activity.gameData.cardSnapshots
                 .reduce((acc: any, card: any) => [...acc, ...card.validators], [])
@@ -92,8 +94,10 @@ export default class ActivityService {
             }
         })
 
-        const athleteDoc = this.fireStoreService.athleteCollection.doc(activity.athlete.id.toString())
-        const athlete = (await athleteDoc.get()).data() || {}
+        const athlete = await this.fireStoreService.athleteCollection.get(activity.athlete.id.toString());
+        if(!athlete) {
+            return;
+        }
 
         this.logger.info(`Activity ${activityId} was approved for athlete ${athlete.firstname} ${athlete.lastname} with cards ${cardIds}`)
 
@@ -105,13 +109,12 @@ export default class ActivityService {
 
     async updatePersonalBests(activity: any, cardIds: string[]) {
         if(cardIds.length) {
-            const cardQuery = this.fireStoreService.cardCollection.where('id', 'in', cardIds)
-            const cardDocs = await cardQuery.get()
+            const cards = await this.fireStoreService.cardCollection.where('id', 'in', cardIds)
             const baseWorkoutPatch: any = {};
             const normalizedType = normalizeActivityType(activity.type);
             baseWorkoutPatch[normalizedType] = {};
-            cardDocs.forEach((card) => {
-                card.data().validators.forEach((validator: any) => {
+            cards.forEach((card) => {
+                card.validators.forEach((validator: any) => {
                     RULES.UPDATABLE_PROPERTIES.forEach((property: any) => {
                         if(validator.formula.indexOf(property) !== -1) {
                             // @ts-ignore

@@ -15,6 +15,7 @@ import {CONST} from "../../definitions/constants";
 import {RULES} from "../../definitions/rules";
 import Card from "../shared/interfaces/card.interface";
 import Athlete from "../shared/interfaces/athlete.interface";
+import WhereFilterOp = firebase.firestore.WhereFilterOp;
 
 export class FirestoreService {
     logger: Logger;
@@ -25,21 +26,18 @@ export class FirestoreService {
             'utf8'))
     ).firestore();
 
-    public athleteCollection = this.db.collection(CONST.COLLECTIONS.ATHLETES)
+    public athleteCollection = new DataCollection<Athlete>(this.db, CONST.COLLECTIONS.ATHLETES)
     public pendingActivityCollection = this.db.collection(CONST.COLLECTIONS.PENDING_ACTIVITIES)
     public detailedActivityCollection = this.db.collection(CONST.COLLECTIONS.DETAILED_ACTIVITIES)
     public commandCollection = this.db.collection(CONST.COLLECTIONS.COMMANDS)
     public handCollection = this.db.collection(CONST.COLLECTIONS.HANDS)
-    public cardCollection = this.db.collection(CONST.COLLECTIONS.CARDS)
+    public cardCollection = new DataCollection<Card>(this.db, CONST.COLLECTIONS.CARDS)
     public cardFactoryCollection = this.db.collection(CONST.COLLECTIONS.CARD_FACTORIES)
     public achievementCollection = this.db.collection(CONST.COLLECTIONS.ACHIEVEMENTS)
     public scoreCollection = this.db.collection(CONST.COLLECTIONS.SCORES)
     public gameCollection = this.db.collection(CONST.COLLECTIONS.GAME)
     public sessionCollection = this.db.collection(CONST.COLLECTIONS.SESSIONS)
     public schemeCollection = this.db.collection(CONST.COLLECTIONS.SCHEME)
-
-    public newCardCollection = new DataCollection<Card>(this.db, CONST.COLLECTIONS.CARDS)
-    public newAthleteCollection = new DataCollection<Athlete>(this.db, CONST.COLLECTIONS.ATHLETES)
 
     constructor(logger: Logger) {
         this.logger = logger;
@@ -143,7 +141,7 @@ export class FirestoreService {
             await handDocument.set({cardIds: currentHand})
         }
         for(let i = 0; i < cards.length; i++) {
-            await this.cardCollection.doc(cards[i]).delete()
+            await this.cardCollection.delete(cards[i]);
         }
         this.logger.info(`Cards ${cards} deleted`)
     }
@@ -151,8 +149,11 @@ export class FirestoreService {
     async submitActivity(activityId: string, cardIds: string[], imageIds: string[], comments: string) {
         const activityDoc = this.detailedActivityCollection.doc(activityId.toString())
         const activity = (await activityDoc.get()).data() || {}
-        const athleteDoc = this.athleteCollection.doc(activity.athlete.id.toString())
-        const athlete = (await athleteDoc.get()).data() || {}
+        const athlete = await this.athleteCollection.get(activity.athlete.id.toString());
+
+        if(!athlete) {
+            return;
+        }
 
         if(activity.gameData.status !== CONST.ACTIVITY_STATUSES.NEW
             && activity.gameData.status !== CONST.ACTIVITY_STATUSES.REJECTED) {
@@ -165,7 +166,7 @@ export class FirestoreService {
             return RESPONSES.ERROR.MAX_CARDS_SUBMIT
         }
 
-        const cardQuery = this.cardCollection.where('id', 'in', cardIds)
+        const cardQuery = this.cardCollection.collection.where('id', 'in', cardIds)
         const cardDocs = await cardQuery.get()
         const cardSnapshots: any[] = [];
         cardDocs.forEach((card) => {
@@ -222,22 +223,23 @@ export class FirestoreService {
     async spendEnergy(athleteId: string, cardIds: string[]) {
         let energySpent = 0;
         if(cardIds?.length) {
-            const itemQuery = this.cardCollection.where('id', 'in', cardIds)
+            const itemQuery = this.cardCollection.collection.where('id', 'in', cardIds)
             const itemDocs = await itemQuery.get()
             itemDocs.forEach(item => {
-                energySpent = energySpent + getTier(item.data().value);
+                energySpent = energySpent + getTier(item.data().value.energyCost);
             })
         }
 
-        const athleteDoc = this.athleteCollection.doc(athleteId.toString())
-        const athleteExists = (await athleteDoc.get()).exists
-        if(athleteExists) {
-            const athlete = (await athleteDoc.get()).data() || {}
+        const athlete = await this.athleteCollection.get(athleteId.toString());
+
+        if(athlete) {
             const newVal = Math.max((athlete.energy || 0) - energySpent, 0);
-            await athleteDoc.update(
+            await this.athleteCollection.update(
+                athleteId.toString(),
                 {
                     energy: newVal
-                })
+                }
+            )
             this.logger.info(`Athlete ${athlete.firstname} ${athlete.lastname} spent ${energySpent} energy, now ${newVal}`)
             return true;
         } else {
@@ -269,7 +271,7 @@ export class FirestoreService {
             }
         }
 
-        const cardTotals = calculateTotals(cardIds, this.cardCollection);
+        const cardTotals = calculateTotals(cardIds, this.cardCollection.collection);
         const achievementTotals = calculateTotals(achievementIds, this.achievementCollection);
         const newScore = updateScoreValues(
             score,
@@ -292,62 +294,71 @@ export class FirestoreService {
         }
 
         for(let i = 0; i < cardIds.length; i++) {
-            const cardDoc = await this.cardCollection.doc(cardIds[i].toString())
-            const card = (await cardDoc.get()).data() || {}
+            const card: Card | null = await this.cardCollection.get(cardIds[i])
+            if(card === null) continue;
 
             let cardUses = card.cardUses.queue;
-            if(parseInt(card.value) >= 7 && cardUses > 0) { // Additional point dump
+            if(card.value >= 7 && cardUses > 0) { // Additional point dump
                 cardUses = cardUses + 1;
             }
             const valueDelta = (RULES.CARD_VALUE_STEP * (1 - cardUses));
-            const newValue = parseInt(card.value) + valueDelta
-            cardDoc.update({
-                value: newValue < RULES.CARD_VALUE_MIN ? RULES.CARD_VALUE_MIN : newValue > RULES.CARD_VALUE_MAX ? RULES.CARD_VALUE_MAX : newValue,
-                cardUses: {
-                    ...card.cardUses,
-                    queue: 0
+            const newValue = card.value + valueDelta;
+            await this.cardCollection.update(
+                cardIds[i],
+                {
+                    value: newValue < RULES.CARD_VALUE_MIN ? RULES.CARD_VALUE_MIN : newValue > RULES.CARD_VALUE_MAX ? RULES.CARD_VALUE_MAX : newValue,
+                    cardUses: {
+                        ...card.cardUses,
+                        queue: 0
+                    }
                 }
-            })
+            );
             this.logger.info(`Card ${card.id} (${card.title}) value changed by ${valueDelta}, now ${newValue}`)
         }
     }
 
     async restoreAthletesEnergy(value: number) {
-        const athleteQuery = await this.athleteCollection.get()
-        athleteQuery.docs.forEach((athlete) => {
-            const excessEnergy = ((athlete.data().energy || 0) + value) - RULES.ENERGY.MAX;
-            const newVal = Math.min((athlete.data().energy || 0) + value, RULES.ENERGY.MAX)
-            this.athleteCollection.doc(athlete.data().id.toString()).update({
-                energy: newVal,
-                coins: (athlete.data().coins || 0) + (excessEnergy > 0 ? excessEnergy * RULES.COINS.PER_ENERGY_CONVERSION : 0)
-            })
-            this.logger.info(`Athlete ${athlete.data().firstname} ${athlete.data().lastname} ${athlete.data().id} restored ${value} energy, now ${newVal}, and ${(excessEnergy > 0 ? excessEnergy * RULES.COINS.PER_ENERGY_CONVERSION : 0)} coins`)
+        const allAthletes = await this.athleteCollection.all();
+        allAthletes.forEach((athlete) => {
+            const excessEnergy = ((athlete.energy || 0) + value) - RULES.ENERGY.MAX;
+            const newVal = Math.min((athlete.energy || 0) + value, RULES.ENERGY.MAX)
+            this.athleteCollection.update(
+                athlete.id.toString(),
+                {
+                    energy: newVal,
+                    coins: (athlete.coins || 0) + (excessEnergy > 0 ? excessEnergy * RULES.COINS.PER_ENERGY_CONVERSION : 0)
+                }
+            )
+            this.logger.info(`Athlete ${athlete.firstname} ${athlete.lastname} ${athlete.id} restored ${value} energy, now ${newVal}, and ${(excessEnergy > 0 ? excessEnergy * RULES.COINS.PER_ENERGY_CONVERSION : 0)} coins`)
         })
     }
 
-    async updateBaseWorkout(athleteIds: any[], baseWorkoutPatch: any) {
-        athleteIds = athleteIds.map(id => parseInt(id, 10))
-        const athleteQuery = this.athleteCollection.where('id', 'in', athleteIds)
-        const athleteDocs = await athleteQuery.get()
-        athleteDocs.forEach((athlete) => {
-            const athleteDoc = this.athleteCollection.doc(athlete.id.toString())
-            const currentBaseWorkout = athlete.data().baseWorkout;
-            athleteDoc.update({
-                baseWorkout: {
-                    ...currentBaseWorkout,
-                    ...Object.keys(baseWorkoutPatch).reduce((acc: any, type) => {
-                        acc[type] = {...currentBaseWorkout[type], ...baseWorkoutPatch[type]}
-                        return acc;
-                    }, {})
+    async updateBaseWorkout(athleteIds: string[], baseWorkoutPatch: any) {
+        const athletes = await this.athleteCollection.where('id', 'in', athleteIds)
+        athletes.forEach((athlete) => {
+            const currentBaseWorkout = athlete.baseWorkout;
+            this.athleteCollection.update(
+                athlete.id,
+                {
+                    baseWorkout: {
+                        ...currentBaseWorkout,
+                        ...Object.keys(baseWorkoutPatch).reduce((acc: any, type) => {
+                            // @ts-ignore
+                            acc[type] = {...currentBaseWorkout[type], ...baseWorkoutPatch[type]}
+                            return acc;
+                        }, {})
+                    }
                 }
-            })
-            this.logger.info(`Base workout updated for ${athlete.data().firstname} ${athlete.data().lastname} ${athlete.id} with ${JSON.stringify(baseWorkoutPatch)}`)
+            )
+            this.logger.info(`Base workout updated for ${athlete.firstname} ${athlete.lastname} ${athlete.id} with ${JSON.stringify(baseWorkoutPatch)}`)
         })
     }
 
     async setPermissions(athleteIds: string[], permissions: string[]) {
         for(let id of athleteIds) {
-            await this.athleteCollection.doc(id.toString()).update({
+
+            await this.athleteCollection.update(id.toString(),
+            {
                 permissions
             })
         }
@@ -389,11 +400,11 @@ export class FirestoreService {
     }
 
     async assignAchievement(athleteId: string, achievementId: string) {
-        const athleteDoc = this.athleteCollection.doc(athleteId.toString())
-        const athleteExists = (await athleteDoc.get()).exists
-        if(athleteExists) {
-            const athlete = (await athleteDoc.get()).data() || {}
-            await athleteDoc.update(
+        const athlete = await this.athleteCollection.get(athleteId.toString());
+
+        if(athlete) {
+            await this.athleteCollection.update(
+                athleteId.toString(),
                 {
                     achievements: [...(athlete.achievements || []), achievementId]
                 })
@@ -408,26 +419,43 @@ export class FirestoreService {
 }
 
 export class DataCollection<T> {
-    private collection: firebase.firestore.CollectionReference<{ [field: string]: T }>;
+    private readonly _collection: firebase.firestore.CollectionReference<{ [field: string]: T }>;
     constructor(
         private db: firebase.firestore.Firestore,
         private collectionName: string
     ) {
-        this.collection = this.db.collection(collectionName);
+        this._collection = this.db.collection(collectionName);
     }
+
+    get collection() {
+        return this._collection;
+    }
+
     async get(documentName: string): Promise<T | null> {
-        return (await this.collection.doc(documentName).get()).data() as T | undefined || null;
+        return (await this._collection.doc(documentName).get()).data() as T | undefined || null;
+    }
+
+    async all(): Promise<T[] | []> {
+        return (await this._collection.doc().get()).data() as T[] | undefined || [];
     }
 
     async exists(documentName: string): Promise<boolean> {
-        return (await this.collection.doc(documentName).get()).exists;
+        return (await this._collection.doc(documentName).get()).exists;
     }
 
     async set(documentName: string, value: T): Promise<void> {
-        return (await this.collection.doc(documentName).set(value as unknown as { [field: string]: T }))
+        return (await this._collection.doc(documentName).set(value as unknown as { [field: string]: T }))
     }
 
     async update(documentName: string, value: any): Promise<void> {
-        return (await this.collection.doc(documentName).update(value))
+        return (await this._collection.doc(documentName).update(value))
+    }
+
+    async delete(documentName: string): Promise<void> {
+        return (await this._collection.doc(documentName).delete())
+    }
+
+    async where(fieldPath: string, opStr: string, value: any): Promise<T[] | []> {
+        return (await (await this._collection.where(fieldPath, opStr as WhereFilterOp, value)).get()).docs.map(doc => doc.data()) as unknown as T[] || []
     }
 }

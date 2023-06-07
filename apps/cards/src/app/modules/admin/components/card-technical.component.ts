@@ -10,7 +10,7 @@ import Card from "../../../../../../shared/interfaces/card.interface";
 -{{card.coinsCost}}c +{{card.energyReward}}e
 </pre>
     `,
-    styleUrls: ['./card-scheme.component.scss']
+    styleUrls: []
 })
 export class CardTechnicalComponent {
 

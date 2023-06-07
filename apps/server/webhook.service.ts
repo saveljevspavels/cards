@@ -8,10 +8,10 @@ export default class WebhookService {
         app.listen(process.env.PORT || 3000, () => console.log('webhook is listening'));
 
         // Creates the endpoint for our webhook
-        app.post(`${CONST.API_PREFIX}/webhook`, (req, res) => {
+        app.post(`${CONST.API_PREFIX}/webhook`, async (req, res) => {
             switch(req.body.aspect_type) {
-                case 'create': fireStoreService.addPendingActivity(req.body); break;
-                case 'delete': fireStoreService.deletePendingActivity(req.body.object_id); break;
+                case 'create': await fireStoreService.addPendingActivity(req.body); break;
+                case 'delete': await fireStoreService.deletePendingActivity(req.body.object_id); break;
             }
             res.status(200).send('EVENT_RECEIVED');
         });

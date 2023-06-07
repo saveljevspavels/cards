@@ -28,13 +28,12 @@ export default class AthleteService {
     }
 
     async saveAthlete(athlete: any) {
-        const athleteDoc = this.fireStoreService.athleteCollection.doc(athlete.id.toString())
-        const athleteExists = (await athleteDoc.get()).exists
+        const athleteExists = await this.fireStoreService.athleteCollection.exists(athlete.id.toString())
         if(!athleteExists) {
-            await athleteDoc.set(this.createAthlete(athlete))
+            await this.fireStoreService.athleteCollection.set(athlete.id.toString(), this.createAthlete(athlete))
             this.logger.info(`Athlete ${athlete.firstname} ${athlete.lastname} ${athlete.id} saved`)
         } else {
-            await athleteDoc.update(this.createAthletePatch(athlete))
+            await this.fireStoreService.athleteCollection.update(athlete.id.toString(), this.createAthlete(athlete))
             this.logger.info(`Athlete ${athlete.firstname} ${athlete.lastname} ${athlete.id} logged in & updated`)
         }
     }

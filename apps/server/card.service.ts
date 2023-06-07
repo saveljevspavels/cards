@@ -35,9 +35,9 @@ export default class CardService {
                 if(!card) {
                     res.status(400).send('Card does not exist');
                 } else {
-                    const athlete = await this.fireStoreService.newAthleteCollection.get(athleteId)
+                    const athlete = await this.fireStoreService.athleteCollection.get(athleteId)
                     if(athlete) {
-                        await this.fireStoreService.newAthleteCollection.update(athleteId, {
+                        await this.fireStoreService.athleteCollection.update(athleteId, {
                             activeCards: [...athlete?.activeCards, this.getActiveCard(card)]
                         })
                         res.status(200).send();
@@ -58,7 +58,7 @@ export default class CardService {
     }
 
     async getCard(cardId: string): Promise<Card | null> {
-        return await this.fireStoreService.newCardCollection.get(cardId);
+        return await this.fireStoreService.cardCollection.get(cardId);
     }
 
     async createCardFactory(cardFactory: CardFactory) {
@@ -125,20 +125,13 @@ export default class CardService {
             },
             validators: cardPrototype.validators
         }
-        await this.fireStoreService.cardCollection.doc(id).set(card)
+        await this.fireStoreService.cardCollection.set(id, card)
 
         this.logger.info(`Created ${factory.title} card ${id}, ${tier} tier`)
     }
 
     async combineCards(athleteId: string, cardIds: string[]) {
-        const cards: any[] = [];
-        if(cardIds.length) {
-            const cardQuery = this.fireStoreService.cardCollection.where('id', 'in', cardIds)
-            const cardDocs = await cardQuery.get()
-            cardDocs.forEach(card => {
-                cards.push(card.data())
-            })
-        }
+        const cards: Card[] = await this.fireStoreService.cardCollection.where('id', 'in', cardIds);
         if(cards.length !== 2) {
             return 'Invalid card ids'
         } else if (cards[0].tier !== cards[1].tier){
@@ -155,7 +148,7 @@ export default class CardService {
         const factory = (await factoryDoc.get()).data() || {}
 
         if(factory) {
-            await this.fireStoreService.cardCollection.doc(card.id).set({
+            await this.fireStoreService.cardCollection.update(card.id, {
                 ...card,
                 tier,
                 ...factory.tiers[tier]
@@ -167,13 +160,15 @@ export default class CardService {
     }
 
     async progressCard(cardId: string) {
-        const cardDoc = this.fireStoreService.cardCollection.doc(cardId)
-        const card = (await cardDoc.get()).data() || {}
+        const card = await this.fireStoreService.cardCollection.get(cardId)
+        if(!card) {
+            return
+        }
         let nextTier = card.tier;
         switch (card.progression) {
             case Progression.TIERS:
             case Progression.CHAIN:
-                nextTier = parseInt(nextTier) + 1;
+                nextTier = nextTier + 1;
                 break;
         }
         this.logger.info(`Progressing card ${cardId} to ${card.progression} ${nextTier}`)
@@ -184,9 +179,12 @@ export default class CardService {
         switch (card.progression) {
             case Progression.CHAIN:
                 const newCardId = generateId();
-                await cardDoc.update({
-                    progression: Progression.NONE
-                })
+                await this.fireStoreService.cardCollection.update(
+                    cardId,
+                    {
+                        progression: Progression.NONE
+                    }
+                )
                 await this.createCardFromFactory(factory, nextTier, newCardId);
                 break;
             default:
@@ -196,19 +194,21 @@ export default class CardService {
 
     async updateCardUses(cardIds: string[]) {
         if(cardIds.length) {
-            const cardQuery = this.fireStoreService.cardCollection.where('id', 'in', cardIds)
-            const cardDocs = await cardQuery.get()
-            cardDocs.forEach((card) => {
-                const newProgression = card.data().cardUses.progression + 1;
-                card.ref.update({
-                    cardUses: {
-                        ...card.data().cardUses,
-                        progression: newProgression,
-                        queue: card.data().cardUses.queue + 1,
+            const cards = await this.fireStoreService.cardCollection.where('id', 'in', cardIds)
+            cards.forEach((card) => {
+                const newProgression = card.cardUses.progression + 1;
+                this.fireStoreService.cardCollection.update(
+                    card.id,
+                    {
+                        cardUses: {
+                            ...card.cardUses,
+                            progression: newProgression,
+                            queue: card.cardUses.queue + 1,
+                        }
                     }
-                })
-                if(card.data().progression !== Progression.NONE && newProgression >= card.data().cardUses.usesToProgress) {
-                    this.progressCard(card.data().id)
+                )
+                if(card.progression !== Progression.NONE && newProgression >= card.cardUses.usesToProgress) {
+                    this.progressCard(card.id)
                 }
             })
         }
