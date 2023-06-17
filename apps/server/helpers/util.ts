@@ -36,25 +36,25 @@ export const getRandomInt = (max: number) => {
     return Math.floor(Math.random() * max);
 }
 
-export const updateScoreValues = (score: any, value: number, cardAmount: number, achievementsAmount: number) => {
+export const updateScoreValues = (score: any, value: number, cardAmount: number) => {
   return {
     value: score.value ? parseInt(score.value + value) : value,
-    cardsPlayed: score.cardsPlayed ? parseInt(score.cardsPlayed + cardAmount) : cardAmount,
-    achievementsAmount: score.achievementsAmount ? parseInt(score.achievementsAmount + achievementsAmount) : achievementsAmount,
+    cardsPlayed: score.cardsPlayed ? parseInt(score.cardsPlayed + cardAmount) : cardAmount
   }
 }
 
-export const normalizeActivityType = (type: string) => {
+export const normalizeActivityType = (type: string): string => {
     return Object.values(CONST.ACTIVITY_TYPES as {[key: string]: string}).find((activityType) => type.toUpperCase().indexOf(activityType.toUpperCase()) !== -1) || CONST.ACTIVITY_TYPES.OTHER
 }
 
-export const tierToRoman = (number: number) => {
+export const tierToRoman = (number: number): string => {
     switch (number) {
         case 0: return 'I';
         case 1: return 'II';
         case 2: return 'III';
         case 3: return 'IV';
         case 4: return 'V';
+        default: return ''
     }
 }
 

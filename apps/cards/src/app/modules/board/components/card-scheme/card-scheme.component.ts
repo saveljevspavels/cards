@@ -2,7 +2,6 @@ import {Component, Input, OnInit} from '@angular/core';
 import {FormArray, FormBuilder, FormControl, FormGroup} from "@angular/forms";
 import {ConstService} from "../../../../services/const.service";
 import {BehaviorSubject} from "rxjs";
-import {RULES} from "../../../../../../../../definitions/rules";
 import Card from "../../../../../../../shared/interfaces/card.interface";
 import {CardScheme} from "../../../../../../../shared/interfaces/card-scheme.interface";
 import {CardService} from "../../../../services/card.service";
@@ -26,9 +25,6 @@ export class CardSchemeComponent implements OnInit {
                 private cardService: CardService) { }
 
     ngOnInit(): void {
-        this.cardScheme.subscribe((cardScheme) => {
-            console.log('card scheme', cardScheme.boards)
-        })
         this.allCards.subscribe((cards) => {
             this.cardMap = new Map<string, Card>(cards.map(card => {
                 return [card.id, card]

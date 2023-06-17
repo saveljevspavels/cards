@@ -1,4 +1,4 @@
-<div class="card card--tier-{{(card.value | tier)}}"
+<div class="card card--tier-{{(card.value | tier)}} card--{{validationStatus.toString()}}"
      *ngIf="card && visible"
      [ngClass]="{'card--small': small, 'card--submitted': submittedType}"
 >

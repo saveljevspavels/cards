@@ -5,6 +5,7 @@ import {ConstService} from "../../../../services/const.service";
 import {UtilService} from "../../../../services/util.service";
 import {CardService} from "../../../../services/card.service";
 import {Progression} from "../../../../../../../shared/interfaces/card-factory.interface";
+import {ValidationStatus} from "../../../../../../../shared/services/validation.service";
 
 @Component({
   selector: 'app-card',
@@ -32,6 +33,9 @@ export class CardComponent implements OnInit, OnChanges {
 
     @Input()
     submittedType = '';
+
+    @Input()
+    validationStatus: ValidationStatus = ValidationStatus.NONE;
 
     imageObservable: any;
     visible = true;

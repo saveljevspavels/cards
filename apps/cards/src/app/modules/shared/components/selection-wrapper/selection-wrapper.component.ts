@@ -45,6 +45,9 @@ export class SelectionWrapperComponent implements OnInit, OnChanges, ControlValu
   @Input()
   idKey = 'id'
 
+  @Input()
+  itemSelectable: Function = (item: any) => true;
+
   public value: string[];
 
   public innerForm: FormGroup;
@@ -123,7 +126,7 @@ export class SelectionWrapperComponent implements OnInit, OnChanges, ControlValu
   }
 
   selectItem(item: any) {
-    if(this.selfSelectable && this.selectionEnabled) {
+    if(this.selfSelectable && this.selectionEnabled && this.itemSelectable(item)) {
       this.innerForm.get(this.getId(item))?.setValue(true)
     }
   }

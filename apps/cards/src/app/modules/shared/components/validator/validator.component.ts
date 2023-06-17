@@ -1,12 +1,12 @@
 import {Component, Input, OnInit, ViewEncapsulation} from '@angular/core';
 import {Validator} from "../../../../../../../shared/interfaces/card.interface";
-import {ValidationService} from "../../../../services/validation.service";
 import {BoardService} from "../../../../services/board.service";
 import {filter, map, take} from "rxjs/operators";
 import {AthleteService} from "../../../../services/athlete.service";
 import {Observable} from "rxjs";
-import {UtilService} from "../../../../services/util.service";
 import {ConstService} from "../../../../services/const.service";
+import {ValidationService} from "../../../../services/validation.service";
+import {UtilService} from "../../../../services/util.service";
 
 @Component({
     selector: 'app-validator',
@@ -46,7 +46,8 @@ export class ValidatorComponent implements OnInit {
 
     constructor(private validationService: ValidationService,
                 private boardService: BoardService,
-                private athleteService: AthleteService) { }
+                private athleteService: AthleteService
+    ) { }
 
     ngOnInit(): void {
         this.athleteService.me.pipe(filter(me => !!me && !this.manual), take(1)).subscribe((me) => {
@@ -71,7 +72,7 @@ export class ValidatorComponent implements OnInit {
                         : this.validationService.validateRule(activity, this.validator)
                             ? 'pass'
                             : 'fail',
-                    type: activity?.type ? UtilService.normalizeActivityType(activity?.type) : null
+                    type: activity?.type ? UtilService.normalizeActivityType(activity?.type) : ''
                 }
             }))
         })

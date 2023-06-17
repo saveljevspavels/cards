@@ -1,8 +1,8 @@
 import {Component, EventEmitter, OnInit, Output, ViewEncapsulation} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup} from "@angular/forms";
-import {UtilService} from "../../../../services/util.service";
 import {LocalStorageService} from "../../../../services/local-storage.service";
 import {ConstService} from "../../../../services/const.service";
+import {UtilService} from "../../../../services/util.service";
 
 @Component({
   selector: 'app-card-filter',

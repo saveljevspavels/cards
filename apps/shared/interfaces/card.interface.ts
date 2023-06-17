@@ -18,9 +18,13 @@ export default interface Card {
     manualValidation: boolean;
 }
 
+export interface CardSnapshot extends Card {
+    comment?: string;
+    attachedImages?: string[];
+}
+
 export interface CardUses {
     progression: number;
-    queue: number;
     usesToProgress: number;
 }
 
@@ -43,7 +47,6 @@ export const NullCard: Card = {
     coinsReward: 0,
     cardUses: {
       progression: 0,
-      queue: 0,
       usesToProgress: 0,
     },
     factoryId: '',

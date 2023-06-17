@@ -1,0 +1,7 @@
+<div class="base-card">
+    {{(athlete$ | async)?.baseCardProgress | json}}
+    {{type | json}}
+    {{value | json}}
+    {{progress | json}}
+    {{progress | percent}}
+</div>

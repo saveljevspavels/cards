@@ -20,6 +20,7 @@ import {CardSchemeComponent} from "./components/card-scheme/card-scheme.componen
 import {AdminModule} from "../admin/admin.module";
 import { ActiveCardListComponent } from './components/active-card-list/active-card-list.component';
 import { ActiveCardComponent } from './components/active-card/active-card.component';
+import { BaseCardComponent } from './components/base-card/base-card.component';
 
 @NgModule({
     declarations: [
@@ -39,7 +40,8 @@ import { ActiveCardComponent } from './components/active-card/active-card.compon
         EnergyLineComponent,
         CardSchemeComponent,
         ActiveCardListComponent,
-        ActiveCardComponent
+        ActiveCardComponent,
+        BaseCardComponent
     ],
     imports: [
         CommonModule,

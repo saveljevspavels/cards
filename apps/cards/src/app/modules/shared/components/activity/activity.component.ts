@@ -1,8 +1,8 @@
 import {Component, ElementRef, forwardRef, Input, OnInit, ViewChild, ViewEncapsulation} from '@angular/core';
 import {ControlValueAccessor, FormControl, NG_VALUE_ACCESSOR} from "@angular/forms";
 import {PopupService} from "../../../../services/popup.service";
-import {UtilService} from "../../../../services/util.service";
 import {ConstService} from "../../../../services/const.service";
+import {UtilService} from "../../../../services/util.service";
 
 @Component({
     selector: 'app-activity',

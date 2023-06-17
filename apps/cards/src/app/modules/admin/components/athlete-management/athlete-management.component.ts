@@ -3,8 +3,8 @@ import {BehaviorSubject} from "rxjs";
 import {AthleteService} from "../../../../services/athlete.service";
 import {FormBuilder, FormControl, Validators} from "@angular/forms";
 import {PERMISSIONS} from "../../../../constants/permissions";
-import {UtilService} from "../../../../services/util.service";
 import {ConstService} from "../../../../services/const.service";
+import {UtilService} from "../../../../services/util.service";
 
 @Component({
     selector: 'app-athlete-management',

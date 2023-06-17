@@ -33,7 +33,6 @@ export class BoardComponent implements OnInit {
 
     enterSubmitMode(activity: any) {
         this.boardService.activity = activity;
-        this.router.navigateByUrl(`board/submit-activity`)
     }
 
     openRules() {

@@ -18,7 +18,8 @@ export const RULES = {
             distance: 7000
         },
         other: {
-            distance: 10000
+            distance: 10000,
+            elapsed_time: 1800
         }
     },
     LEVELS: {
@@ -66,7 +67,7 @@ export const RULES = {
     CARD_VALUE_STEP: 1,
     CARD_VALUE_MIN: 1,
     CARD_VALUE_MAX: 10,
-    MAX_CARDS_SUBMIT: 1,
+    MAX_CARDS_SUBMIT: 4,
     ENERGY: {
         MIN: 0,
         MAX: 3,
@@ -81,5 +82,6 @@ export const RULES = {
     },
     SCHEME: {
         BOARDS_NUMBER: 3
-    }
+    },
+    PROGRESS_PRECISION: 1000,
 }

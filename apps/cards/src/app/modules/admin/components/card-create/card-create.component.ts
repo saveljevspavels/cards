@@ -2,12 +2,12 @@ import {Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core'
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {AdminService} from "../../admin.service";
 import {FileService} from "../../../../services/file.service";
-import {UtilService} from "../../../../services/util.service";
 import {ConstService} from "../../../../services/const.service";
 import CardFactory, {
     CardPrototype,
     Progression
 } from "../../../../../../../shared/interfaces/card-factory.interface";
+import {UtilService} from "../../../../services/util.service";
 
 @Component({
   selector: 'app-card-create',

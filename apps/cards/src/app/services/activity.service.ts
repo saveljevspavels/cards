@@ -3,7 +3,6 @@ import {AngularFirestore} from "@angular/fire/firestore";
 import {BehaviorSubject} from "rxjs";
 import {HttpClient} from "@angular/common/http";
 import {debounceTime, distinctUntilChanged, filter} from "rxjs/operators";
-import {LocalStorageService} from "./local-storage.service";
 import {environment} from "../../environments/environment";
 import {AthleteService} from "./athlete.service";
 import {ConstService} from "./const.service";
@@ -36,7 +35,7 @@ export class ActivityService {
                 (ref: any) => (
                     ref
                         .where('athlete.id', '==', parseInt(me?.id || '', 10))
-                        .where('gameData.status', 'in', [ConstService.CONST.ACTIVITY_STATUSES.NEW, ConstService.CONST.ACTIVITY_STATUSES.SUBMITTED])
+                        .where('gameData.status', '==', ConstService.CONST.ACTIVITY_STATUSES.NEW)
                 )
             ).valueChanges().subscribe((activities: any) => {
                 this.newActivities.next(activities)
@@ -71,10 +70,10 @@ export class ActivityService {
         })
     }
 
-    submitActivity(activityId: string, cards: string[], images: string[], comments: string) {
+    submitActivity(activityId: string, cardIds: string[], images: string[][], comments: string[]) {
         return this.http.post(`${environment.baseBE}/submit-activity`, {
             activityId,
-            cards,
+            cardIds,
             images,
             comments
         })

@@ -57,6 +57,10 @@ export default class CardService {
         }
     }
 
+    async getCards(cardIds: string[]): Promise<Card[] | []> {
+        return await this.fireStoreService.cardCollection.where([{fieldPath: 'id', opStr: 'in', value: cardIds}]);
+    }
+
     async getCard(cardId: string): Promise<Card | null> {
         return await this.fireStoreService.cardCollection.get(cardId);
     }
@@ -120,7 +124,6 @@ export default class CardService {
             coinsReward: cardPrototype.coinsReward,
             cardUses: {
                 usesToProgress: cardPrototype.usesToProgress,
-                queue: 0,
                 progression: 0
             },
             validators: cardPrototype.validators
@@ -131,7 +134,7 @@ export default class CardService {
     }
 
     async combineCards(athleteId: string, cardIds: string[]) {
-        const cards: Card[] = await this.fireStoreService.cardCollection.where('id', 'in', cardIds);
+        const cards: Card[] = await this.fireStoreService.cardCollection.where([{ fieldPath: 'id', opStr: 'in', value: cardIds}]);
         if(cards.length !== 2) {
             return 'Invalid card ids'
         } else if (cards[0].tier !== cards[1].tier){
@@ -194,7 +197,7 @@ export default class CardService {
 
     async updateCardUses(cardIds: string[]) {
         if(cardIds.length) {
-            const cards = await this.fireStoreService.cardCollection.where('id', 'in', cardIds)
+            const cards = await this.fireStoreService.cardCollection.where([{ fieldPath: 'id', opStr: 'in', value: cardIds}])
             cards.forEach((card) => {
                 const newProgression = card.cardUses.progression + 1;
                 this.fireStoreService.cardCollection.update(
@@ -203,7 +206,6 @@ export default class CardService {
                         cardUses: {
                             ...card.cardUses,
                             progression: newProgression,
-                            queue: card.cardUses.queue + 1,
                         }
                     }
                 )

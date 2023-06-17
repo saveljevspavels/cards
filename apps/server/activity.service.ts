@@ -2,23 +2,23 @@ import {RESPONSES} from "./response-codes";
 import {Express} from "express";
 import {FirestoreService} from "./firestore.service";
 import {CONST} from "../../definitions/constants";
-import {ValidationService} from "./shared/validation.service";
 import {normalizeActivityType} from "./helpers/util";
 import {RULES} from "../../definitions/rules";
 import {Logger} from "winston";
-import CardService from "./card.service";
+import {StaticValidationService} from "../shared/services/validation.service";
+import Card, {CardSnapshot, NullCard} from "../shared/interfaces/card.interface";
+import Athlete from "../shared/interfaces/athlete.interface";
 
 export default class ActivityService {
     constructor(
         private app: Express,
         private fireStoreService: FirestoreService,
-        private logger: Logger,
-        private cardService: CardService
+        private logger: Logger
     ) {
         app.post(`${CONST.API_PREFIX}/submit-activity`, async (req, res) => {
-            let response = await fireStoreService.submitActivity(
+            let response = await this.submitActivity(
                 req.body.activityId,
-                req.body.cards,
+                req.body.cardIds,
                 req.body.images,
                 req.body.comments
             )
@@ -29,87 +29,91 @@ export default class ActivityService {
         });
 
         app.post(`${CONST.API_PREFIX}/reject-activity`, async (req, res) => {
-            await fireStoreService.rejectActivity(req.body.activityId, req.body.comments)
+            await this.rejectActivity(req.body.activityId, req.body.comments)
             res.status(200).send({response: RESPONSES.SUCCESS});
         });
 
         app.post(`${CONST.API_PREFIX}/delete-activity`, async (req, res) => {
-            await fireStoreService.deleteActivity(req.body.activityId)
+            await this.deleteActivity(req.body.activityId)
             res.status(200).send({response: RESPONSES.SUCCESS});
         });
 
         app.post(`${CONST.API_PREFIX}/approve-activity`, async (req, res) => {
-          await this.approveActivity(req.body.activityId, req.body.cardIds)
-          res.status(200).send({response: RESPONSES.SUCCESS});
+          const activity = await this.getActivity(req.body.activityId);
+          const athlete = await this.fireStoreService.athleteCollection.get(activity.athlete.id.toString());
+          if(!athlete || !activity) {
+              res.status(400).send({response: RESPONSES.SUCCESS});
+              return;
+          }
+          await this.approveActivity(activity)
+          res.status(200).send({response: RESPONSES.ERROR.INVALID_ATHLETE});
         });
     }
 
-    async tryAutoApprove(activityId: string) {
-        this.logger.info(`Attempting auto approve for activity ${activityId}`)
-        const activityDoc = this.fireStoreService.detailedActivityCollection.doc(activityId.toString())
-        const activity = (await activityDoc.get()).data() || {}
-        if(!activity.gameData.cardSnapshots[0]) {
-            this.logger.info(`No cards provided on activity ${activityId}, switching to manual validation`)
-        } else {
-            const card = activity.gameData.cardSnapshots[0]
-
-            if(activity.gameData.cardSnapshots.find((card: any) => card.manualValidation)) {
-                this.logger.info(`Manual validation required for card ${card.id}`)
-                return RESPONSES.SUCCESS;
-            }
-
-            const athlete = await this.fireStoreService.athleteCollection.get(activity.athlete.id.toString());
-            if(!athlete) {
-                return;
-            }
-
-            if(activity.gameData.cardSnapshots
-                .reduce((acc: any, card: any) => [...acc, ...card.validators], [])
-                .reduce((acc: any, validator: any) => acc && ValidationService.validateRule(activity, validator, athlete.baseWorkout), true)
-            ) { // Checks all validators
-                this.logger.info(`All validators passed for ${activityId}`)
-                await this.approveActivity(activityId, [card.id])
-            } else {
-                this.logger.info(`Validator(s) failed, switching for manual approve ${activityId}`)
-            }
-        }
-        return RESPONSES.SUCCESS;
+    async getActivity(activityId: number) {
+        return await this.fireStoreService.detailedActivityCollection.get(activityId.toString());
     }
 
-    async approveActivity(activityId: string, cardIds: string[] = []) {
-        const activityDoc = this.fireStoreService.detailedActivityCollection.doc(activityId.toString())
-        const activity = (await activityDoc.get()).data() || {}
-        if(activity.gameData.status === CONST.ACTIVITY_STATUSES.APPROVED) {
-            this.logger.error(`Activity ${activityId} was already approved for athlete ${activity.athlete.id.toString()}`)
-            return;
-        }
+    async tryAutoApprove(activityId: number) {
+        this.logger.info(`Attempting auto approve for activity ${activityId}`)
+        const activity = await this.getActivity(activityId);
 
-        await activityDoc.set({
-            ...activity,
-            gameData: {
-                ...activity.gameData,
-                status: CONST.ACTIVITY_STATUSES.APPROVED,
-                cardIds,
-                cardSnapshots: activity.gameData.cardSnapshots.filter((snapshot: any) => cardIds.indexOf(snapshot.id) !== -1)
-            }
-        })
+        const cardSnapshots: CardSnapshot[] = activity.gameData.cardSnapshots;
 
         const athlete = await this.fireStoreService.athleteCollection.get(activity.athlete.id.toString());
         if(!athlete) {
             return;
         }
 
-        this.logger.info(`Activity ${activityId} was approved for athlete ${athlete.firstname} ${athlete.lastname} with cards ${cardIds}`)
+        if(StaticValidationService.validateCardGroup(activity, cardSnapshots, athlete.baseWorkout)) {
+            this.logger.info(`All validators passed for ${activityId}`)
+            await this.approveActivity(activity.id.toString());
+            await this.updateBaseCard(athlete, activity, cardSnapshots);
+        } else {
+            this.logger.info(`Validator(s) failed, switching for manual approve ${activityId}`)
+        }
 
-        await this.fireStoreService.updateScore(activity.athlete.id.toString(), cardIds, []);
-        await this.fireStoreService.spendEnergy(activity.athlete.id.toString(), cardIds);
-        await this.cardService.updateCardUses(cardIds);
-        await this.updatePersonalBests(activity, cardIds);
+        return RESPONSES.SUCCESS;
+    }
+
+    async approveActivity(activityId: any) {
+        const activity = await this.fireStoreService.detailedActivityCollection.get(activityId);
+        const athlete = await this.fireStoreService.athleteCollection.get(activity.athlete.id.toString());
+        if(!athlete || !activity) {
+            return;
+        }
+
+        if(activity.gameData.status === CONST.ACTIVITY_STATUSES.APPROVED) {
+            this.logger.error(`Activity ${activity.id} was already approved for athlete ${activity.athlete.id.toString()}`)
+            return;
+        }
+
+        await this.fireStoreService.detailedActivityCollection.update(
+            activity.id.toString(),
+            {
+            gameData: {
+                ...activity.gameData,
+                status: CONST.ACTIVITY_STATUSES.APPROVED,
+            }
+        })
+
+        this.logger.info(`Activity ${activity.id} was approved for athlete ${athlete.firstname} ${athlete.lastname} with cards ${activity.gameData.cardSnapshots.map((card: CardSnapshot) => card.title)}`)
+    }
+
+    async updateBaseCard(athlete: Athlete, activity: any, cardSnapshots: CardSnapshot[]) {
+        const baseWorkout = athlete.baseWorkout;
+        const remainderActivity = StaticValidationService.getActivityRemainder(activity, cardSnapshots, baseWorkout);
+        return await this.fireStoreService.athleteCollection.update(
+            athlete.id,
+            {
+                baseCardProgress: StaticValidationService.updateBaseCardProgress(remainderActivity, baseWorkout, athlete.baseCardProgress)
+            }
+        )
     }
 
     async updatePersonalBests(activity: any, cardIds: string[]) {
         if(cardIds.length) {
-            const cards = await this.fireStoreService.cardCollection.where('id', 'in', cardIds)
+            const cards = await this.fireStoreService.cardCollection.where([{ fieldPath: 'id', opStr: 'in', value: cardIds}])
             const baseWorkoutPatch: any = {};
             const normalizedType = normalizeActivityType(activity.type);
             baseWorkoutPatch[normalizedType] = {};
@@ -127,5 +131,86 @@ export default class ActivityService {
                 await this.fireStoreService.updateBaseWorkout([activity.athlete.id.toString()], baseWorkoutPatch)
             }
         }
+    }
+
+    async submitActivity(activityId: number, cardIds: string[], imageIds: string[][], comments: string) {
+        const activity = await this.getActivity(activityId);
+        const athlete = await this.fireStoreService.athleteCollection.get(activity.athlete.id.toString());
+
+        if(!athlete || !activity) {
+            return;
+        }
+
+        if(cardIds.find(id => athlete.activeCards.map(card => card.id).indexOf(id) === -1)) {
+            this.logger.info(`Athlete ${athlete.firstname} ${athlete.lastname} ${athlete.id} tried to submit unactivated card(s) ${cardIds}`)
+            return RESPONSES.ERROR.CARD_NOT_ACTIVATED
+        }
+
+        if(activity.gameData.status !== CONST.ACTIVITY_STATUSES.NEW
+            && activity.gameData.status !== CONST.ACTIVITY_STATUSES.REJECTED) {
+            this.logger.info(`Athlete ${athlete.firstname} ${athlete.lastname} ${athlete.id} submitted activity ${activityId} with invalid status ${activity.gameData.status}`)
+            return RESPONSES.ERROR.WRONG_ACTIVITY_STATUS
+        }
+
+        if(cardIds.length > RULES.MAX_CARDS_SUBMIT) {
+            this.logger.info(`Athlete ${athlete.firstname} ${athlete.lastname} ${athlete.id} submitted activity with too many cards ${cardIds}`)
+            return RESPONSES.ERROR.MAX_CARDS_SUBMIT
+        }
+
+        const cards: Card[] = cardIds.length ? await this.fireStoreService.cardCollection.where([{fieldPath: 'id', opStr: 'in', value: cardIds}]) : [];
+        const cardSnapshots: CardSnapshot[] = cardIds.map((id, index) => {
+            return {
+                ...(cards.find(card => card.id === id) || NullCard),
+                comment: comments[index] || '',
+                attachedImages: imageIds[index] || []
+            }
+        });
+
+        await this.fireStoreService.detailedActivityCollection.update(
+            activityId.toString(),
+            {
+                gameData: {
+                    status: CONST.ACTIVITY_STATUSES.SUBMITTED,
+                    submittedAt: new Date().toISOString(),
+                    cardIds,
+                    cardSnapshots, // Storing card snapshots
+                    images: imageIds,
+                    comments
+                }
+            })
+        this.logger.info(`Athlete ${athlete.firstname} ${athlete.lastname} ${athlete.id} submitted activity with ${cardIds}`)
+        return RESPONSES.SUCCESS
+    }
+
+    async rejectActivity(activityId: string, comments: string) {
+        const activity = await this.fireStoreService.detailedActivityCollection.get(activityId.toString())
+        await this.fireStoreService.detailedActivityCollection.update(
+            activityId.toString(),
+            {
+                gameData: {
+                    ...activity.gameData,
+                    cardSnapshots: [],
+                    cardIds: [],
+                    images: [],
+                    comments,
+                    status: CONST.ACTIVITY_STATUSES.NEW,
+                }
+            })
+        this.logger.info(`Activity ${activity.type} ${activityId} was rejected for athlete ${activity.athlete.id.toString()}`)
+    }
+
+    async deleteActivity(activityId: string) {
+        const activity = await this.fireStoreService.detailedActivityCollection.get(activityId.toString())
+        await this.fireStoreService.detailedActivityCollection.update(
+            activityId.toString(),
+            {
+                gameData: {
+                    ...activity.gameData,
+                    cardSnapshots: [],
+                    cardIds: [],
+                    status: CONST.ACTIVITY_STATUSES.DELETED,
+                }
+            })
+        this.logger.info(`Activity ${activityId} was deleted for athlete ${activity.athlete.id.toString()}`)
     }
 }

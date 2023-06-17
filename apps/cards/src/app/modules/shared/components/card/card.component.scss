@@ -8,6 +8,20 @@
     justify-content: space-between;
     overflow: hidden;
 
+    &--pass {
+        border-color: var(--color-pass)!important;
+        cursor: pointer;
+    }
+
+    &--fail {
+        border-color: var(--color-danger)!important;
+    }
+
+    &--selected {
+        border-color: var(--text-active)!important;
+        cursor: pointer;
+    }
+
     &__border {
         height: 100%;
         width: 100%;

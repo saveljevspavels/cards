@@ -12,6 +12,7 @@ export default interface Athlete {
     energy: number;
     coins: number;
     activeCards: ActiveCard[];
+    baseCardProgress: BaseCardProgress;
 }
 
 export interface AthletePatch {
@@ -37,4 +38,15 @@ export interface BaseWorkout {
     walk?: {
         distance?: number;
     };
+    other?: {
+        distance?: number;
+        elapsed_time?: number;
+    }
+}
+
+export interface BaseCardProgress {
+    run: number;
+    ride: number;
+    walk: number;
+    other: number;
 }

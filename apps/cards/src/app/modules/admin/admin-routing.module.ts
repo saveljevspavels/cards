@@ -8,7 +8,7 @@ import {AthleteManagementComponent} from "./components/athlete-management/athlet
 import {LogsComponent} from "./components/logs/logs.component";
 import {AdminParentComponent} from "./components/admin-parent/admin-parent.component";
 import {AchievementManagementComponent} from "./components/achievement-management/achievement-management.component";
-import {CardSchemeComponent} from "../board/components/card-scheme/card-scheme.component";
+import {CardSchemeManagementComponent} from "./components/card-scheme-management/card-scheme-management.component";
 
 const routes: Routes = [
     {
@@ -30,7 +30,7 @@ const routes: Routes = [
             },
             {
                 path: 'card-scheme',
-                component: CardSchemeComponent
+                component: CardSchemeManagementComponent
             },
             {
                 path: 'athlete-management',

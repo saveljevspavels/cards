@@ -38,6 +38,10 @@ export default class AthleteService {
         }
     }
 
+    async getAthlete(athleteId: string): Promise<Athlete | null> {
+        return await this.fireStoreService.athleteCollection.get(athleteId);
+    }
+
     createAthlete(athlete: any): Athlete {
         return {
             id: athlete.id.toString(),
@@ -50,7 +54,13 @@ export default class AthleteService {
             achievements: [],
             energy: RULES.ENERGY.BASE,
             coins: RULES.COINS.BASE,
-            activeCards: []
+            activeCards: [],
+            baseCardProgress: {
+                run: 0,
+                ride: 0,
+                walk: 0,
+                other: 0,
+            }
         }
     }
 

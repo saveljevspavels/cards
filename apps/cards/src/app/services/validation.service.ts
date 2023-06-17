@@ -1,9 +1,8 @@
 import {Injectable} from "@angular/core";
-import {Validator} from "../../../../shared/interfaces/card.interface";
+import Card, {Validator} from "../../../../shared/interfaces/card.interface";
 import {AthleteService} from "./athlete.service";
-import {UtilService} from "./util.service";
-import {ConstService} from "./const.service";
 import {BaseWorkout} from "../../../../shared/interfaces/athlete.interface";
+import {StaticValidationService} from "../../../../shared/services/validation.service";
 
 @Injectable({
     providedIn: 'root'
@@ -17,59 +16,46 @@ export class ValidationService {
         })
     }
 
-    resolveValidationValue(validator: Validator, baseWorkout: any = this.baseWorkout ): any {
-        if(baseWorkout !== null) {
-            return Object.keys(ConstService.RULES.DEFAULT_BASE_WORKOUT).reduce((acc: any, type) => {
-                try {
-                    acc[type] = this.evaluateFormula(validator.formula, validator.property, baseWorkout[type])
-                } catch (err) {}
-                return acc
-            }, {})
-        } else return 0;
+    resolveValidationValue(validator: Validator, baseWorkout: any = this.baseWorkout): any {
+        return StaticValidationService.resolveValidationValue(validator, baseWorkout);
     }
 
     evaluateFormula(formula: string, property: string, values: any = {}) {
-        Object.entries(values).forEach(([key, value]: any) => {
-            formula = formula.replace(key, value)
-        })
-
-        switch (property) {
-            case ConstService.CONST.ACTIVITY_PROPERTIES.TYPE:
-                return formula;
-            case ConstService.CONST.ACTIVITY_PROPERTIES.DISTANCE:
-                const value = eval(formula);
-                return value - (value % 100);
-            case ConstService.CONST.ACTIVITY_PROPERTIES.START_DATE:
-                return eval(formula) * 60 * 60;
-            default: return eval(formula);
-        }
+        return StaticValidationService.evaluateFormula(formula, property, values);
     }
 
-    validateRule(activity: any, validator: Validator, baseWorkout = this.baseWorkout) {
-        const type = UtilService.normalizeActivityType(activity.type);
-
-        const activityVal = validator.property === ConstService.CONST.ACTIVITY_PROPERTIES.START_DATE
-            ? this.getTimeInSeconds(activity[validator.property])
-            : activity[validator.property]
-        const validatorVal = this.resolveValidationValue(validator, baseWorkout)[type]
-
-        switch (validator.comparator) {
-            case ConstService.CONST.COMPARATORS.GREATER:
-                return activityVal >= validatorVal;
-            case ConstService.CONST.COMPARATORS.LESS:
-                return activityVal < validatorVal
-            case ConstService.CONST.COMPARATORS.IN:
-                return validatorVal.toString().toUpperCase().indexOf(UtilService.normalizeActivityType(activityVal).toUpperCase()) !== -1
-            case ConstService.CONST.COMPARATORS.NOT_IN:
-                return validatorVal.toString().toUpperCase().indexOf(UtilService.normalizeActivityType(activityVal).toUpperCase()) === -1
-            case ConstService.CONST.COMPARATORS.EQUALS:
-            default:
-                return activityVal === validatorVal
+    validateRule(activity: any, validator: Validator, baseWorkout = this.baseWorkout): boolean {
+        if (!baseWorkout) {
+            return false;
         }
+        return StaticValidationService.validateRule(activity, validator, baseWorkout);
     }
 
-    getTimeInSeconds(ISODate: string): number {
-        const date = new Date(ISODate)
-        return date.getHours() * 60 * 60 + date.getMinutes() * 60 + date.getSeconds();
+    validateCards(activity: any, cards: Card[], baseWorkout = this.baseWorkout): boolean {
+        if (!baseWorkout) {
+            return false;
+        }
+        return StaticValidationService.validateCards(activity, cards, baseWorkout);
+    }
+
+    validateCardGroup(activity: any, cards: Card[], baseWorkout = this.baseWorkout): boolean {
+        if (!baseWorkout) {
+            return false;
+        }
+        return StaticValidationService.validateCardGroup(activity, cards, baseWorkout);
+    }
+
+    getActivityRemainder(activity: any, cards: Card[], baseWorkout = this.baseWorkout): any {
+        if (!baseWorkout) {
+            return null;
+        }
+        return StaticValidationService.getActivityRemainder(activity, cards, baseWorkout);
+    }
+
+    getBaseCardProgress(activity: any, baseWorkout = this.baseWorkout): number {
+        if (!baseWorkout) {
+            return 0;
+        }
+        return StaticValidationService.getBaseCardProgress(activity, baseWorkout);
     }
 }
