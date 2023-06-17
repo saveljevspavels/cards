@@ -325,7 +325,6 @@ export class DataCollection<T> {
     }
 
     async get(documentName: string): Promise<T | null> {
-        console.log('doc name', documentName)
         return (await this._collection.doc(documentName).get()).data() as T | undefined || null;
     }
 

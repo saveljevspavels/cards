@@ -31,10 +31,6 @@ export class BoardComponent implements OnInit {
         })
     }
 
-    enterSubmitMode(activity: any) {
-        this.boardService.activity = activity;
-    }
-
     openRules() {
         LocalStorageService.setObject({rules: false});
         this.router.navigateByUrl(`board/rules`)

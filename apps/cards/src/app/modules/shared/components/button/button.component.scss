@@ -14,6 +14,14 @@
     &--success {
 
     }
+    &--small {
+        padding: 4px 10px;
+        height: 24px;
+        border-radius: var(--radius-half);
+        .title {
+            font-size: 12px!important;
+        }
+    }
     &--action {
         background-color: var(--color-blue);
         color: var(--acticity-background);

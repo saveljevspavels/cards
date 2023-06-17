@@ -40,6 +40,7 @@
     --padding: 14px 14px 14px 14px;
     --padding-value: 14px;
     --radius: 10px;
+    --radius-half: 5px;
 
     --menu-height: 56px;
     --header-height: 50px;
@@ -92,6 +93,14 @@ hr {
 
 .text-blue {
     color: var(--color-blue);
+}
+
+.text {
+    &-color {
+        &-on-primary {
+            color: white;
+        }
+    }
 }
 
 .color {
@@ -156,6 +165,9 @@ hr {
     background-color: var(--acticity-background);
     padding: var(--padding);
     border-radius: var(--radius);
+    &--primary {
+        background-color: var(--color-blue);
+    }
 }
 
 .pointer {
@@ -164,34 +176,6 @@ hr {
 
 .no-click {
     pointer-events: none;
-}
-
-.activity-type {
-    &--run {
-        color: var(--color-run)!important;
-        fill: var(--color-run)!important;
-    }
-    &--walk {
-        color: var(--color-walk)!important;
-        fill: var(--color-walk)!important;
-    }
-    &--ride {
-        color: var(--color-ride)!important;
-        fill: var(--color-ride)!important;
-    }
-    &--other {
-        color: var(--color-other);
-        fill: var(--color-other)!important;
-    }
-    &--all {
-        color: var(--color-all);
-        fill: var(--color-all)!important;
-        svg {
-            margin-top: 6px;
-            width: 32px;
-            height: 32px;
-        }
-    }
 }
 
 .h-50 {

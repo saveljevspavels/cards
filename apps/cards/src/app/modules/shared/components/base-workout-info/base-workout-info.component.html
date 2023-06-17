@@ -1,8 +1,9 @@
 <div class="base-workout pt-0" *ngIf="baseWorkout">
     <ng-container *ngFor="let type of activityTypes | keyvalue: noSort">
-        <div class="text-bold text-blue mt-3 d-flex align-items-center activity-type--{{type.value}}">
-            <app-svg [icon]="'activity_' + type.value"></app-svg>
-            <span class="pl-1">{{type.value + '' | titlecase}}:</span>
+        <div class="text-bold text-blue mt-3">
+            <app-activity-type-icon [type]="type.value">
+                <span class="pl-1">{{type.value + '' | titlecase}}:</span>
+            </app-activity-type-icon>
         </div>
         <div class="stat-item" *ngIf="baseWorkout[type.value].distance">
             <div class="stat-item__property">Base workout distance:</div>

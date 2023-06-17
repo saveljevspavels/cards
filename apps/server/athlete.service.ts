@@ -54,7 +54,11 @@ export default class AthleteService {
             achievements: [],
             energy: RULES.ENERGY.BASE,
             coins: RULES.COINS.BASE,
-            activeCards: [],
+            cards: {
+                active: [],
+                completed: [],
+                finished: [],
+            },
             baseCardProgress: {
                 run: 0,
                 ride: 0,

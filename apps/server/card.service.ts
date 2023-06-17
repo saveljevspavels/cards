@@ -6,7 +6,6 @@ import {generateId, getRandomInt, tierToRoman} from "./helpers/util";
 import {Logger} from "winston";
 import CardFactory, {CardPrototype, Progression} from "../shared/interfaces/card-factory.interface";
 import Card from "../shared/interfaces/card.interface";
-import {ActiveCard} from "../shared/interfaces/active-card";
 
 export default class CardService {
     constructor(
@@ -38,7 +37,7 @@ export default class CardService {
                     const athlete = await this.fireStoreService.athleteCollection.get(athleteId)
                     if(athlete) {
                         await this.fireStoreService.athleteCollection.update(athleteId, {
-                            activeCards: [...athlete?.activeCards, this.getActiveCard(card)]
+                            activeCards: [...athlete?.cards.active, card.id]
                         })
                         res.status(200).send();
                     } else {
@@ -47,14 +46,6 @@ export default class CardService {
                 }
             }
         });
-    }
-
-    getActiveCard(card: Card): ActiveCard {
-        return {
-            id: card.id,
-            progress: 0,
-            firstUse: true
-        }
     }
 
     async getCards(cardIds: string[]): Promise<Card[] | []> {

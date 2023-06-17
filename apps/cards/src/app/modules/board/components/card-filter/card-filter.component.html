@@ -17,8 +17,8 @@
             <div class="d-flex align-items-center">
                 <app-radio [fc]="form.get('filterActivity')" [name]="'filterActivity'" [value]="activity.key"></app-radio>
                 <div class="d-flex align-items-center">
-                    <span class="activity-type--{{activity.key}} mr-1">
-                        <app-svg [icon]="'activity_' + activity.key"></app-svg>
+                    <span class="mr-1">
+                        <app-activity-type-icon [type]="activity.key"></app-activity-type-icon>
                     </span>
                     <p class="m-0">{{activity.title}}</p>
                 </div>

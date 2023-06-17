@@ -48,8 +48,8 @@ export class ActiveCardListComponent implements OnInit {
         return;
       }
 
-      this.cardList = athlete?.activeCards.map(activeCard => {
-        const card = this.cardService.getCard(activeCard.id);
+      this.cardList = athlete?.cards.active.map(cardId => {
+        const card = this.cardService.getCard(cardId);
         return {
           card,
           validationStatus: this.validateCard(activity, card, this.selectedCards.value)
@@ -121,7 +121,9 @@ export class ActiveCardListComponent implements OnInit {
         this.selectedCards.value.map((validatedCard: ValidatedCard) => validatedCard.card.id),
         [],
         []
-    ).subscribe(res => console.log('res', res))
+    ).subscribe(_ => {
+      this.boardService.deselectActivity();
+    })
   }
 }
 

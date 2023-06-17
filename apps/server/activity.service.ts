@@ -141,7 +141,7 @@ export default class ActivityService {
             return;
         }
 
-        if(cardIds.find(id => athlete.activeCards.map(card => card.id).indexOf(id) === -1)) {
+        if(cardIds.find(id => athlete.cards.active.indexOf(id) === -1)) {
             this.logger.info(`Athlete ${athlete.firstname} ${athlete.lastname} ${athlete.id} tried to submit unactivated card(s) ${cardIds}`)
             return RESPONSES.ERROR.CARD_NOT_ACTIVATED
         }
@@ -164,22 +164,36 @@ export default class ActivityService {
                 comment: comments[index] || '',
                 attachedImages: imageIds[index] || []
             }
-        });
+        })
 
-        await this.fireStoreService.detailedActivityCollection.update(
-            activityId.toString(),
-            {
-                gameData: {
-                    status: CONST.ACTIVITY_STATUSES.SUBMITTED,
-                    submittedAt: new Date().toISOString(),
-                    cardIds,
-                    cardSnapshots, // Storing card snapshots
-                    images: imageIds,
-                    comments
+        await Promise.all([
+            this.fireStoreService.athleteCollection.update(
+                athlete.id,
+                {
+                    cards: {
+                        ...athlete.cards,
+                        active: athlete.cards.active.filter(cardId => cardIds.indexOf(cardId) === -1),
+                        completed: [...athlete.cards.completed, ...cardIds]
+                    }
                 }
-            })
+
+            ),
+            this.fireStoreService.detailedActivityCollection.update(
+                activityId.toString(),
+                {
+                    gameData: {
+                        status: CONST.ACTIVITY_STATUSES.SUBMITTED,
+                        submittedAt: new Date().toISOString(),
+                        cardIds,
+                        cardSnapshots, // Storing card snapshots
+                        images: imageIds,
+                        comments
+                    }
+                })
+        ])
+
         this.logger.info(`Athlete ${athlete.firstname} ${athlete.lastname} ${athlete.id} submitted activity with ${cardIds}`)
-        return RESPONSES.SUCCESS
+        return RESPONSES.SUCCESS;
     }
 
     async rejectActivity(activityId: string, comments: string) {

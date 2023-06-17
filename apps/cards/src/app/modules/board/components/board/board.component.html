@@ -10,50 +10,14 @@
                 </div>
             </div>
             <div>
-                <app-collapsible [title]="'Your Pending Activities'"
-                                 [inclusive]="true"
-                                 [id]="'pendingActivities'"
-                >
-                    <div hiddenContent>
-                        <p class="pl-3 mt-0 pr-3 text-small">
-                            <ng-container *ngIf="(newActivities | async).length; else noActivities">
-                                Click on activity to start its submission process
-                            </ng-container>
-                            <ng-template #noActivities>
-                                No activities. Time to move
-                            </ng-template>
-                        </p>
-                        <ng-template>
-
-                        </ng-template>
-                        <app-selection-wrapper
-                            [singleSelection]="true"
-                            [template]="activityTemplate"
-                            [selfSelectable]="true"
-                            [selectionEnabled]="false"
-                            [dataItems]="(newActivities | async)"
-                            [idKey]="'id'"
-                        >
-                            <ng-template #activityTemplate let-dataItem="dataItem">
-                                <ng-container *ngIf="dataItem.gameData.status === 'submitted'">
-                                    <div class="pr-3 pl-3 light pt-1 d-flex align-items-center justify-content-between">
-                                        <div class="d-flex align-items-center">
-                                            <app-svg [icon]="'clock'"></app-svg>
-                                            <span class="pl-1 pb-1 title text-bold">Waiting for approval</span>
-                                        </div>
-                                        <app-button styleClass="p-0 pb-1" (buttonClick)="rejectActivity(dataItem.id)" type="danger" label="Cancel"></app-button>
-                                    </div>
-                                </ng-container>
-                                <app-activity
-                                    [activity]="dataItem"
-                                    [showComments]="true"
-                                    (click)="dataItem.gameData.status !== 'submitted' && enterSubmitMode(dataItem)"
-                                    [style]="{'cursor': 'pointer'}"
-                                ></app-activity>
-                            </ng-template>
-                        </app-selection-wrapper>
+                <div class="box box--primary mb-2">
+                    <h3 class="title text-color-on-primary">You got now activity</h3>
+                    <div class="mt-2" *ngFor="let activity of (newActivities | async)">
+                        <app-pending-activity [activity]="activity"
+                                              (submitClicked)="enterSubmitMode(activity)"
+                        ></app-pending-activity>
                     </div>
-                </app-collapsible>
+                </div>
                 <div class="row mb-2">
                     <div class="col-md-12">
                         <app-active-card-list></app-active-card-list>

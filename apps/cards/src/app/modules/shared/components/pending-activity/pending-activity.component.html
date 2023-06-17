@@ -1,0 +1,18 @@
+<div class="box d-flex justify-content-between">
+    <app-activity-type-icon [type]="activityType">
+        <h4 class="m-0 ml-2">{{value | distance}}</h4>
+    </app-activity-type-icon>
+
+    <app-button *ngIf="active; else submitButton"
+                [small]="true"
+                type="action"
+                [label]="'Cancel'"
+                (buttonClick)="cancel()"></app-button>
+    <ng-template #submitButton>
+        <app-button [small]="true"
+                    type="action"
+                    [label]="'Submit'"
+                    [disabled]="disabled"
+                    (buttonClick)="submit()"></app-button>
+    </ng-template>
+</div>

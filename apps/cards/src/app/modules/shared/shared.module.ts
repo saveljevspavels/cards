@@ -36,6 +36,8 @@ import { SwiperComponent } from './components/swiper/swiper.component';
 import { AchievementComponent } from './components/achievement/achievement.component';
 import {RadioComponent} from "../../components/radio/radio.component";
 import {GoogleMapComponent} from "./components/google-map/google-map.component";
+import { PendingActivityComponent } from './components/pending-activity/pending-activity.component';
+import { ActivityTypeIconComponent } from './components/activity-type-icon/activity-type-icon.component';
 
 const COMPS = [
     InputComponent,
@@ -79,6 +81,8 @@ const MODULES = [
     declarations: [
         COMPS,
         AchievementComponent,
+        PendingActivityComponent,
+        ActivityTypeIconComponent,
     ],
     imports: [
         CommonModule,
@@ -91,6 +95,8 @@ const MODULES = [
         ...COMPS,
         ...MODULES,
         AchievementComponent,
+        ActivityTypeIconComponent,
+        PendingActivityComponent,
     ],
     providers: [
         FileService

@@ -6,8 +6,7 @@ export const CONST = {
         SUBMITTED: "submitted",
         REJECTED: "rejected",
         APPROVED: "approved",
-        DELETED: "deleted",
-        FINISHED: "finished"
+        DELETED: "deleted"
     },
     COLLECTIONS: {
         PENDING_ACTIVITIES: "pending_activities",

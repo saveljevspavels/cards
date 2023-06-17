@@ -26,7 +26,8 @@
             </div>
             <ng-template #submittedCardValue>
                 <div class="d-flex align-items-center">
-                    <app-svg styleClass="activity-type--{{submittedType}}" [icon]="'activity_' + submittedType + (staticActivity ? '_static' : '')"></app-svg>
+                    <app-activity-type-icon [type]="submittedType + (staticActivity ? '_static' : '')">
+                    </app-activity-type-icon>
                     <div class="ml-1 mb-1">
                         <ng-container *ngTemplateOutlet="cardValue"></ng-container>
                     </div>
@@ -48,7 +49,7 @@
 
 <ng-template #cardValue>
     <div class="card__value" *ngIf="card.value !== 0">
-        <span class="card__energy-price pr-3" *ngIf="(card.value | tier)"><app-svg [icon]="'energy'"></app-svg>{{(card.value | tier)}}</span>
+<!--        <span class="card__energy-price pr-3" *ngIf="(card.value | tier)"><app-svg [icon]="'energy'"></app-svg>{{(card.value | tier)}}</span>-->
         <span class="card__value-number">{{card.value}}</span> points
     </div>
 </ng-template>

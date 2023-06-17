@@ -1,0 +1,31 @@
+:host {
+  height: 24px;
+}
+
+.activity-type {
+  &--run {
+    color: var(--color-run)!important;
+    fill: var(--color-run)!important;
+  }
+  &--walk {
+    color: var(--color-walk)!important;
+    fill: var(--color-walk)!important;
+  }
+  &--ride {
+    color: var(--color-ride)!important;
+    fill: var(--color-ride)!important;
+  }
+  &--other {
+    color: var(--color-other);
+    fill: var(--color-other)!important;
+  }
+  &--all {
+    color: var(--color-all);
+    fill: var(--color-all)!important;
+    svg {
+      margin-top: 6px;
+      width: 32px;
+      height: 32px;
+    }
+  }
+}

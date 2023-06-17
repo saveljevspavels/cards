@@ -74,9 +74,9 @@
 <!--                [activityType]="activityType"-->
 <!--            ></app-google-map>-->
         </div>
-        <div class="activity__type mt-1 activity-type--{{activityType}}">
+        <app-activity-type-icon [type]="activityType">
             {{activity.type}}
-        </div>
+        </app-activity-type-icon>
         <div class="stat-item" *ngIf="activity.gameData.submittedAt && activity.gameData.status === CONST.ACTIVITY_STATUSES.APPROVED">
             <div class="stat-item__property">Submitted at</div>
             <div class="stat-item__value">{{activity.gameData.submittedAt | date : 'dd MMM, HH:mm'}}</div>
