@@ -16,6 +16,7 @@ import AchievementService from "./achievement.service";
 import AuthService from "./auth.service";
 import {Logger} from "winston";
 import {AuthInterceptor} from "./helpers/auth.interceptor";
+import ScoreService from "./score.service";
 
 const app: Express = express().use(
     bodyParser.json(),
@@ -29,7 +30,8 @@ const fireStoreService = new FirestoreService(logger);
 const webhookService = new WebhookService(app, fireStoreService);
 const clientService = new ClientService(app, fireStoreService);
 const adminService = new AdminService(app, fireStoreService, logger);
-const cardService = new CardService(app, fireStoreService, logger);
+const scoreService = new ScoreService(app, fireStoreService, logger);
+const cardService = new CardService(app, fireStoreService, logger, scoreService);
 const athleteService = new AthleteService(app, fireStoreService, logger);
 const activityService = new ActivityService(app, fireStoreService, logger);
 const imageService = new ImageService(app, fireStoreService);

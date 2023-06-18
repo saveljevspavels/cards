@@ -173,43 +173,6 @@ export class FirestoreService {
         }
     }
 
-    async updateScore(athleteId: string, cardIds: string[]) {
-        const score = await this.scoreCollection.get(athleteId.toString());
-        const calculateTotals = async (ids: string[], collection: any) => {
-            const items: any[] = [];
-            const value = 0;
-            if(ids?.length) {
-                const itemQuery = collection.where('id', 'in', ids)
-                const itemDocs = await itemQuery.get()
-                itemDocs.forEach((item: any) => {
-                    items.push(item.data())
-                })
-                items.reduce((acc, item) => {
-                    acc = acc + item.value;
-                    return acc;
-                }, value);
-            }
-            return {
-                amount: items.length || 0,
-                total: value
-            }
-        }
-
-        const cardTotals = calculateTotals(cardIds, this.cardCollection.collection);
-        const newScore = updateScoreValues(
-            score,
-            (await cardTotals).total,
-            (await cardTotals).amount
-        )
-        await this.scoreCollection.update(
-            athleteId.toString(),
-            {
-            ...newScore
-        });
-
-        this.logger.info(`Athlete ${athleteId} new score: ${JSON.stringify(newScore)}, was ${JSON.stringify(score)}`)
-    }
-
     async restoreAthletesEnergy(value: number) {
         const allAthletes = await this.athleteCollection.all();
         allAthletes.forEach((athlete) => {

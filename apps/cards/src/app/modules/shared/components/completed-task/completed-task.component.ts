@@ -13,7 +13,9 @@ export class CompletedTaskComponent implements OnInit {
   @Input() cardId: string;
   public card: Card;
 
-  constructor(private cardService: CardService) { }
+  constructor(
+      private cardService: CardService
+  ) { }
 
   ngOnInit(): void {
     if(this.cardId) {
@@ -21,6 +23,10 @@ export class CompletedTaskComponent implements OnInit {
         this.card = this.cardService.getCard(this.cardId)
       })
     }
+  }
+
+  claimReward() {
+    this.cardService.claimCardReward(this.cardId).subscribe(() => {})
   }
 
 }

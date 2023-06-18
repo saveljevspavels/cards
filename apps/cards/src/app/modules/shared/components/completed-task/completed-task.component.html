@@ -4,5 +4,8 @@
     ></div>
     <h5 class="m-0 mb-1">{{card?.title}}</h5>
     <app-rewards [card]="card" class="mb-1"></app-rewards>
-    <app-button type="action" label="Claim Reward" [small]="true"></app-button>
+    <app-button (buttonClick)="claimReward()"
+                type="action"
+                label="Claim Reward"
+                [small]="true"></app-button>
 </div>

@@ -38,4 +38,10 @@ export class CardService {
             cardId
         })
     }
+
+    claimCardReward(cardId: string) {
+        return this.http.post(`${environment.baseBE}/cards/claim-reward`, {
+            cardId
+        })
+    }
 }

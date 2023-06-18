@@ -6,12 +6,15 @@ import {generateId, getRandomInt, tierToRoman} from "./helpers/util";
 import {Logger} from "winston";
 import CardFactory, {CardPrototype, Progression} from "../shared/interfaces/card-factory.interface";
 import Card from "../shared/interfaces/card.interface";
+import ScoreService from "./score.service";
+import {RULES} from "../../definitions/rules";
 
 export default class CardService {
     constructor(
         private app: Express,
         private fireStoreService: FirestoreService,
-        private logger: Logger
+        private logger: Logger,
+        private scoreService: ScoreService
     ) {
 
         app.post(`${CONST.API_PREFIX}/create-card-factory`, async(req, res) => {
@@ -37,13 +40,91 @@ export default class CardService {
                     const athlete = await this.fireStoreService.athleteCollection.get(athleteId)
                     if(athlete) {
                         await this.fireStoreService.athleteCollection.update(athleteId, {
-                            activeCards: [...athlete?.cards.active, card.id]
+                            cards: {
+                                ...athlete.cards,
+                                active: [...athlete?.cards.active, card.id]
+                            }
                         })
                         res.status(200).send();
                     } else {
                         res.status(400).send('Athlete does not exist');
                     }
                 }
+            }
+        });
+
+        app.post(`${CONST.API_PREFIX}/cards/claim-reward`,async (req, res) => {
+            const cardId = req.body?.cardId;
+            const athleteId = res.get('athleteId');
+            if(!cardId || !athleteId) {
+                res.status(400).send('Card Id or Athlete Id missing');
+                return;
+            }
+            const athlete = await this.fireStoreService.athleteCollection.get(athleteId);
+            if(!athlete) {
+                res.status(400).send('Athlete does not exist');
+                return;
+            }
+            if(athlete?.cards.completed.indexOf(cardId) === -1) {
+                res.status(400).send('Card is not completed');
+                return;
+            }
+            if(!await this.fireStoreService.cardCollection.exists(cardId)) {
+                res.status(400).send('Card does not exist');
+                return
+            }
+            await Promise.all([
+                await this.finishCard(athleteId, cardId),
+                await this.scoreService.updateScore(athleteId, cardId),
+                await this.claimCardRewards(athleteId, cardId)
+            ]);
+            res.status(200).send();
+        });
+    }
+
+    async claimCardRewards(athleteId: string, cardId: string) {
+        const athlete = await this.fireStoreService.athleteCollection.get(athleteId);
+        if(!athlete) {
+            this.logger.error(`Athlete ${athleteId} does not exist`);
+            return;
+        }
+        const card = await this.getCard(cardId);
+        if(!card) {
+            this.logger.error(`Card ${cardId} does not exist`);
+            return;
+        }
+        const newEnergy = parseInt(String(athlete.energy)) + parseInt(String(card.energyReward));
+        let bonusCoins = 0;
+        if(newEnergy > RULES.ENERGY.MAX) {
+            bonusCoins = (newEnergy - RULES.ENERGY.MAX) * RULES.COINS.PER_ENERGY_CONVERSION;
+        }
+        await this.fireStoreService.athleteCollection.update(
+            athleteId,
+            {
+                coins: parseInt(String(athlete.coins), 10) + parseInt(String(card.coinsReward), 10) + bonusCoins,
+                energy: Math.min(newEnergy, RULES.ENERGY.MAX),
+            }
+        )
+        this.logger.error(`Athlete claimed ${parseInt(String(card.coinsReward), 10) + bonusCoins} coins for card ${card.title}`);
+        if(parseInt(String(card.energyReward))) {
+            this.logger.error(`Athlete restored ${card.energyReward} energy for card ${card.title}`);
+        }
+    }
+
+    async finishCard(athleteId: string, cardId: string) {
+        const athlete = await this.fireStoreService.athleteCollection.get(athleteId);
+        if(!athlete) {
+            return;
+        }
+        const completedCards = athlete.cards.completed;
+        const finishedCards = athlete.cards.finished;
+        completedCards.splice(athlete?.cards.completed.indexOf(cardId), 1);
+        finishedCards.push(cardId);
+        await this.fireStoreService.athleteCollection.update(athleteId, {
+            cards: {
+                ...athlete.cards,
+                completed: completedCards,
+                finished: finishedCards
             }
         });
     }

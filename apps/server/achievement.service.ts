@@ -15,11 +15,11 @@ export default class AchievementService {
             res.status(200).send({});
         });
 
-        app.post(`${CONST.API_PREFIX}/assign-achievement`, async (req, res) => {
-            if(await fireStoreService.assignAchievement(req.body.athleteId, req.body.achievementId)) {
-                await fireStoreService.updateScore(req.body.athleteId, [])
-            }
-            res.status(200).send({});
-        });
+        // app.post(`${CONST.API_PREFIX}/assign-achievement`, async (req, res) => {
+        //     if(await fireStoreService.assignAchievement(req.body.athleteId, req.body.achievementId)) {
+        //         await fireStoreService.updateScore(req.body.athleteId, [])
+        //     }
+        //     res.status(200).send({});
+        // });
     }
 }
