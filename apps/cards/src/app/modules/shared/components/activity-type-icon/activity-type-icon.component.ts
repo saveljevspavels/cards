@@ -8,6 +8,8 @@ import {Component, Input, OnInit} from '@angular/core';
 export class ActivityTypeIconComponent implements OnInit {
 
   @Input() type: string;
+  @Input() width: number;
+  @Input() height: number;
 
   constructor() { }
 

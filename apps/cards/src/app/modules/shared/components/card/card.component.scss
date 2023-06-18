@@ -1,7 +1,9 @@
+@import "./apps/cards/src/styles";
+
 .card {
     position: relative;
     width: 100%;
-    border: 3px solid black;
+    border: 1px solid rgba(0, 0, 0, 0);
     border-radius: var(--radius);
     display: flex;
     flex-direction: column;
@@ -9,16 +11,16 @@
     overflow: hidden;
 
     &--pass {
-        border-color: var(--color-pass)!important;
         cursor: pointer;
     }
 
     &--fail {
-        border-color: var(--color-danger)!important;
+        opacity: 0.35;
+        pointer-events: none;
     }
 
     &--selected {
-        border-color: var(--text-active)!important;
+        border: 1px solid var(--color-border) !important;
         cursor: pointer;
     }
 
@@ -28,10 +30,6 @@
         display: flex;
         flex-direction: column;
         justify-content: space-between;
-    }
-    &__content {
-        display: flex;
-        background-color: var(--card-background);
     }
     &__title {
         font-size: var(--text-size-big);
@@ -98,18 +96,17 @@
         }
     }
     &__image {
-        width: 100px;
-        min-height: 140px;
+        width: 40px;
+        height: 40px;
         position: relative;
         overflow: hidden;
         background-size: cover;
         background-position: center;
         flex-shrink: 0;
+        border-radius: var(--radius-half);
         img {
-            top: -5px;
-            left: -5px;
-            width: 130px;
-            height: 139px;
+            width: 40px;
+            height: 40px;
             position: absolute;
         }
     }
@@ -119,27 +116,5 @@
         top: 10px;
         right: 10px;
         opacity: 0.2;
-    }
-    &--tier-0 {
-        border-color: var(--color-main-0);
-        background-color: var(--color-main-0);
-    }
-    &--tier-1 {
-        border-color: var(--color-main-1);
-        background-color: var(--color-main-1);
-
-    }
-    &--tier-2 {
-        border-color: var(--color-main-2);
-        background-color: var(--color-main-2);
-    }
-    &--tier-3 {
-        border-color: var(--color-main-3);
-        background-color: var(--color-main-3);
-
-    }
-    &--tier-4 {
-        border-color: var(--color-main-4);
-        background-color: var(--color-main-4);
     }
 }

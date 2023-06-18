@@ -1,55 +1,31 @@
-<div class="card card--tier-{{(card.value | tier)}} card--{{validationStatus.toString()}}"
+<div class="card card--{{validationStatus.toString()}}"
      *ngIf="card && visible"
-     [ngClass]="{'card--small': small, 'card--submitted': submittedType}"
+     [ngClass]="{'card--small': small}"
 >
-    <div class="card__id">
-        {{card.id}}
-    </div>
-    <div class="card__content">
+<!--    <div class="card__id">-->
+<!--        {{card.id}}-->
+<!--    </div>-->
+    <div class="box d-flex align-items-center">
         <div class="card__image card--tier-{{(card.value | tier)}}"
              [style.background-image]="'url(' + card.image + ')'"
         >
         </div>
-        <div class="ml-2 mt-2 pr-3 flex-grow-1" [ngClass]="{'pb-2': !submittedType, 'pb-0': submittedType}">
-            <div class="card__title">
+        <div class="ml-2 pr-3 flex-grow-1">
+            <h5>
                 {{card.title}}
-            </div>
-            <div class="card__description light mt-2" *ngIf="!submittedType">
+            </h5>
+            <div class="card__description light mt-2" *ngIf="showDescription">
                 {{card.description}}
             </div>
-            <div class="card__validation mt-2" *ngIf="!submittedType; else submittedCardValue">
-                <app-validator *ngIf="card.manualValidation" [manual]="true"></app-validator>
+            <div class="card__validation">
                 <app-validator *ngFor="let validator of card.validators"
                                [validator]="validator"
                                [activityTypes]="activityTypes"
                 ></app-validator>
             </div>
-            <ng-template #submittedCardValue>
-                <div class="d-flex align-items-center">
-                    <app-activity-type-icon [type]="submittedType + (staticActivity ? '_static' : '')">
-                    </app-activity-type-icon>
-                    <div class="ml-1 mb-1">
-                        <ng-container *ngTemplateOutlet="cardValue"></ng-container>
-                    </div>
-                </div>
-            </ng-template>
         </div>
-    </div>
-    <div class="card__bonuses" *ngIf="!submittedType">
-        <div class="card__progression" *ngIf="card.cardUses.usesToProgress !== 0 && card.progression !== PROGRESSION.NONE; else placeholder">
-            <span *ngIf="card.progression === PROGRESSION.TIERS">Uses to level up</span>
-            <span *ngIf="card.progression === PROGRESSION.CHAIN">Uses to get new card</span>
-            <span *ngIf="card.progression === PROGRESSION.FLAT">Uses to change for new card</span>
-            <span> {{card.cardUses?.progression}}/{{card.cardUses?.usesToProgress}}</span>
+        <div class="card__value">
+            <app-rewards [card]="card"></app-rewards>
         </div>
-        <ng-template #placeholder><div></div></ng-template>
-        <ng-container *ngTemplateOutlet="cardValue"></ng-container>
     </div>
 </div>
-
-<ng-template #cardValue>
-    <div class="card__value" *ngIf="card.value !== 0">
-<!--        <span class="card__energy-price pr-3" *ngIf="(card.value | tier)"><app-svg [icon]="'energy'"></app-svg>{{(card.value | tier)}}</span>-->
-        <span class="card__value-number">{{card.value}}</span> points
-    </div>
-</ng-template>

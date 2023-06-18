@@ -38,6 +38,12 @@ import {RadioComponent} from "../../components/radio/radio.component";
 import {GoogleMapComponent} from "./components/google-map/google-map.component";
 import { PendingActivityComponent } from './components/pending-activity/pending-activity.component';
 import { ActivityTypeIconComponent } from './components/activity-type-icon/activity-type-icon.component';
+import { CompletedTaskComponent } from './components/completed-task/completed-task.component';
+import { CompletedTaskViewComponent } from './components/completed-task-view/completed-task-view.component';
+import { RewardBubbleComponent } from './components/reward-bubble/reward-bubble.component';
+import { RewardMoneyComponent } from './components/reward-money/reward-money.component';
+import { RewardPointsComponent } from './components/reward-points/reward-points.component';
+import { RewardsComponent } from './components/rewards/rewards.component';
 
 const COMPS = [
     InputComponent,
@@ -83,6 +89,12 @@ const MODULES = [
         AchievementComponent,
         PendingActivityComponent,
         ActivityTypeIconComponent,
+        CompletedTaskComponent,
+        CompletedTaskViewComponent,
+        RewardBubbleComponent,
+        RewardMoneyComponent,
+        RewardPointsComponent,
+        RewardsComponent,
     ],
     imports: [
         CommonModule,
@@ -97,6 +109,7 @@ const MODULES = [
         AchievementComponent,
         ActivityTypeIconComponent,
         PendingActivityComponent,
+        CompletedTaskViewComponent,
     ],
     providers: [
         FileService

@@ -9,12 +9,16 @@
                     <app-coins-display></app-coins-display>
                 </div>
             </div>
+            <div class="mb-2">
+                <app-completed-task-view>
+
+                </app-completed-task-view>
+            </div>
             <div>
-                <div class="box box--primary mb-2">
-                    <h3 class="title text-color-on-primary">You got now activity</h3>
+                <div class="box background-primary-variant mb-2">
+                    <h3 class="title text-color-on-primary">You got new activity</h3>
                     <div class="mt-2" *ngFor="let activity of (newActivities | async)">
                         <app-pending-activity [activity]="activity"
-                                              (submitClicked)="enterSubmitMode(activity)"
                         ></app-pending-activity>
                     </div>
                 </div>

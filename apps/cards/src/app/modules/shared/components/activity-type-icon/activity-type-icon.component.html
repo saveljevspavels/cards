@@ -1,4 +1,7 @@
 <span class="activity-type--{{type}} d-flex align-items-center">
-    <app-svg [icon]="'activity_' + type"></app-svg>
+    <app-svg [icon]="'activity_' + type"
+             [height]="height"
+             [width]="width"
+    ></app-svg>
     <ng-content></ng-content>
 </span>

@@ -20,10 +20,6 @@
         }
     }
 
-    &__property-margin {
-        flex: 0 1 24px;
-    }
-
     &__type {
         display: flex;
         align-items: center;
@@ -55,6 +51,6 @@
     }
 
     span {
-        color: var(--color-text-light)
+        color: var(--color-text)
     }
 }

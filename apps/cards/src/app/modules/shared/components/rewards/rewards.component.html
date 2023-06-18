@@ -1,0 +1,10 @@
+<div class="d-flex">
+    <app-reward-money *ngIf="card?.coinsReward"
+                      [value]="card?.coinsReward"
+                      [ngClass]="{'mr-1': card?.value}"
+    >
+    </app-reward-money>
+    <app-reward-points *ngIf="card?.value"
+                       [value]="card?.value">
+    </app-reward-points>
+</div>

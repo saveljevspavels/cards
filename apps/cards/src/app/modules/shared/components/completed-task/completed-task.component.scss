@@ -1,0 +1,14 @@
+.completed-card {
+  width: 124px;
+  //border: 1px solid var(--color-blue-light);
+  &__image {
+    height: 44px;
+    width: 44px;
+    position: relative;
+    overflow: hidden;
+    background-size: cover;
+    background-position: center;
+    flex-shrink: 0;
+    border-radius: var(--radius);
+  }
+}

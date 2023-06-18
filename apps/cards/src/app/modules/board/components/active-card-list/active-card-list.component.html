@@ -1,6 +1,7 @@
 <ng-container *ngFor="let validatedCard of cardList">
     <app-card (click)="cardSelected(validatedCard)"
               [card]="validatedCard.card"
+              [showDescription]="false"
               [validationStatus]="validatedCard.validationStatus"
     ></app-card>
 </ng-container>

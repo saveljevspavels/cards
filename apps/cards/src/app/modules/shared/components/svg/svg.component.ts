@@ -8,15 +8,16 @@ import {Component, Input, OnInit} from '@angular/core';
 export class SvgComponent implements OnInit {
 
     @Input() icon: string;
-    @Input() width = 24;
-    @Input() height = 24;
-    viewBox = "0 0 24 24";
+    @Input() width: number;
+    @Input() height: number;
+    @Input() viewBox = "0 0 24 24";
     @Input() styleClass = "";
 
     constructor() { }
 
     ngOnInit(): void {
-        this.viewBox = `0 0 ${this.width} ${this.height}`;
+        this.height = this.height || 24;
+        this.width = this.width || 24;
     }
 
 }
