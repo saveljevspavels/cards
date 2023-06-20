@@ -12,7 +12,7 @@
     --text-active: #38f;
     --card-background: rgba(245, 247, 251, 1);
     --acticity-background: rgba(245, 247, 251, 1);
-    --background: #fff;
+    --color-background: #fff;
     --popup-background: #00000066;
     --card-shadow: 2px 5px 7px rgba(0, 0, 0, 0.1);
     --color-disabled: #ddd;
@@ -71,9 +71,10 @@ body {
     margin: 0 0 var(--menu-height) 0;
     overflow-x: hidden;
     font-size: var(--text-size);
-    background-color: var(--background);
+    background-color: var(--color-background);
 }
 
+.color-background {@include color('background')};
 .color-primary {@include color('primary')};
 .color-secondary-1 {@include color('secondary-1')};
 .color-secondary-2 {@include color('secondary-2')};

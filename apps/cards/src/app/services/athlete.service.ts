@@ -56,6 +56,12 @@ export class AthleteService {
         )
     }
 
+    claimBaseReward(type: string) {
+        return this.http.post(`${environment.baseBE}/athlete/claim-base-reward`, {
+            type
+        })
+    }
+
     updateBaseWorkout(athleteIds: string[], baseWorkout: any) {
         return this.http.post(`${environment.baseBE}/update-base-workout`, {
             athleteIds,

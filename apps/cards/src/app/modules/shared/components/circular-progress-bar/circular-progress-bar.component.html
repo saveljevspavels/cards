@@ -14,6 +14,11 @@
                                     [height]="14"></app-activity-type-icon>
             <span class="text-small text-bold m-0 mt-n1">{{(active && activity) ? ('+' + (type === "other" ? (newValue | minutes) : (newValue | distance))) : (currentProgress | percent)}}</span>
         </div>
+        <div  *ngIf="complete"
+              class="circular-progress-bar__circle circular-progress-bar__complete background-{{type}} d-flex flex-column align-items-center">
+            <app-svg class="color-background mt-2" height="14" width="14" viewBox="0 0 14 14" [icon]="'coin'"></app-svg>
+            <span class="text-bold color-background text-small">Claim</span>
+        </div>
     </div>
     <div class="circular-progress-bar__details text-small text-light mt-1">
         {{type === "other" ? (totalValue | minutes) : (totalValue | distance)}}/{{type === "other" ? (baseValue | minutes) : (baseValue | distance)}}

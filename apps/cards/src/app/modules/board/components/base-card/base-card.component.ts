@@ -12,7 +12,7 @@ import {RULES} from "../../../../../../../../definitions/rules";
   templateUrl: './base-card.component.html',
   styleUrls: ['./base-card.component.scss']
 })
-export class BaseCardComponent implements OnChanges {
+export class BaseCardComponent {
   public reward: number = RULES.COINS.BASE_CARD_REWARD;
 
   @Input() remainderActivity: any;
@@ -23,8 +23,8 @@ export class BaseCardComponent implements OnChanges {
       private athleteService: AthleteService
   ) { }
 
-  ngOnChanges(): void {
-
+  claimBaseReward(type: string) {
+    this.athleteService.claimBaseReward(type).subscribe();
   }
 
 }

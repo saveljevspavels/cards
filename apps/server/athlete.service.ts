@@ -25,6 +25,40 @@ export default class AthleteService {
             await fireStoreService.setPermissions(req.body.athleteIds, req.body.permissions)
             res.status(200).send({response: RESPONSES.SUCCESS});
         });
+
+        this.app.post(`${CONST.API_PREFIX}/athlete/claim-base-reward`, async (req, res) => {
+            const athleteId = res.get('athleteId');
+            if(!athleteId) {
+                res.status(400).send('Athlete Id missing');
+                return;
+            }
+            const type = req.body?.type;
+            if(!type) {
+                res.status(400).send('Activity type missing');
+                return;
+            }
+            await this.claimBaseReward(athleteId, type)
+            res.status(200).send({response: RESPONSES.SUCCESS});
+        });
+    }
+
+    async claimBaseReward(athleteId: string, type: string) {
+        const athlete = await this.fireStoreService.athleteCollection.get(athleteId);
+        if(!athlete) {
+            return;
+        }
+        // @ts-ignore
+        const newCoins = parseInt(String(athlete.coins), 10) + Math.floor(parseInt(athlete.baseCardProgress[type], 10) / RULES.PROGRESS_PRECISION);
+        const newProgress = {...athlete.baseCardProgress};
+        // @ts-ignore
+        newProgress[type] = parseInt(athlete.baseCardProgress[type], 10) % RULES.PROGRESS_PRECISION
+        await this.fireStoreService.athleteCollection.update(
+            athleteId,
+            {
+                coins: newCoins,
+                baseCardProgress: newProgress
+            }
+        )
     }
 
     async saveAthlete(athlete: any) {
@@ -76,4 +110,6 @@ export default class AthleteService {
             name: `${athlete.firstname} ${athlete.lastname}`,
         }
     }
+
+
 }

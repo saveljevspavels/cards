@@ -1,10 +1,11 @@
 <h2>Base Card</h2>
-<div class="base-card box d-flex align-items-center">
+<div class="base-card box d-flex align-items-center" [ngClass]="{'border-primary': remainderActivity}">
     <div *ngFor="let keyValue of (athlete$ | async)?.baseCardProgress | keyvalue">
         <app-circular-progress-bar
                 [currentProgress]="keyValue.value"
                 [type]="keyValue.key"
                 [activity]="remainderActivity"
+                (click)="claimBaseReward(keyValue.key.toString())"
         >
         </app-circular-progress-bar>
     </div>
