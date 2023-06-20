@@ -78,7 +78,8 @@ export const RULES = {
         BASE: 0,
         MIN: 0,
         MAX: 999,
-        PER_ENERGY_CONVERSION: 2
+        PER_ENERGY_CONVERSION: 2,
+        BASE_CARD_REWARD: 1
     },
     SCHEME: {
         BOARDS_NUMBER: 3

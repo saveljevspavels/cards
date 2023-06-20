@@ -44,6 +44,7 @@ import { RewardBubbleComponent } from './components/reward-bubble/reward-bubble.
 import { RewardMoneyComponent } from './components/reward-money/reward-money.component';
 import { RewardPointsComponent } from './components/reward-points/reward-points.component';
 import { RewardsComponent } from './components/rewards/rewards.component';
+import { CircularProgressBarComponent } from './components/circular-progress-bar/circular-progress-bar.component';
 
 const COMPS = [
     InputComponent,
@@ -95,6 +96,7 @@ const MODULES = [
         RewardMoneyComponent,
         RewardPointsComponent,
         RewardsComponent,
+        CircularProgressBarComponent,
     ],
     imports: [
         CommonModule,
@@ -110,6 +112,8 @@ const MODULES = [
         ActivityTypeIconComponent,
         PendingActivityComponent,
         CompletedTaskViewComponent,
+        CircularProgressBarComponent,
+        RewardMoneyComponent,
     ],
     providers: [
         FileService

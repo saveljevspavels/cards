@@ -5,6 +5,7 @@ import {Observable} from "rxjs";
 import {UtilService} from "../../../../services/util.service";
 import {StaticValidationService} from "../../../../../../../shared/services/validation.service";
 import {ValidationService} from "../../../../services/validation.service";
+import {RULES} from "../../../../../../../../definitions/rules";
 
 @Component({
   selector: 'app-base-card',
@@ -12,25 +13,18 @@ import {ValidationService} from "../../../../services/validation.service";
   styleUrls: ['./base-card.component.scss']
 })
 export class BaseCardComponent implements OnChanges {
+  public reward: number = RULES.COINS.BASE_CARD_REWARD;
 
   @Input() remainderActivity: any;
 
   public athlete$: Observable<Athlete | null> = this.athleteService.me;
-  public type: string;
-  public value: number;
-  public progress: number;
 
   constructor(
-      private athleteService: AthleteService,
-      private validationService: ValidationService
+      private athleteService: AthleteService
   ) { }
 
   ngOnChanges(): void {
-    if(this.remainderActivity) {
-      this.type = UtilService.normalizeActivityType(this.remainderActivity.type);
-      this.value = this.remainderActivity[StaticValidationService.baseActivityTypeMap.get(this.type) || ''];
-      this.progress = this.validationService.getBaseCardProgress(this.remainderActivity);
-    }
+
   }
 
 }

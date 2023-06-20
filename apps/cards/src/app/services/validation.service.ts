@@ -58,4 +58,11 @@ export class ValidationService {
         }
         return StaticValidationService.getBaseCardProgress(activity, baseWorkout);
     }
+
+    getBaseValue(type: string, baseWorkout = this.baseWorkout): number {
+        if (!baseWorkout) {
+            return 0;
+        }
+        return StaticValidationService.getBaseValue(type, baseWorkout);
+    }
 }

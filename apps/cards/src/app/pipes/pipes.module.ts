@@ -9,6 +9,7 @@ import {PacePipe} from "./pace.pipe";
 import {ArraySortPipe} from "./sort.pipe";
 import {ActivityTypePipe} from "./activity-type.pipe";
 import {PercentPipe} from "./percent.pipe";
+import {MinutesPipe} from "./minutes.pipe";
 
 const PIPES = [
 	ModifierPipe,
@@ -19,7 +20,8 @@ const PIPES = [
     PacePipe,
     ArraySortPipe,
     ActivityTypePipe,
-    PercentPipe
+    PercentPipe,
+    MinutesPipe
 ]
 
 @NgModule({

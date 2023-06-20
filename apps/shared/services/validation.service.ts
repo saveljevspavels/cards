@@ -24,6 +24,11 @@ export class StaticValidationService {
         } else return 0;
     }
 
+    static getBaseValue(type: string, baseWorkout: BaseWorkout): number {
+        // @ts-ignore
+        return baseWorkout[type][StaticValidationService.baseActivityTypeMap.get(type)];
+    }
+
     static evaluateFormula(formula: any, property: any, values = {}) {
         Object.entries(values).forEach(([key, value]) => {
             formula = formula.replace(key, value)

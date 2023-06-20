@@ -18,7 +18,7 @@
     --color-disabled: #ddd;
     --color-text: rgba(15, 15, 49, 1);
     --color-text-lighter: #0F0F3180;
-    --color-text-light: #00000080;
+    --color-text-light: rgba(15, 15, 49, 0.5);
     --color-pass: limegreen;
     --color-blue: #494ADB;
     --color-green: rgba(127, 168, 41, 1);
@@ -48,10 +48,20 @@
     --radius: 10px;
     --radius-half: 5px;
 
+    --margin: 16px;
+
     --menu-height: 56px;
     --header-height: 50px;
 }
 
+@mixin color($type) {
+    color: var(--color-#{$type})!important;
+    fill: var(--color-#{$type})!important;
+}
+
+@mixin background($type) {
+    background-color: var(--color-#{$type})!important;
+}
 
 body {
     font-family: 'Nunito', sans-serif;
@@ -64,42 +74,24 @@ body {
     background-color: var(--background);
 }
 
-.color-primary {
-    color: var(--color-primary)!important;
-    fill: var(--color-primary)!important;
-}
-.background-primary {
-    background-color: var(--color-primary);
-}
+.color-primary {@include color('primary')};
+.color-secondary-1 {@include color('secondary-1')};
+.color-secondary-2 {@include color('secondary-2')};
+.color-secondary-3 {@include color('secondary-3')};
+.color-run {@include color('run')};
+.color-walk {@include color('walk')};
+.color-ride {@include color('ride')};
+.color-other {@include color('other')};
 
-.background-primary-variant {
-    background-color: var(--color-primary-variant)!important;
-}
-
-.color-secondary-1 {
-    color: var(--color-secondary-1)!important;
-    fill: var(--color-secondary-1)!important;
-}
-.background-secondary-1 {
-    background-color: var(--color-secondary-1)!important;
-}
-
-.color-secondary-2 {
-    color: var(--color-secondary-2)!important;
-    fill: var(--color-secondary-2)!important;
-}
-.background-secondary-2 {
-    background-color: var(--color-secondary-2)!important;
-}
-
-.color-secondary-3 {
-    color: var(--color-secondary-3)!important;
-    fill: var(--color-secondary-3)!important;
-}
-.background-secondary-3 {
-    background-color: var(--color-secondary-3)!important;
-}
-
+.background-primary {@include background('primary')};
+.background-primary-variant {@include background('primary-variant')};
+.background-secondary-1 {@include background('secondary-1')};
+.background-secondary-2 {@include background('secondary-2')};
+.background-secondary-3 {@include background('secondary-3')};
+.background-run {@include background('run')};
+.background-walk {@include background('walk')};
+.background-ride {@include background('ride')};
+.background-other {@include background('other')};
 
 hr {
     border: none;
@@ -145,6 +137,17 @@ hr {
             color: white;
         }
     }
+}
+
+.text-light {
+    font-weight: 300;
+    color: var(--color-text-light)
+}
+
+h2 {
+    font-size: 20px;
+    font-weight: 700;
+    margin: var(--margin) 0 var(--margin) 0;
 }
 
 h5 {

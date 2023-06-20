@@ -1,7 +1,14 @@
-<div class="base-card">
-    {{(athlete$ | async)?.baseCardProgress | json}}
-    {{type | json}}
-    {{value | json}}
-    {{progress | json}}
-    {{progress | percent}}
+<h2>Base Card</h2>
+<div class="base-card box d-flex align-items-center">
+    <div *ngFor="let keyValue of (athlete$ | async)?.baseCardProgress | keyvalue">
+        <app-circular-progress-bar
+                [currentProgress]="keyValue.value"
+                [type]="keyValue.key"
+                [activity]="remainderActivity"
+        >
+        </app-circular-progress-bar>
+    </div>
+    <div class="d-flex justify-content-end">
+        <app-reward-money [value]="reward"></app-reward-money>
+    </div>
 </div>
