@@ -63,6 +63,10 @@
     background-color: var(--color-#{$type})!important;
 }
 
+@mixin border($type) {
+    border: 1px solid var(--color-#{$type})!important;
+}
+
 body {
     font-family: 'Nunito', sans-serif;
     letter-spacing: -0.3px;
@@ -93,6 +97,11 @@ body {
 .background-walk {@include background('walk')};
 .background-ride {@include background('ride')};
 .background-other {@include background('other')};
+
+.border-primary {@include border('primary')};
+.border-secondary-1 {@include border('secondary-1')};
+.border-secondary-2 {@include border('secondary-2')};
+.border-secondary-3 {@include border('secondary-3')};
 
 hr {
     border: none;
@@ -219,10 +228,6 @@ h5 {
     background-color: var(--acticity-background);
     padding: var(--padding);
     border-radius: var(--radius);
-}
-
-.border-primary {
-    border: 1px solid var(--color-border);
 }
 
 .pointer {

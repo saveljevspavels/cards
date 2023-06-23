@@ -4,6 +4,9 @@ export interface CardScheme {
 
 export interface CardSchemeBoard {
     title: string;
+    key: string;
+    color: string;
+    icon: string;
     levels: CardSchemeLevel[];
 }
 

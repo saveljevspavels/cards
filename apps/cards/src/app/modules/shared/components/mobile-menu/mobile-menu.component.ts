@@ -17,14 +17,19 @@ export class MobileMenuComponent implements OnInit {
     routes: any = {
         public: [
             {
-                label: 'Board',
-                path: '/board/main',
-                icon: 'home',
+                label: 'Activity List',
+                icon: 'stars',
+                path: '/board/activity-list'
             },
             {
-                label: 'Activity List',
-                icon: 'activities',
-                path: '/board/activity-list'
+                label: 'Dashboard',
+                path: '/board/main',
+                icon: 'gauge',
+            },
+            {
+                label: 'Board',
+                icon: 'board',
+                path: '/board/board'
             },
             {
                 label: 'Leaderboard',

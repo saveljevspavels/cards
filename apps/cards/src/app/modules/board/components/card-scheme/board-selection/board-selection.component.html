@@ -1,0 +1,11 @@
+<div class="d-flex justify-content-between">
+    <div *ngFor="let board of boards"
+         (click)="select(board.key)"
+         class="board-button border-{{board.color}} d-flex justify-content-center align-items-center color-{{board.color}}"
+         [ngClass]="{'board-button--inactive': board.key !== activeBoard}"
+    >
+        <div class="background-{{board.color}} board-button__background"></div>
+        <app-svg [icon]="board.icon" height="18" width="18" class="mt-1"></app-svg>
+        <span class="text-bold text-small ml-1">{{board.title}}</span>
+    </div>
+</div>

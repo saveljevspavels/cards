@@ -1,0 +1,30 @@
+.board-button {
+  position: relative;
+  border-radius: 20px;
+  background-color: var(--card-background);
+  overflow: hidden;
+  padding: 4px 8px 4px 8px;
+  cursor: pointer;
+  margin-right: var(--margin);
+  flex-basis: 33.3%;
+  &__background {
+    opacity: 0.1;
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    top: 0;
+    left: 0;
+  }
+  &--inactive {
+    border: 1px solid var(--card-background)!important;
+    .board-button__background {
+      background-color: var(--card-background) !important;
+    }
+    span {
+      color: var(--color-text-light)!important;
+    }
+    app-svg {
+      fill: var(--color-text-light) !important;
+    }
+  }
+}

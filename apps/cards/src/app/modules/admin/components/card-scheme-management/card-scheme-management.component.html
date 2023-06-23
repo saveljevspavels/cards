@@ -17,7 +17,10 @@
 
 <div *ngIf="form" class="d-flex justify-content-between">
     <div *ngFor="let board of form.controls">
+        <app-input [label]="'Key'" [fc]="board.get('key')"></app-input>
         <app-input [label]="'Title'" [fc]="board.get('title')"></app-input>
+        <app-input [label]="'Color'" [fc]="board.get('color')"></app-input>
+        <app-input [label]="'Icon'" [fc]="board.get('icon')"></app-input>
         <div *ngFor="let level of board.get('levels').controls; let i = index" class="mt-2">
             <hr>
             Level {{i + 1}}

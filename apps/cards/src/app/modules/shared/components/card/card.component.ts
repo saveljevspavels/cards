@@ -1,4 +1,4 @@
-import {Component, Input, OnChanges, OnInit} from '@angular/core';
+import {Component, EventEmitter, Input, OnChanges, OnInit, Output} from '@angular/core';
 import Card, {Validator} from "../../../../../../../shared/interfaces/card.interface";
 import {filter} from "rxjs/operators";
 import {ConstService} from "../../../../services/const.service";
@@ -13,29 +13,22 @@ import {ValidationStatus} from "../../../../../../../shared/services/validation.
   styleUrls: ['./card.component.scss']
 })
 export class CardComponent implements OnInit, OnChanges {
-    public PROGRESSION = Progression;
     public RULES = ConstService.RULES;
 
-    @Input()
-    public card: Card;
+    @Input() public card: Card;
+    @Input() public cardId: string;
+    @Input() public filterData: any;
+    @Input() styleClass: string;
+    @Input() energy: number;
 
-    @Input()
-    public cardId: string;
+    @Input() public showDescription = true;
+    @Input() small: boolean = false;
+    @Input() canActivate = false;
+    @Input() showActivate = false;
 
-    @Input()
-    public filterData: any;
+    @Input() validationStatus: ValidationStatus = ValidationStatus.NONE;
 
-    @Input()
-    public showDescription = true;
-
-    @Input()
-    small: boolean = false;
-
-    @Input()
-    energy: number;
-
-    @Input()
-    validationStatus: ValidationStatus = ValidationStatus.NONE;
+    @Output() activated = new EventEmitter;
 
     imageObservable: any;
     visible = true;
@@ -81,6 +74,10 @@ export class CardComponent implements OnInit, OnChanges {
 
     resolveActivityTypes(validators: Validator[]): string {
         return (validators?.find(validator => validator.property === ConstService.CONST.ACTIVITY_PROPERTIES.TYPE)?.formula) || '';
+    }
+
+    activate() {
+        this.activated.emit(this.card.id);
     }
 
 }

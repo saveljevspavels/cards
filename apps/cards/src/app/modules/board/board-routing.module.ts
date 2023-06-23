@@ -10,6 +10,7 @@ import {ProfileComponent} from "./components/profile/profile.component";
 import {RulesComponent} from "./components/rules/rules.component";
 import {BoardParentComponent} from "./components/board-parent/board-parent.component";
 import {SubmittingActivityComponent} from "./components/submitting-activity/submitting-activity.component";
+import {CardBoardComponent} from "./components/card-board/card-board.component";
 
 const routes: Routes = [
     {
@@ -28,6 +29,10 @@ const routes: Routes = [
             {
                 path: 'submit-activity',
                 component: SubmittingActivityComponent
+            },
+            {
+                path: 'board',
+                component: CardBoardComponent
             },
             {
                 path: 'activity-list',

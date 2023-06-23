@@ -49,7 +49,10 @@ export class CardSchemeManagementComponent implements OnInit {
         const form: FormArray = this.formBuilder.array([]);
         for(let i = 0; i < (cardScheme.boards.length || RULES.SCHEME.BOARDS_NUMBER); i++) {
             const boardControl = this.formBuilder.group({
+                key: [cardScheme.boards[i] ? cardScheme.boards[i].key : ''],
                 title: [cardScheme.boards[i] ? cardScheme.boards[i].title : ''],
+                color: [cardScheme.boards[i] ? cardScheme.boards[i].color : ''],
+                icon: [cardScheme.boards[i] ? cardScheme.boards[i].icon : ''],
                 levels: this.formBuilder.array([])
             })
             for(let j = 0; j < 5; j++) {

@@ -1,4 +1,4 @@
-<div class="card card--{{validationStatus.toString()}}"
+<div class="card card--{{validationStatus.toString()}} {{styleClass}}"
      *ngIf="card && visible"
      [ngClass]="{'card--small': small}"
 >
@@ -26,6 +26,14 @@
         </div>
         <div class="card__value">
             <app-rewards [card]="card"></app-rewards>
+            <app-button *ngIf="showActivate"
+                        [small]="true"
+                        [styleClass]="'mt-1'"
+                        label="Activate"
+                        [type]="'action'"
+                        [disabled]="!canActivate"
+                        (click)="activate()"
+            ></app-button>
         </div>
     </div>
 </div>

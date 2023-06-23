@@ -1,6 +1,6 @@
 <div class="d-flex flex-column">
     <div class="row flex-md-nowrap flex-sm-wrap order-1">
-        <div class="col-lg-6 mb-2">
+        <div class="offset-lg-3 col-lg-6 mb-2">
             <div class="row mb-2">
                 <div class="col-6 pr-1">
                     <app-energy-line></app-energy-line>
@@ -28,24 +28,6 @@
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="col-lg-6 mb-2">
-            <app-collapsible [title]="'Card PLACEHOLDER'" [id]="'cardQueue'">
-                <div hiddenContent class="card-queue">
-                    <div class="mb-2 mt-2">
-                        <app-collapsible [id]="'cardFilter'"
-                                         [title]="'Card Filter'"
-                                         [inclusive]="true"
-                                         styleClass="card-filter-collapsible"
-                        >
-                            <div hiddenContent>
-                                <app-card-filter (filterChange)="setFilterData($event)"></app-card-filter>
-                            </div>
-                        </app-collapsible>
-                    </div>
-                    <app-card-scheme></app-card-scheme>
-                </div>
-            </app-collapsible>
         </div>
     </div>
 

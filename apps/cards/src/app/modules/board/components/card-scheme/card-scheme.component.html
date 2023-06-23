@@ -1,30 +1,26 @@
-selected: {{selectedCard.value}}
-<div class="d-flex justify-content-between">
-    <div *ngFor="let board of (cardScheme | async)?.boards">
-        <h4>{{board.title}}</h4>
-        <div *ngFor="let level of board.levels; let i = index" class="mt-2">
-            <hr>
-            Level {{i + 1}}
-            <div class="d-flex">
-                <div *ngFor="let card of level.cards">
-                    <app-selection-wrapper
-                            [singleSelection]="true"
-                            [formControl]="selectedCard"
-                            [template]="cardTemplate"
-                            [selfSelectable]="true"
-                            [selectionEnabled]="true"
-                            [dataItems]="level.cards"
-                    >
-                        <ng-template #cardTemplate let-dataItem="dataItem">
-                            <app-card-technical [card]="cardMap.get(card)"></app-card-technical>
-                        </ng-template>
-                    </app-selection-wrapper>
+<ng-container *ngIf="boards.length">
+    <div class="mb-2">
+        <app-board-selection [boards]="boards"
+                             [activeBoard]="activeBoard.value"
+                             (boardSelected)="activeBoard.setValue($event)"
+        ></app-board-selection>
+    </div>
+    <ng-container *ngFor="let board of boards">
+        <ng-container *ngIf="board.key === activeBoard.value">
+            <div *ngFor="let level of board.levels; let i = index">
+                <div class="d-flex flex-column">
+                    <div *ngFor="let card of level.cards">
+                        <app-card (activated)="activateCard($event)"
+                                  [showActivate]="true"
+                                  [canActivate]="(athlete | async)?.energy > cardMap.get(card).energyCost"
+                                  [card]="cardMap.get(card)"
+                                  [styleClass]="'mb-2'"
+                        ></app-card>
+                    </div>
                 </div>
             </div>
-        </div>
-    </div>
-</div>
+        </ng-container>
+    </ng-container>
 
-<app-button label="Activate" (buttonClick)="activateCard(selectedCard.value[0])"></app-button>
-
-
+<!--    <app-button label="Activate" (buttonClick)="activateCard(selectedCard.value[0])"></app-button>-->
+</ng-container>

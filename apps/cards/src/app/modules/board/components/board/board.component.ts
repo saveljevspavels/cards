@@ -17,8 +17,6 @@ export class BoardComponent implements OnInit {
         rules: true,
     }
 
-    public filterData: any;
-
     public saveState = UtilService.saveState;
 
     constructor(private activityService: ActivityService,
@@ -38,10 +36,6 @@ export class BoardComponent implements OnInit {
 
     rejectActivity(activityId: string) {
         this.activityService.rejectActivity(activityId, 'Cancelled by athlete').subscribe()
-    }
-
-    setFilterData(data: any) {
-        this.filterData = data;
     }
 
 }
