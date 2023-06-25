@@ -17,7 +17,7 @@
                                 <app-card (activated)="activateCard($event)"
                                           [showActivate]="true"
                                           [locked]="unlockMap.get(board.key) < levelIndex"
-                                          [canActivate]="(athlete | async)?.energy > cardMap.get(card).energyCost"
+                                          [canActivate]="(athlete | async)?.energy >= cardMap.get(card).energyCost && (athlete | async)?.cards.active.length < RULES.SCHEME.MAX_ACTIVE_CARDS"
                                           [card]="cardMap.get(card)"
                                           [styleClass]="'mb-2'"
                                 ></app-card>

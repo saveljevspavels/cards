@@ -1,11 +1,16 @@
 <h2 class="mb-2 mt-2">Active Tasks</h2>
-<ng-container *ngFor="let validatedCard of cardList">
+<app-add-card-button
+        *ngIf="cardList.length < RULES.SCHEME.MAX_ACTIVE_CARDS"
+        class="mb-2"
+        (click)="openCardScheme()">
+</app-add-card-button>
+<div *ngFor="let validatedCard of cardList" class="mb-2">
     <app-card (click)="cardSelected(validatedCard)"
               [card]="validatedCard.card"
               [showDescription]="false"
               [validationStatus]="validatedCard.validationStatus"
     ></app-card>
-</ng-container>
+</div>
 <div class="row mb-2">
     <div class="col-md-12">
         <app-base-card [remainderActivity]="remainderActivity">

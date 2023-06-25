@@ -32,25 +32,14 @@ export default class CardService {
             const athleteId = res.get('athleteId');
             if(!cardId || !athleteId) {
                 res.status(400).send('Card Id or Athlete Id missing');
-            } else {
-                const card = await this.getCard(cardId);
-                if(!card) {
-                    res.status(400).send('Card does not exist');
-                } else {
-                    const athlete = await this.fireStoreService.athleteCollection.get(athleteId)
-                    if(athlete) {
-                        await this.fireStoreService.athleteCollection.update(athleteId, {
-                            cards: {
-                                ...athlete.cards,
-                                active: [...athlete?.cards.active, card.id]
-                            }
-                        })
-                        res.status(200).send();
-                    } else {
-                        res.status(400).send('Athlete does not exist');
-                    }
-                }
+                return;
             }
+            try {
+                await this.activateCard(athleteId, cardId);
+            } catch (err) {
+                res.status(400).send(err);
+            }
+            res.status(200).send();
         });
 
         app.post(`${CONST.API_PREFIX}/cards/claim-reward`,async (req, res) => {
@@ -85,25 +74,11 @@ export default class CardService {
             const boardKey = req.body?.boardKey;
             const level = req.body?.level;
             const athleteId = res.get('athleteId');
-            console.log(boardKey, level, athleteId);
             if(!boardKey || !athleteId || !level) {
                 res.status(400).send('Board Key/Level or Athlete Id missing');
                 return;
             }
             await this.unlockBoardLevel(athleteId, boardKey, level);
-            // if(athlete?.cards.completed.indexOf(cardId) === -1) {
-            //     res.status(400).send('Card is not completed');
-            //     return;
-            // }
-            // if(!await this.fireStoreService.cardCollection.exists(cardId)) {
-            //     res.status(400).send('Card does not exist');
-            //     return
-            // }
-            // await Promise.all([
-            //     await this.finishCard(athleteId, cardId),
-            //     await this.scoreService.updateScore(athleteId, cardId),
-            //     await this.claimCardRewards(athleteId, cardId)
-            // ]);
             res.status(200).send();
         });
     }
@@ -165,6 +140,32 @@ export default class CardService {
         if(parseInt(String(card.energyReward))) {
             this.logger.error(`Athlete restored ${card.energyReward} energy for card ${card.title}`);
         }
+    }
+
+    async activateCard(athleteId: string, cardId: string) {
+        const card = await this.getCard(cardId);
+        if(!card) {
+            throw 'Card does not exist';
+        }
+        const athlete = await this.fireStoreService.athleteCollection.get(athleteId)
+        if(!athlete) {
+            throw 'Athlete does not exist';
+        }
+        if(parseInt(String(athlete.energy), 10) < parseInt(String(card.energyCost), 10)) {
+            this.logger.info(`Athlete ${athlete.firstname} ${athlete.lastname} don't have enough energy to activate card ${card.title}`);
+            throw 'Not enough energy';
+        }
+        if(athlete.cards.active.length + 1 >= RULES.SCHEME.MAX_ACTIVE_CARDS) {
+            this.logger.info(`Athlete ${athlete.firstname} ${athlete.lastname} has too much activated cards`);
+            throw 'Too much active cards';
+        }
+        await this.fireStoreService.athleteCollection.update(athleteId, {
+            cards: {
+                ...athlete.cards,
+                active: [...athlete?.cards.active, card.id]
+            },
+            energy: parseInt(String(athlete.energy), 10) - parseInt(String(card.energyCost), 10)
+        })
     }
 
     async finishCard(athleteId: string, cardId: string) {

@@ -1,12 +1,12 @@
 import {Component, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
-import {FormArray, FormBuilder, FormControl, FormGroup} from "@angular/forms";
+import {FormBuilder, FormControl} from "@angular/forms";
 import {ConstService} from "../../../../services/const.service";
 import {BehaviorSubject, combineLatest, Subject} from "rxjs";
 import Card from "../../../../../../../shared/interfaces/card.interface";
 import {CardScheme, CardSchemeBoard} from "../../../../../../../shared/interfaces/card-scheme.interface";
 import {CardService} from "../../../../services/card.service";
 import {AthleteService} from "../../../../services/athlete.service";
-import {filter, first, take} from "rxjs/operators";
+import {filter, first} from "rxjs/operators";
 import {PopupService} from "../../../../services/popup.service";
 import {Router} from "@angular/router";
 

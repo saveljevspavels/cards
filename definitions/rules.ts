@@ -83,7 +83,8 @@ export const RULES = {
         PER_LEVEL_PRICE: 5
     },
     SCHEME: {
-        BOARDS_NUMBER: 3
+        BOARDS_NUMBER: 3,
+        MAX_ACTIVE_CARDS: 3
     },
     PROGRESS_PRECISION: 1000,
 }

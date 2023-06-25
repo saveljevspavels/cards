@@ -9,6 +9,8 @@ import Card from "../../../../../../../shared/interfaces/card.interface";
 import {ValidationStatus} from "../../../../../../../shared/services/validation.service";
 import {FormControl} from "@angular/forms";
 import {ActivityService} from "../../../../services/activity.service";
+import {Router} from "@angular/router";
+import {RULES} from "../../../../../../../../definitions/rules";
 
 @Component({
   selector: 'app-active-card-list',
@@ -16,7 +18,7 @@ import {ActivityService} from "../../../../services/activity.service";
   styleUrls: ['./active-card-list.component.scss']
 })
 export class ActiveCardListComponent implements OnInit {
-
+  public RULES = RULES;
   public athlete: Observable<Athlete | null> = this.athleteService.me;
   public selectedActivity$ = this.boardService.selectedActivity$;
   public remainderActivity: any = null;
@@ -29,7 +31,8 @@ export class ActiveCardListComponent implements OnInit {
       private athleteService: AthleteService,
       private boardService: BoardService,
       private validationService: ValidationService,
-      private activityService: ActivityService
+      private activityService: ActivityService,
+      private router: Router
   ) { }
 
   get selectedActivity() {
@@ -124,6 +127,10 @@ export class ActiveCardListComponent implements OnInit {
     ).subscribe(_ => {
       this.boardService.deselectActivity();
     })
+  }
+
+  openCardScheme() {
+    this.router.navigateByUrl('board/board');
   }
 }
 
