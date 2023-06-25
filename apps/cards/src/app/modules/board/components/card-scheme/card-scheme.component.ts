@@ -6,7 +6,7 @@ import Card from "../../../../../../../shared/interfaces/card.interface";
 import {CardScheme, CardSchemeBoard} from "../../../../../../../shared/interfaces/card-scheme.interface";
 import {CardService} from "../../../../services/card.service";
 import {AthleteService} from "../../../../services/athlete.service";
-import {filter, first} from "rxjs/operators";
+import {distinctUntilChanged, filter, first} from "rxjs/operators";
 import {PopupService} from "../../../../services/popup.service";
 import {Router} from "@angular/router";
 
@@ -45,9 +45,13 @@ export class CardSchemeComponent implements OnInit {
     ngOnInit(): void {
         combineLatest([
             this.cardScheme,
-            this.athlete
-        ]).subscribe(([scheme, athlete]) => {
-            if(!scheme || !athlete) {
+            this.athlete,
+            this.allCards
+        ])
+            .pipe(distinctUntilChanged())
+            .subscribe(([scheme, athlete, cards]) => {
+                console.log(scheme, athlete, cards)
+            if(!scheme?.boards.length || !athlete || !cards.length) {
                 return;
             }
             this.boards = scheme.boards;
@@ -57,11 +61,13 @@ export class CardSchemeComponent implements OnInit {
             this.unlockMap = new Map<string, number>(this.boards.map((board) => {
                 return [board.key, athlete.unlocks[board.key] || 0];
             }))
-        })
-        this.allCards.subscribe((cards) => {
-            this.cardMap = new Map<string, Card>(cards.map(card => {
-                return [card.id, card]
-            }))
+            const usedCards = Object.values(athlete.cards).reduce((acc, cards) => [...cards, ...acc], []);
+            this.cardMap = new Map<string, Card>(cards
+                .filter(card => usedCards.indexOf(card.id) === -1)
+                .map(card => {
+                    return [card.id, card]
+                }
+            ));
         })
     }
 

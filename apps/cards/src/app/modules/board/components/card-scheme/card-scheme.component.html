@@ -13,15 +13,16 @@
                     <h2 class="mb-2 mt-2" *ngIf="(levelIndex - 1) === unlockMap.get(board.key)">Locked Tasks</h2>
                     <div [ngClass]="{'border-primary border-radius p-2': (levelIndex - 1) === unlockMap.get(board.key)}">
                         <div class="d-flex flex-column">
-                            <div *ngFor="let card of level.cards">
-                                <app-card (activated)="activateCard($event)"
+                            <ng-container *ngFor="let card of level.cards">
+                                <app-card *ngIf="cardMap.get(card)"
+                                          (activated)="activateCard($event)"
                                           [showActivate]="true"
                                           [locked]="unlockMap.get(board.key) < levelIndex"
                                           [canActivate]="(athlete | async)?.energy >= cardMap.get(card).energyCost && (athlete | async)?.cards.active.length < RULES.SCHEME.MAX_ACTIVE_CARDS"
                                           [card]="cardMap.get(card)"
                                           [styleClass]="'mb-2'"
                                 ></app-card>
-                            </div>
+                            </ng-container>
                         </div>
                         <app-button
                                 *ngIf="unlockMap.get(board.key) === levelIndex - 1"
