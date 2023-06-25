@@ -7,17 +7,17 @@ import {Component, Input, OnInit} from '@angular/core';
 })
 export class GenericCounterComponent implements OnInit {
 
-    @Input() public indicatorData: IndicatorData
-    @Input() energyColors = false;
+    @Input() filledClass: string;
+    @Input() max: number;
+    @Input() current: number;
+
+    public iterator: any[];
 
     constructor() { }
 
     ngOnInit(): void {
+        this.iterator = Array(this.max).fill(0);
     }
 
 }
 
-export interface IndicatorData {
-    width: number;
-    stage: number;
-}

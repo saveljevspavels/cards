@@ -1,0 +1,8 @@
+<div class="box d-flex flex-column align-items-center">
+    <div class="d-flex full-width justify-content-center mt-1 mb-2">
+        <app-svg [icon]="'star'" [height]="32" [width]="34" viewBox="0 0 16 16" [styleClass]="'color-secondary-1'"></app-svg>
+    </div>
+    <span class="full-width justify-content-center d-flex">Your points:</span>
+    <span class="text-bold title mt-1">{{(myScore$ | async)?.value}}</span>
+    <p class="text-small light m-0 text-center">Currently you are 2nd in the leaderboard</p>
+</div>

@@ -1,33 +1,13 @@
-@mixin background($number) {
-    background-color: var(--color-main-#{$number});
-}
-
 .generic-counter {
     position: relative;
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    height: 13px;
-    border: 2px solid black;
-    border-radius: 5px;
-    &__fill {
-        height: 100%;
-        width: 0;
-        &--0 { @include background(0); }
-        &--1 { @include background(1); }
-        &--2 { @include background(2); }
-        &--3 { @include background(3); }
-        &--4 { @include background(4); }
-        &--5 { @include background(5); }
-    }
-    &--energy {
-        .generic-counter__fill {
-            &--0 { background-color: var(--color-main-2); }
-            &--1 { background-color: var(--color-main-1); }
-            &--2 { background-color: var(--color-main-0); }
-            &--3 { background-color: var(--color-main-0); }
-            &--4 { background-color: var(--color-pass); }
-            &--5 { background-color: var(--color-pass); }
-        }
+    justify-content: center;
+    &__point {
+        height: 13px;
+        border: 2px solid black;
+        width: 24px;
+        margin: 1px;
+        border-radius: 5px;
     }
 }

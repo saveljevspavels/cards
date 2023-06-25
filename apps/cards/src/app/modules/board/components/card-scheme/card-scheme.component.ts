@@ -50,7 +50,6 @@ export class CardSchemeComponent implements OnInit {
         ])
             .pipe(distinctUntilChanged())
             .subscribe(([scheme, athlete, cards]) => {
-                console.log(scheme, athlete, cards)
             if(!scheme?.boards.length || !athlete || !cards.length) {
                 return;
             }

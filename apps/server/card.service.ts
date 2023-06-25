@@ -155,7 +155,7 @@ export default class CardService {
             this.logger.info(`Athlete ${athlete.firstname} ${athlete.lastname} don't have enough energy to activate card ${card.title}`);
             throw 'Not enough energy';
         }
-        if(athlete.cards.active.length + 1 >= RULES.SCHEME.MAX_ACTIVE_CARDS) {
+        if(athlete.cards.active.length + 1 > RULES.SCHEME.MAX_ACTIVE_CARDS) {
             this.logger.info(`Athlete ${athlete.firstname} ${athlete.lastname} has too much activated cards`);
             throw 'Too much active cards';
         }

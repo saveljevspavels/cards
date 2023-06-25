@@ -23,6 +23,7 @@ import { BaseCardComponent } from './components/base-card/base-card.component';
 import { CardBoardComponent } from './components/card-board/card-board.component';
 import { BoardSelectionComponent } from './components/card-scheme/board-selection/board-selection.component';
 import { AddCardButtonComponent } from './components/add-card-button/add-card-button.component';
+import { PointsDisplayComponent } from './components/points-display/points-display.component';
 
 @NgModule({
     declarations: [
@@ -45,7 +46,8 @@ import { AddCardButtonComponent } from './components/add-card-button/add-card-bu
         BaseCardComponent,
         CardBoardComponent,
         BoardSelectionComponent,
-        AddCardButtonComponent
+        AddCardButtonComponent,
+        PointsDisplayComponent
     ],
     imports: [
         CommonModule,

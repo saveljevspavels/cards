@@ -1,3 +1,5 @@
-<div class="generic-counter" [ngClass]="{'generic-counter--energy': energyColors}">
-    <div class="generic-counter__fill generic-counter__fill--{{indicatorData.stage}}" [ngStyle]="{'width.%': indicatorData.width}"></div>
+<div class="generic-counter">
+    <div *ngFor="let point of iterator; let i = index"
+         class="generic-counter__point {{(current >= (i + 1)) && filledClass}}"
+    ></div>
 </div>

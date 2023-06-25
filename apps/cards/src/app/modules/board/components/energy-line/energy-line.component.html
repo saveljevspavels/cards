@@ -1,10 +1,13 @@
-<div class="counter-line">
+<div class="box d-flex justify-content-center flex-column align-items-center">
     <div class="d-flex full-width justify-content-center mt-1 mb-2">
-        <img class="counter-line__image" src="assets/icons/energy-big.svg">
+        <app-svg [icon]="'fire'" [height]="32" [width]="24" viewBox="0 0 24 32" [styleClass]="'color-secondary-2'"></app-svg>
     </div>
-    <h4 class="title full-width justify-content-center d-flex">Your energy: {{(athlete$ | async)?.energy}}/{{RULES.ENERGY.MAX}}</h4>
-    <p class="text-small light m-0">Energy is required for activating tasks. Energy is restored at night</p>
+    <span>Your energy:</span>
     <div class="mt-2">
-        <app-generic-counter [indicatorData]="indicatorData" [energyColors]="true"></app-generic-counter>
+        <app-generic-counter [filledClass]="'background-secondary-2'"
+                             [max]="RULES.ENERGY.MAX"
+                             [current]="currentEnergy"
+        ></app-generic-counter>
     </div>
+    <p class="text-small light mt-1 text-center">You need energy to activate tasks</p>
 </div>
