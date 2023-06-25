@@ -44,4 +44,11 @@ export class CardService {
             cardId
         })
     }
+
+    unlockLevel(boardKey: string, level: number) {
+        return this.http.post(`${environment.baseBE}/cards/unlock-level`, {
+            boardKey,
+            level
+        })
+    }
 }

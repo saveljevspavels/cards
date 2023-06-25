@@ -80,6 +80,62 @@ export default class CardService {
             ]);
             res.status(200).send();
         });
+
+        app.post(`${CONST.API_PREFIX}/cards/unlock-level`,async (req, res) => {
+            const boardKey = req.body?.boardKey;
+            const level = req.body?.level;
+            const athleteId = res.get('athleteId');
+            console.log(boardKey, level, athleteId);
+            if(!boardKey || !athleteId || !level) {
+                res.status(400).send('Board Key/Level or Athlete Id missing');
+                return;
+            }
+            await this.unlockBoardLevel(athleteId, boardKey, level);
+            // if(athlete?.cards.completed.indexOf(cardId) === -1) {
+            //     res.status(400).send('Card is not completed');
+            //     return;
+            // }
+            // if(!await this.fireStoreService.cardCollection.exists(cardId)) {
+            //     res.status(400).send('Card does not exist');
+            //     return
+            // }
+            // await Promise.all([
+            //     await this.finishCard(athleteId, cardId),
+            //     await this.scoreService.updateScore(athleteId, cardId),
+            //     await this.claimCardRewards(athleteId, cardId)
+            // ]);
+            res.status(200).send();
+        });
+    }
+
+    async unlockBoardLevel(athleteId: string, boardKey: string, level: number) {
+        const athlete = await this.fireStoreService.athleteCollection.get(athleteId);
+        if(!athlete) {
+            this.logger.error(`Athlete ${athleteId} does not exist`);
+            return;
+        }
+
+        const currentMoney = athlete.coins || 0;
+        const currentLevel = athlete.unlocks[boardKey] || 0;
+        if(currentLevel >= level) {
+            this.logger.error(`${boardKey} level ${level} already unlocked for athlete ${athlete.firstname} ${athlete.lastname}`);
+            return;
+        }
+        const price = (level - currentLevel) * RULES.COINS.PER_LEVEL_PRICE;
+        if(currentMoney < price) {
+            this.logger.error(`Athlete ${athlete.firstname} ${athlete.lastname} does not have ${price} (has ${currentMoney}) money to unlock ${boardKey} ${level}`);
+            return;
+        }
+        const newUnlocks = {...athlete.unlocks};
+        newUnlocks[boardKey] = level;
+        await this.fireStoreService.athleteCollection.update(
+            athleteId,
+            {
+                coins: currentMoney - price,
+                unlocks: newUnlocks
+            }
+        )
+        this.logger.error(`Athlete ${athlete.firstname} ${athlete.lastname} unlocked ${boardKey} ${level} for ${price} coins (had ${currentMoney}, now has ${currentMoney - price})`);
     }
 
     async claimCardRewards(athleteId: string, cardId: string) {

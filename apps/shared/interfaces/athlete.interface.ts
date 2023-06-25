@@ -15,6 +15,7 @@ export default interface Athlete {
         finished: string[]
     };
     baseCardProgress: BaseCardProgress;
+    unlocks: {[key: string]: number}
 }
 
 export interface AthletePatch {

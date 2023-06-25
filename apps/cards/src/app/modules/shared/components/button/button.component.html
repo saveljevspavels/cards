@@ -8,5 +8,5 @@
         'button--transparent': transparent,
         'button--small': small
     }">
-    <ng-container *ngIf="icon"><app-svg [icon]="icon"></app-svg>&nbsp;</ng-container><span class="title">{{label}}</span>
+    <span class="title">{{label}}</span><ng-container *ngIf="icon">&nbsp;<span class="mt-2 pt-1"><app-svg [icon]="icon"></app-svg></span></ng-container>
 </div>

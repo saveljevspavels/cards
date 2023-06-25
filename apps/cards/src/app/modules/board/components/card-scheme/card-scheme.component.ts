@@ -1,11 +1,14 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
 import {FormArray, FormBuilder, FormControl, FormGroup} from "@angular/forms";
 import {ConstService} from "../../../../services/const.service";
-import {BehaviorSubject} from "rxjs";
+import {BehaviorSubject, combineLatest, Subject} from "rxjs";
 import Card from "../../../../../../../shared/interfaces/card.interface";
 import {CardScheme, CardSchemeBoard} from "../../../../../../../shared/interfaces/card-scheme.interface";
 import {CardService} from "../../../../services/card.service";
 import {AthleteService} from "../../../../services/athlete.service";
+import {filter, first, take} from "rxjs/operators";
+import {PopupService} from "../../../../services/popup.service";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-card-scheme',
@@ -19,24 +22,42 @@ export class CardSchemeComponent implements OnInit {
     public cardScheme: BehaviorSubject<CardScheme> = this.cardService.cardScheme;
     public athlete = this.athleteService.me;
 
+    private unlock$ = new Subject();
+    private activate$ = new Subject();
+    @ViewChild('unlockPopup', { static: true }) unlockPopup: ElementRef;
+    @ViewChild('activatePopup', { static: true }) activatePopup: ElementRef;
+
     public boards: CardSchemeBoard[] = [];
     public activeBoard = this.formBuilder.control('');
 
     public cardMap: Map<string, Card>
+    public unlockMap: Map<string, number>;
 
     public selectedCard: FormControl = this.formBuilder.control([]);
 
     constructor(private formBuilder: FormBuilder,
                 private cardService: CardService,
-                private athleteService: AthleteService) { }
+                private athleteService: AthleteService,
+                private popupService: PopupService,
+                private router: Router
+    ) { }
 
     ngOnInit(): void {
-        this.cardScheme.subscribe(scheme => {
+        combineLatest([
+            this.cardScheme,
+            this.athlete
+        ]).subscribe(([scheme, athlete]) => {
+            if(!scheme || !athlete) {
+                return;
+            }
             this.boards = scheme.boards;
             if(!this.activeBoard.value && scheme.boards.length) {
                 this.activeBoard.setValue(this.boards[0].key);
             }
-        });
+            this.unlockMap = new Map<string, number>(this.boards.map((board) => {
+                return [board.key, athlete.unlocks[board.key] || 0];
+            }))
+        })
         this.allCards.subscribe((cards) => {
             this.cardMap = new Map<string, Card>(cards.map(card => {
                 return [card.id, card]
@@ -48,6 +69,43 @@ export class CardSchemeComponent implements OnInit {
         if(!cardId) {
             return;
         }
-        this.cardService.activateCard(cardId).subscribe();
+        this.activate$.pipe(
+            first(),
+            filter((resolution) => !!resolution)
+        ).subscribe(_ => {
+            this.cardService.activateCard(cardId).subscribe();
+            this.router.navigateByUrl('');
+        });
+        this.popupService.showPopup(this.activatePopup);
+    }
+
+    confirmActivate() {
+        this.activate$.next(true);
+        this.popupService.closePopup();
+    }
+
+    cancelActivate() {
+        this.activate$.next(false);
+        this.popupService.closePopup();
+    }
+
+    unlockLevel(boardKey: string, level: number) {
+        this.unlock$.pipe(
+            first(),
+            filter((resolution) => !!resolution)
+        ).subscribe(_ => {
+            this.cardService.unlockLevel(boardKey, level).subscribe();
+        })
+        this.popupService.showPopup(this.unlockPopup);
+    }
+
+    confirmUnlock() {
+        this.unlock$.next(true);
+        this.popupService.closePopup();
+    }
+
+    cancelUnlock() {
+        this.unlock$.next(false);
+        this.popupService.closePopup();
     }
 }

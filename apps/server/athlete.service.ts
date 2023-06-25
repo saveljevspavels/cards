@@ -98,7 +98,8 @@ export default class AthleteService {
                 ride: 0,
                 walk: 0,
                 other: 0,
-            }
+            },
+            unlocks: {}
         }
     }
 

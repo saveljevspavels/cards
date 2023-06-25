@@ -5,22 +5,67 @@
                              (boardSelected)="activeBoard.setValue($event)"
         ></app-board-selection>
     </div>
+    <h2 class="mb-2 mt-2">Available Tasks</h2>
     <ng-container *ngFor="let board of boards">
         <ng-container *ngIf="board.key === activeBoard.value">
-            <div *ngFor="let level of board.levels; let i = index">
-                <div class="d-flex flex-column">
-                    <div *ngFor="let card of level.cards">
-                        <app-card (activated)="activateCard($event)"
-                                  [showActivate]="true"
-                                  [canActivate]="(athlete | async)?.energy > cardMap.get(card).energyCost"
-                                  [card]="cardMap.get(card)"
-                                  [styleClass]="'mb-2'"
-                        ></app-card>
+            <div *ngFor="let level of board.levels; let levelIndex = index">
+                <ng-container *ngIf="level.cards.length">
+                    <h2 class="mb-2 mt-2" *ngIf="(levelIndex - 1) === unlockMap.get(board.key)">Locked Tasks</h2>
+                    <div [ngClass]="{'border-primary border-radius p-2': (levelIndex - 1) === unlockMap.get(board.key)}">
+                        <div class="d-flex flex-column">
+                            <div *ngFor="let card of level.cards">
+                                <app-card (activated)="activateCard($event)"
+                                          [showActivate]="true"
+                                          [locked]="unlockMap.get(board.key) < levelIndex"
+                                          [canActivate]="(athlete | async)?.energy > cardMap.get(card).energyCost"
+                                          [card]="cardMap.get(card)"
+                                          [styleClass]="'mb-2'"
+                                ></app-card>
+                            </div>
+                        </div>
+                        <app-button
+                                *ngIf="unlockMap.get(board.key) === levelIndex - 1"
+                                label="Unlock for -{{RULES.COINS.PER_LEVEL_PRICE}}"
+                                (buttonClick)="unlockLevel(board.key, levelIndex)"
+                                type="action"
+                                [icon]="'coin'"
+                        >
+                        </app-button>
                     </div>
-                </div>
+                </ng-container>
             </div>
         </ng-container>
     </ng-container>
-
-<!--    <app-button label="Activate" (buttonClick)="activateCard(selectedCard.value[0])"></app-button>-->
 </ng-container>
+
+<ng-template #unlockPopup>
+    <div class="popup box">
+        <div class="d-flex flex-column align-items-center">
+            <p class="mt-4 mb-1">
+                Are you sure you want to unlock new tasks for {{RULES.COINS.PER_LEVEL_PRICE}} Coins?
+            </p>
+            <div class="mt-4 mb-2 full-width">
+                <app-button type="action" [label]="'Yes'" (buttonClick)="confirmUnlock()"></app-button>
+            </div>
+            <div class="mb-3">
+                <app-button (buttonClick)="cancelUnlock()" [label]="'Cancel'"></app-button>
+            </div>
+        </div>
+    </div>
+</ng-template>
+
+<ng-template #activatePopup>
+    <div class="popup box">
+        <div class="d-flex flex-column align-items-center">
+            <p class="mt-4 mb-1">
+                Are you sure you want activate the task?
+            </p>
+            <div class="mt-4 mb-2 full-width">
+                <app-button type="action" [label]="'Yes'" (buttonClick)="confirmActivate()"></app-button>
+            </div>
+            <div class="mb-3">
+                <app-button (buttonClick)="cancelActivate()" [label]="'Cancel'"></app-button>
+            </div>
+        </div>
+    </div>
+</ng-template>

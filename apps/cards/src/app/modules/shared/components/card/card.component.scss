@@ -95,6 +95,12 @@
             }
         }
     }
+    &--locked {
+        .card__image {
+            filter: grayscale(1);
+            opacity: 0.5;
+        }
+    }
     &__image {
         width: 40px;
         height: 40px;

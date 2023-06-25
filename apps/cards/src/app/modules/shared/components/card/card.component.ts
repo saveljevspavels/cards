@@ -24,6 +24,7 @@ export class CardComponent implements OnInit, OnChanges {
     @Input() public showDescription = true;
     @Input() small: boolean = false;
     @Input() canActivate = false;
+    @Input() locked = false;
     @Input() showActivate = false;
 
     @Input() validationStatus: ValidationStatus = ValidationStatus.NONE;
