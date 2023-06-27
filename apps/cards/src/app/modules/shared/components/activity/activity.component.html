@@ -9,112 +9,44 @@
 
 <ng-template #activityTemplate>
     <ng-container *ngTemplateOutlet="headerTemplate"></ng-container>
-    <ng-container *ngTemplateOutlet="cardsTemplate"></ng-container>
     <ng-container *ngTemplateOutlet="contentTemplate"></ng-container>
 </ng-template>
 
 <ng-template #collapsibleActivityTemplate>
     <app-collapsible [customHeader]="true">
         <ng-container headerContent *ngTemplateOutlet="headerTemplate"></ng-container>
-        <ng-container visibleContent *ngTemplateOutlet="cardsTemplate"></ng-container>
         <ng-container hiddenContent *ngTemplateOutlet="contentTemplate"></ng-container>
     </app-collapsible>
 </ng-template>
 
 <ng-template #headerTemplate>
-    <div>
-        <div *ngIf="showAthlete"
-             class="d-flex align-items-center"
-        >
-            <div class="ml-1">
-                <app-athlete *ngIf="activity?.athlete" [size]="'small'" [athleteId]="activity?.athlete.id">
-                    <span class="text-medium">gained {{(activity.gameData?.cardSnapshots && activity.gameData?.cardSnapshots[0]?.value) || 0}} points by playing a card:</span>
-                </app-athlete>
-            </div>
-        </div>
-        <div *ngIf="showStartedAt"
-             class="d-flex align-items-center"
-        >
-            <div class="ml-1 mt-2 mb-2">
-                <div class="text-medium">Started at {{activity.start_date | date : 'dd MMM, HH:mm'}}</div>
-            </div>
-        </div>
+    <div class="d-flex align-items-center mb-2">
+        <app-athlete *ngIf="activity?.athlete" [size]="'small'" [athleteId]="activity?.athlete.id"></app-athlete>
+        <span class="text-small ml-1">
+            {{activityVerbMap.get(activityType)}} <span class="text-bold">{{activity[validationService.baseActivityTypeMap.get(activityType)] | activityProp : validationService.baseActivityTypeMap.get(activityType)}}</span>
+        </span>
     </div>
 </ng-template>
 
-<ng-template #cardsTemplate>
-    <div *ngIf="activity.gameData.cardSnapshots?.length">
-        <app-selection-wrapper
-            [selectionEnabled]="selection"
-            [formControl]="selectedCards"
-            [template]="cardTemplate"
-            [dataItems]="activity.gameData.cardSnapshots"
-        >
-            <ng-template #cardTemplate let-dataItem="dataItem">
-                <app-card
-                    [card]="dataItem"
-                    [submittedType]="activityType"
-                ></app-card>
-            </ng-template>
-        </app-selection-wrapper>
-    </div>
-</ng-template>
 
 <ng-template #contentTemplate>
     <div class="activity__content" [ngClass]="{'full-width': !activity.gameData.cardSnapshots?.length}">
-        <div class="activity__id text-small lighter">
-            {{activity.id}}
-        </div>
-        <div class="text-small lighter">
-            Type:
-        </div>
         <div class="" *ngIf="activity.map?.summary_polyline">
-<!--            <app-google-map-->
-<!--                [polyline]="activity.map?.summary_polyline"-->
-<!--                [activityType]="activityType"-->
-<!--            ></app-google-map>-->
-        </div>
-        <app-activity-type-icon [type]="activityType">
-            {{activity.type}}
-        </app-activity-type-icon>
-        <div class="stat-item" *ngIf="activity.gameData.submittedAt && activity.gameData.status === CONST.ACTIVITY_STATUSES.APPROVED">
-            <div class="stat-item__property">Submitted at</div>
-            <div class="stat-item__value">{{activity.gameData.submittedAt | date : 'dd MMM, HH:mm'}}</div>
-        </div>
-        <div class="stat-item">
-            <div class="stat-item__property">Started at</div>
-            <div class="stat-item__value">{{activity.start_date | date : 'dd MMM, HH:mm'}}</div>
-        </div>
-        <div class="stat-item">
-            <div class="stat-item__property">Time</div>
-            <div class="stat-item__value">{{activity.moving_time | time}} ({{activity.elapsed_time | time}} total)</div>
-        </div>
-        <div class="stat-item">
-            <div class="stat-item__property">Distance</div>
-            <div class="stat-item__value">{{(activity.distance | distance) || '-'}}</div>
-        </div>
-        <div class="stat-item">
-            <div class="stat-item__property">Average pace</div>
-            <div class="stat-item__value">{{(activity.average_speed | pace) || '-'}}</div>
-        </div>
-        <div class="stat-item" *ngIf="showComments && activity.gameData.comments">
-            <div class="stat-item__property">Comments</div>
-            <div class="stat-item__value">{{activity.gameData.comments}}</div>
+            <!--            <app-google-map-->
+            <!--                [polyline]="activity.map?.summary_polyline"-->
+            <!--                [activityType]="activityType"-->
+            <!--            ></app-google-map>-->
         </div>
     </div>
-    <div *ngIf="showImages && activity.gameData?.images?.length"
-         class="activity__images mt-n3"
-    >
-        <div class="activity__image mr-1"
-             (click)="openGallery(i)"
-             *ngFor="let image of activity.gameData?.images; let i = index;"
-             [style.background-image]="'url(' + image + ')'">
+    <div *ngFor="let card of activity.gameData?.cardSnapshots" class="box p-1 mb-2">
+        <div class="d-flex align-items-center justify-content-between mb-1">
+            <div class="d-flex align-items-center">
+                <app-athlete *ngIf="activity?.athlete" [size]="'small'" [athleteId]="activity?.athlete.id"></app-athlete>
+                &nbsp;
+                <span class="text-small">completed <span class="text-bold">"{{card.title}}"</span></span>
+            </div>
+            <app-image [src]="card.image" class="mr-1" [small]="true"></app-image>
         </div>
-    </div>
-</ng-template>
-
-<ng-template #gallery>
-    <div class="popup box">
-        <app-swiper [images]="activity.gameData?.images" [slideIndex]="slideIndex"></app-swiper>
+        <app-gallery [images]="card.images"></app-gallery>
     </div>
 </ng-template>

@@ -1,0 +1,15 @@
+<div class="d-flex">
+    <div *ngFor="let image of images; let i = index"
+         class="mr-1"
+    >
+        <app-image [src]="image"
+                   (click)="openGallery(i)"
+        ></app-image>
+    </div>
+</div>
+
+<ng-template #gallery>
+    <div class="popup box">
+        <app-swiper [images]="images" [slideIndex]="slideIndex"></app-swiper>
+    </div>
+</ng-template>

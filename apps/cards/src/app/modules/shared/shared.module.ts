@@ -45,6 +45,8 @@ import { RewardMoneyComponent } from './components/reward-money/reward-money.com
 import { RewardPointsComponent } from './components/reward-points/reward-points.component';
 import { RewardsComponent } from './components/rewards/rewards.component';
 import { CircularProgressBarComponent } from './components/circular-progress-bar/circular-progress-bar.component';
+import { ImageComponent } from './components/image/image.component';
+import { GalleryComponent } from './components/gallery/gallery.component';
 
 const COMPS = [
     InputComponent,
@@ -97,6 +99,8 @@ const MODULES = [
         RewardPointsComponent,
         RewardsComponent,
         CircularProgressBarComponent,
+        ImageComponent,
+        GalleryComponent,
     ],
     imports: [
         CommonModule,

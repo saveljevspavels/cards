@@ -3,6 +3,9 @@ import {ControlValueAccessor, FormControl, NG_VALUE_ACCESSOR} from "@angular/for
 import {PopupService} from "../../../../services/popup.service";
 import {ConstService} from "../../../../services/const.service";
 import {UtilService} from "../../../../services/util.service";
+import {CONST} from "../../../../../../../../definitions/constants";
+import {ValidationService} from "../../../../services/validation.service";
+import {StaticValidationService} from "../../../../../../../shared/services/validation.service";
 
 @Component({
     selector: 'app-activity',
@@ -18,20 +21,23 @@ import {UtilService} from "../../../../services/util.service";
 export class ActivityComponent implements OnInit, ControlValueAccessor {
     public CONST = ConstService.CONST;
 
-    @ViewChild('gallery', { static: true }) gallery: ElementRef;
-    public slideIndex = 0;
-
     public selectedCards = new FormControl([])
     public imageObservables: any;
     public activityType = '';
+    public validationService = StaticValidationService;
 
     @Input() public activity: any;
     @Input() public selection = false;
     @Input() public showImages = true;
     @Input() public showComments = false;
-    @Input() public showAthlete = false;
-    @Input() public showStartedAt = false;
     @Input() public collapsible = false;
+
+    public activityVerbMap = new Map<string, string>([
+        [CONST.ACTIVITY_TYPES.OTHER, 'exercised for'],
+        [CONST.ACTIVITY_TYPES.RUN, 'ran'],
+        [CONST.ACTIVITY_TYPES.RIDE, 'rode'],
+        [CONST.ACTIVITY_TYPES.WALK, 'walked'],
+    ]);
 
     constructor(private popupService: PopupService) { }
 
@@ -53,11 +59,6 @@ export class ActivityComponent implements OnInit, ControlValueAccessor {
 
     registerOnTouched(fn: any) {
         this._onTouched = fn;
-    }
-
-    openGallery(index: number) {
-        this.slideIndex = index
-        this.popupService.showPopup(this.gallery)
     }
 
 }

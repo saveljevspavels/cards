@@ -2,23 +2,10 @@
     position: relative;
     flex-wrap: wrap;
     align-items: center;
-    background-color: var(--acticity-background);
     width: 100%;
     border-radius: var(--radius);
     &__content {
-        padding: var(--padding);
         position: relative;
-    }
-    &__images {
-        display: flex;
-        padding: var(--padding);
-    }
-    &__image {
-        display: block;
-        width: 72px;
-        height: 72px;
-        background-size: cover;
-        background-position: center;
     }
     &__type {
         font-weight: 800;

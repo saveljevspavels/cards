@@ -3,17 +3,15 @@
     align-items: center;
     cursor: pointer;
     &--small {
-        padding: 6px;
         .athlete__text {
             margin-left: 8px;
         }
         .athlete__profile-picture {
-            height: 38px;
-            width: 38px;
+            height: 27px;
+            width: 27px;
         }
         .athlete__name {
-            font-size: var(--text-size);
-            display: inline-block;
+            font-size: var(--text-size-small);
         }
     }
     &--medium {
@@ -27,7 +25,6 @@
         .athlete__name {
             font-size: var(--text-size);
             font-weight: 600;
-            display: inline-block;
         }
     }
     &--big {
