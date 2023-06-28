@@ -6,10 +6,19 @@
                    (click)="openGallery(i)"
         ></app-image>
     </div>
+    <app-google-map *ngIf="polyline"
+            [polyline]="polyline"
+            [activityType]="activityType"
+            [thumbnail]="true"
+    ></app-google-map>
 </div>
 
 <ng-template #gallery>
     <div class="popup box">
-        <app-swiper [images]="images" [slideIndex]="slideIndex"></app-swiper>
+        <app-swiper [images]="images"
+                    [slideIndex]="slideIndex"
+                    [polyline]="polyline"
+                    [activityType]="activityType"
+        ></app-swiper>
     </div>
 </ng-template>

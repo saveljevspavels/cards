@@ -9,6 +9,8 @@ import {PopupService} from "../../../../services/popup.service";
 export class GalleryComponent implements OnInit {
 
   @Input() public images: string[];
+  @Input() public polyline: string;
+  @Input() activityType: string;
   @ViewChild('gallery', { static: true }) gallery: ElementRef;
   public slideIndex = 0;
 

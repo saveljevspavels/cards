@@ -1,7 +1,12 @@
 .map {
-  height: 168px;
+  height: 322px;
   width: 100%;
   border-radius: var(--input-radius);
+  &--thumbnail {
+    height: 50px;
+    width: 50px;
+    border-radius: var(--radius);
+  }
 }
 
 .map__wrapper {

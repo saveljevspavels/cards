@@ -14,6 +14,7 @@ export class GoogleMapComponent implements OnInit {
   @Input() location: string;
   @Input() polyline: string;
   @Input() activityType: string;
+  @Input() thumbnail = false;
 
   private loader = new Loader({
     apiKey: ConstService.MAP_CONFIG.mapKey,
@@ -28,9 +29,7 @@ export class GoogleMapComponent implements OnInit {
   ngOnInit(): void {
 
     this.loader.load().then(() => {
-      console.log('polyline', this.polyline);
       const decoded = google.maps.geometry.encoding.decodePath(this.polyline);
-      console.log('decoded', decoded);
 
       this.map = new google.maps.Map(this.mapRef.nativeElement as HTMLElement, {
         center: decoded[(Math.floor(decoded.length / 2))],
@@ -61,16 +60,16 @@ export class GoogleMapComponent implements OnInit {
     }
     this.map.fitBounds(bounds);
     setTimeout(() => {
-        this.map.setZoom(this.map.getZoom() + 1)
+        this.map.setZoom(this.map.getZoom() + 2)
     }, 200)
   }
 
   getColor(type: string) {
       switch (type) {
-          case 'run': return '#EC4444';
-          case 'walk': return '#ECB844';
-          case 'ride': return '#494ADB';
-          default: return '#B754F3';
+          case 'run': return '#494ADB';
+          case 'walk': return 'rgba(127, 168, 41, 1)';
+          case 'ride': return 'rgba(251, 176, 45, 1)';
+          default: return 'rgba(240, 100, 73, 1)';
       }
   }
 

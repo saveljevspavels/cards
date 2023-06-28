@@ -1,7 +1,7 @@
 <div class="swiper">
     <div class="swiper__header">
         <div class="swiper__close">
-            <app-svg styleClass="pointer" icon="close" st (click)="close()"></app-svg>
+            <app-svg styleClass="pointer" icon="close" (click)="close()"></app-svg>
         </div>
     </div>
     <div class="swiper__image mr-1"
@@ -10,9 +10,17 @@
          [style.background-image]="'url(' + image + ')'"
     >
     </div>
+    <div *ngIf="polyline"
+         class="swiper__image"
+         [ngClass]="{'d-none': slideIndex !== images.length}">
+        <app-google-map
+                [polyline]="polyline"
+                [activityType]="activityType"
+        ></app-google-map>
+    </div>
     <div class="swiper__controls">
         <app-svg styleClass="pointer" icon="arrow_left" (click)="prev()"></app-svg>
-        <p class="text-bold">{{slideIndex + 1}}/{{images.length}}</p>
+        <p class="text-bold">{{slideIndex + 1}}/{{images.length + 1}}</p>
         <app-svg styleClass="pointer" icon="arrow_right" (click)="next()"></app-svg>
     </div>
 </div>
