@@ -8,6 +8,7 @@ import CardFactory, {CardPrototype, Progression} from "../shared/interfaces/card
 import Card, {CardSnapshot} from "../shared/interfaces/card.interface";
 import ScoreService from "./score.service";
 import {RULES} from "../../definitions/rules";
+import {StaticValidationService} from "../shared/services/validation.service";
 
 export default class CardService {
     constructor(
@@ -109,6 +110,22 @@ export default class CardService {
             }
             try {
                 await this.likeCard(athleteId, cardId, activityId);
+            } catch (err) {
+                res.status(400).send(err);
+            }
+            res.status(200).send();
+        });
+
+        app.post(`${CONST.API_PREFIX}/cards/reject`,async (req, res) => {
+            const cardId = req.body?.cardId;
+            const activityId = req.body?.activityId?.toString();
+            const comment = req.body?.comment;
+            if(!cardId || !activityId) {
+                res.status(400).send('Card Id/Activity Id missing');
+                return;
+            }
+            try {
+                await this.rejectCard(cardId, activityId, comment);
             } catch (err) {
                 res.status(400).send(err);
             }
@@ -379,11 +396,6 @@ export default class CardService {
     }
 
     async reportCard(athleteId: string, cardId: string, activityId: string, comment: string) {
-        const athlete = await this.fireStoreService.athleteCollection.get(athleteId)
-        if(!athlete) {
-            this.logger.info(`Athlete ${athleteId} does not exist`);
-            throw 'Athlete does not exist';
-        }
         const activity: any = await this.fireStoreService.detailedActivityCollection.get(activityId);
         if(!activity) {
             this.logger.info(`Activity ${activityId} does not exist`);
@@ -407,15 +419,10 @@ export default class CardService {
                 gameData
             }
         )
-        this.logger.info(`Card ${card.title} reported for athlete ${activity.athlete.id} by ${athlete.name}, comment: ${comment}`);
+        this.logger.info(`Card ${card.title} reported for athlete ${activity.athlete.id} by ${athleteId}, comment: ${comment}`);
     }
 
     async likeCard(athleteId: string, cardId: string, activityId: string) {
-        const athlete = await this.fireStoreService.athleteCollection.get(athleteId)
-        if(!athlete) {
-            this.logger.info(`Athlete ${athleteId} does not exist`);
-            throw 'Athlete does not exist';
-        }
         const activity: any = await this.fireStoreService.detailedActivityCollection.get(activityId);
         if(!activity) {
             this.logger.info(`Activity ${activityId} does not exist`);
@@ -439,6 +446,52 @@ export default class CardService {
                 gameData
             }
         )
-        this.logger.info(`Card ${card.title} liked for athlete ${activity.athlete.id} by ${athlete.name}`);
+        // this.logger.info(`Card ${card.title} liked for athlete ${activity.athlete.id} by ${athleteId}`);
+    }
+
+    async rejectCard(cardId: string, activityId: string, comment: string) {
+        const activity: any = await this.fireStoreService.detailedActivityCollection.get(activityId);
+        if(!activity) {
+            this.logger.info(`Activity ${activityId} does not exist`);
+            throw 'Activity does not exist';
+        }
+        const gameData = activity.gameData;
+        const card: CardSnapshot = gameData.cardSnapshots.find((cardSnapshot: CardSnapshot) => cardSnapshot.id === cardId)
+        if(!card) {
+            this.logger.info(`Card snapshot ${cardId} does not exist in activity ${activityId}`);
+            throw 'Card snapshot does not exist in activity';
+        }
+        const owner = await this.fireStoreService.athleteCollection.get(activity.athlete.id.toString());
+        if(!owner) {
+            this.logger.info(`Athlete ${activity.athlete.id.toString()} does not exist`);
+            throw 'Athlete does not exist';
+        }
+
+        Promise.all([
+            await this.scoreService.updateScore(owner.id, cardId, true),
+            await this.fireStoreService.athleteCollection.update(
+                owner.id,
+                {
+                    coins: owner.coins - card.coinsReward,
+                    baseCardProgress: StaticValidationService.updateBaseCardProgressFromCard(activity.type, card, owner.baseWorkout, owner.baseCardProgress),
+                    cards: {
+                        ...owner.cards,
+                        finished: owner.cards?.finished.filter(card => card !== cardId),
+                        completed: owner.cards?.completed.filter(card => card !== cardId),
+                    }
+                }
+            ),
+            await this.fireStoreService.detailedActivityCollection.update(
+                activityId,
+                {
+                    gameData: {
+                        ...gameData,
+                        cardSnapshots: gameData.cardSnapshots.filter((cardSnapshot: CardSnapshot) => cardSnapshot.id !== cardId)
+                    },
+                }
+            )
+        ])
+
+        this.logger.info(`Card ${card.title} rejected for athlete ${activity.athlete.id}, comment: ${comment}`);
     }
 }

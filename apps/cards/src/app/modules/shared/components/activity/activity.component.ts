@@ -43,6 +43,7 @@ export class ActivityComponent implements OnInit, ControlValueAccessor {
     @Input() public selection = false;
     @Input() public showImages = true;
     @Input() public showComments = false;
+    @Input() public showReports = false;
     @Input() public collapsible = false;
 
     @Output() public reported = new EventEmitter;

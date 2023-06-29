@@ -20,6 +20,7 @@ import {HTTP_INTERCEPTORS} from "@angular/common/http";
 import {HttpMainInterceptor} from "../../services/http.interceptor";
 import {CardSchemeManagementComponent} from "./components/card-scheme-management/card-scheme-management.component";
 import {CardTechnicalComponent} from "./components/card-technical.component";
+import { GameStatsComponent } from './components/game-stats/game-stats.component';
 
 
 @NgModule({
@@ -37,7 +38,8 @@ import {CardTechnicalComponent} from "./components/card-technical.component";
         LogsComponent,
         LogItemComponent,
         AdminParentComponent,
-        AchievementManagementComponent
+        AchievementManagementComponent,
+        GameStatsComponent
     ],
     imports: [
         CommonModule,

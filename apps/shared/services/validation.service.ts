@@ -1,7 +1,7 @@
 import {RULES} from "../../../definitions/rules";
 import {CONST} from "../../../definitions/constants";
 import {normalizeActivityType} from "../../server/helpers/util";
-import Card, {Validator} from "../interfaces/card.interface";
+import Card, {CardSnapshot, Validator} from "../interfaces/card.interface";
 import {BaseCardProgress, BaseWorkout} from "../interfaces/athlete.interface";
 
 export class StaticValidationService {
@@ -13,10 +13,11 @@ export class StaticValidationService {
         [CONST.ACTIVITY_TYPES.WALK, CONST.ACTIVITY_PROPERTIES.DISTANCE],
     ]);
 
-    static resolveValidationValue(validator: any, baseWorkout: any) {
+    static resolveValidationValue(validator: Validator, baseWorkout: BaseWorkout) {
         if(baseWorkout !== null) {
             return Object.keys(RULES.DEFAULT_BASE_WORKOUT).reduce((acc: any, type) => {
                 try {
+                    // @ts-ignore
                     acc[type] = this.evaluateFormula(validator.formula, validator.property, baseWorkout[type])
                 } catch (err) {}
                 return acc
@@ -112,7 +113,22 @@ export class StaticValidationService {
         const activityValue = activity[property]
         // @ts-ignore
         const baseValue = baseWorkout[activityType][property];
-        return Math.ceil((activityValue * RULES.PROGRESS_PRECISION) / baseValue);
+        return StaticValidationService.calculateProgress(activityValue, baseValue);
+    }
+
+    static calculateProgress(incomingValue: number, baseValue: number) {
+        return Math.ceil((incomingValue * RULES.PROGRESS_PRECISION) / baseValue)
+    }
+
+    static getBaseCardProgressFromCard(activityType: string, card: CardSnapshot, baseWorkout: BaseWorkout): number {
+        const property = StaticValidationService.baseActivityTypeMap.get(activityType) || '';
+        const value = StaticValidationService.resolveValidationValue(
+            // @ts-ignore
+            card.validators.find((validator: Validator) => validator.property === property),
+            baseWorkout
+        )[activityType]
+        // @ts-ignore
+        return StaticValidationService.calculateProgress(value, baseWorkout[activityType][property]);
     }
 
     static updateBaseCardProgress(activity: any, baseWorkout: BaseWorkout, baseCardProgress: BaseCardProgress): BaseCardProgress {
@@ -120,6 +136,15 @@ export class StaticValidationService {
         const result = {...baseCardProgress};
         // @ts-ignore
         result[normalizeActivityType(activity.type)] = baseCardProgress[normalizeActivityType(activity.type)] + progress;
+        return result;
+    }
+
+    static updateBaseCardProgressFromCard(rawType: string, card: CardSnapshot, baseWorkout: BaseWorkout, baseCardProgress: BaseCardProgress): BaseCardProgress {
+        const activityType = normalizeActivityType(rawType) || '';
+        const progress = StaticValidationService.getBaseCardProgressFromCard(activityType, card, baseWorkout);
+        const result = {...baseCardProgress};
+        // @ts-ignore
+        result[activityType] = baseCardProgress[activityType] + progress;
         return result;
     }
 

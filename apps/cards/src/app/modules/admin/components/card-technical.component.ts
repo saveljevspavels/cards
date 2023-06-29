@@ -8,6 +8,7 @@ import Card from "../../../../../../shared/interfaces/card.interface";
 <b>{{card.title}} {{card.value}}p</b>
 -{{card.energyCost}}e +{{card.coinsReward}}c
 -{{card.coinsCost}}c +{{card.energyReward}}e
+id:{{card.id}}
 </pre>
     `,
     styleUrls: []

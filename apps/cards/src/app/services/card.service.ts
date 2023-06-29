@@ -60,6 +60,14 @@ export class CardService {
         })
     }
 
+    rejectCard(cardId: string, activityId: string, comment: string) {
+        return this.http.post(`${environment.baseBE}/cards/reject`, {
+            cardId,
+            activityId,
+            comment
+        })
+    }
+
     likeCard(cardId: string, activityId: string) {
         return this.http.post(`${environment.baseBE}/cards/like`, {
             cardId,

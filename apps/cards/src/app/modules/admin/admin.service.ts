@@ -7,21 +7,28 @@ import {environment} from "../../../environments/environment";
 import {ConstService} from "../../services/const.service";
 import CardFactory from "../../../../../shared/interfaces/card-factory.interface";
 import {CardScheme} from "../../../../../shared/interfaces/card-scheme.interface";
+import {map} from "rxjs/operators";
+import {CardSnapshot} from "../../../../../shared/interfaces/card.interface";
 
 @Injectable()
 export class AdminService {
 
-    public submittedActivities = new BehaviorSubject<any>([])
+    public reportedActivities = new BehaviorSubject<any>([])
     public cardFactories = new BehaviorSubject<any>([])
 
     constructor(private http: HttpClient,
                 private db: AngularFirestore,) {
         db.collection(ConstService.CONST.COLLECTIONS.DETAILED_ACTIVITIES,
             (ref: any) => (
-                ref.where('gameData.status', '==', 'submitted')
+                ref.where('gameData.cardSnapshots', '!=', [])
             )
-        ).valueChanges().subscribe((activities: any) => {
-            this.submittedActivities.next(activities)
+        ).valueChanges()
+            .pipe(
+                map((activities: any[]) => activities.filter(activity => activity.gameData.cardSnapshots.find((card: CardSnapshot) => card.reports && Object.keys(card.reports).length))
+            )
+            )
+            .subscribe((activities: any) => {
+            this.reportedActivities.next(activities)
         });
 
         db.collection(ConstService.CONST.COLLECTIONS.CARD_FACTORIES).valueChanges().subscribe((cardFactories: any) => {

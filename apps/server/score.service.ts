@@ -10,7 +10,7 @@ export default class ScoreService {
     ) {
     }
 
-    async updateScore(athleteId: string, cardId: string) {
+    async updateScore(athleteId: string, cardId: string, deduct = false) {
         const score = await this.fireStoreService.scoreCollection.get(athleteId.toString());
         if(!score) {
             this.logger.info(`Score does not exist for athlete ${athleteId}`);
@@ -21,7 +21,7 @@ export default class ScoreService {
             this.logger.info(`Can't update score for athlete ${athleteId}, card ${cardId} does not exist`);
             return;
         }
-        const newValue: number = parseInt(String(score.value)) + parseInt(String(card.value));
+        const newValue: number = parseInt(String(score.value)) + parseInt(String(deduct ? (-card.value) : card.value));
             await this.fireStoreService.scoreCollection.update(
             athleteId.toString(),
             {
@@ -29,6 +29,6 @@ export default class ScoreService {
                 value: newValue
             });
 
-        this.logger.info(`Athlete ${athleteId} got ${card.value} points, new score: ${newValue}, was ${score.value}`)
+        this.logger.info(`Athlete ${athleteId} ${deduct ? 'lost': 'got'} ${card.value} points, new score: ${newValue}, was ${score.value}`)
     }
 }

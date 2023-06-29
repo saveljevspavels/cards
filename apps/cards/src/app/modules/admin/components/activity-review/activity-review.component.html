@@ -1,42 +1,15 @@
 <div class="activity-review">
-    <div class="row">
-        <div class="col-md-6">
-            <h3>Stats</h3>
-            <h4>Totals</h4>
-            <ng-container [ngTemplateOutlet]="baseStat" [ngTemplateOutletContext]="{stats: stats}"></ng-container>
-            <h4>Run</h4>
-            <ng-container [ngTemplateOutlet]="baseStat" [ngTemplateOutletContext]="{stats: stats.run}"></ng-container>
-            <h4>Ride</h4>
-            <ng-container [ngTemplateOutlet]="baseStat" [ngTemplateOutletContext]="{stats: stats.ride}"></ng-container>
-            <h4>Walk</h4>
-            <ng-container [ngTemplateOutlet]="baseStat" [ngTemplateOutletContext]="{stats: stats.walk}"></ng-container>
-            <h4>Other</h4>
-            <ng-container [ngTemplateOutlet]="baseStat" [ngTemplateOutletContext]="{stats: stats.other}"></ng-container>
-
-            <ng-template #baseStat let-stats="stats">
-                <p>Total activities: {{stats.activityAmount}}</p>
-                <p>Total distance: {{stats.totalDistance | distance}}</p>
-                <p>Total time: {{stats.totalTime | time}}</p>
-            </ng-template>
-        </div>
-        <div class="col-md-6">
-            <div *ngFor="let card of stats.cards">
-                <p><span class="text-bold">{{card.title}}</span> Uses: {{card.uses}}</p>
-            </div>
-        </div>
-    </div>
-
-
-    <h3>Submitted Activities</h3>
-    <div *ngFor="let activity of submittedActivities | async; let i = index" class="activity-review__activities">
+    <h3>Reported Activities</h3>
+    <div *ngFor="let activity of reportedActivities | async; let i = index" class="activity-review__activities">
         <app-activity
             [activity]="activity"
             [showComments]="true"
             [showImages]="true"
-            [showAthlete]="true"
+            [showReports]="true"
         ></app-activity>
-        <app-button (buttonClick)="rejectActivity(activity.id)" [disabled]="!rejectionComment.value" label="Reject"></app-button>
-        <app-button (buttonClick)="approveActivity(activity.id, activity.gameData.cardIds)" label="Approve"></app-button>
+        <ng-container *ngFor="let card of activity.gameData.cardSnapshots">
+            <app-button (buttonClick)="rejectCard(card.id, activity.id)" [disabled]="!rejectionComment.value" label="Reject {{card.title}}"></app-button>
+        </ng-container>
     </div>
     <app-textarea [label]="'Rejection Comment'" [fc]="rejectionComment"></app-textarea>
 </div>
