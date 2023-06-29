@@ -6,6 +6,8 @@ import {UtilService} from "../../../../services/util.service";
 import {CardService} from "../../../../services/card.service";
 import {Progression} from "../../../../../../../shared/interfaces/card-factory.interface";
 import {ValidationStatus} from "../../../../../../../shared/services/validation.service";
+import {FormControl} from "@angular/forms";
+import {Subject} from "rxjs";
 
 @Component({
   selector: 'app-card',
@@ -14,12 +16,14 @@ import {ValidationStatus} from "../../../../../../../shared/services/validation.
 })
 export class CardComponent implements OnInit, OnChanges {
     public RULES = ConstService.RULES;
+    public ValidationStatus = ValidationStatus;
 
     @Input() public card: Card;
     @Input() public cardId: string;
     @Input() public filterData: any;
     @Input() styleClass: string;
     @Input() energy: number;
+    @Input() public imagesController: FormControl;
 
     @Input() public showDescription = true;
     @Input() small: boolean = false;
@@ -30,6 +34,9 @@ export class CardComponent implements OnInit, OnChanges {
     @Input() validationStatus: ValidationStatus = ValidationStatus.NONE;
 
     @Output() activated = new EventEmitter;
+    @Output() photoClicked = new EventEmitter;
+
+    public uploadTrigger = new Subject();
 
     imageObservable: any;
     visible = true;
@@ -78,7 +85,16 @@ export class CardComponent implements OnInit, OnChanges {
     }
 
     activate() {
+        if(!this.canActivate) {
+            return;
+        }
         this.activated.emit(this.card.id);
     }
 
+    addPhoto(event: Event) {
+        if(this.imagesController) {
+            event.stopPropagation();
+            this.uploadTrigger.next();
+        }
+    }
 }

@@ -1,6 +1,7 @@
-import {Component, forwardRef, Input, ViewChild, ViewEncapsulation} from '@angular/core';
+import {Component, ElementRef, forwardRef, Input, ViewChild, ViewEncapsulation} from '@angular/core';
 import {ControlValueAccessor, FormControl, NG_VALUE_ACCESSOR} from "@angular/forms";
 import {FileUpload} from "primeng/fileupload";
+import {Subject} from "rxjs";
 
 @Component({
     selector: 'app-image-upload',
@@ -16,18 +17,32 @@ import {FileUpload} from "primeng/fileupload";
 export class ImageUploadComponent implements ControlValueAccessor {
 
     @ViewChild('upload') upload: FileUpload;
+    @ViewChild('wrapper') wrapper: ElementRef;
 
     public imagesControl = new FormControl([])
 
     @Input()
     public multiple = true;
 
+    @Input() public uploadTrigger: Subject<any>;
+
     constructor() {}
-    ngOnInit() {}
+    ngOnInit() {
+        this.initUploadTrigger();
+    }
 
     onSelect(event: any) {
         this.imagesControl.setValue(event.currentFiles)
         this._onChange(event.currentFiles)
+    }
+
+    initUploadTrigger() {
+        if(!this.uploadTrigger) {
+            return;
+        }
+        this.uploadTrigger.subscribe(_ => {
+            this.wrapper.nativeElement.querySelector('input').click();
+        })
     }
 
     _onChange: any = () => {};

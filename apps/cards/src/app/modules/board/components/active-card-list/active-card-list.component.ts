@@ -7,10 +7,13 @@ import {BoardService} from "../../../../services/board.service";
 import {ValidationService} from "../../../../services/validation.service";
 import Card from "../../../../../../../shared/interfaces/card.interface";
 import {ValidationStatus} from "../../../../../../../shared/services/validation.service";
-import {FormControl} from "@angular/forms";
+import {FormArray, FormControl} from "@angular/forms";
 import {ActivityService} from "../../../../services/activity.service";
 import {Router} from "@angular/router";
 import {RULES} from "../../../../../../../../definitions/rules";
+import {ConstService} from "../../../../services/const.service";
+import {mergeMap} from "rxjs/operators";
+import {FileService} from "../../../../services/file.service";
 
 @Component({
   selector: 'app-active-card-list',
@@ -23,8 +26,11 @@ export class ActiveCardListComponent implements OnInit {
   public selectedActivity$ = this.boardService.selectedActivity$;
   public remainderActivity: any = null;
 
-  public cardList: ValidatedCard[];
+  public cardList: ValidatedCard[] = [];
   public selectedCards: FormControl = new FormControl([]);
+  public uploadedImages: FormArray;
+
+  public loading = false;
   
   constructor(
       private cardService: CardService,
@@ -32,7 +38,8 @@ export class ActiveCardListComponent implements OnInit {
       private boardService: BoardService,
       private validationService: ValidationService,
       private activityService: ActivityService,
-      private router: Router
+      private router: Router,
+      private fileService: FileService
   ) { }
 
   get selectedActivity() {
@@ -49,6 +56,12 @@ export class ActiveCardListComponent implements OnInit {
       if(!athlete && !cards) {
         this.cardList = [];
         return;
+      }
+
+      if(this.cardList.length !== this.uploadedImages?.controls?.length) {
+        this.uploadedImages = new FormArray([
+          ...this.cardList.map(_ => new FormControl([]))
+        ]);
       }
 
       this.cardList = athlete?.cards.active.map(cardId => {
@@ -97,6 +110,9 @@ export class ActiveCardListComponent implements OnInit {
   }
 
   cardSelected(validatedCard: ValidatedCard) {
+    if(validatedCard.validationStatus === ValidationStatus.NONE) {
+      return;
+    }
     switch (validatedCard.validationStatus) {
       case ValidationStatus.PASS:
         if(!this.selectedCards.value.find((selectedCard: ValidatedCard) => validatedCard.card.id === selectedCard.card.id)) {
@@ -118,19 +134,33 @@ export class ActiveCardListComponent implements OnInit {
     return validatedCards.map((validatedCard: ValidatedCard) => validatedCard.card);
   }
 
-  submitActivity() {
+  async submitActivity() {
+    this.loading = true;
+
+    const cardIds = this.selectedCards.value.map((validatedCard: ValidatedCard) => validatedCard.card.id);
+    let images = cardIds
+        .map((id: string) => this.cardList.findIndex(card => card.card.id === id))
+        .map((index: number) => this.uploadedImages.get(index.toString())?.value)
+    images = await Promise.all(images.map(async (imageGroup: File[]) => await this.fileService.uploadImages(imageGroup)))
+
+
     this.activityService.submitActivity(
         this.selectedActivity.id,
-        this.selectedCards.value.map((validatedCard: ValidatedCard) => validatedCard.card.id),
-        [],
+        cardIds,
+        images,
         []
     ).subscribe(_ => {
       this.boardService.deselectActivity();
+      this.loading = false;
     })
   }
 
   openCardScheme() {
     this.router.navigateByUrl('board/board');
+  }
+
+  cardTrackBy(index: number, item: ValidatedCard){
+    return item.card.id;
   }
 }
 

@@ -97,6 +97,7 @@ body {
 .background-walk {@include background('walk')};
 .background-ride {@include background('ride')};
 .background-other {@include background('other')};
+.background {@include background('background')};
 
 .border-primary {@include border('primary')};
 .border-secondary-1 {@include border('secondary-1')};

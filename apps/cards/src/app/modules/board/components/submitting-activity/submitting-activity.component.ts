@@ -43,7 +43,7 @@ export class SubmittingActivityComponent implements OnInit, OnDestroy {
         this.activityService.submitActivity(
             this.boardService.activity.id.toString(),
             this.form.value.selectedCards,
-            uploadedImages,
+            [uploadedImages],
             this.form.value.comments.slice(0, ConstService.CONST.COMMENT_LENGTH),
         ).pipe(mergeMap(() => this.popupService.showPopup(this.submitPopup, 2500)))
         .subscribe(() => {

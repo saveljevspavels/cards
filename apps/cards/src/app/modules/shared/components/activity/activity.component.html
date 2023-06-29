@@ -39,7 +39,7 @@
             </div>
             <app-image [src]="card.image" class="mr-1" [small]="true"></app-image>
         </div>
-        <app-gallery [images]="card.images"
+        <app-gallery [images]="card.attachedImages"
                      [polyline]="activity.map?.summary_polyline"
                      [activityType]="activityType"
         ></app-gallery>

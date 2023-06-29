@@ -7,7 +7,7 @@ export class FileService {
 
     constructor(private storage: AngularFireStorage) {}
 
-    async uploadImages(files: any[]) {
+    async uploadImages(files: any[]): Promise<string[]> {
         const uploadedFileIds = []
         if(files.length) {
             for(let i = 0; i < files.length; i++) {

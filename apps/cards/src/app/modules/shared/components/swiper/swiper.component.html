@@ -20,7 +20,7 @@
     </div>
     <div class="swiper__controls">
         <app-svg styleClass="pointer" icon="arrow_left" (click)="prev()"></app-svg>
-        <p class="text-bold">{{slideIndex + 1}}/{{images.length + 1}}</p>
+        <p class="text-bold">{{slideIndex + 1}}/{{images.length + (polyline? 1 : 0)}}</p>
         <app-svg styleClass="pointer" icon="arrow_right" (click)="next()"></app-svg>
     </div>
 </div>

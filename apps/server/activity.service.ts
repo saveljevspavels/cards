@@ -186,7 +186,6 @@ export default class ActivityService {
                         submittedAt: new Date().toISOString(),
                         cardIds,
                         cardSnapshots, // Storing card snapshots
-                        images: imageIds,
                         comments
                     }
                 })

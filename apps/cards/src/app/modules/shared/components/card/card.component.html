@@ -1,11 +1,11 @@
-<div class="card card--{{validationStatus.toString()}} {{styleClass}}"
+<div class="card box card--{{validationStatus.toString()}} {{styleClass}}"
      *ngIf="card && visible"
      [ngClass]="{'card--small': small, 'card--locked': locked}"
 >
 <!--    <div class="card__id">-->
 <!--        {{card.id}}-->
 <!--    </div>-->
-    <div class="box d-flex align-items-center">
+    <div class="d-flex align-items-center">
         <div class="card__image card--tier-{{(card.value | tier)}}"
              [style.background-image]="'url(' + card.image + ')'"
         >
@@ -26,6 +26,13 @@
         </div>
         <div class="card__value">
             <app-rewards [card]="card"></app-rewards>
+            <app-button *ngIf="validationStatus.toString() !== ValidationStatus.NONE"
+                        [small]="true"
+                        [styleClass]="'mt-1'"
+                        [type]="'action'"
+                        (buttonClick)="addPhoto($event)"
+                        [icon]="'camera'"
+            ></app-button>
             <app-button *ngIf="showActivate && !locked"
                         [small]="true"
                         [styleClass]="'mt-1'"
@@ -35,5 +42,14 @@
                         (buttonClick)="activate()"
             ></app-button>
         </div>
+    </div>
+    <div *ngIf="imagesController"
+         class="background mt-2 border-radius d-none"
+         [ngClass]="{'d-block': imagesController.value.length}">
+        <app-image-upload
+                (click)="$event.stopPropagation()"
+                [uploadTrigger]="uploadTrigger"
+                [formControl]="imagesController"
+        ></app-image-upload>
     </div>
 </div>

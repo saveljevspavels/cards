@@ -1,4 +1,4 @@
-<div class="button {{styleClass}}" (click)="click()" [ngClass]="{
+<div class="button {{styleClass}}" (click)="click($event)" [ngClass]="{
         'button--disabled': disabled,
         'button--danger': type === 'danger',
         'button--danger-filled': type === 'danger-filled',
@@ -8,5 +8,5 @@
         'button--transparent': transparent,
         'button--small': small
     }">
-    <span class="title">{{label}}</span><ng-container *ngIf="icon">&nbsp;<span class="mt-2 pt-1"><app-svg [icon]="icon"></app-svg></span></ng-container>
+    <span class="title">{{label}}</span><ng-container *ngIf="icon">&nbsp;<span class="pt-1" [ngClass]="{'mt-2': !small}"><app-svg [icon]="icon"></app-svg></span></ng-container>
 </div>
