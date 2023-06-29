@@ -5,15 +5,15 @@ import {combineLatest, Observable} from "rxjs";
 import Athlete from "../../../../../../../shared/interfaces/athlete.interface";
 import {BoardService} from "../../../../services/board.service";
 import {ValidationService} from "../../../../services/validation.service";
-import Card from "../../../../../../../shared/interfaces/card.interface";
+import Card, {NullCard} from "../../../../../../../shared/interfaces/card.interface";
 import {ValidationStatus} from "../../../../../../../shared/services/validation.service";
 import {FormArray, FormControl} from "@angular/forms";
 import {ActivityService} from "../../../../services/activity.service";
 import {Router} from "@angular/router";
 import {RULES} from "../../../../../../../../definitions/rules";
-import {ConstService} from "../../../../services/const.service";
-import {mergeMap} from "rxjs/operators";
 import {FileService} from "../../../../services/file.service";
+import {GameService} from "../../../../services/game.service";
+import {filter, map} from "rxjs/operators";
 
 @Component({
   selector: 'app-active-card-list',
@@ -26,6 +26,7 @@ export class ActiveCardListComponent implements OnInit {
   public selectedActivity$ = this.boardService.selectedActivity$;
   public remainderActivity: any = null;
 
+  public featuredCard: ValidatedCard;
   public cardList: ValidatedCard[] = [];
   public selectedCards: FormControl = new FormControl([]);
   public uploadedImages: FormArray;
@@ -39,7 +40,8 @@ export class ActiveCardListComponent implements OnInit {
       private validationService: ValidationService,
       private activityService: ActivityService,
       private router: Router,
-      private fileService: FileService
+      private fileService: FileService,
+      private gameService: GameService
   ) { }
 
   get selectedActivity() {
@@ -50,12 +52,23 @@ export class ActiveCardListComponent implements OnInit {
     combineLatest([
       this.athlete,
       this.cardService.cards,
-      this.selectedActivity$
-    ]).subscribe(([athlete, cards, activity]) => {
+      this.selectedActivity$,
+      this.gameService.gameData.pipe(
+          map((gameData) => this.cardService.getCard(gameData?.featuredCard || '')),
+          filter((card) => card !== NullCard),
+      )
+    ]).subscribe(([athlete, cards, activity, featuredCard]) => {
       this.selectedCards.setValue([]);
       if(!athlete && !cards) {
         this.cardList = [];
         return;
+      }
+
+      if(featuredCard) {
+        this.featuredCard = {
+          card: featuredCard,
+          validationStatus: this.validateCard(activity, featuredCard, this.selectedCards.value)
+        }
       }
 
       if(this.cardList.length !== this.uploadedImages?.controls?.length) {
@@ -82,6 +95,7 @@ export class ActiveCardListComponent implements OnInit {
         validationStatus: this.validateCard(this.selectedActivity, validatedCard.card, this.selectedCards.value)
       }
     }))
+    this.featuredCard.validationStatus = this.validateCard(this.selectedActivity, this.featuredCard.card, this.selectedCards.value);
     this.remainderActivity = this.validationService.getActivityRemainder(this.selectedActivity, this.getPlainCards(this.selectedCards.value));
   }
 

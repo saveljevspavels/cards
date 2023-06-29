@@ -17,6 +17,7 @@ import Card from "../shared/interfaces/card.interface";
 import Athlete from "../shared/interfaces/athlete.interface";
 import WhereFilterOp = firebase.firestore.WhereFilterOp;
 import Score from "../shared/interfaces/score.interface";
+import Game from "../cards/src/app/interfaces/game";
 
 export class FirestoreService {
     logger: Logger;
@@ -36,7 +37,7 @@ export class FirestoreService {
     public cardFactoryCollection = this.db.collection(CONST.COLLECTIONS.CARD_FACTORIES)
     public achievementCollection = this.db.collection(CONST.COLLECTIONS.ACHIEVEMENTS)
     public scoreCollection = new DataCollection<Score>(this.db, CONST.COLLECTIONS.SCORES)
-    public gameCollection = this.db.collection(CONST.COLLECTIONS.GAME)
+    public gameCollection = new DataCollection<Game>(this.db, CONST.COLLECTIONS.GAME)
     public sessionCollection = this.db.collection(CONST.COLLECTIONS.SESSIONS)
     public schemeCollection = this.db.collection(CONST.COLLECTIONS.SCHEME)
 
@@ -49,6 +50,11 @@ export class FirestoreService {
             }
         })
 
+        this.initEnergyRegen();
+        this.initFeaturedCardChange();
+    }
+
+    initEnergyRegen() {
         const rule = new schedule.RecurrenceRule();
         rule.hour = 21;
         rule.minute = 0;
@@ -57,6 +63,17 @@ export class FirestoreService {
         const job = schedule.scheduleJob(rule, async () => {
             this.logger.error(`It's midnight`);
             await this.restoreAthletesEnergy(RULES.ENERGY.TIMED_RESTORE);
+        })
+    }
+
+    initFeaturedCardChange() {
+        const rule = new schedule.RecurrenceRule();
+        rule.hour = [1, 9, 17];
+        rule.minute = 0;
+        rule.tz = 'Etc/UTC';
+
+        const job = schedule.scheduleJob(rule, async () => {
+            await this.changeFeaturedCard();
         })
     }
 
@@ -173,6 +190,18 @@ export class FirestoreService {
         }
     }
 
+    async changeFeaturedCard() {
+        const allCards: Card[] = await this.cardCollection.all();
+        const randomCard = allCards[getRandomInt(allCards.length) - 1]
+        await this.gameCollection.update(
+            CONST.GAME_ID,
+            {
+                featuredCard: randomCard.id
+            }
+        )
+        this.logger.error(`New featured card ${randomCard.title}`);
+    }
+
     async restoreAthletesEnergy(value: number) {
         const allAthletes = await this.athleteCollection.all();
         allAthletes.forEach((athlete) => {
@@ -221,13 +250,16 @@ export class FirestoreService {
     }
 
     async startGame() {
-        const gameDoc = this.gameCollection.doc(CONST.GAME_ID)
-        const game = (await gameDoc.get()).data() || {}
-        await gameDoc.set({
+        const game: Game = {
             cardUses: 0,
             shifts: 0,
-            startDate: game.startDate
-        })
+            startDate: new Date().toISOString().slice(0, 10),
+            featuredCard: null
+        }
+        await this.gameCollection.set(
+            CONST.GAME_ID,
+            game
+        )
     }
 
 
@@ -292,7 +324,7 @@ export class DataCollection<T> {
     }
 
     async all(): Promise<T[] | []> {
-        return (await this._collection.doc().get()).data() as T[] | undefined || [];
+        return (await this._collection.get()).docs.map(doc => doc.data()) as unknown as T[] | undefined || [];
     }
 
     async exists(documentName: string): Promise<boolean> {

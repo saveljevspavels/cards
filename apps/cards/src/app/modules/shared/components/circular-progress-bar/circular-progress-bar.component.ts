@@ -32,7 +32,7 @@ export class CircularProgressBarComponent implements OnChanges {
     this.active = !this.activity || this.type === UtilService.normalizeActivityType(this.activity.type);
     this.baseValue = this.validationService.getBaseValue(this.type);
     this.currentValue = Math.floor((this.currentProgress * this.baseValue) / RULES.PROGRESS_PRECISION);
-    this.newValue = this.active ? parseInt(this.activity[StaticValidationService.baseActivityTypeMap.get(this.type) || ''] || 0,  10) : 0;
+    this.newValue = this.active ? parseInt(this.activity && this.activity[StaticValidationService.baseActivityTypeMap.get(this.type) || ''] || 0,  10) : 0;
     this.totalValue = this.active ? this.newValue + this.currentValue : this.currentValue;
     this.progress = this.activity ? this.validationService.getBaseCardProgress(this.activity) : 0;
     this.totalProgress = this.active ? this.currentProgress + this.progress : 0;

@@ -4,7 +4,6 @@ import {AngularFirestore} from "@angular/fire/firestore";
 import Game from "../interfaces/game";
 import {ConstService} from "./const.service";
 import {environment} from "../../environments/environment";
-import {LocalStorageService} from "./local-storage.service";
 import {HttpClient} from "@angular/common/http";
 
 @Injectable({

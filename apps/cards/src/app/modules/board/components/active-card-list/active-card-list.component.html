@@ -5,6 +5,15 @@
             (click)="openCardScheme()">
     </app-add-card-button>
 </div>
+<div class="mb-2" *ngIf="featuredCard?.card">
+    <app-card (click)="cardSelected(featuredCard)"
+              [card]="featuredCard?.card"
+              [showDescription]="false"
+              [imagesController]="uploadedImages.get('0')"
+              [validationStatus]="featuredCard.validationStatus"
+    ></app-card>
+</div>
+
 <div *ngFor="let validatedCard of cardList; let i = index; trackBy: cardTrackBy" class="mb-2">
     <app-card (click)="cardSelected(validatedCard)"
               [card]="validatedCard.card"
