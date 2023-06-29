@@ -5,7 +5,7 @@ import {CONST} from "../../definitions/constants";
 import {generateId, getRandomInt, tierToRoman} from "./helpers/util";
 import {Logger} from "winston";
 import CardFactory, {CardPrototype, Progression} from "../shared/interfaces/card-factory.interface";
-import Card from "../shared/interfaces/card.interface";
+import Card, {CardSnapshot} from "../shared/interfaces/card.interface";
 import ScoreService from "./score.service";
 import {RULES} from "../../definitions/rules";
 
@@ -79,6 +79,39 @@ export default class CardService {
                 return;
             }
             await this.unlockBoardLevel(athleteId, boardKey, level);
+            res.status(200).send();
+        });
+
+        app.post(`${CONST.API_PREFIX}/cards/report`,async (req, res) => {
+            const cardId = req.body?.cardId;
+            const activityId = req.body?.activityId.toString();
+            const comment = req.body?.comment;
+            const athleteId = res.get('athleteId');
+            if(!cardId || !athleteId || !activityId) {
+                res.status(400).send('Card Id/Activity Id or Athlete Id missing');
+                return;
+            }
+            try {
+                await this.reportCard(athleteId, cardId, activityId, comment);
+            } catch (err) {
+                res.status(400).send(err);
+            }
+            res.status(200).send();
+        });
+
+        app.post(`${CONST.API_PREFIX}/cards/like`,async (req, res) => {
+            const cardId = req.body?.cardId;
+            const activityId = req.body?.activityId.toString();
+            const athleteId = res.get('athleteId');
+            if(!cardId || !athleteId || !activityId) {
+                res.status(400).send('Card Id/Activity Id or Athlete Id missing');
+                return;
+            }
+            try {
+                await this.likeCard(athleteId, cardId, activityId);
+            } catch (err) {
+                res.status(400).send(err);
+            }
             res.status(200).send();
         });
     }
@@ -343,5 +376,69 @@ export default class CardService {
                 }
             })
         }
+    }
+
+    async reportCard(athleteId: string, cardId: string, activityId: string, comment: string) {
+        const athlete = await this.fireStoreService.athleteCollection.get(athleteId)
+        if(!athlete) {
+            this.logger.info(`Athlete ${athleteId} does not exist`);
+            throw 'Athlete does not exist';
+        }
+        const activity: any = await this.fireStoreService.detailedActivityCollection.get(activityId);
+        if(!activity) {
+            this.logger.info(`Activity ${activityId} does not exist`);
+            throw 'Activity does not exist';
+        }
+        const gameData = activity.gameData;
+        const card: CardSnapshot = gameData.cardSnapshots.find((cardSnapshot: CardSnapshot) => cardSnapshot.id === cardId)
+        if(!card) {
+            this.logger.info(`Card snapshot ${cardId} does not exist in activity ${activityId}`);
+            throw 'Card snapshot does not exist in activity';
+        }
+
+        if(!card.reports) {
+            card.reports = {};
+        }
+        card.reports[athleteId] = comment;
+
+        await this.fireStoreService.detailedActivityCollection.update(
+            activityId,
+            {
+                gameData
+            }
+        )
+        this.logger.info(`Card ${card.title} reported for athlete ${activity.athlete.id} by ${athlete.name}, comment: ${comment}`);
+    }
+
+    async likeCard(athleteId: string, cardId: string, activityId: string) {
+        const athlete = await this.fireStoreService.athleteCollection.get(athleteId)
+        if(!athlete) {
+            this.logger.info(`Athlete ${athleteId} does not exist`);
+            throw 'Athlete does not exist';
+        }
+        const activity: any = await this.fireStoreService.detailedActivityCollection.get(activityId);
+        if(!activity) {
+            this.logger.info(`Activity ${activityId} does not exist`);
+            throw 'Activity does not exist';
+        }
+        const gameData = activity.gameData;
+        const card: CardSnapshot = gameData.cardSnapshots.find((cardSnapshot: CardSnapshot) => cardSnapshot.id === cardId)
+        if(!card) {
+            this.logger.info(`Card snapshot ${cardId} does not exist in activity ${activityId}`);
+            throw 'Card snapshot does not exist in activity';
+        }
+
+        if(!card.likes) {
+            card.likes = {};
+        }
+        card.likes[athleteId] = true;
+
+        await this.fireStoreService.detailedActivityCollection.update(
+            activityId,
+            {
+                gameData
+            }
+        )
+        this.logger.info(`Card ${card.title} liked for athlete ${activity.athlete.id} by ${athlete.name}`);
     }
 }

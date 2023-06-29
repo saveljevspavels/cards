@@ -51,4 +51,19 @@ export class CardService {
             level
         })
     }
+
+    reportCard(cardId: string, activityId: string, comment: string) {
+        return this.http.post(`${environment.baseBE}/cards/report`, {
+            cardId,
+            activityId,
+            comment
+        })
+    }
+
+    likeCard(cardId: string, activityId: string) {
+        return this.http.post(`${environment.baseBE}/cards/like`, {
+            cardId,
+            activityId
+        })
+    }
 }

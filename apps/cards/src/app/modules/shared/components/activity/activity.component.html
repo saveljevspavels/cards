@@ -31,7 +31,9 @@
 
 <ng-template #contentTemplate>
     <div *ngFor="let card of activity.gameData?.cardSnapshots" class="box p-1 mb-2">
-        <div class="d-flex align-items-center justify-content-between mb-1">
+        <div class="d-flex align-items-center justify-content-between"
+             [ngClass]="{'mb-1': card.attachedImages?.length || activity.map?.summary_polyline}"
+        >
             <div class="d-flex align-items-center">
                 <app-athlete *ngIf="activity?.athlete" [size]="'small'" [athleteId]="activity?.athlete.id"></app-athlete>
                 &nbsp;
@@ -43,5 +45,15 @@
                      [polyline]="activity.map?.summary_polyline"
                      [activityType]="activityType"
         ></app-gallery>
+        <div>
+            <app-button (click)="report(card.id)"
+                        [small]="true"
+                        [label]="(card?.reports && card?.reports[myId]) ? 'Reported' : 'Report'"
+                        [type]="(card?.reports && card?.reports[myId]) ? 'danger-filled': 'danger'"></app-button>
+            <app-button (click)="like(card.id)"
+                        [small]="true"
+                        [label]="(card?.likes && card?.likes[myId]) ? 'Liked' : 'Like'"
+                        [type]="(card?.likes && card?.likes[myId]) ? 'success' : 'action'"></app-button>
+        </div>
     </div>
 </ng-template>

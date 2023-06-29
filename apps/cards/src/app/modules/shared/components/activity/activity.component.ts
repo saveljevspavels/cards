@@ -1,4 +1,14 @@
-import {Component, ElementRef, forwardRef, Input, OnInit, ViewChild, ViewEncapsulation} from '@angular/core';
+import {
+    Component,
+    ElementRef,
+    EventEmitter,
+    forwardRef,
+    Input,
+    OnInit,
+    Output,
+    ViewChild,
+    ViewEncapsulation
+} from '@angular/core';
 import {ControlValueAccessor, FormControl, NG_VALUE_ACCESSOR} from "@angular/forms";
 import {PopupService} from "../../../../services/popup.service";
 import {ConstService} from "../../../../services/const.service";
@@ -6,6 +16,8 @@ import {UtilService} from "../../../../services/util.service";
 import {CONST} from "../../../../../../../../definitions/constants";
 import {ValidationService} from "../../../../services/validation.service";
 import {StaticValidationService} from "../../../../../../../shared/services/validation.service";
+import {AthleteService} from "../../../../services/athlete.service";
+import {AuthService} from "../../../../services/auth.service";
 
 @Component({
     selector: 'app-activity',
@@ -20,6 +32,7 @@ import {StaticValidationService} from "../../../../../../../shared/services/vali
 })
 export class ActivityComponent implements OnInit, ControlValueAccessor {
     public CONST = ConstService.CONST;
+    public myId = this.authService.myId.value;
 
     public selectedCards = new FormControl([])
     public imageObservables: any;
@@ -32,6 +45,9 @@ export class ActivityComponent implements OnInit, ControlValueAccessor {
     @Input() public showComments = false;
     @Input() public collapsible = false;
 
+    @Output() public reported = new EventEmitter;
+    @Output() public liked = new EventEmitter;
+
     public activityVerbMap = new Map<string, string>([
         [CONST.ACTIVITY_TYPES.OTHER, 'exercised for'],
         [CONST.ACTIVITY_TYPES.RUN, 'ran'],
@@ -39,7 +55,7 @@ export class ActivityComponent implements OnInit, ControlValueAccessor {
         [CONST.ACTIVITY_TYPES.WALK, 'walked'],
     ]);
 
-    constructor(private popupService: PopupService) { }
+    constructor(private authService: AuthService) { }
 
     async ngOnInit() {
         this.selectedCards.valueChanges.subscribe((value) => {
@@ -61,4 +77,11 @@ export class ActivityComponent implements OnInit, ControlValueAccessor {
         this._onTouched = fn;
     }
 
+    report(cardId: string) {
+        this.reported.emit(cardId);
+    }
+
+    like(cardId: string) {
+        this.liked.emit(cardId);
+    }
 }

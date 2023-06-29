@@ -13,10 +13,29 @@
 </div>
 
 <ng-template #activityTemplate let-activities="activities">
-    <div *ngFor="let activity of activities | sort: 'gameData.submittedAt' : { order: 'desc', type: 'date' } ">
+    <div *ngFor="let activity of activities | sort: 'gameData.submittedAt' : { order: 'desc', type: 'date' }; trackBy: activityTrackBy">
         <app-activity
             [activity]="activity"
             [showComments]="true"
+            (reported)="reportCard($event, activity.id)"
+            (liked)="likeCard($event, activity.id)"
         ></app-activity>
+    </div>
+</ng-template>
+
+<ng-template #reportPopup>
+    <div class="popup box">
+        <div class="d-flex flex-column align-items-center">
+            <p class="mt-2 mb-2">
+                Is there a problem? Wrong task? Cheating?
+            </p>
+            <app-textarea [fc]="reportComment" [label]="'Please provide comment'"></app-textarea>
+            <div class="mt-4 mb-2 full-width">
+                <app-button type="danger-filled" [label]="'Report'" (buttonClick)="confirmReport()"></app-button>
+            </div>
+            <div class="mb-3">
+                <app-button (buttonClick)="cancelReport()" [label]="'Cancel'"></app-button>
+            </div>
+        </div>
     </div>
 </ng-template>
