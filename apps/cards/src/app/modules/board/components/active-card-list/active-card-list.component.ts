@@ -1,7 +1,7 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {CardService} from "../../../../services/card.service";
 import {AthleteService} from "../../../../services/athlete.service";
-import {combineLatest, Observable} from "rxjs";
+import {combineLatest, Observable, Subject} from "rxjs";
 import Athlete from "../../../../../../../shared/interfaces/athlete.interface";
 import {BoardService} from "../../../../services/board.service";
 import {ValidationService} from "../../../../services/validation.service";
@@ -13,7 +13,8 @@ import {Router} from "@angular/router";
 import {RULES} from "../../../../../../../../definitions/rules";
 import {FileService} from "../../../../services/file.service";
 import {GameService} from "../../../../services/game.service";
-import {filter, map} from "rxjs/operators";
+import {filter, first, map} from "rxjs/operators";
+import {PopupService} from "../../../../services/popup.service";
 
 @Component({
   selector: 'app-active-card-list',
@@ -31,6 +32,9 @@ export class ActiveCardListComponent implements OnInit {
   public selectedCards: FormControl = new FormControl([]);
   public uploadedImages: FormArray;
 
+  private submitConfirmation = new Subject;
+  @ViewChild('submitConfirmPopup', { static: true }) submitConfirmPopup: ElementRef;
+
   public loading = false;
   
   constructor(
@@ -41,7 +45,8 @@ export class ActiveCardListComponent implements OnInit {
       private activityService: ActivityService,
       private router: Router,
       private fileService: FileService,
-      private gameService: GameService
+      private gameService: GameService,
+      private popupService: PopupService
   ) { }
 
   get selectedActivity() {
@@ -154,7 +159,7 @@ export class ActiveCardListComponent implements OnInit {
   }
 
   async submitActivity() {
-    this.loading = true;
+    // this.loading = true;
 
     const cardIds = this.selectedCards.value.map((validatedCard: ValidatedCard) => validatedCard.card.id);
     let images = cardIds
@@ -163,21 +168,32 @@ export class ActiveCardListComponent implements OnInit {
           return index !== -1 ? index : this.cardList.length
         })
         .map((index: number) => this.uploadedImages.get(index.toString())?.value);
-    images = await Promise.all(images.map(async (imageGroup: File[]) => await this.fileService.uploadImages(imageGroup)))
 
 
-    this.activityService.submitActivity(
-        this.selectedActivity.id,
-        cardIds,
-        images,
-        []
-    ).subscribe(_ => {
-      this.boardService.deselectActivity();
-      this.loading = false;
-    }, (error => {
-      this.selectedCards.setValue([]);
-      this.loading = false;
-    }))
+    this.submitConfirmation.pipe(first()).subscribe(async confirmed => {
+      if(confirmed) {
+        images = await Promise.all(images.map(async (imageGroup: File[]) => await this.fileService.uploadImages(imageGroup)))
+
+        this.activityService.submitActivity(
+            this.selectedActivity.id,
+            cardIds,
+            images,
+            []
+        ).subscribe(_ => {
+          this.boardService.deselectActivity();
+          this.loading = false;
+        }, (error => {
+          this.selectedCards.setValue([]);
+          this.loading = false;
+        }))
+      }
+    })
+
+    if(images.find((imageSet: string[]) => !imageSet.length)) {
+      this.popupService.showPopup(this.submitConfirmPopup);
+    } else {
+      this.confirmSubmit();
+    }
   }
 
   openCardScheme() {
@@ -186,6 +202,16 @@ export class ActiveCardListComponent implements OnInit {
 
   cardTrackBy(index: number, item: ValidatedCard){
     return item.card.id;
+  }
+
+  confirmSubmit() {
+    this.popupService.closePopup();
+    this.submitConfirmation.next(true);
+  }
+
+  cancelSubmit() {
+    this.submitConfirmation.next(false);
+    this.popupService.closePopup();
   }
 }
 

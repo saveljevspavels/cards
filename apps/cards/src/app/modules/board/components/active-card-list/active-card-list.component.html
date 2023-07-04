@@ -40,3 +40,23 @@
             (buttonClick)="submitActivity()"
             [disabled]="loading"
 ></app-button>
+
+<ng-template #submitConfirmPopup>
+    <div class="popup box">
+        <div class="d-flex flex-column align-items-center mt-3">
+            <app-svg icon="camera" styleClass="color-primary"></app-svg>
+            <p class="mt-2 mb-2">
+                Images are missing on some of the selected tasks. Are you sure you want to submit?
+            </p>
+            <div class="mt-4 mb-2 full-width">
+                <app-button type="action"
+                            [label]="'Submit'"
+                            (buttonClick)="confirmSubmit()"
+                ></app-button>
+            </div>
+            <div class="mb-3">
+                <app-button (buttonClick)="cancelSubmit()" [label]="'Cancel'"></app-button>
+            </div>
+        </div>
+    </div>
+</ng-template>
