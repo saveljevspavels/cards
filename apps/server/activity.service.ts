@@ -8,24 +8,29 @@ import {Logger} from "winston";
 import {StaticValidationService} from "../shared/services/validation.service";
 import Card, {CardSnapshot, NullCard} from "../shared/interfaces/card.interface";
 import Athlete from "../shared/interfaces/athlete.interface";
+import AthleteService from "./athlete.service";
+import GameService from "./game.service";
 
 export default class ActivityService {
     constructor(
         private app: Express,
         private fireStoreService: FirestoreService,
-        private logger: Logger
+        private logger: Logger,
+        private athleteService: AthleteService
     ) {
         app.post(`${CONST.API_PREFIX}/submit-activity`, async (req, res) => {
-            let response = await this.submitActivity(
-                req.body.activityId,
-                req.body.cardIds,
-                req.body.images,
-                req.body.comments
-            )
-            if(response === RESPONSES.SUCCESS) {
-                response = await this.tryAutoApprove(req.body.activityId)
+            try {
+                await this.submitActivity(
+                    req.body.activityId,
+                    req.body.cardIds,
+                    req.body.images,
+                    req.body.comments
+                )
+                await this.tryAutoApprove(req.body.activityId)
+            } catch (err) {
+                res.status(400).send(err);
             }
-            res.status(response === RESPONSES.SUCCESS ? 200 : 400).send({response: response});
+            res.status(200).send();
         });
 
         app.post(`${CONST.API_PREFIX}/reject-activity`, async (req, res) => {
@@ -50,20 +55,23 @@ export default class ActivityService {
         });
     }
 
-    async getActivity(activityId: number) {
-        return await this.fireStoreService.detailedActivityCollection.get(activityId.toString());
+    async getActivity(activityId: number | string): Promise<any> {
+        const activity: any = await this.fireStoreService.detailedActivityCollection.get(activityId.toString());
+        if(!activity) {
+            this.logger.info(`Activity ${activityId} does not exist`);
+            throw 'Activity does not exist';
+        } else {
+            return activity;
+        }
     }
 
-    async tryAutoApprove(activityId: number) {
+    async tryAutoApprove(activityId: number): Promise<void> {
         this.logger.info(`Attempting auto approve for activity ${activityId}`)
         const activity = await this.getActivity(activityId);
 
         const cardSnapshots: CardSnapshot[] = activity.gameData.cardSnapshots;
 
-        const athlete = await this.fireStoreService.athleteCollection.get(activity.athlete.id.toString());
-        if(!athlete) {
-            return;
-        }
+        const athlete = await this.athleteService.getAthlete(activity.athlete.id);
 
         if(StaticValidationService.validateCardGroup(activity, cardSnapshots, athlete.baseWorkout)) {
             this.logger.info(`All validators passed for ${activityId}`)
@@ -72,16 +80,11 @@ export default class ActivityService {
         } else {
             this.logger.info(`Validator(s) failed, switching for manual approve ${activityId}`)
         }
-
-        return RESPONSES.SUCCESS;
     }
 
     async approveActivity(activityId: any) {
-        const activity = await this.fireStoreService.detailedActivityCollection.get(activityId);
-        const athlete = await this.fireStoreService.athleteCollection.get(activity.athlete.id.toString());
-        if(!athlete || !activity) {
-            return;
-        }
+        const activity = await this.getActivity(activityId);
+        const athlete = await this.athleteService.getAthlete(activity.athlete.id);
 
         if(activity.gameData.status === CONST.ACTIVITY_STATUSES.APPROVED) {
             this.logger.error(`Activity ${activity.id} was already approved for athlete ${activity.athlete.id.toString()}`)
@@ -135,26 +138,23 @@ export default class ActivityService {
 
     async submitActivity(activityId: number, cardIds: string[], imageIds: string[][], comments: string) {
         const activity = await this.getActivity(activityId);
-        const athlete = await this.fireStoreService.athleteCollection.get(activity.athlete.id.toString());
+        const athlete = await this.athleteService.getAthlete(activity.athlete.id);
+        const featuredCard = (await this.fireStoreService.gameCollection.get(CONST.GAME_ID))?.featuredCard;
 
-        if(!athlete || !activity) {
-            return;
-        }
-
-        if(cardIds.find(id => athlete.cards.active.indexOf(id) === -1)) {
+        if(cardIds.find(id => (athlete.cards.active.indexOf(id) === -1) && id !== featuredCard)) {
             this.logger.info(`Athlete ${athlete.firstname} ${athlete.lastname} ${athlete.id} tried to submit unactivated card(s) ${cardIds}`)
-            return RESPONSES.ERROR.CARD_NOT_ACTIVATED
+            throw RESPONSES.ERROR.CARD_NOT_ACTIVATED
         }
 
         if(activity.gameData.status !== CONST.ACTIVITY_STATUSES.NEW
             && activity.gameData.status !== CONST.ACTIVITY_STATUSES.REJECTED) {
             this.logger.info(`Athlete ${athlete.firstname} ${athlete.lastname} ${athlete.id} submitted activity ${activityId} with invalid status ${activity.gameData.status}`)
-            return RESPONSES.ERROR.WRONG_ACTIVITY_STATUS
+            throw RESPONSES.ERROR.WRONG_ACTIVITY_STATUS
         }
 
         if(cardIds.length > RULES.MAX_CARDS_SUBMIT) {
             this.logger.info(`Athlete ${athlete.firstname} ${athlete.lastname} ${athlete.id} submitted activity with too many cards ${cardIds}`)
-            return RESPONSES.ERROR.MAX_CARDS_SUBMIT
+            throw RESPONSES.ERROR.MAX_CARDS_SUBMIT
         }
 
         const cards: Card[] = cardIds.length ? await this.fireStoreService.cardCollection.where([{fieldPath: 'id', opStr: 'in', value: cardIds}]) : [];
@@ -194,7 +194,6 @@ export default class ActivityService {
         ])
 
         this.logger.info(`Athlete ${athlete.firstname} ${athlete.lastname} ${athlete.id} submitted activity with ${cardIds}`)
-        return RESPONSES.SUCCESS;
     }
 
     async rejectActivity(activityId: string, comments: string) {

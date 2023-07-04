@@ -87,4 +87,5 @@ export const RULES = {
         MAX_ACTIVE_CARDS: 3
     },
     PROGRESS_PRECISION: 1000,
+    FEATURED_TASK_HOURS: [4, 12, 20]
 }

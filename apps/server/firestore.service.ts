@@ -68,9 +68,9 @@ export class FirestoreService {
 
     initFeaturedCardChange() {
         const rule = new schedule.RecurrenceRule();
-        rule.hour = [1, 9, 17];
+        rule.hour = RULES.FEATURED_TASK_HOURS;
         rule.minute = 0;
-        rule.tz = 'Etc/UTC';
+        rule.tz = 'Europe/Riga';
 
         const job = schedule.scheduleJob(rule, async () => {
             await this.changeFeaturedCard();

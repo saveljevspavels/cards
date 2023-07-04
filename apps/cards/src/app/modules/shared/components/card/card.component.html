@@ -1,10 +1,13 @@
 <div class="card box card--{{validationStatus.toString()}} {{styleClass}}"
      *ngIf="card && visible"
-     [ngClass]="{'card--small': small, 'card--locked': locked}"
+     [ngClass]="{'card--small': small, 'card--locked': locked, 'card--featured': featured}"
 >
 <!--    <div class="card__id">-->
 <!--        {{card.id}}-->
 <!--    </div>-->
+    <div class="d-flex justify-content-center">
+        <app-count-down *ngIf="featured"></app-count-down>
+    </div>
     <div class="d-flex align-items-center">
         <div class="card__image card--tier-{{(card.value | tier)}}"
              [style.background-image]="'url(' + card.image + ')'"
@@ -26,7 +29,7 @@
         </div>
         <div class="card__value">
             <app-rewards [card]="card"></app-rewards>
-            <app-button *ngIf="validationStatus.toString() !== ValidationStatus.NONE"
+            <app-button *ngIf="validationStatus.toString() === ValidationStatus.SELECTED"
                         [small]="true"
                         [styleClass]="'mt-1'"
                         [type]="'action'"
@@ -43,7 +46,7 @@
             ></app-button>
         </div>
     </div>
-    <div *ngIf="imagesController"
+    <div *ngIf="imagesController && validationStatus.toString() === ValidationStatus.SELECTED"
          class="background mt-2 border-radius d-none"
          [ngClass]="{'d-block': imagesController.value.length}">
         <app-image-upload

@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnChanges, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
 import Card, {Validator} from "../../../../../../../shared/interfaces/card.interface";
 import {filter} from "rxjs/operators";
 import {ConstService} from "../../../../services/const.service";
@@ -30,6 +30,7 @@ export class CardComponent implements OnInit, OnChanges {
     @Input() canActivate = false;
     @Input() locked = false;
     @Input() showActivate = false;
+    @Input() featured = false;
 
     @Input() validationStatus: ValidationStatus = ValidationStatus.NONE;
 
@@ -58,7 +59,10 @@ export class CardComponent implements OnInit, OnChanges {
 
     }
 
-    ngOnChanges() {
+    ngOnChanges(changes: SimpleChanges) {
+        if(!changes.card?.isFirstChange() && changes.card?.previousValue.id !== changes.card?.currentValue.id) {
+            this.initCard();
+        }
         this.checkFilter()
     }
 

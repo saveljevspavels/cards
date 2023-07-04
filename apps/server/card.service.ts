@@ -9,13 +9,17 @@ import Card, {CardSnapshot} from "../shared/interfaces/card.interface";
 import ScoreService from "./score.service";
 import {RULES} from "../../definitions/rules";
 import {StaticValidationService} from "../shared/services/validation.service";
+import AthleteService from "./athlete.service";
+import ActivityService from "./activity.service";
 
 export default class CardService {
     constructor(
         private app: Express,
         private fireStoreService: FirestoreService,
         private logger: Logger,
-        private scoreService: ScoreService
+        private scoreService: ScoreService,
+        private athleteService: AthleteService,
+        private activityService: ActivityService
     ) {
 
         app.post(`${CONST.API_PREFIX}/create-card-factory`, async(req, res) => {
@@ -50,24 +54,26 @@ export default class CardService {
                 res.status(400).send('Card Id or Athlete Id missing');
                 return;
             }
-            const athlete = await this.fireStoreService.athleteCollection.get(athleteId);
-            if(!athlete) {
-                res.status(400).send('Athlete does not exist');
-                return;
+
+            try {
+                const athlete = await this.athleteService.getAthlete(athleteId);
+                if(athlete?.cards.completed.indexOf(cardId) === -1) {
+                    res.status(400).send('Card is not completed');
+                    return;
+                }
+                if(!await this.fireStoreService.cardCollection.exists(cardId)) {
+                    res.status(400).send('Card does not exist');
+                    return
+                }
+
+                await Promise.all([
+                    await this.finishCard(athleteId, cardId),
+                    await this.scoreService.updateScore(athleteId, cardId),
+                    await this.claimCardRewards(athleteId, cardId)
+                ]);
+            } catch (err) {
+                res.status(400).send(err);
             }
-            if(athlete?.cards.completed.indexOf(cardId) === -1) {
-                res.status(400).send('Card is not completed');
-                return;
-            }
-            if(!await this.fireStoreService.cardCollection.exists(cardId)) {
-                res.status(400).send('Card does not exist');
-                return
-            }
-            await Promise.all([
-                await this.finishCard(athleteId, cardId),
-                await this.scoreService.updateScore(athleteId, cardId),
-                await this.claimCardRewards(athleteId, cardId)
-            ]);
             res.status(200).send();
         });
 
@@ -134,11 +140,7 @@ export default class CardService {
     }
 
     async unlockBoardLevel(athleteId: string, boardKey: string, level: number) {
-        const athlete = await this.fireStoreService.athleteCollection.get(athleteId);
-        if(!athlete) {
-            this.logger.error(`Athlete ${athleteId} does not exist`);
-            return;
-        }
+        const athlete = await this.athleteService.getAthlete(athleteId);
 
         const currentMoney = athlete.coins || 0;
         const currentLevel = athlete.unlocks[boardKey] || 0;
@@ -164,16 +166,8 @@ export default class CardService {
     }
 
     async claimCardRewards(athleteId: string, cardId: string) {
-        const athlete = await this.fireStoreService.athleteCollection.get(athleteId);
-        if(!athlete) {
-            this.logger.error(`Athlete ${athleteId} does not exist`);
-            return;
-        }
+        const athlete = await this.athleteService.getAthlete(athleteId);
         const card = await this.getCard(cardId);
-        if(!card) {
-            this.logger.error(`Card ${cardId} does not exist`);
-            return;
-        }
         const newEnergy = parseInt(String(athlete.energy)) + parseInt(String(card.energyReward));
         let bonusCoins = 0;
         if(newEnergy > RULES.ENERGY.MAX) {
@@ -194,13 +188,7 @@ export default class CardService {
 
     async activateCard(athleteId: string, cardId: string) {
         const card = await this.getCard(cardId);
-        if(!card) {
-            throw 'Card does not exist';
-        }
-        const athlete = await this.fireStoreService.athleteCollection.get(athleteId)
-        if(!athlete) {
-            throw 'Athlete does not exist';
-        }
+        const athlete = await this.athleteService.getAthlete(athleteId);
         if(parseInt(String(athlete.energy), 10) < parseInt(String(card.energyCost), 10)) {
             this.logger.info(`Athlete ${athlete.firstname} ${athlete.lastname} don't have enough energy to activate card ${card.title}`);
             throw 'Not enough energy';
@@ -219,10 +207,7 @@ export default class CardService {
     }
 
     async finishCard(athleteId: string, cardId: string) {
-        const athlete = await this.fireStoreService.athleteCollection.get(athleteId);
-        if(!athlete) {
-            return;
-        }
+        const athlete = await this.athleteService.getAthlete(athleteId);
         const completedCards = athlete.cards.completed;
         const finishedCards = athlete.cards.finished;
         completedCards.splice(athlete?.cards.completed.indexOf(cardId), 1);
@@ -240,8 +225,14 @@ export default class CardService {
         return await this.fireStoreService.cardCollection.where([{fieldPath: 'id', opStr: 'in', value: cardIds}]);
     }
 
-    async getCard(cardId: string): Promise<Card | null> {
-        return await this.fireStoreService.cardCollection.get(cardId);
+    async getCard(cardId: string): Promise<Card> {
+        const card = await this.fireStoreService.cardCollection.get(cardId);
+        if(!card) {
+            this.logger.error(`Card ${cardId} does not exist`);
+            throw 'Card does not exist';
+        } else {
+            return card;
+        }
     }
 
     async createCardFactory(cardFactory: CardFactory) {
@@ -342,10 +333,7 @@ export default class CardService {
     }
 
     async progressCard(cardId: string) {
-        const card = await this.fireStoreService.cardCollection.get(cardId)
-        if(!card) {
-            return
-        }
+        const card = await this.getCard(cardId);
         let nextTier = card.tier;
         switch (card.progression) {
             case Progression.TIERS:
@@ -396,11 +384,7 @@ export default class CardService {
     }
 
     async reportCard(athleteId: string, cardId: string, activityId: string, comment: string) {
-        const activity: any = await this.fireStoreService.detailedActivityCollection.get(activityId);
-        if(!activity) {
-            this.logger.info(`Activity ${activityId} does not exist`);
-            throw 'Activity does not exist';
-        }
+        const activity = await this.activityService.getActivity(activityId);
         const gameData = activity.gameData;
         const card: CardSnapshot = gameData.cardSnapshots.find((cardSnapshot: CardSnapshot) => cardSnapshot.id === cardId)
         if(!card) {
@@ -423,11 +407,7 @@ export default class CardService {
     }
 
     async likeCard(athleteId: string, cardId: string, activityId: string) {
-        const activity: any = await this.fireStoreService.detailedActivityCollection.get(activityId);
-        if(!activity) {
-            this.logger.info(`Activity ${activityId} does not exist`);
-            throw 'Activity does not exist';
-        }
+        const activity = await this.activityService.getActivity(activityId);
         const gameData = activity.gameData;
         const card: CardSnapshot = gameData.cardSnapshots.find((cardSnapshot: CardSnapshot) => cardSnapshot.id === cardId)
         if(!card) {
@@ -450,22 +430,14 @@ export default class CardService {
     }
 
     async rejectCard(cardId: string, activityId: string, comment: string) {
-        const activity: any = await this.fireStoreService.detailedActivityCollection.get(activityId);
-        if(!activity) {
-            this.logger.info(`Activity ${activityId} does not exist`);
-            throw 'Activity does not exist';
-        }
+        const activity = await this.activityService.getActivity(activityId);
         const gameData = activity.gameData;
         const card: CardSnapshot = gameData.cardSnapshots.find((cardSnapshot: CardSnapshot) => cardSnapshot.id === cardId)
         if(!card) {
             this.logger.info(`Card snapshot ${cardId} does not exist in activity ${activityId}`);
             throw 'Card snapshot does not exist in activity';
         }
-        const owner = await this.fireStoreService.athleteCollection.get(activity.athlete.id.toString());
-        if(!owner) {
-            this.logger.info(`Athlete ${activity.athlete.id.toString()} does not exist`);
-            throw 'Athlete does not exist';
-        }
+        const owner = await this.athleteService.getAthlete(activity.athlete.id);
 
         Promise.all([
             await this.scoreService.updateScore(owner.id, cardId, true),

@@ -26,7 +26,7 @@ export class ActiveCardListComponent implements OnInit {
   public selectedActivity$ = this.boardService.selectedActivity$;
   public remainderActivity: any = null;
 
-  public featuredCard: ValidatedCard;
+  public featuredCard: ValidatedCard | null;
   public cardList: ValidatedCard[] = [];
   public selectedCards: FormControl = new FormControl([]);
   public uploadedImages: FormArray;
@@ -64,17 +64,13 @@ export class ActiveCardListComponent implements OnInit {
         return;
       }
 
-      if(featuredCard) {
+      if(featuredCard && [...athlete?.cards?.completed || [], ...athlete?.cards?.finished || []].indexOf(featuredCard.id) === -1) {
         this.featuredCard = {
           card: featuredCard,
           validationStatus: this.validateCard(activity, featuredCard, this.selectedCards.value)
         }
-      }
-
-      if(this.cardList.length !== this.uploadedImages?.controls?.length) {
-        this.uploadedImages = new FormArray([
-          ...this.cardList.map(_ => new FormControl([]))
-        ]);
+      } else {
+        this.featuredCard = null;
       }
 
       this.cardList = athlete?.cards.active.map(cardId => {
@@ -84,6 +80,13 @@ export class ActiveCardListComponent implements OnInit {
           validationStatus: this.validateCard(activity, card, this.selectedCards.value)
         }
       }) || [];
+
+      const cardAmount = this.cardList.length + (this.featuredCard ? 1 : 0);
+      if(this.cardList.length !== cardAmount) {
+        this.uploadedImages = new FormArray([
+          ...Array(cardAmount).fill(null).map(_ => new FormControl([]))
+        ]);
+      }
       this.remainderActivity = this.validationService.getActivityRemainder(activity, this.getPlainCards(this.selectedCards.value));
     });
   }
@@ -95,7 +98,9 @@ export class ActiveCardListComponent implements OnInit {
         validationStatus: this.validateCard(this.selectedActivity, validatedCard.card, this.selectedCards.value)
       }
     }))
-    this.featuredCard.validationStatus = this.validateCard(this.selectedActivity, this.featuredCard.card, this.selectedCards.value);
+    if(this.featuredCard) {
+      this.featuredCard.validationStatus = this.validateCard(this.selectedActivity, this.featuredCard.card, this.selectedCards.value);
+    }
     this.remainderActivity = this.validationService.getActivityRemainder(this.selectedActivity, this.getPlainCards(this.selectedCards.value));
   }
 
@@ -153,8 +158,11 @@ export class ActiveCardListComponent implements OnInit {
 
     const cardIds = this.selectedCards.value.map((validatedCard: ValidatedCard) => validatedCard.card.id);
     let images = cardIds
-        .map((id: string) => this.cardList.findIndex(card => card.card.id === id))
-        .map((index: number) => this.uploadedImages.get(index.toString())?.value)
+        .map((id: string) => {
+          const index = this.cardList.findIndex(card => card.card.id === id)
+          return index !== -1 ? index : this.cardList.length
+        })
+        .map((index: number) => this.uploadedImages.get(index.toString())?.value);
     images = await Promise.all(images.map(async (imageGroup: File[]) => await this.fileService.uploadImages(imageGroup)))
 
 
@@ -166,7 +174,10 @@ export class ActiveCardListComponent implements OnInit {
     ).subscribe(_ => {
       this.boardService.deselectActivity();
       this.loading = false;
-    })
+    }, (error => {
+      this.selectedCards.setValue([]);
+      this.loading = false;
+    }))
   }
 
   openCardScheme() {

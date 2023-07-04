@@ -101,6 +101,10 @@
             opacity: 0.5;
         }
     }
+    &--featured {
+        border: 1px solid var(--color-secondary-1);
+        background-color: rgba(251, 176, 45, 0.12);
+    }
     &__image {
         width: 40px;
         height: 40px;

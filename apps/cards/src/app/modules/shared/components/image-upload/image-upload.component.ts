@@ -1,7 +1,7 @@
-import {Component, ElementRef, forwardRef, Input, ViewChild, ViewEncapsulation} from '@angular/core';
+import {Component, ElementRef, forwardRef, Input, OnDestroy, ViewChild, ViewEncapsulation} from '@angular/core';
 import {ControlValueAccessor, FormControl, NG_VALUE_ACCESSOR} from "@angular/forms";
 import {FileUpload} from "primeng/fileupload";
-import {Subject} from "rxjs";
+import {Subject, Subscription} from "rxjs";
 
 @Component({
     selector: 'app-image-upload',
@@ -14,7 +14,7 @@ import {Subject} from "rxjs";
     }],
     encapsulation: ViewEncapsulation.None
 })
-export class ImageUploadComponent implements ControlValueAccessor {
+export class ImageUploadComponent implements ControlValueAccessor, OnDestroy {
 
     @ViewChild('upload') upload: FileUpload;
     @ViewChild('wrapper') wrapper: ElementRef;
@@ -25,6 +25,7 @@ export class ImageUploadComponent implements ControlValueAccessor {
     public multiple = true;
 
     @Input() public uploadTrigger: Subject<any>;
+    private triggerSubscription: Subscription;
 
     constructor() {}
     ngOnInit() {
@@ -40,7 +41,7 @@ export class ImageUploadComponent implements ControlValueAccessor {
         if(!this.uploadTrigger) {
             return;
         }
-        this.uploadTrigger.subscribe(_ => {
+        this.triggerSubscription = this.uploadTrigger.subscribe(_ => {
             this.wrapper.nativeElement.querySelector('input').click();
         })
     }
@@ -63,4 +64,7 @@ export class ImageUploadComponent implements ControlValueAccessor {
         this._onTouched = fn;
     }
 
+    ngOnDestroy() {
+        this.triggerSubscription.unsubscribe();
+    }
 }

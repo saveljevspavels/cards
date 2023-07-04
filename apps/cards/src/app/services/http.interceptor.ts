@@ -42,7 +42,7 @@ export class HttpMainInterceptor implements HttpInterceptor {
                 if ( err instanceof HttpErrorResponse ) {
                     switch ( err.status ) {
                         case 400:
-                            this.messageService.add({severity:'error', summary:'Error', detail: err.error.response})
+                            this.messageService.add({severity:'error', summary:'Error', detail: err.error})
                             break;
                     }
 

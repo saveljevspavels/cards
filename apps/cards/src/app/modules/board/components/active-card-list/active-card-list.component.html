@@ -1,3 +1,16 @@
+<ng-container *ngIf="featuredCard?.card">
+    <h2 class="mb-2 mt-2">Featured Task</h2>
+    <div class="mb-3">
+        <app-card (click)="cardSelected(featuredCard)"
+                  [card]="featuredCard?.card"
+                  [showDescription]="false"
+                  [imagesController]="uploadedImages.get(cardList.length + '')"
+                  [validationStatus]="featuredCard.validationStatus"
+                  [featured]="true"
+        ></app-card>
+    </div>
+</ng-container>
+
 <h2 class="mb-2 mt-2">Active Tasks</h2>
 <div class="mb-2">
     <app-add-card-button
@@ -5,20 +18,12 @@
             (click)="openCardScheme()">
     </app-add-card-button>
 </div>
-<div class="mb-2" *ngIf="featuredCard?.card">
-    <app-card (click)="cardSelected(featuredCard)"
-              [card]="featuredCard?.card"
-              [showDescription]="false"
-              [imagesController]="uploadedImages.get('0')"
-              [validationStatus]="featuredCard.validationStatus"
-    ></app-card>
-</div>
 
 <div *ngFor="let validatedCard of cardList; let i = index; trackBy: cardTrackBy" class="mb-2">
     <app-card (click)="cardSelected(validatedCard)"
               [card]="validatedCard.card"
               [showDescription]="false"
-              [imagesController]="uploadedImages.get(i + '')"
+              [imagesController]="uploadedImages?.get(i + '')"
               [validationStatus]="validatedCard.validationStatus"
     ></app-card>
 </div>

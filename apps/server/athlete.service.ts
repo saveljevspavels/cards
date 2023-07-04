@@ -72,8 +72,14 @@ export default class AthleteService {
         }
     }
 
-    async getAthlete(athleteId: string): Promise<Athlete | null> {
-        return await this.fireStoreService.athleteCollection.get(athleteId);
+    async getAthlete(athleteId: string | number): Promise<Athlete> {
+        const athlete = await this.fireStoreService.athleteCollection.get(athleteId.toString());
+        if(!athlete) {
+            this.logger.error(`Athlete ${athleteId} does not exist`);
+            throw 'Athlete does not exist';
+        } else {
+            return athlete;
+        }
     }
 
     createAthlete(athlete: any): Athlete {
