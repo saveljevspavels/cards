@@ -438,13 +438,14 @@ export default class CardService {
             throw 'Card snapshot does not exist in activity';
         }
         const owner = await this.athleteService.getAthlete(activity.athlete.id);
+        const finished = owner.cards?.finished.find(card => card == cardId);
 
         Promise.all([
-            await this.scoreService.updateScore(owner.id, cardId, true),
+            finished ? await this.scoreService.updateScore(owner.id, cardId, true) : null,
             await this.fireStoreService.athleteCollection.update(
                 owner.id,
                 {
-                    coins: owner.coins - card.coinsReward,
+                    coins: finished ? owner.coins - card.coinsReward : owner.coins,
                     baseCardProgress: StaticValidationService.updateBaseCardProgressFromCard(activity.type, card, owner.baseWorkout, owner.baseCardProgress),
                     cards: {
                         ...owner.cards,
