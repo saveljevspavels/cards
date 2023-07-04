@@ -29,8 +29,8 @@
                                 label="Unlock for -{{RULES.COINS.PER_LEVEL_PRICE}}"
                                 (buttonClick)="unlockLevel(board.key, levelIndex)"
                                 type="action"
-                                [icon]="'coin'"
                         >
+                            <app-svg [icon]="'coin'" height="20"></app-svg>
                         </app-button>
                     </div>
                 </ng-container>

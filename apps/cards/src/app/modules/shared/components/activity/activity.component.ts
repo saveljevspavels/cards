@@ -90,6 +90,7 @@ export class ActivityComponent implements OnInit, ControlValueAccessor {
 
     like(cardId: string) {
         this.liked.emit(cardId);
+        this.liked.unsubscribe()
     }
 
     showMap() {
