@@ -159,7 +159,7 @@ export class ActiveCardListComponent implements OnInit {
   }
 
   async submitActivity() {
-    // this.loading = true;
+    this.loading = true;
 
     const cardIds = this.selectedCards.value.map((validatedCard: ValidatedCard) => validatedCard.card.id);
     let images = cardIds

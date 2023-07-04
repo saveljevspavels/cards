@@ -67,7 +67,7 @@ export default class AthleteService {
             await this.fireStoreService.athleteCollection.set(athlete.id.toString(), this.createAthlete(athlete))
             this.logger.info(`Athlete ${athlete.firstname} ${athlete.lastname} ${athlete.id} saved`)
         } else {
-            await this.fireStoreService.athleteCollection.update(athlete.id.toString(), this.createAthlete(athlete))
+            await this.fireStoreService.athleteCollection.update(athlete.id.toString(), this.createAthletePatch(athlete))
             this.logger.info(`Athlete ${athlete.firstname} ${athlete.lastname} ${athlete.id} logged in & updated`)
         }
     }
@@ -90,7 +90,7 @@ export default class AthleteService {
             profile: athlete.profile,
             name: `${athlete.firstname} ${athlete.lastname}`,
             baseWorkout: RULES.DEFAULT_BASE_WORKOUT,
-            permissions: ['default'],
+            permissions: [],
             achievements: [],
             energy: RULES.ENERGY.BASE,
             coins: RULES.COINS.BASE,

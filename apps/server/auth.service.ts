@@ -22,7 +22,6 @@ export default class AuthService {
         });
 
         this.app.post(`${CONST.API_PREFIX}/auth/token`, async (req, res) => {
-            console.log('code', req.body.code)
             const response: any = await AuthHelper.tokenRequest(
                 AuthHelper.getTokenConfig(req.body.code as string)
             ).catch(err => console.log('err', err))
