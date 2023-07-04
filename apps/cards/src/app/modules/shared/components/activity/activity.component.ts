@@ -3,9 +3,9 @@ import {
     ElementRef,
     EventEmitter,
     forwardRef,
-    Input,
+    Input, OnChanges,
     OnInit,
-    Output,
+    Output, SimpleChanges,
     ViewChild,
     ViewEncapsulation
 } from '@angular/core';
@@ -18,6 +18,7 @@ import {ValidationService} from "../../../../services/validation.service";
 import {StaticValidationService} from "../../../../../../../shared/services/validation.service";
 import {AthleteService} from "../../../../services/athlete.service";
 import {AuthService} from "../../../../services/auth.service";
+import {CardSnapshot} from "../../../../../../../shared/interfaces/card.interface";
 
 @Component({
     selector: 'app-activity',
@@ -39,6 +40,8 @@ export class ActivityComponent implements OnInit, ControlValueAccessor {
     public activityType = '';
     public validationService = StaticValidationService;
 
+    @ViewChild('mapViewPopup', { static: true }) mapViewPopup: ElementRef;
+
     @Input() public activity: any;
     @Input() public selection = false;
     @Input() public showImages = true;
@@ -56,7 +59,10 @@ export class ActivityComponent implements OnInit, ControlValueAccessor {
         [CONST.ACTIVITY_TYPES.WALK, 'walked'],
     ]);
 
-    constructor(private authService: AuthService) { }
+    constructor(
+        private authService: AuthService,
+        private popupService: PopupService
+    ) { }
 
     async ngOnInit() {
         this.selectedCards.valueChanges.subscribe((value) => {
@@ -84,5 +90,13 @@ export class ActivityComponent implements OnInit, ControlValueAccessor {
 
     like(cardId: string) {
         this.liked.emit(cardId);
+    }
+
+    showMap() {
+        this.popupService.showPopup(this.mapViewPopup);
+    }
+
+    cardTrackBy(index: number, item: CardSnapshot){
+        return item.id;
     }
 }

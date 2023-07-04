@@ -36,10 +36,11 @@ export class GoogleMapComponent implements OnInit {
         zoom: 11,
         clickableIcons: false,
         disableDefaultUI: true,
+        scrollwheel: true,
         disableDoubleClickZoom: true
       });
 
-        var line = new google.maps.Polyline({
+        const line = new google.maps.Polyline({
             path: decoded,
             strokeColor: this.getColor(this.activityType),
             strokeOpacity: 1.0,
@@ -58,10 +59,7 @@ export class GoogleMapComponent implements OnInit {
     for (let n = 0; n < points.length ; n++){
         bounds.extend(points[n]);
     }
-    this.map.fitBounds(bounds);
-    setTimeout(() => {
-        this.map.setZoom(this.map.getZoom() + 2)
-    }, 200)
+    this.map.fitBounds(bounds, 20);
   }
 
   getColor(type: string) {

@@ -1,11 +1,11 @@
-<div class="box d-flex justify-content-between align-items-end">
+<div class="box d-flex justify-content-between align-items-center">
     <div class="d-flex align-items-center">
         <app-activity-type-icon [type]="activityType"
                                 [width]="14"
                                 [height]="14"
         >
         </app-activity-type-icon>
-        <span class="m-0 ml-1 mb-1 text-small text-bold">{{activityType === 'other' ? (value | minutes) : (value | distance)}}</span>
+        <span class="m-0 ml-1 text-small text-bold">{{activityType === 'other' ? (value | minutes) : (value | distance)}}</span>
     </div>
 
     <app-button *ngIf="active; else submitButton"

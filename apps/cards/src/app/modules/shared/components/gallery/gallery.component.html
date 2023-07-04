@@ -6,11 +6,6 @@
                    (click)="openGallery(i)"
         ></app-image>
     </div>
-    <app-google-map *ngIf="polyline"
-            [polyline]="polyline"
-            [activityType]="activityType"
-            [thumbnail]="true"
-    ></app-google-map>
 </div>
 
 <ng-template #gallery>

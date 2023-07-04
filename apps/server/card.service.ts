@@ -416,9 +416,14 @@ export default class CardService {
         }
 
         if(!card.likes) {
-            card.likes = {};
+            card.likes = [];
         }
-        card.likes[athleteId] = true;
+        if(card.likes.indexOf(athleteId) !== -1) {
+            this.logger.info(`Athlete ${athleteId} tried to like card more than once`);
+            throw 'Already liked by you';
+        }
+
+        card.likes.push(athleteId);
 
         await this.fireStoreService.detailedActivityCollection.update(
             activityId,

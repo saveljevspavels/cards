@@ -12,7 +12,7 @@
             <app-activity-type-icon [type]="type"
                                     [width]="14"
                                     [height]="14"></app-activity-type-icon>
-            <span class="text-small text-bold m-0 mt-n1">{{(active && activity) ? ('+' + (type === "other" ? (newValue | minutes) : (newValue | distance))) : (currentProgress | percent)}}</span>
+            <span class="text-small text-bold m-0 mt-0">{{(active && activity) ? ('+' + (type === "other" ? (newValue | minutes) : (newValue | distance))) : (currentProgress | percent)}}</span>
         </div>
         <div  *ngIf="complete"
               class="circular-progress-bar__circle circular-progress-bar__complete background-{{type}} d-flex flex-column align-items-center">

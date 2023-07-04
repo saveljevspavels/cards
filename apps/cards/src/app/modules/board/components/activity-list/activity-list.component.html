@@ -31,7 +31,10 @@
             </p>
             <app-textarea [fc]="reportComment" [label]="'Please provide comment'"></app-textarea>
             <div class="mt-4 mb-2 full-width">
-                <app-button type="danger-filled" [label]="'Report'" (buttonClick)="confirmReport()"></app-button>
+                <app-button type="danger-filled"
+                            [label]="'Report'"
+                            (buttonClick)="confirmReport()"
+                ></app-button>
             </div>
             <div class="mb-3">
                 <app-button (buttonClick)="cancelReport()" [label]="'Cancel'"></app-button>

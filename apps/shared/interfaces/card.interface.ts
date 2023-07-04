@@ -21,7 +21,7 @@ export default interface Card {
 export interface CardSnapshot extends Card {
     comment?: string;
     attachedImages?: string[];
-    likes?: {[key: string]: boolean};
+    likes?: string[];
     reports?: {[key: string]: string};
 }
 

@@ -20,17 +20,34 @@
 </ng-template>
 
 <ng-template #headerTemplate>
-    <div class="d-flex align-items-center mb-2">
-        <app-athlete *ngIf="activity?.athlete" [size]="'small'" [athleteId]="activity?.athlete.id"></app-athlete>
-        <span class="text-small ml-1">
+    <div class="d-flex align-items-center justify-content-between mb-2 box p-1">
+        <div class="d-flex align-items-center">
+            <app-athlete *ngIf="activity?.athlete" [size]="'small'" [athleteId]="activity?.athlete.id"></app-athlete>
+            <span class="text-small ml-1">
             {{activityVerbMap.get(activityType)}} <span class="text-bold">{{activity[validationService.baseActivityTypeMap.get(activityType)] | activityProp : validationService.baseActivityTypeMap.get(activityType)}}</span>
         </span>
+        </div>
+        <div *ngIf="activity.map?.summary_polyline">
+            <app-svg (click)="showMap()"
+                     class="pointer"
+                     [icon]="'map'"
+                     height="30"
+                     width="30"
+            ></app-svg>
+        </div>
     </div>
 </ng-template>
 
+<ng-template #mapViewPopup>
+    <div class="popup box">
+        <app-swiper [polyline]="activity.map?.summary_polyline"
+                    [activityType]="activityType"
+        ></app-swiper>
+    </div>
+</ng-template>
 
 <ng-template #contentTemplate>
-    <div *ngFor="let card of activity.gameData?.cardSnapshots" class="box p-1 mb-2">
+    <div *ngFor="let card of activity.gameData?.cardSnapshots; trackBy: cardTrackBy" class="box p-1 mb-2">
         <div class="d-flex align-items-center justify-content-between"
              [ngClass]="{'mb-1': card.attachedImages?.length || activity.map?.summary_polyline}"
         >
@@ -48,15 +65,17 @@
                      [polyline]="activity.map?.summary_polyline"
                      [activityType]="activityType"
         ></app-gallery>
-        <div>
+        <div class="d-flex justify-content-between mt-1">
             <app-button (click)="report(card.id)"
                         [small]="true"
                         [label]="(card?.reports && card?.reports[myId]) ? 'Reported' : 'Report'"
+                        [icon]="'flag'"
                         [type]="(card?.reports && card?.reports[myId]) ? 'danger-filled': 'danger'"></app-button>
-            <app-button (click)="like(card.id)"
+            <app-button (click)="(card?.likes && card?.likes?.indexOf(myId) !== -1) || like(card.id)"
                         [small]="true"
-                        [label]="(card?.likes && card?.likes[myId]) ? 'Liked' : 'Like'"
-                        [type]="(card?.likes && card?.likes[myId]) ? 'success' : 'action'"></app-button>
+                        [label]="(card?.likes && card?.likes?.indexOf(myId) !== -1) ? card?.likes?.length : 'Like'"
+                        [icon]="'fire'"
+                        [type]="(card?.likes && card?.likes?.indexOf(myId) !== -1) ? 'danger-filled': 'danger'"></app-button>
         </div>
     </div>
 </ng-template>
