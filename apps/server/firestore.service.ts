@@ -3,11 +3,7 @@ import {
     generateId,
     getRandomInt,
     getTier,
-    normalizeActivityType,
-    tierToRoman,
-    updateScoreValues
 } from "./helpers/util";
-import {RESPONSES} from "./response-codes";
 import fs from "fs";
 import schedule from "node-schedule";
 import {Logger} from "winston";

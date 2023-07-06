@@ -13,7 +13,7 @@ export class AuthInterceptor {
             res.status(401).send();
         }
         const decodedJwt = decodeJwt(jwt);
-        const expired: boolean = AuthHelper.tokenExpired(decodedJwt.expiresAt);
+        const expired: boolean = AuthHelper.tokenExpired(decodedJwt?.expiresAt || 0);
         if(expired) {
             jwt = AuthHelper.createJwt(
                 await AuthInterceptor.refreshToken(decodedJwt.refreshToken),

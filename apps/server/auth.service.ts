@@ -1,11 +1,9 @@
-import axios from "axios";
 import {Express} from "express";
 import {FirestoreService} from "./firestore.service";
 import {CONST} from "../../definitions/constants";
 import {STRAVA_CONFIG} from "../../definitions/stravaConfig";
 import {Logger} from "winston";
 import AthleteService from "./athlete.service";
-import jwt from 'jsonwebtoken';
 import {AuthHelper} from "./helpers/auth.helper";
 
 export default class AuthService {
