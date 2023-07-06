@@ -11,7 +11,7 @@
                                         [width]="14"
                 ></app-activity-type-icon>
 
-                <span class="pl-1 mb-1">
+                <span class="pl-1">
                     <span *ngIf="validator.property === CONST.ACTIVITY_PROPERTIES.DISTANCE">{{value.value | distance}}</span>
                     <span *ngIf="validator.property === CONST.ACTIVITY_PROPERTIES.AVERAGE_SPEED">{{value.value | pace}}</span>
                     <span *ngIf="validator.property === CONST.ACTIVITY_PROPERTIES.ELAPSED_TIME">{{value.value | time}}</span>

@@ -31,14 +31,14 @@
             <app-rewards [card]="card"></app-rewards>
             <app-button *ngIf="validationStatus.toString() === ValidationStatus.SELECTED"
                         [small]="true"
-                        [styleClass]="'mt-1'"
+                        [styleClass]="'mt-1-5 full-width'"
                         [type]="'action'"
                         (buttonClick)="addPhoto($event)"
                         [icon]="'camera'"
             ></app-button>
             <app-button *ngIf="showActivate && !locked"
                         [small]="true"
-                        [styleClass]="'mt-1'"
+                        [styleClass]="'mt-1-5 full-width'"
                         label="Activate"
                         [type]="'action'"
                         [disabled]="!canActivate"

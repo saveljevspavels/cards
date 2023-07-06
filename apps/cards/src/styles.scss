@@ -119,7 +119,8 @@ hr {
 }
 
 .full-width {
-    width: 100%;
+    width: 100%!important;
+    max-width: unset!important;
 }
 
 .title {
@@ -249,4 +250,8 @@ h5 {
 
 .h-50 {
     height: 50px!important;
+}
+
+.mt-1-5 {
+    margin-top: 6px;
 }

@@ -5,7 +5,7 @@
                              (boardSelected)="activeBoard.setValue($event)"
         ></app-board-selection>
     </div>
-    <h2 class="mb-2 mt-2">Available Tasks</h2>
+    <h2 class="mb-2 mt-3">Available Tasks</h2>
     <ng-container *ngFor="let board of boards">
         <ng-container *ngIf="board.key === activeBoard.value">
             <div *ngFor="let level of board.levels; let levelIndex = index">
