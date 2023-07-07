@@ -5,8 +5,7 @@ import {CONST} from "../../../definitions/constants";
 
 export class AuthInterceptor {
     public static async interceptRequest(req: Request, res: Response, next: NextFunction) {
-        console.log('request', req);
-        if(req.method === "OPTIONS" || req.originalUrl.indexOf('auth') !== -1) {
+        if(req.method === "OPTIONS" || req.originalUrl.indexOf('auth') !== -1 || req.originalUrl.indexOf('webhook') !== -1) {
             next();
             return;
         }
