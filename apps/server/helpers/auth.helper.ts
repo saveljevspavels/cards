@@ -41,7 +41,7 @@ export class AuthHelper {
 
     static async tokenRequest(config: {params: {[key: string]: string}}) {
         return await axios.post(
-            `http://${CONST.STRAVA_BASE}/oauth/token`,
+            `${CONST.STRAVA_BASE}/oauth/token`,
             null,
             config
         )

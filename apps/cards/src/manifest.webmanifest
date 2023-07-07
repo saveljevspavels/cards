@@ -1,8 +1,8 @@
 {
   "name": "Kurkudos",
   "short_name": "Kurkudos",
-  "theme_color": "#edeae4",
-  "background_color": "#edeae4",
+  "theme_color": "#ffffff",
+  "background_color": "#ffffff",
   "display": "standalone",
   "scope": "./",
   "start_url": "./",

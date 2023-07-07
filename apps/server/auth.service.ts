@@ -15,7 +15,7 @@ export default class AuthService {
     ) {
         this.app.get(`${CONST.API_PREFIX}/auth/url`, async (req, res) => {
             res.status(200).send({
-                url: `http://${CONST.STRAVA_BASE}/oauth/authorize?client_id=${STRAVA_CONFIG.STRAVA_CLIENT_ID}&response_type=code&redirect_uri=${req.query.returnUrl}?exchange_token&approval_prompt=force&scope=${STRAVA_CONFIG.REQUIRED_PERMISSIONS}`
+                url: `${CONST.STRAVA_BASE}/oauth/authorize?client_id=${STRAVA_CONFIG.STRAVA_CLIENT_ID}&response_type=code&redirect_uri=${req.query.returnUrl}?exchange_token&approval_prompt=force&scope=${STRAVA_CONFIG.REQUIRED_PERMISSIONS}`
             });
         });
 

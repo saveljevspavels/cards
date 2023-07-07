@@ -109,7 +109,7 @@ export class FirestoreService {
             // this.logger.error(`Activity ${activity.id} already exists`); Too much spam
         } else {
             this.logger.info(`Activity ${activity.id} added for athlete ${activity.athlete.id}`);
-            return this.detailedActivityCollection.update(activity.id.toString(), activity)
+            return await this.detailedActivityCollection.set(activity.id.toString(), activity)
         }
     }
 

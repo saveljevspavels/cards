@@ -1,5 +1,5 @@
 export const CONST = {
-    STRAVA_BASE: "www.strava.com",
+    STRAVA_BASE: "https://www.strava.com",
     API_PREFIX: "/api",
     ACTIVITY_STATUSES: {
         NEW: "new",

@@ -18,7 +18,7 @@
                 </app-completed-task-view>
             </div>
             <div>
-                <div class="box background-primary-variant mb-2">
+                <div class="box background-primary-variant mb-2" *ngIf="(newActivities | async).length">
                     <h3 class="title text-color-on-primary">You got new activity</h3>
                     <div class="mt-2" *ngFor="let activity of (newActivities | async)">
                         <app-pending-activity [activity]="activity"
