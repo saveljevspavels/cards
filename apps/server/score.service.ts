@@ -23,7 +23,7 @@ export default class ScoreService {
             return;
         }
         const newValue: number = parseInt(String(score.value)) + parseInt(String(deduct ? (-card.value) : card.value));
-            await this.fireStoreService.scoreCollection.update(
+            await this.fireStoreService.scoreCollection.set(
             athleteId.toString(),
             {
                 ...score,
