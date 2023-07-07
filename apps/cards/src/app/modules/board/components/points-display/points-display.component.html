@@ -3,6 +3,6 @@
         <app-svg [icon]="'star'" [height]="32" [width]="34" viewBox="0 0 14 14" [styleClass]="'color-secondary-1'"></app-svg>
     </div>
     <span class="full-width justify-content-center d-flex">Your points:</span>
-    <span class="text-bold title mt-1">{{(myScore$ | async)?.value}}</span>
-    <p class="text-small light m-0 text-center">Currently you are {{position}} in the leaderboard</p>
+    <span class="text-bold title mt-1">{{(myScore$ | async)?.value || 0}}</span>
+    <p class="text-small light m-0 text-center">{{(myScore$ | async) ? 'Currently you are ' + position + ' in the leaderboard' : 'You are not in the leaderboard yet'}}</p>
 </div>

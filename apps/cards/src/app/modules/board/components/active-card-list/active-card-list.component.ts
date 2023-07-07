@@ -87,7 +87,7 @@ export class ActiveCardListComponent implements OnInit {
       }) || [];
 
       const cardAmount = this.cardList.length + (this.featuredCard ? 1 : 0);
-      if(this.cardList.length !== cardAmount) {
+      if((this.uploadedImages?.length || 0) !== cardAmount) {
         this.uploadedImages = new FormArray([
           ...Array(cardAmount).fill(null).map(_ => new FormControl([]))
         ]);

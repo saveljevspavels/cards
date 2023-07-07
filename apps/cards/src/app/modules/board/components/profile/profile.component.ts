@@ -43,7 +43,7 @@ export class ProfileComponent implements OnInit {
         this.athlete$ = this.self ? this.athleteService.me : this.athleteService.getAthlete$(this.athleteId)
         this.athlete$.subscribe((athlete) => {
             this.athlete = athlete;
-            this.athleteActivities$ = this.activityService.approvedActivities.pipe(map((activities => activities.filter((activity: any) => activity.athlete.id === athlete?.id).reverse())))
+            this.athleteActivities$ = this.activityService.approvedActivities.pipe(map((activities => activities.filter((activity: any) => activity.athlete.id.toString() === athlete?.id).reverse())))
             this.achievements$ = this.achievementsService.getAchievements(athlete?.achievements || []);
         })
     }

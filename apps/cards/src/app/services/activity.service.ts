@@ -46,6 +46,7 @@ export class ActivityService {
             ConstService.CONST.COLLECTIONS.DETAILED_ACTIVITIES,
             (ref: any) => ref.where('gameData.status', '==', ConstService.CONST.ACTIVITY_STATUSES.APPROVED)
         ).valueChanges().subscribe((activities: any) => {
+            console.log('approved', activities)
             this.approvedActivities.next(activities)
         });
 

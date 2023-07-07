@@ -2,23 +2,23 @@ export const RULES = {
     HAND_SIZE: 3,
     DEFAULT_BASE_WORKOUT: {
         run: {
-            distance: 3000,
-            average_speed: 2.22,
+            distance: 4000,
+            average_speed: 2.56,
             time_3k: 1620,
             time_5k: 2700,
             time_10k: 5400
         },
         ride: {
-            distance: 12000,
-            average_speed: 4.17,
+            distance: 10000,
+            average_speed: 5,
             time_10k: 2400,
             time_40k: 10800
         },
         walk: {
-            distance: 7000
+            distance: 3500
         },
         other: {
-            distance: 10000,
+            distance: 5000,
             elapsed_time: 1800
         }
     },
