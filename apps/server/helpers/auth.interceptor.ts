@@ -5,7 +5,8 @@ import {CONST} from "../../../definitions/constants";
 
 export class AuthInterceptor {
     public static async interceptRequest(req: Request, res: Response, next: NextFunction) {
-        if(req.method === "OPTIONS" || req.originalUrl.indexOf('auth') !== -1 || req.originalUrl.indexOf(CONST.STRAVA_BASE) !== -1) {
+        console.log('request', req);
+        if(req.method === "OPTIONS" || req.originalUrl.indexOf('auth') !== -1) {
             next();
             return;
         }
