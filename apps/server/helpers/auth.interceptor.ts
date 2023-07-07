@@ -9,6 +9,7 @@ export class AuthInterceptor {
             next();
             return;
         }
+        console.log('blocked', req.originalUrl)
         let jwt = req.header('jwt') || '';
         if(!jwt) {
             res.status(401).send();
