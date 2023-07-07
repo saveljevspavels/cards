@@ -180,7 +180,7 @@ export default class CardService {
                 energy: Math.min(newEnergy, RULES.ENERGY.MAX),
             }
         )
-        this.logger.error(`Athlete claimed ${parseInt(String(card.coinsReward), 10) + bonusCoins} coins for card ${card.title}`);
+        this.logger.info(`Athlete claimed ${parseInt(String(card.coinsReward), 10) + bonusCoins} coins for card ${card.title}`);
         if(parseInt(String(card.energyReward))) {
             this.logger.error(`Athlete restored ${card.energyReward} energy for card ${card.title}`);
         }

@@ -9,7 +9,6 @@ export default class WebhookService {
 
         // Creates the endpoint for our webhook
         app.post(`${CONST.API_PREFIX}/webhook`, async (req, res) => {
-            console.log('webhook', req.originalUrl, req.body)
             switch(req.body.aspect_type) {
                 case 'create': await fireStoreService.addPendingActivity(req.body); break;
                 case 'delete': await fireStoreService.deletePendingActivity(req.body.object_id); break;

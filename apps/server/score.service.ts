@@ -1,6 +1,7 @@
 import {Express} from "express";
 import {FirestoreService} from "./firestore.service";
 import {Logger} from "winston";
+import Score from "../shared/interfaces/score.interface";
 
 export default class ScoreService {
     constructor(
@@ -11,7 +12,7 @@ export default class ScoreService {
     }
 
     async updateScore(athleteId: string, cardId: string, deduct = false) {
-        const score = await this.fireStoreService.scoreCollection.get(athleteId.toString());
+        const score = (await this.fireStoreService.scoreCollection.get(athleteId.toString())) || this.createNewScore(athleteId);
         if(!score) {
             this.logger.info(`Score does not exist for athlete ${athleteId}`);
             return;
@@ -30,5 +31,14 @@ export default class ScoreService {
             });
 
         this.logger.info(`Athlete ${athleteId} ${deduct ? 'lost': 'got'} ${card.value} points, new score: ${newValue}, was ${score.value}`)
+    }
+
+    createNewScore(athleteId: string): Score {
+        return {
+            athleteId,
+            cardsPlayed: 0,
+            value: 0,
+            activities: 0
+        }
     }
 }

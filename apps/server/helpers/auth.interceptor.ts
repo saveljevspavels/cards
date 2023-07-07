@@ -1,7 +1,6 @@
 import {NextFunction, Request, response, Response} from "express";
 import {decodeJwt} from "../../shared/utils/decodeJwt";
 import {AuthHelper} from "./auth.helper";
-import {CONST} from "../../../definitions/constants";
 
 export class AuthInterceptor {
     public static async interceptRequest(req: Request, res: Response, next: NextFunction) {
@@ -9,7 +8,6 @@ export class AuthInterceptor {
             next();
             return;
         }
-        console.log('blocked', req.originalUrl)
         let jwt = req.header('jwt') || '';
         if(!jwt) {
             res.status(401).send();
