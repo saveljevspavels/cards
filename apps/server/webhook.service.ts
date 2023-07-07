@@ -18,6 +18,7 @@ export default class WebhookService {
 
         // Adds support for GET requests to our webhook
         app.get(`${CONST.API_PREFIX}/webhook`, (req, res) => {
+            console.log('req', req)
             // Your verify token. Should be a random string.
             const VERIFY_TOKEN = "STRAVA";
             // Parses the query params

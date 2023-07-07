@@ -2,11 +2,10 @@ import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {AthleteService} from "../../../../services/athlete.service";
 import {AuthService} from "../../../../services/auth.service";
 import {ActivatedRoute} from "@angular/router";
-import {LocalStorageService} from "../../../../services/local-storage.service";
 import {PopupService} from "../../../../services/popup.service";
 import {AchievementService} from "../../../../services/achievement.service";
 import {Achievement} from "../../../../interfaces/achievement";
-import {BehaviorSubject, Observable} from "rxjs";
+import {Observable} from "rxjs";
 import {ActivityService} from "../../../../services/activity.service";
 import {map} from "rxjs/operators";
 import Athlete from "../../../../../../../shared/interfaces/athlete.interface";
@@ -39,7 +38,7 @@ export class ProfileComponent implements OnInit {
 
     ngOnInit(): void {
         this.athleteId = this.route.snapshot.params.athleteId;
-        this.self = !this.athleteId || this.authService.myId.value === this.athleteId;
+        this.self = !this.athleteId || this.athleteService.myId.value === this.athleteId;
         this.athlete$ = this.self ? this.athleteService.me : this.athleteService.getAthlete$(this.athleteId)
         this.athlete$.subscribe((athlete) => {
             this.athlete = athlete;

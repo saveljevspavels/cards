@@ -97,7 +97,7 @@ export class MobileMenuComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        this.athleteService.permissions.subscribe(() => {
+        AthleteService.permissions.subscribe(() => {
             this.filteredRoutes = {
                 public: [],
                 admin: [],

@@ -2,9 +2,8 @@ import { Injectable } from '@angular/core';
 import {BehaviorSubject, combineLatest, forkJoin} from "rxjs";
 import {AngularFirestore} from "@angular/fire/firestore";
 import {ConstService} from "./const.service";
-import Athlete from "../../../../shared/interfaces/athlete.interface";
-import {AuthService} from "./auth.service";
 import Score from "../../../../shared/interfaces/score.interface";
+import {AthleteService} from "./athlete.service";
 
 @Injectable()
 export class ScoreService {
@@ -14,12 +13,12 @@ export class ScoreService {
   private scoreCollection = this.db.collection(ConstService.CONST.COLLECTIONS.SCORES);
 
   constructor(private db: AngularFirestore,
-              private authService: AuthService) {
+              private athleteService: AthleteService) {
     this.scoreCollection.valueChanges().subscribe((scores: any[]) => {
       this.scores.next(scores);
     });
     combineLatest([
-      this.authService.myId,
+      this.athleteService.myId,
       this.scoreCollection.valueChanges()
     ]).subscribe(([myId, scores]: any) => {
       if(!myId || !scores.length) {

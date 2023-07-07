@@ -4,7 +4,6 @@ import {AngularFirestore} from "@angular/fire/firestore";
 import {filter, map, mergeMap} from "rxjs/operators";
 import {HttpClient} from "@angular/common/http";
 import {environment} from "../../environments/environment";
-import {AuthService} from "./auth.service";
 import {ConstService} from "./const.service";
 import Athlete from "../../../../shared/interfaces/athlete.interface";
 
@@ -15,26 +14,25 @@ export class AthleteService {
 
     public athletes = new BehaviorSubject<Athlete[]>([]);
     public me = new BehaviorSubject<Athlete | null>(null);
-    public permissions = new BehaviorSubject<string[] | null>(null);
+    public myId = new BehaviorSubject<string>('');
+    public static permissions = new BehaviorSubject<string[] | null>(null);
     private athleteCollection = this.db.collection(ConstService.CONST.COLLECTIONS.ATHLETES);
 
     constructor(private db: AngularFirestore,
-                private http: HttpClient,
-                private authService: AuthService) {
-
+                private http: HttpClient) {
         combineLatest([
-            this.authService.myId,
+            this.myId,
             this.athleteCollection.valueChanges()
         ]).subscribe(([myId, athletes]: any) => {
             this.athletes.next(athletes)
             this.me.next(athletes.find((athlete: Athlete) => athlete.id === myId) || null)
-            this.permissions.next(this.me.value?.permissions || ['default'])
+            AthleteService.permissions.next(this.me.value?.permissions || ['default'])
         });
     }
 
-    permissionPromise() {
+    static permissionPromise() {
         return new Promise((resolve) => {
-            this.permissions.pipe(filter((perms) => !!perms))
+            AthleteService.permissions.pipe(filter((perms) => !!perms))
                 .subscribe( (perms) => {
                     resolve(true);
                 });
@@ -42,7 +40,7 @@ export class AthleteService {
     }
 
     hasPermission(permission: string): boolean{
-        return this.permissions.value?.indexOf(permission) !== -1;
+        return AthleteService.permissions.value?.indexOf(permission) !== -1;
     }
 
     getAthlete(athleteId: string): Athlete | null {

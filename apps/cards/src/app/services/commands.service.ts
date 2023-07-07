@@ -1,14 +1,12 @@
 import {Injectable} from "@angular/core";
 import {AngularFirestore} from "@angular/fire/firestore";
-import {LocalStorageService} from "./local-storage.service";
-import {distinctUntilChanged, filter, map, tap} from "rxjs/operators";
+import {distinctUntilChanged, filter} from "rxjs/operators";
 import {COMMANDS} from "../constants/commands";
 import {ActivityService} from "./activity.service";
 import {GameService} from "./game.service";
 import {combineLatest} from "rxjs";
 import {AthleteService} from "./athlete.service";
 import {ConstService} from "./const.service";
-import {AuthService} from "./auth.service";
 import {flatMap} from "rxjs/internal/operators";
 
 @Injectable({
@@ -19,13 +17,12 @@ export class CommandsService {
     constructor(private db: AngularFirestore,
                 private activityService: ActivityService,
                 private athleteService: AthleteService,
-                private gameService: GameService,
-                private authService: AuthService
+                private gameService: GameService
                 ) {
     }
 
     init() {
-        this.authService.myId.pipe(
+        this.athleteService.myId.pipe(
             distinctUntilChanged(),
             filter(id => !!id),
             flatMap((id) =>

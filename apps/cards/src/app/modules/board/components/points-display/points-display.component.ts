@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import {ConstService} from "../../../../services/const.service";
 import {ScoreService} from "../../../../services/score.service";
-import {AuthService} from "../../../../services/auth.service";
 import Score from "../../../../../../../shared/interfaces/score.interface";
+import {AthleteService} from "../../../../services/athlete.service";
 
 @Component({
   selector: 'app-points-display',
@@ -18,12 +18,12 @@ export class PointsDisplayComponent implements OnInit {
 
   constructor(
       private scoreService: ScoreService,
-      private authService: AuthService
+      private athleteService: AthleteService
   ) { }
 
   ngOnInit(): void {
     this.scoreService.scores.subscribe((scores) => {
-      this.position = this.numberToPosition(scores.findIndex((score: Score) => score.athleteId === this.authService.myId.value) + 1);
+      this.position = this.numberToPosition(scores.findIndex((score: Score) => score.athleteId === this.athleteService.myId.value) + 1);
     })
   }
 

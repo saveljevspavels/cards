@@ -3,9 +3,9 @@ import {
     ElementRef,
     EventEmitter,
     forwardRef,
-    Input, OnChanges,
+    Input,
     OnInit,
-    Output, SimpleChanges,
+    Output,
     ViewChild,
     ViewEncapsulation
 } from '@angular/core';
@@ -14,10 +14,8 @@ import {PopupService} from "../../../../services/popup.service";
 import {ConstService} from "../../../../services/const.service";
 import {UtilService} from "../../../../services/util.service";
 import {CONST} from "../../../../../../../../definitions/constants";
-import {ValidationService} from "../../../../services/validation.service";
 import {StaticValidationService} from "../../../../../../../shared/services/validation.service";
 import {AthleteService} from "../../../../services/athlete.service";
-import {AuthService} from "../../../../services/auth.service";
 import {CardSnapshot} from "../../../../../../../shared/interfaces/card.interface";
 
 @Component({
@@ -33,7 +31,7 @@ import {CardSnapshot} from "../../../../../../../shared/interfaces/card.interfac
 })
 export class ActivityComponent implements OnInit, ControlValueAccessor {
     public CONST = ConstService.CONST;
-    public myId = this.authService.myId.value;
+    public myId = this.athleteService.myId.value;
 
     public selectedCards = new FormControl([])
     public imageObservables: any;
@@ -60,7 +58,7 @@ export class ActivityComponent implements OnInit, ControlValueAccessor {
     ]);
 
     constructor(
-        private authService: AuthService,
+        private athleteService: AthleteService,
         private popupService: PopupService
     ) { }
 

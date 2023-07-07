@@ -23,8 +23,11 @@ export default class AuthService {
             const response: any = await AuthHelper.tokenRequest(
                 AuthHelper.getTokenConfig(req.body.code as string)
             ).catch(err => console.log('err', err))
-            const jwt = AuthHelper.createJwt(response, response.data.athlete.id.toString());
-            await this.athleteService.saveAthlete(response.data.athlete);
+            let jwt = '';
+            if(response?.data) {
+                jwt = AuthHelper.createJwt(response, response.data.athlete.id.toString());
+                await this.athleteService.saveAthlete(response.data.athlete);
+            }
 
             res.status(200).send({
                 jwt

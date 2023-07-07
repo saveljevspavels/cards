@@ -53,9 +53,6 @@ const routes: Routes = [
         RouterModule.forChild(routes),
     ],
     exports: [RouterModule],
-    providers: [
-        AthleteService,
-        ActivityService
-    ]
+    providers: []
 })
 export class AdminRoutingModule { }

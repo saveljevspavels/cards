@@ -1,26 +1,21 @@
 import { Injectable } from '@angular/core';
-import {
-  REQUIRED_PERMISSIONS,
-} from "../constants/constants";
-import {HttpClient, HttpParams} from "@angular/common/http";
-import {filter, map, tap} from "rxjs/operators";
+import {HttpClient} from "@angular/common/http";
+import {map} from "rxjs/operators";
 import {Router} from "@angular/router";
 import {environment} from "../../environments/environment";
 import {LocalStorageService} from "./local-storage.service";
-import sampleUser from "../../../../../definitions/sampleUser.json"
-import {BehaviorSubject, Observable} from "rxjs";
-import {ConstService} from "./const.service";
+import {Observable} from "rxjs";
 import {decodeJwt} from "../../../../shared/utils/decodeJwt";
+import {AthleteService} from "./athlete.service";
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
 
-  myId = new BehaviorSubject<string>('');
-
   constructor(private httpClient: HttpClient,
-              private router: Router) {
+              private router: Router,
+              private athleteService: AthleteService) {
   }
 
   getJwt(code: string): Observable<string> {
@@ -37,7 +32,7 @@ export class AuthService {
   }
 
   decodeId() {
-      this.myId.next(decodeJwt(LocalStorageService.jwt).athleteId);
+      this.athleteService.myId.next(decodeJwt(LocalStorageService.jwt).athleteId);
   }
 
   async login() {
@@ -53,8 +48,12 @@ export class AuthService {
   }
 
   logout() {
-    localStorage.clear()
-    this.myId.next('');
-    this.router.navigateByUrl('/login')
+      this.clearUserData();
+      return this.router.navigateByUrl('/login')
+  }
+
+  clearUserData() {
+      localStorage.clear()
+      this.athleteService.myId.next('');
   }
 }

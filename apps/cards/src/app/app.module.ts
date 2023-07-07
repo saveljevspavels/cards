@@ -54,7 +54,7 @@ const firebaseConfig = FIREBASE_CONFIG;
         {provide: HTTP_INTERCEPTORS, useClass: HttpMainInterceptor, multi: true},
         {
             provide: APP_INITIALIZER,
-            useFactory: (athleteService: AthleteService) => () => athleteService.permissionPromise(),
+            useFactory: () => () => AthleteService.permissionPromise(),
             deps: [AthleteService],
             multi: true
         },
