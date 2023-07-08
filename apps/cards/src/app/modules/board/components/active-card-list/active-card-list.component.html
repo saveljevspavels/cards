@@ -1,9 +1,9 @@
 <ng-container *ngIf="featuredCard?.card">
-    <h2 class="mb-2 mt-2">Featured Task</h2>
+    <h2 class="mb-2 mt-2">Time Limited Task</h2>
     <div class="mb-3">
         <app-card (click)="cardSelected(featuredCard)"
                   [card]="featuredCard?.card"
-                  [showDescription]="false"
+                  [showDescription]="true"
                   [imagesController]="uploadedImages.get(cardList.length + '')"
                   [validationStatus]="featuredCard.validationStatus"
                   [featured]="true"

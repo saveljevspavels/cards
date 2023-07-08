@@ -26,13 +26,14 @@
 <ng-template #reportPopup>
     <div class="popup box">
         <div class="d-flex flex-column align-items-center">
-            <p class="mt-4 mb-2">
+            <p class="mt-5 pt-2 mb-4 text-center">
                 Is there a problem? Wrong task? Cheating?
             </p>
             <app-textarea [fc]="reportComment" [label]="'Please provide comment'"></app-textarea>
             <div class="mt-4 mb-2 full-width">
                 <app-button type="danger-filled"
                             [label]="'Report'"
+                            [disabled]="!reportComment.value"
                             (buttonClick)="confirmReport()"
                 ></app-button>
             </div>
