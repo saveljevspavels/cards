@@ -4,10 +4,9 @@
         width: 100%;
         display: flex;
         justify-content: flex-end;
-        padding-left: var(--padding-value);
-        padding-right: var(--padding-value);
+        padding: var(--padding);
         &-item {
-            text-align: right;
+            text-align: center;
             font-size: 12px;
             min-width: 50px;
         }

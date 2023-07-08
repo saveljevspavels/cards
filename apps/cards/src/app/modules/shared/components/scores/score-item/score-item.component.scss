@@ -28,8 +28,8 @@
         font-size: var(--text-size-big);
         color: var(--color-text-light);
         font-weight: 700;
-        min-width: 65px;
-        text-align: right;
+        min-width: 50px;
+        text-align: center;
     }
     &__achievements-amount {
         min-width: unset;
@@ -38,6 +38,6 @@
         font-size: var(--text-size-big);
         font-weight: 700;
         min-width: 50px;
-        text-align: right;
+        text-align: center;
     }
 }

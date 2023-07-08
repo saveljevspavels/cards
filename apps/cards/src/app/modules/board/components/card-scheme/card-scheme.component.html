@@ -11,7 +11,7 @@
             <div *ngFor="let level of board.levels; let levelIndex = index">
                 <ng-container *ngIf="level.cards.length">
                     <h2 class="mb-2 mt-2" *ngIf="(levelIndex - 1) === unlockMap.get(board.key)">Locked Tasks</h2>
-                    <div [ngClass]="{'border-primary border-radius p-2': (levelIndex - 1) === unlockMap.get(board.key)}">
+                    <div [ngClass]="{'border-primary border-radius p-2 mb-2': (levelIndex - 1) === unlockMap.get(board.key)}">
                         <div class="d-flex flex-column">
                             <ng-container *ngFor="let card of level.cards">
                                 <app-card *ngIf="cardMap.get(card)"
@@ -27,6 +27,7 @@
                         <app-button
                                 *ngIf="unlockMap.get(board.key) === levelIndex - 1"
                                 label="Unlock for -{{RULES.COINS.PER_LEVEL_PRICE}}"
+                                [disabled]="RULES.COINS.PER_LEVEL_PRICE > (athlete | async)?.coins"
                                 (buttonClick)="unlockLevel(board.key, levelIndex)"
                                 type="action"
                         >
@@ -42,7 +43,7 @@
 <ng-template #unlockPopup>
     <div class="popup box">
         <div class="d-flex flex-column align-items-center">
-            <p class="mt-4 mb-1">
+            <p class="mt-5 pt-2 mb-4 text-center">
                 Are you sure you want to unlock new tasks for {{RULES.COINS.PER_LEVEL_PRICE}} Coins?
             </p>
             <div class="mt-4 mb-2 full-width">
@@ -58,11 +59,13 @@
 <ng-template #activatePopup>
     <div class="popup box">
         <div class="d-flex flex-column align-items-center">
-            <p class="mt-4 mb-1">
+            <p class="mt-5 pt-2 mb-4 text-center">
                 Are you sure you want activate the task?
             </p>
             <div class="mt-4 mb-2 full-width">
-                <app-button type="action" [label]="'Yes'" (buttonClick)="confirmActivate()"></app-button>
+                <app-button type="action" [label]="'Yes'" (buttonClick)="confirmActivate()">
+                    <div class="title ml-2 d-flex justify-content-center">-1<app-svg [height]="20" [icon]="'fire'"></app-svg></div>
+                </app-button>
             </div>
             <div class="mb-3">
                 <app-button (buttonClick)="cancelActivate()" [label]="'Cancel'"></app-button>

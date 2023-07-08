@@ -3,10 +3,12 @@
     <div class="d-flex justify-content-center">
         <p class="mt-0 mb-2">Congratulation you have new completed task(s):</p>
     </div>
-    <div class="d-flex justify-content-around">
-        <app-completed-task *ngFor="let card of (athlete | async)?.cards.completed"
-                            [cardId]="card"
-        >
-        </app-completed-task>
+    <div class="d-flex justify-content-center">
+        <div class="pl-2 pr-2" *ngFor="let card of (athlete | async)?.cards.completed">
+            <app-completed-task
+                                [cardId]="card"
+            >
+            </app-completed-task>
+        </div>
     </div>
 </ng-container>

@@ -65,7 +65,7 @@
                      [polyline]="activity.map?.summary_polyline"
                      [activityType]="activityType"
         ></app-gallery>
-        <div class="d-flex justify-content-between mt-1">
+        <div class="d-flex justify-content-between mt-2">
             <app-button (click)="report(card.id)"
                         [small]="true"
                         [label]="(card?.reports && card?.reports[myId]) ? 'Reported' : 'Report'"

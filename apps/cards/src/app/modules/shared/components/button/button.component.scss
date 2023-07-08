@@ -22,7 +22,6 @@
         border-radius: var(--radius-half);
         .title {
             font-size: 12px!important;
-            font-weight: 400!important;;
         }
         app-svg {
             svg {
@@ -38,6 +37,7 @@
         fill: var(--acticity-background);
     }
     &--danger {
+        background-color: var(--color-background);
         color: var(--color-danger);
         border-color: var(--color-danger);
         app-svg {
@@ -59,7 +59,7 @@
         pointer-events: none;
         background-color: var(--color-disabled);
         border-color: var(--color-disabled);
-        color: var(--color-text-lighter);
+        color: var(--color-background);
     }
     &--transparent {
         background-color: #00000000!important;
