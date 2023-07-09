@@ -48,6 +48,7 @@ import { CircularProgressBarComponent } from './components/circular-progress-bar
 import { ImageComponent } from './components/image/image.component';
 import { GalleryComponent } from './components/gallery/gallery.component';
 import { CountDownComponent } from './components/count-down/count-down.component';
+import { RewardEnergyComponent } from './components/reward-energy/reward-energy.component';
 
 const COMPS = [
     InputComponent,
@@ -103,6 +104,7 @@ const MODULES = [
         ImageComponent,
         GalleryComponent,
         CountDownComponent,
+        RewardEnergyComponent,
     ],
     imports: [
         CommonModule,
@@ -120,6 +122,9 @@ const MODULES = [
         CompletedTaskViewComponent,
         CircularProgressBarComponent,
         RewardMoneyComponent,
+        RewardsComponent,
+        RewardPointsComponent,
+        RewardEnergyComponent,
     ],
     providers: [
         FileService

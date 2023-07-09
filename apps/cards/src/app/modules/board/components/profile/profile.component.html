@@ -13,22 +13,18 @@
 <!--    </app-collapsible>-->
 <!--</div>-->
 
-
-<!--<div class="mt-3">-->
-<!--    <app-collapsible [title]="'Achievements'"-->
-<!--                     [inclusive]="true"-->
-<!--                     [id]="'achievements'"-->
-<!--    >-->
-<!--        <div hiddenContent>-->
-<!--            <div class="mb-3">-->
-<!--                <div *ngFor="let achievement of achievements$ | async; let i = index">-->
-<!--                    <hr class="m-1" *ngIf="i !== 0">-->
-<!--                    <app-achievement [achievement]="achievement"></app-achievement>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--        </div>-->
-<!--    </app-collapsible>-->
-<!--</div>-->
+<div class="mt-3">
+    <app-collapsible [title]="'Special Abilities'"
+                     [inclusive]="true"
+                     [id]="'specialAbilities'"
+    >
+        <div hiddenContent>
+            <div class="mb-3 mt-2">
+                <app-abilities></app-abilities>
+            </div>
+        </div>
+    </app-collapsible>
+</div>
 
 <div class="mt-3">
     <app-collapsible [title]="'Played Cards'"
@@ -36,8 +32,8 @@
                      [id]="'payedCards'"
     >
         <div hiddenContent>
-            <div class="mb-3 m-2">
-                <div *ngFor="let activity of athleteActivities$ | async; let i = index">
+            <div class="mt-2">
+                <div *ngFor="let activity of athleteActivities$ | async; let i = index" class="mb-2">
                     <app-card *ngFor="let cardSnapShot of activity.gameData.cardSnapshots"
                               [card]="cardSnapShot"
                               [showActivate]="false"

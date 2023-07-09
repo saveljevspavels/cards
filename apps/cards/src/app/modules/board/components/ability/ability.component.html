@@ -1,0 +1,23 @@
+<div class="d-flex justify-content-between align-items-center box">
+    <div class="pr-4">
+        <div class="text-small text-bold mb-2">{{ability.title}}</div>
+        <div class="text-small text-light">{{ability.description}}</div>
+    </div>
+    <div>
+        <div class="d-flex justify-content-end">
+            <app-reward-money *ngIf="ability.coinsReward" [value]="ability.coinsReward"></app-reward-money>
+            <app-reward-points *ngIf="ability.value" [value]="ability.value"></app-reward-points>
+            <app-reward-energy *ngIf="ability.energyReward" [value]="ability.energyReward"></app-reward-energy>
+        </div>
+        <app-button [label]="'Activate'"
+                    [type]="'action'"
+                    [small]="true"
+                    [styleClass]="'mt-1-5 w-90'"
+                    [disabled]="ability.coinsCost ? (athlete$ | async)?.coins < ability.coinsCost : ability.energyCost ? (athlete$ | async)?.energy < ability.energyCost : false"
+        >
+            <div class="title ml-2 d-flex justify-content-center align-items-center">
+                {{ability.coinsCost ? '-' + ability.coinsCost : ability.energyCost ? '-' + ability.energyCost : ''}}&nbsp;<app-svg [icon]="ability.coinsCost ? 'coin' : ability.energyCost ? 'fire' : ''"></app-svg>
+            </div>
+        </app-button>
+    </div>
+</div>

@@ -21,12 +21,12 @@
         max-width: 74px;
         border-radius: var(--radius-half);
         .title {
-            font-size: 12px!important;
+            font-size: var(--text-size-small)!important;
         }
         app-svg {
             svg {
-                height: 16px;
-                width: 16px;
+                height: 14px;
+                width: 14px;
             }
         }
     }

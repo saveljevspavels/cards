@@ -1,3 +1,5 @@
+import {AbilityKey} from "./ability.interface";
+
 export default interface Athlete {
     name: string;
     firstname: string;
@@ -15,7 +17,8 @@ export default interface Athlete {
         finished: string[]
     };
     baseCardProgress: BaseCardProgress;
-    unlocks: {[key: string]: number}
+    unlocks: {[key: string]: number},
+    usedAbilities: AbilityKey[];
 }
 
 export interface AthletePatch {

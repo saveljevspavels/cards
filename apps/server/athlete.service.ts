@@ -105,7 +105,8 @@ export default class AthleteService {
                 walk: 0,
                 other: 0,
             },
-            unlocks: {}
+            unlocks: {},
+            usedAbilities: []
         }
     }
 

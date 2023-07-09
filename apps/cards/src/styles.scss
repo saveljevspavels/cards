@@ -83,6 +83,7 @@ body {
 .color-secondary-1 {@include color('secondary-1')};
 .color-secondary-2 {@include color('secondary-2')};
 .color-secondary-3 {@include color('secondary-3')};
+.color-danger {@include color('danger')};
 .color-run {@include color('run')};
 .color-walk {@include color('walk')};
 .color-ride {@include color('ride')};
@@ -250,6 +251,11 @@ h5 {
 
 .h-50 {
     height: 50px!important;
+}
+
+.w-90 {
+    width: 90px !important;
+    max-width: unset!important;
 }
 
 .mt-1-5 {

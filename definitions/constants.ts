@@ -47,5 +47,5 @@ export const CONST = {
     },
     GAME_ID: "game1",
     SCHEME_ID: "main",
-    COMMENT_LENGTH: 300
+    COMMENT_LENGTH: 300,
 }

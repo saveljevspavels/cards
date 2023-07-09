@@ -1,4 +1,4 @@
-<div class="reward-bubble d-flex align-items-center" [ngClass]="styleClass">
-    <span class="mr-1 text-bold text-medium">{{value > 0 ? '+' : '-'}}{{value}}</span>
+<div class="reward-bubble d-flex align-items-center {{styleClass}}" [ngClass]="{'color-danger': value < 0}">
+    <span class="mr-1 text-bold text-medium">{{value > 0 ? '+' : ''}}{{value}}</span>
     <app-svg height="14" width="14" [icon]="icon"></app-svg>
 </div>
