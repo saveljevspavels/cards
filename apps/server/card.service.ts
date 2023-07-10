@@ -79,13 +79,12 @@ export default class CardService {
 
         app.post(`${CONST.API_PREFIX}/cards/unlock-level`,async (req, res) => {
             const boardKey = req.body?.boardKey;
-            const level = req.body?.level;
             const athleteId = res.get('athleteId');
-            if(!boardKey || !athleteId || !level) {
-                res.status(400).send('Board Key/Level or Athlete Id missing');
+            if(!boardKey || !athleteId) {
+                res.status(400).send('Board Key or Athlete Id missing');
                 return;
             }
-            await this.unlockBoardLevel(athleteId, boardKey, level);
+            await this.unlockBoardLevel(athleteId, boardKey);
             res.status(200).send();
         });
 
@@ -139,22 +138,19 @@ export default class CardService {
         });
     }
 
-    async unlockBoardLevel(athleteId: string, boardKey: string, level: number) {
+    async unlockBoardLevel(athleteId: string, boardKey: string) {
         const athlete = await this.athleteService.getAthlete(athleteId);
 
         const currentMoney = athlete.coins || 0;
         const currentLevel = athlete.unlocks[boardKey] || 0;
-        if(currentLevel >= level) {
-            this.logger.error(`${boardKey} level ${level} already unlocked for athlete ${athlete.firstname} ${athlete.lastname}`);
-            return;
-        }
-        const price = (level - currentLevel) * RULES.COINS.PER_LEVEL_PRICE;
+        const nextLevel = currentLevel + 1;
+        const price = RULES.COINS.BASE_UNLOCK_PRICE + (nextLevel * RULES.COINS.PER_LEVEL_PRICE);
         if(currentMoney < price) {
-            this.logger.error(`Athlete ${athlete.firstname} ${athlete.lastname} does not have ${price} (has ${currentMoney}) money to unlock ${boardKey} ${level}`);
+            this.logger.error(`Athlete ${athlete.firstname} ${athlete.lastname} does not have ${price} (has ${currentMoney}) money to unlock ${boardKey} ${currentLevel + 1}`);
             return;
         }
         const newUnlocks = {...athlete.unlocks};
-        newUnlocks[boardKey] = level;
+        newUnlocks[boardKey] = nextLevel;
         await this.fireStoreService.athleteCollection.update(
             athleteId,
             {
@@ -162,7 +158,7 @@ export default class CardService {
                 unlocks: newUnlocks
             }
         )
-        this.logger.error(`Athlete ${athlete.firstname} ${athlete.lastname} unlocked ${boardKey} ${level} for ${price} coins (had ${currentMoney}, now has ${currentMoney - price})`);
+        this.logger.error(`Athlete ${athlete.firstname} ${athlete.lastname} unlocked ${boardKey} ${nextLevel} for ${price} coins (had ${currentMoney}, now has ${currentMoney - price})`);
     }
 
     async claimCardRewards(athleteId: string, cardId: string) {

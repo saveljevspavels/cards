@@ -22,6 +22,8 @@ export class CardSchemeComponent implements OnInit {
     public cardScheme: BehaviorSubject<CardScheme> = this.cardService.cardScheme;
     public athlete = this.athleteService.me;
 
+    public loading = false;
+
     private unlock$ = new Subject();
     private activate$ = new Subject();
     @ViewChild('unlockPopup', { static: true }) unlockPopup: ElementRef;
@@ -74,12 +76,16 @@ export class CardSchemeComponent implements OnInit {
         if(!cardId) {
             return;
         }
+        this.loading = true;
         this.activate$.pipe(
             first(),
             filter((resolution) => !!resolution)
         ).subscribe(_ => {
-            this.cardService.activateCard(cardId).subscribe();
-            this.router.navigateByUrl('');
+            this.cardService.activateCard(cardId).subscribe(() => {
+                this.loading = false;
+            }, () => {
+                this.loading = false;
+            });
         });
         this.popupService.showPopup(this.activatePopup);
     }
@@ -91,15 +97,20 @@ export class CardSchemeComponent implements OnInit {
 
     cancelActivate() {
         this.activate$.next(false);
+        this.loading = false;
         this.popupService.closePopup();
     }
 
-    unlockLevel(boardKey: string, level: number) {
+    unlockLevel(boardKey: string) {
         this.unlock$.pipe(
             first(),
             filter((resolution) => !!resolution)
         ).subscribe(_ => {
-            this.cardService.unlockLevel(boardKey, level).subscribe();
+            this.cardService.unlockLevel(boardKey).subscribe(() => {
+                this.loading = false;
+            }, () => {
+                this.loading = false;
+            });
         })
         this.popupService.showPopup(this.unlockPopup);
     }
@@ -111,6 +122,7 @@ export class CardSchemeComponent implements OnInit {
 
     cancelUnlock() {
         this.unlock$.next(false);
+        this.loading = false;
         this.popupService.closePopup();
     }
 }

@@ -27,7 +27,8 @@ export default class ScoreService {
             athleteId.toString(),
             {
                 ...score,
-                value: newValue
+                value: newValue,
+                cardsPlayed: score.cardsPlayed + 1
             }
         );
 

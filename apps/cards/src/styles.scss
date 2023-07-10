@@ -76,6 +76,9 @@ body {
     overflow-x: hidden;
     font-size: var(--text-size);
     background-color: var(--color-background);
+    user-select: none;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+    -webkit-tap-highlight-color: transparent;
 }
 
 .color-background {@include color('background')};

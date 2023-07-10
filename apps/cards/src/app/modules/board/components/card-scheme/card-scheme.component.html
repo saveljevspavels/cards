@@ -26,9 +26,9 @@
                         </div>
                         <app-button
                                 *ngIf="unlockMap.get(board.key) === levelIndex - 1"
-                                label="Unlock for -{{RULES.COINS.PER_LEVEL_PRICE}}"
-                                [disabled]="RULES.COINS.PER_LEVEL_PRICE > (athlete | async)?.coins"
-                                (buttonClick)="unlockLevel(board.key, levelIndex)"
+                                label="Unlock for -{{(RULES.COINS.BASE_UNLOCK_PRICE + (RULES.COINS.PER_LEVEL_PRICE * levelIndex))}}"
+                                [disabled]="(RULES.COINS.BASE_UNLOCK_PRICE + (RULES.COINS.PER_LEVEL_PRICE * levelIndex)) > (athlete | async)?.coins"
+                                (buttonClick)="unlockLevel(board.key)"
                                 type="action"
                         >
                             <app-svg [icon]="'coin'" height="20"></app-svg>
@@ -44,7 +44,7 @@
     <div class="popup box">
         <div class="d-flex flex-column align-items-center">
             <p class="mt-5 pt-2 mb-4 text-center">
-                Are you sure you want to unlock new tasks for {{RULES.COINS.PER_LEVEL_PRICE}} Coins?
+                Are you sure you want to unlock new tasks?
             </p>
             <div class="mt-4 mb-2 full-width">
                 <app-button type="action" [label]="'Yes'" (buttonClick)="confirmUnlock()"></app-button>

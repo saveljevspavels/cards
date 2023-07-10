@@ -82,6 +82,7 @@ export const RULES = {
         MAX: 999,
         PER_ENERGY_CONVERSION: 2,
         BASE_CARD_REWARD: 1,
+        BASE_UNLOCK_PRICE: 0,
         PER_LEVEL_PRICE: 5
     },
     SCHEME: {
