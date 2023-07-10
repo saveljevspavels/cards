@@ -23,14 +23,27 @@ export default class ScoreService {
             return;
         }
         const newValue: number = parseInt(String(score.value)) + parseInt(String(deduct ? (-card.value) : card.value));
-            await this.fireStoreService.scoreCollection.set(
+        await this.fireStoreService.scoreCollection.set(
             athleteId.toString(),
             {
                 ...score,
                 value: newValue
-            });
+            }
+        );
 
         this.logger.info(`Athlete ${athleteId} ${deduct ? 'lost': 'got'} ${card.value} points, new score: ${newValue}, was ${score.value}`)
+    }
+
+    async addPoints(athleteId: string, value: number) {
+        const score = (await this.fireStoreService.scoreCollection.get(athleteId.toString())) || this.createNewScore(athleteId);
+        await this.fireStoreService.scoreCollection.set(
+            athleteId.toString(),
+            {
+                ...score,
+                value: score.value + value
+            }
+        );
+        this.logger.info(`Athlete ${athleteId} got ${value} points, new score: ${score.value + value}, was ${score.value}`);
     }
 
     createNewScore(athleteId: string): Score {

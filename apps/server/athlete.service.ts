@@ -119,5 +119,56 @@ export default class AthleteService {
         }
     }
 
+    async restoreAthletesEnergy(value: number) {
+        const allAthletes = await this.fireStoreService.athleteCollection.all();
+        Promise.all([
+            ...allAthletes.map((athlete: Athlete) => this.addEnergy(athlete.id, value))
+        ]);
+    }
 
+    async addEnergy(athleteId: string, value: number) {
+        const athlete = await this.getAthlete(athleteId);
+        const excessEnergy = ((athlete.energy || 0) + value) - RULES.ENERGY.MAX;
+        const newVal = Math.min((athlete.energy || 0) + value, RULES.ENERGY.MAX)
+        await this.fireStoreService.athleteCollection.update(
+            athlete.id.toString(),
+            {
+                energy: newVal,
+                coins: (athlete.coins || 0) + (excessEnergy > 0 ? excessEnergy * RULES.COINS.PER_ENERGY_CONVERSION : 0)
+            }
+        )
+        this.logger.info(`Athlete ${athlete.firstname} ${athlete.lastname} ${athlete.id} restored ${value} energy, now ${newVal}, and ${(excessEnergy > 0 ? excessEnergy * RULES.COINS.PER_ENERGY_CONVERSION : 0)} coins`)
+    }
+
+    async spendEnergy(athleteId: string, amount: number) {
+        const athlete = await this.getAthlete(athleteId);
+        if(athlete.energy < amount) {
+            this.logger.info(`Athlete ${athlete.name} don't have enough energy (${amount}) to spend. Has ${athlete.energy}`);
+            throw 'Not enough energy';
+        }
+
+        await this.fireStoreService.athleteCollection.update(
+            athleteId,
+            {
+                energy: athlete.energy - amount
+            }
+        )
+        this.logger.info(`Athlete ${athlete.firstname} ${athlete.lastname} spent ${amount} energy, now ${athlete.energy - amount}`)
+    }
+
+    async spendCoins(athleteId: string, amount: number) {
+        const athlete = await this.getAthlete(athleteId);
+        if(athlete.coins < amount) {
+            this.logger.info(`Athlete ${athlete.name} don't have enough coins (${amount}) to spend. Has ${athlete.coins}`);
+            throw 'Not enough coins';
+        }
+
+        await this.fireStoreService.athleteCollection.update(
+            athleteId,
+            {
+                coins: athlete.coins - amount
+            }
+        )
+        this.logger.info(`Athlete ${athlete.name} spent ${amount} coins, now ${athlete.coins - amount}`)
+    }
 }

@@ -13,11 +13,37 @@
                     [type]="'action'"
                     [small]="true"
                     [styleClass]="'mt-1-5 w-90'"
-                    [disabled]="ability.coinsCost ? (athlete$ | async)?.coins < ability.coinsCost : ability.energyCost ? (athlete$ | async)?.energy < ability.energyCost : false"
+                    [loading]="loading"
+                    (buttonClick)="openConfirmation()"
+                    [disabled]="ability.coinsCost ? athlete.coins < ability.coinsCost : ability.energyCost ? athlete.energy < ability.energyCost : false"
         >
-            <div class="title ml-2 d-flex justify-content-center align-items-center">
-                {{ability.coinsCost ? '-' + ability.coinsCost : ability.energyCost ? '-' + ability.energyCost : ''}}&nbsp;<app-svg [icon]="ability.coinsCost ? 'coin' : ability.energyCost ? 'fire' : ''"></app-svg>
-            </div>
+            <ng-container [ngTemplateOutlet]="price"></ng-container>
         </app-button>
     </div>
 </div>
+
+<ng-template #price>
+    <div class="title ml-2 d-flex justify-content-center align-items-center">
+        {{ability.coinsCost ? '-' + ability.coinsCost : ability.energyCost ? '-' + ability.energyCost : ''}}&nbsp;<app-svg [icon]="ability.coinsCost ? 'coin' : ability.energyCost ? 'fire' : ''"></app-svg>
+    </div>
+</ng-template>
+
+<ng-template #activateAbilityPopup>
+    <div class="popup box">
+        <div class="d-flex flex-column align-items-center">
+            <div class="mt-5 pt-2 mb-4 text-center">
+                <p class="color-primary">Each ability can be used only once.</p>
+                Are you sure you want activate the ability?
+            </div>
+            <div class="mt-4 mb-2 full-width">
+                <app-button type="action" [label]="'Yes'" (buttonClick)="confirm(ability.key)">
+                    <ng-container [ngTemplateOutlet]="price"></ng-container>
+                </app-button>
+            </div>
+            <div class="mb-3">
+                <app-button (buttonClick)="cancel()" [label]="'Cancel'"></app-button>
+            </div>
+        </div>
+    </div>
+</ng-template>
+

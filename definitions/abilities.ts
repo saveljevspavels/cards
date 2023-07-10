@@ -1,0 +1,76 @@
+import {Ability, AbilityKey} from "../apps/shared/interfaces/ability.interface";
+import {RULES} from "./rules";
+
+export const ABILITIES: Ability[] =
+[
+    {
+        title: 'Reset Task',
+        key: AbilityKey.RESET_CARD,
+        description: 'You can reset any played card so it could be played again',
+        value: 0,
+        energyCost: 0,
+        energyReward: 0,
+        coinsCost: 10,
+        coinsReward: 0,
+    },
+    {
+        title: 'Victory point',
+        key: AbilityKey.BUY_POINT,
+        description: 'Immediately get 1 victory point',
+        value: 1,
+        energyCost: 0,
+        energyReward: 0,
+        coinsCost: 10,
+        coinsReward: 0,
+    },
+    {
+        title: 'Rest Day',
+        key: AbilityKey.SELL_ENERGY_FULL,
+        description: 'Lose full energy to immediately get 3 victory points',
+        value: 3,
+        energyCost: RULES.ENERGY.MAX,
+        energyReward: 0,
+        coinsCost: 0,
+        coinsReward: 0,
+    },
+    {
+        title: 'Energy Shot',
+        key: AbilityKey.BUY_ENERGY,
+        description: 'Immediately restore 1 energy',
+        value: 0,
+        energyCost: 0,
+        energyReward: 1,
+        coinsCost: 10,
+        coinsReward: 0,
+    },
+    {
+        title: 'Energy Boost',
+        key: AbilityKey.BUY_ENERGY_FULL,
+        description: 'Immediately restore full energy',
+        value: 0,
+        energyCost: 0,
+        energyReward: RULES.ENERGY.MAX,
+        coinsCost: 25,
+        coinsReward: 0,
+    },
+    {
+        title: 'All In',
+        key: AbilityKey.ENERGY_TO_COINS,
+        description: 'Spend full energy to get 20 coins',
+        value: 0,
+        energyCost: RULES.ENERGY.MAX,
+        energyReward: 0,
+        coinsCost: 0,
+        coinsReward: 20,
+    },
+    {
+        title: 'Go Easy',
+        key: AbilityKey.REDUCE_BASE_WORKOUT,
+        description: 'Reduce distance requirements for most of the tasks by 10%',
+        value: 0,
+        energyCost: 0,
+        energyReward: 0,
+        coinsCost: 30,
+        coinsReward: 0,
+    }
+]

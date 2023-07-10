@@ -5,6 +5,7 @@ import Game from "../interfaces/game";
 import {ConstService} from "./const.service";
 import {environment} from "../../environments/environment";
 import {HttpClient} from "@angular/common/http";
+import {AbilityKey} from "../../../../shared/interfaces/ability.interface";
 
 @Injectable({
   providedIn: 'root'
@@ -23,5 +24,13 @@ export class GameService {
 
     getCreatures() {
         return this.http.get(`${environment.baseBE}/creatures`)
+    }
+
+    useAbility(abilityKey: AbilityKey) {
+        return this.http.post(`${environment.baseBE}/game/ability`,
+            {
+                abilityKey
+            }
+        )
     }
 }

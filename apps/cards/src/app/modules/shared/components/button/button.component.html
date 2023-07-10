@@ -1,5 +1,5 @@
 <div class="button {{styleClass}}" (click)="click($event)" [ngClass]="{
-        'button--disabled': disabled,
+        'button--disabled': disabled || loading,
         'button--danger': type === 'danger',
         'button--danger-filled': type === 'danger-filled',
         'button--success': type === 'success',

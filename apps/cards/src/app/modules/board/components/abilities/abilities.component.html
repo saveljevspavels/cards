@@ -1,4 +1,11 @@
-<div class="text-small mb-2">Each ability is usable only once</div>
-<div class="mb-2" *ngFor="let ability of abilities">
-    <app-ability [ability]="ability"></app-ability>
-</div>
+<ng-container *ngIf="athlete">
+    <div class="text-small mb-2">{{abilities.length ? 'Each ability is usable only once' : 'All available abilities used!'}}</div>
+    <ng-container *ngFor="let ability of abilities">
+        <div class="mb-2">
+            <app-ability
+                    [ability]="ability"
+                    [athlete]="athlete"
+            ></app-ability>
+        </div>
+    </ng-container>
+</ng-container>

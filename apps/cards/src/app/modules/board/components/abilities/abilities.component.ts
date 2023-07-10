@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import {Ability, AbilityKey} from "../../../../../../../shared/interfaces/ability.interface";
+import {ABILITIES} from "../../../../../../../../definitions/abilities";
+import {AthleteService} from "../../../../services/athlete.service";
+import Athlete from "../../../../../../../shared/interfaces/athlete.interface";
 import {RULES} from "../../../../../../../../definitions/rules";
-import {Ability} from "../../../../../../../shared/interfaces/ability.interface";
 
 @Component({
   selector: 'app-abilities',
@@ -9,11 +12,20 @@ import {Ability} from "../../../../../../../shared/interfaces/ability.interface"
 })
 export class AbilitiesComponent implements OnInit {
 
-  public abilities: Ability[] = RULES.ABILITIES;
+  public abilities: Ability[];
+  public athlete: Athlete;
 
-  constructor() { }
+  constructor(private athleteService: AthleteService) { }
 
   ngOnInit(): void {
+    this.athleteService.me.subscribe(athlete => {
+      if(athlete) {
+        this.athlete = athlete;
+        this.abilities = ABILITIES
+            .filter((ability: Ability) => RULES.ENABLED_ABILITIES.indexOf(ability.key) !== -1)
+            .filter((ability: Ability) => athlete.usedAbilities.indexOf(ability.key) === -1);
+      }
+    })
   }
 
 }

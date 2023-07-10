@@ -1,6 +1,9 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {Ability} from "../../../../../../../shared/interfaces/ability.interface";
+import {Component, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
+import {Ability, AbilityKey} from "../../../../../../../shared/interfaces/ability.interface";
 import {AthleteService} from "../../../../services/athlete.service";
+import {GameService} from "../../../../services/game.service";
+import {PopupService} from "../../../../services/popup.service";
+import Athlete from "../../../../../../../shared/interfaces/athlete.interface";
 
 @Component({
   selector: 'app-ability',
@@ -10,12 +13,40 @@ import {AthleteService} from "../../../../services/athlete.service";
 export class AbilityComponent implements OnInit {
 
   @Input() ability: Ability;
+  @Input() athlete: Athlete;
 
-  public athlete$ = this.athleteService.me;
+  public loading = false;
 
-  constructor(private athleteService: AthleteService) { }
+  @ViewChild('activateAbilityPopup', { static: true }) activateAbilityPopup: ElementRef;
+
+  constructor(
+      private athleteService: AthleteService,
+      private gameService: GameService,
+      private popupService: PopupService
+  ) { }
 
   ngOnInit(): void {
   }
 
+  useAbility(activityKey: AbilityKey) {
+    this.loading = true;
+    this.gameService.useAbility(activityKey).subscribe(() => {
+      this.loading = false;
+    }, (err) => {
+      this.loading = false;
+    });
+  }
+
+  openConfirmation() {
+    this.popupService.showPopup(this.activateAbilityPopup);
+  }
+
+  cancel() {
+    this.popupService.closePopup();
+  }
+
+  confirm(activityKey: AbilityKey) {
+    this.useAbility(activityKey);
+    this.popupService.closePopup();
+  }
 }

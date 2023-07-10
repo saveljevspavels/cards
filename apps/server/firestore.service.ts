@@ -45,32 +45,6 @@ export class FirestoreService {
                 this[method] = this.errorHandlerWrap(method, this[method]);
             }
         })
-
-        this.initEnergyRegen();
-        this.initFeaturedCardChange();
-    }
-
-    initEnergyRegen() {
-        const rule = new schedule.RecurrenceRule();
-        rule.hour = 21;
-        rule.minute = 0;
-        rule.tz = 'Etc/UTC';
-
-        const job = schedule.scheduleJob(rule, async () => {
-            this.logger.error(`It's midnight`);
-            await this.restoreAthletesEnergy(RULES.ENERGY.TIMED_RESTORE);
-        })
-    }
-
-    initFeaturedCardChange() {
-        const rule = new schedule.RecurrenceRule();
-        rule.hour = RULES.FEATURED_TASK_HOURS;
-        rule.minute = 0;
-        rule.tz = 'Europe/Riga';
-
-        const job = schedule.scheduleJob(rule, async () => {
-            await this.changeFeaturedCard();
-        })
     }
 
     errorHandlerWrap(methodName: string, method: any) {
@@ -156,62 +130,6 @@ export class FirestoreService {
             await this.cardCollection.delete(cards[i]);
         }
         this.logger.info(`Cards ${cards} deleted`)
-    }
-
-    async spendEnergy(athleteId: string, cardIds: string[]) {
-        let energySpent = 0;
-        if(cardIds?.length) {
-            const itemQuery = this.cardCollection.collection.where('id', 'in', cardIds)
-            const itemDocs = await itemQuery.get()
-            itemDocs.forEach(item => {
-                energySpent = energySpent + getTier(item.data().value.energyCost);
-            })
-        }
-
-        const athlete = await this.athleteCollection.get(athleteId.toString());
-
-        if(athlete) {
-            const newVal = Math.max((athlete.energy || 0) - energySpent, 0);
-            await this.athleteCollection.update(
-                athleteId.toString(),
-                {
-                    energy: newVal
-                }
-            )
-            this.logger.info(`Athlete ${athlete.firstname} ${athlete.lastname} spent ${energySpent} energy, now ${newVal}`)
-            return true;
-        } else {
-            this.logger.info(`Athlete ${athleteId} doesn't exist`)
-            return false;
-        }
-    }
-
-    async changeFeaturedCard() {
-        const allCards: Card[] = await this.cardCollection.all();
-        const randomCard = allCards[getRandomInt(allCards.length) - 1]
-        await this.gameCollection.update(
-            CONST.GAME_ID,
-            {
-                featuredCard: randomCard.id
-            }
-        )
-        this.logger.error(`New featured card ${randomCard.title}`);
-    }
-
-    async restoreAthletesEnergy(value: number) {
-        const allAthletes = await this.athleteCollection.all();
-        allAthletes.forEach((athlete) => {
-            const excessEnergy = ((athlete.energy || 0) + value) - RULES.ENERGY.MAX;
-            const newVal = Math.min((athlete.energy || 0) + value, RULES.ENERGY.MAX)
-            this.athleteCollection.update(
-                athlete.id.toString(),
-                {
-                    energy: newVal,
-                    coins: (athlete.coins || 0) + (excessEnergy > 0 ? excessEnergy * RULES.COINS.PER_ENERGY_CONVERSION : 0)
-                }
-            )
-            this.logger.info(`Athlete ${athlete.firstname} ${athlete.lastname} ${athlete.id} restored ${value} energy, now ${newVal}, and ${(excessEnergy > 0 ? excessEnergy * RULES.COINS.PER_ENERGY_CONVERSION : 0)} coins`)
-        })
     }
 
     async updateBaseWorkout(athleteIds: string[], baseWorkoutPatch: any) {
