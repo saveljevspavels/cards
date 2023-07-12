@@ -75,7 +75,7 @@ export class ValidatorComponent implements OnInit {
                         : this.validationService.validateRule(activity, this.validator)
                             ? 'pass'
                             : 'fail',
-                    type: activity?.type ? UtilService.normalizeActivityType(activity?.type) : ''
+                    type: activity?.type ? UtilService.normalizeActivityType(activity) : ''
                 }
             }))
         })

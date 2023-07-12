@@ -20,7 +20,7 @@ export class PendingActivityComponent implements OnInit {
   constructor(private boardService: BoardService) { }
 
   ngOnInit(): void {
-    this.activityType = UtilService.normalizeActivityType(this.activity.type);
+    this.activityType = UtilService.normalizeActivityType(this.activity);
     // @ts-ignore
     this.value = this.activity[StaticValidationService.baseActivityTypeMap.get(this.activityType)];
 

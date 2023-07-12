@@ -2,14 +2,13 @@ import {RESPONSES} from "./response-codes";
 import {Express} from "express";
 import {FirestoreService} from "./firestore.service";
 import {CONST} from "../../definitions/constants";
-import {normalizeActivityType} from "./helpers/util";
 import {RULES} from "../../definitions/rules";
 import {Logger} from "winston";
 import {StaticValidationService} from "../shared/services/validation.service";
 import Card, {CardSnapshot, NullCard} from "../shared/interfaces/card.interface";
 import Athlete from "../shared/interfaces/athlete.interface";
 import AthleteService from "./athlete.service";
-import GameService from "./game.service";
+import {UtilService} from "../cards/src/app/services/util.service";
 
 export default class ActivityService {
     constructor(
@@ -118,7 +117,7 @@ export default class ActivityService {
         if(cardIds.length) {
             const cards = await this.fireStoreService.cardCollection.where([{ fieldPath: 'id', opStr: 'in', value: cardIds}])
             const baseWorkoutPatch: any = {};
-            const normalizedType = normalizeActivityType(activity.type);
+            const normalizedType = UtilService.normalizeActivityType(activity);
             baseWorkoutPatch[normalizedType] = {};
             cards.forEach((card) => {
                 card.validators.forEach((validator: any) => {

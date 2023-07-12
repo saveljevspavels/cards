@@ -1,8 +1,8 @@
 import {RULES} from "../../../definitions/rules";
 import {CONST} from "../../../definitions/constants";
-import {normalizeActivityType} from "../../server/helpers/util";
 import Card, {CardSnapshot, Validator} from "../interfaces/card.interface";
 import {BaseCardProgress, BaseWorkout} from "../interfaces/athlete.interface";
+import {UtilService} from "../../cards/src/app/services/util.service";
 
 export class StaticValidationService {
 
@@ -55,7 +55,7 @@ export class StaticValidationService {
     }
 
     static validateRule(activity: any, validator: Validator, baseWorkout: BaseWorkout): boolean {
-        const type = normalizeActivityType(activity.type);
+        const type = UtilService.normalizeActivityType(activity);
 
         const activityVal = StaticValidationService.getActivityValue(activity, validator);
         const validatorVal = this.resolveValidationValue(validator, baseWorkout)[type]
@@ -66,9 +66,9 @@ export class StaticValidationService {
             case CONST.COMPARATORS.LESS:
                 return activityVal < validatorVal
             case CONST.COMPARATORS.IN:
-                return validatorVal.toString().toUpperCase().indexOf(normalizeActivityType(activityVal).toUpperCase()) !== -1
+                return validatorVal.toString().toUpperCase().indexOf(UtilService.normalizeActivityType(activity).toUpperCase()) !== -1
             case CONST.COMPARATORS.NOT_IN:
-                return validatorVal.toString().toUpperCase().indexOf(normalizeActivityType(activityVal).toUpperCase()) === -1
+                return validatorVal.toString().toUpperCase().indexOf(UtilService.normalizeActivityType(activity).toUpperCase()) === -1
             case CONST.COMPARATORS.EQUALS:
             default:
                 return activityVal === validatorVal
@@ -108,7 +108,7 @@ export class StaticValidationService {
     }
 
     static getBaseCardProgress(activity: any, baseWorkout: BaseWorkout): number {
-        const activityType = normalizeActivityType(activity.type) || '';
+        const activityType = UtilService.normalizeActivityType(activity) || '';
         const property = StaticValidationService.baseActivityTypeMap.get(activityType) || '';
         const activityValue = activity[property]
         // @ts-ignore
@@ -135,12 +135,12 @@ export class StaticValidationService {
         const progress = StaticValidationService.getBaseCardProgress(activity, baseWorkout);
         const result = {...baseCardProgress};
         // @ts-ignore
-        result[normalizeActivityType(activity.type)] = baseCardProgress[normalizeActivityType(activity.type)] + progress;
+        result[normalizeActivityType(activity)] = baseCardProgress[normalizeActivityType(activity)] + progress;
         return result;
     }
 
-    static updateBaseCardProgressFromCard(rawType: string, card: CardSnapshot, baseWorkout: BaseWorkout, baseCardProgress: BaseCardProgress): BaseCardProgress {
-        const activityType = normalizeActivityType(rawType) || '';
+    static updateBaseCardProgressFromCard(activity: any, card: CardSnapshot, baseWorkout: BaseWorkout, baseCardProgress: BaseCardProgress): BaseCardProgress {
+        const activityType = UtilService.normalizeActivityType(activity) || '';
         const progress = StaticValidationService.getBaseCardProgressFromCard(activityType, card, baseWorkout);
         const result = {...baseCardProgress};
         // @ts-ignore
@@ -157,7 +157,7 @@ export class StaticValidationService {
             return activity;
         }
 
-        const type = normalizeActivityType(activity.type);
+        const type = UtilService.normalizeActivityType(activity);
         const value = StaticValidationService.getActivityValue(activity, spendableValidator);
         const activityCopy = {...activity};
         activityCopy[spendableValidator.property] = value - StaticValidationService.resolveValidationValue(spendableValidator, baseWorkout)[type];

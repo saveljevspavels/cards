@@ -70,7 +70,7 @@ export class ActivityComponent implements OnInit, ControlValueAccessor, OnChange
 
     ngOnChanges(changes: SimpleChanges) {
         if(changes.activity) {
-            this.activityType = UtilService.normalizeActivityType(this.activity.type);
+            this.activityType = UtilService.normalizeActivityType(this.activity);
             this.activity.gameData?.cardSnapshots.forEach((cardSnapshot: CardSnapshot) => {
                 cardSnapshot.likedByMe = (cardSnapshot?.likes && cardSnapshot?.likes?.indexOf(this.myId) !== -1);
             });

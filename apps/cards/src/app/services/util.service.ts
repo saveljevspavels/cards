@@ -12,8 +12,11 @@ export class UtilService {
         return Math.random().toString(36).substring(7);
     }
 
-    static normalizeActivityType = (type: string): any => {
-        return Object.values(ConstService.CONST.ACTIVITY_TYPES).find((activityType: any) => type.toUpperCase().indexOf(activityType.toUpperCase()) !== -1) || ConstService.CONST.ACTIVITY_TYPES.OTHER
+    static normalizeActivityType = (activity: any): string => {
+        if(!activity || activity.distance === 0) {
+            return ConstService.CONST.ACTIVITY_TYPES.OTHER;
+        }
+        return Object.values(ConstService.CONST.ACTIVITY_TYPES).find((activityType: any) => activity.type.toUpperCase().indexOf(activityType.toUpperCase()) !== -1) || ConstService.CONST.ACTIVITY_TYPES.OTHER
     }
 
     static getFlatKeys(object: any): any {

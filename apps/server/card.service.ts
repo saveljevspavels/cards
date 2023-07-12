@@ -419,7 +419,7 @@ export default class CardService {
                 owner.id,
                 {
                     coins: finished ? owner.coins - card.coinsReward : owner.coins,
-                    baseCardProgress: StaticValidationService.updateBaseCardProgressFromCard(activity.type, card, owner.baseWorkout, owner.baseCardProgress),
+                    baseCardProgress: StaticValidationService.updateBaseCardProgressFromCard(activity, card, owner.baseWorkout, owner.baseCardProgress),
                     cards: {
                         ...owner.cards,
                         finished: owner.cards?.finished.filter(card => card !== cardId),
