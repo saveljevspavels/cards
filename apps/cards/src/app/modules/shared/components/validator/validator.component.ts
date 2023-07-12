@@ -7,6 +7,7 @@ import {Observable} from "rxjs";
 import {ConstService} from "../../../../services/const.service";
 import {ValidationService} from "../../../../services/validation.service";
 import {UtilService} from "../../../../services/util.service";
+import {StaticValidationService} from "../../../../../../../shared/services/validation.service";
 
 @Component({
     selector: 'app-validator',
@@ -75,7 +76,7 @@ export class ValidatorComponent implements OnInit {
                         : this.validationService.validateRule(activity, this.validator)
                             ? 'pass'
                             : 'fail',
-                    type: activity?.type ? UtilService.normalizeActivityType(activity) : ''
+                    type: activity?.type ? StaticValidationService.normalizeActivityType(activity) : ''
                 }
             }))
         })

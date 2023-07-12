@@ -1,6 +1,5 @@
 import {Component, Input, OnChanges, OnInit, Output} from '@angular/core';
 import {ValidationService} from "../../../../services/validation.service";
-import {UtilService} from "../../../../services/util.service";
 import {StaticValidationService} from "../../../../../../../shared/services/validation.service";
 import {RULES} from "../../../../../../../../definitions/rules";
 
@@ -29,7 +28,7 @@ export class CircularProgressBarComponent implements OnChanges {
   ) { }
 
   ngOnChanges(): void {
-    this.active = !this.activity || this.type === UtilService.normalizeActivityType(this.activity);
+    this.active = !this.activity || this.type === StaticValidationService.normalizeActivityType(this.activity);
     this.baseValue = this.validationService.getBaseValue(this.type);
     this.currentValue = Math.floor((this.currentProgress * this.baseValue) / RULES.PROGRESS_PRECISION);
     this.newValue = this.active ? parseInt(this.activity && this.activity[StaticValidationService.baseActivityTypeMap.get(this.type) || ''] || 0,  10) : 0;

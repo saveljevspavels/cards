@@ -2,7 +2,6 @@ import {Injectable} from "@angular/core";
 import {ConstService} from "./const.service";
 import {LocalStorageService} from "./local-storage.service";
 
-
 @Injectable()
 export class UtilService {
 
@@ -10,13 +9,6 @@ export class UtilService {
 
     static generateId = () => {
         return Math.random().toString(36).substring(7);
-    }
-
-    static normalizeActivityType = (activity: any): string => {
-        if(!activity || activity.distance === 0) {
-            return ConstService.CONST.ACTIVITY_TYPES.OTHER;
-        }
-        return Object.values(ConstService.CONST.ACTIVITY_TYPES).find((activityType: any) => activity.type.toUpperCase().indexOf(activityType.toUpperCase()) !== -1) || ConstService.CONST.ACTIVITY_TYPES.OTHER
     }
 
     static getFlatKeys(object: any): any {

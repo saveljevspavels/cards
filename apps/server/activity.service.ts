@@ -8,7 +8,7 @@ import {StaticValidationService} from "../shared/services/validation.service";
 import Card, {CardSnapshot, NullCard} from "../shared/interfaces/card.interface";
 import Athlete from "../shared/interfaces/athlete.interface";
 import AthleteService from "./athlete.service";
-import {UtilService} from "../cards/src/app/services/util.service";
+import {ConstService} from "../cards/src/app/services/const.service";
 
 export default class ActivityService {
     constructor(
@@ -117,7 +117,7 @@ export default class ActivityService {
         if(cardIds.length) {
             const cards = await this.fireStoreService.cardCollection.where([{ fieldPath: 'id', opStr: 'in', value: cardIds}])
             const baseWorkoutPatch: any = {};
-            const normalizedType = UtilService.normalizeActivityType(activity);
+            const normalizedType = StaticValidationService.normalizeActivityType(activity);
             baseWorkoutPatch[normalizedType] = {};
             cards.forEach((card) => {
                 card.validators.forEach((validator: any) => {
@@ -131,6 +131,21 @@ export default class ActivityService {
             })
             if(Object.keys(baseWorkoutPatch[normalizedType]).length) {
                 await this.fireStoreService.updateBaseWorkout([activity.athlete.id.toString()], baseWorkoutPatch)
+            }
+        }
+    }
+
+    async submitAllActivities(athleteId: string) {
+        const activities = await this.fireStoreService.detailedActivityCollection.where([
+            {fieldPath: 'athlete.id', opStr: '==', value: parseInt(athleteId, 10)},
+            {fieldPath: 'gameData.status', opStr: '==', value: CONST.ACTIVITY_STATUSES.NEW},
+        ]);
+        for(let i = 0; i < activities.length; i++) {
+            try {
+                await this.submitActivity(activities[i].id, [], [], '');
+                await this.tryAutoApprove(activities[i].id);
+            } catch (err) {
+                this.logger.info(`Error auto submitting activity ${activities[i].id} for athlete ${athleteId}`);
             }
         }
     }

@@ -1,8 +1,6 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {UtilService} from "../../../../services/util.service";
+import {Component, Input, OnInit} from '@angular/core';
 import {StaticValidationService} from "../../../../../../../shared/services/validation.service";
 import {BoardService} from "../../../../services/board.service";
-import {filter} from "rxjs/operators";
 
 @Component({
   selector: 'app-pending-activity',
@@ -20,7 +18,7 @@ export class PendingActivityComponent implements OnInit {
   constructor(private boardService: BoardService) { }
 
   ngOnInit(): void {
-    this.activityType = UtilService.normalizeActivityType(this.activity);
+    this.activityType = StaticValidationService.normalizeActivityType(this.activity);
     // @ts-ignore
     this.value = this.activity[StaticValidationService.baseActivityTypeMap.get(this.activityType)];
 

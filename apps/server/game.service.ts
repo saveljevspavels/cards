@@ -9,12 +9,12 @@ import {Logger} from "winston";
 import {ABILITIES} from "../../definitions/abilities";
 import schedule from "node-schedule";
 import {RULES} from "../../definitions/rules";
-import Card from "../shared/interfaces/card.interface";
 import {getRandomInt} from "./helpers/util";
 import ScoreService from "./score.service";
 import CardService from "./card.service";
 import Athlete from "../shared/interfaces/athlete.interface";
 import CardFactory from "../shared/interfaces/card-factory.interface";
+import ActivityService from "./activity.service";
 
 export default class GameService {
     constructor(
@@ -23,7 +23,8 @@ export default class GameService {
         private logger: Logger,
         private athleteService: AthleteService,
         private scoreService: ScoreService,
-        private cardService: CardService
+        private cardService: CardService,
+        private activityService: ActivityService
     ) {
         app.post(`${CONST.API_PREFIX}/start-game`, async (req, res) => {
             await fireStoreService.startGame()
@@ -68,8 +69,9 @@ export default class GameService {
             this.logger.error(`It's midnight`);
             const allAthletes = await this.fireStoreService.athleteCollection.all();
             allAthletes.map(async (athlete: Athlete) => {
-                await this.athleteService.addEnergy(athlete.id, RULES.ENERGY.TIMED_RESTORE)
-                await this.claimAllRewards(athlete.id)
+                await this.activityService.submitAllActivities(athlete.id);
+                await this.athleteService.addEnergy(athlete.id, RULES.ENERGY.TIMED_RESTORE);
+                await this.claimAllRewards(athlete.id);
             })
         })
     }
