@@ -14,6 +14,7 @@ import Athlete from "../shared/interfaces/athlete.interface";
 import WhereFilterOp = firebase.firestore.WhereFilterOp;
 import Score from "../shared/interfaces/score.interface";
 import Game from "../cards/src/app/interfaces/game";
+import CardFactory from "../shared/interfaces/card-factory.interface";
 
 export class FirestoreService {
     logger: Logger;
@@ -30,7 +31,7 @@ export class FirestoreService {
     public commandCollection = this.db.collection(CONST.COLLECTIONS.COMMANDS)
     public handCollection = this.db.collection(CONST.COLLECTIONS.HANDS)
     public cardCollection = new DataCollection<Card>(this.db, CONST.COLLECTIONS.CARDS)
-    public cardFactoryCollection = this.db.collection(CONST.COLLECTIONS.CARD_FACTORIES)
+    public cardFactoryCollection = new DataCollection<CardFactory>(this.db, CONST.COLLECTIONS.CARD_FACTORIES)
     public achievementCollection = this.db.collection(CONST.COLLECTIONS.ACHIEVEMENTS)
     public scoreCollection = new DataCollection<Score>(this.db, CONST.COLLECTIONS.SCORES)
     public gameCollection = new DataCollection<Game>(this.db, CONST.COLLECTIONS.GAME)

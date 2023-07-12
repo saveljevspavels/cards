@@ -14,6 +14,7 @@ import {getRandomInt} from "./helpers/util";
 import ScoreService from "./score.service";
 import CardService from "./card.service";
 import Athlete from "../shared/interfaces/athlete.interface";
+import CardFactory from "../shared/interfaces/card-factory.interface";
 
 export default class GameService {
     constructor(
@@ -85,15 +86,26 @@ export default class GameService {
     }
 
     async changeFeaturedCard() {
-        const allCards: Card[] = await this.fireStoreService.cardCollection.all();
-        const randomCard = allCards[getRandomInt(allCards.length) - 1]
-        await this.fireStoreService.gameCollection.update(
-            CONST.GAME_ID,
-            {
-                featuredCard: randomCard.id
-            }
-        )
-        this.logger.error(`New featured card ${randomCard.title}`);
+        const allFactories: CardFactory[] = await this.fireStoreService.cardFactoryCollection.all();
+        const randomFactory = allFactories[getRandomInt(allFactories.length) - 1];
+        const newCard = await this.cardService.createCardFromFactory(randomFactory, 0);
+
+        Promise.all([
+            await this.fireStoreService.cardCollection.update(
+                newCard.id,
+                {
+                    value: 0,
+                    coinsReward: newCard.coinsReward + (newCard.value * RULES.COINS.FEATURED_CARD_POINT_CONVERSION)
+                }
+            ),
+            await this.fireStoreService.gameCollection.update(
+                CONST.GAME_ID,
+                {
+                    featuredCard: newCard.id
+                }
+            )
+        ])
+        this.logger.error(`New featured card ${newCard.title}`);
     }
 
     async useAbility(athleteId: string, abilityKey: AbilityKey) {
