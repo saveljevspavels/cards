@@ -1,22 +1,19 @@
-<ng-container *ngIf="featuredCard?.card">
-    <h2 class="mb-2 mt-2">Time Limited Task</h2>
-    <div class="mb-3">
-        <app-card (click)="cardSelected(featuredCard)"
-                  [card]="featuredCard?.card"
-                  [showDescription]="true"
-                  [imagesController]="uploadedImages.get(cardList.length + '')"
-                  [validationStatus]="featuredCard.validationStatus"
-                  [featured]="true"
-        ></app-card>
-    </div>
-</ng-container>
-
 <h2 class="mb-2 mt-2">Active Tasks</h2>
 <div class="mb-2">
     <app-add-card-button
             *ngIf="cardList.length < RULES.SCHEME.MAX_ACTIVE_CARDS"
             (click)="openCardScheme()">
     </app-add-card-button>
+</div>
+
+<div class="mb-2" *ngIf="featuredCard?.card">
+    <app-card (click)="cardSelected(featuredCard)"
+              [card]="featuredCard?.card"
+              [showDescription]="true"
+              [imagesController]="uploadedImages.get(cardList.length + '')"
+              [validationStatus]="featuredCard.validationStatus"
+              [featured]="true"
+    ></app-card>
 </div>
 
 <div *ngFor="let validatedCard of cardList; let i = index; trackBy: cardTrackBy" class="mb-2">
