@@ -3,9 +3,9 @@ import {
     ElementRef,
     EventEmitter,
     forwardRef,
-    Input,
+    Input, OnChanges,
     OnInit,
-    Output,
+    Output, SimpleChanges,
     ViewChild,
     ViewEncapsulation
 } from '@angular/core';
@@ -29,7 +29,7 @@ import {CardSnapshot} from "../../../../../../../shared/interfaces/card.interfac
     }],
     encapsulation: ViewEncapsulation.None
 })
-export class ActivityComponent implements OnInit, ControlValueAccessor {
+export class ActivityComponent implements OnInit, ControlValueAccessor, OnChanges {
     public CONST = ConstService.CONST;
     public myId = this.athleteService.myId.value;
 
@@ -62,11 +62,19 @@ export class ActivityComponent implements OnInit, ControlValueAccessor {
         private popupService: PopupService
     ) { }
 
-    async ngOnInit() {
+    ngOnInit() {
         this.selectedCards.valueChanges.subscribe((value) => {
             this._onChange(value)
         })
-        this.activityType = UtilService.normalizeActivityType(this.activity.type);
+    }
+
+    ngOnChanges(changes: SimpleChanges) {
+        if(changes.activity) {
+            this.activityType = UtilService.normalizeActivityType(this.activity.type);
+            this.activity.gameData?.cardSnapshots.forEach((cardSnapshot: CardSnapshot) => {
+                cardSnapshot.likedByMe = (cardSnapshot?.likes && cardSnapshot?.likes?.indexOf(this.myId) !== -1);
+            });
+        }
     }
 
     _onChange: any = () => {};
@@ -86,9 +94,9 @@ export class ActivityComponent implements OnInit, ControlValueAccessor {
         this.reported.emit(cardId);
     }
 
-    like(cardId: string) {
-        this.liked.emit(cardId);
-        this.liked?.unsubscribe()
+    like(cardSnapshot: CardSnapshot) {
+        this.liked.emit(cardSnapshot.id);
+        cardSnapshot.likedByMe = true;
     }
 
     showMap() {

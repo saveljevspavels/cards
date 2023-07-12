@@ -6,6 +6,8 @@ import {HttpClient} from "@angular/common/http";
 import {environment} from "../../environments/environment";
 import {ConstService} from "./const.service";
 import Athlete from "../../../../shared/interfaces/athlete.interface";
+import {CONST} from "../../../../../definitions/constants";
+import {PERMISSIONS} from "../constants/permissions";
 
 @Injectable({
     providedIn: 'root'
@@ -16,6 +18,7 @@ export class AthleteService {
     public me = new BehaviorSubject<Athlete | null>(null);
     public myId = new BehaviorSubject<string>('');
     public static permissions = new BehaviorSubject<string[] | null>(null);
+    public isAdmin$ = AthleteService.permissions.pipe((map((permissions) => permissions?.indexOf(PERMISSIONS.ADMIN) !== -1)));
     private athleteCollection = this.db.collection(ConstService.CONST.COLLECTIONS.ATHLETES);
 
     constructor(private db: AngularFirestore,
@@ -29,7 +32,7 @@ export class AthleteService {
             if(JSON.stringify(this.me.value) !== JSON.stringify(currentAthlete)) {
                 this.me.next(currentAthlete);
             }
-            AthleteService.permissions.next(this.me.value?.permissions || ['default'])
+            AthleteService.permissions.next(this.me.value?.permissions || [])
         });
     }
 

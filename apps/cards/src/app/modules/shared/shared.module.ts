@@ -49,6 +49,7 @@ import { ImageComponent } from './components/image/image.component';
 import { GalleryComponent } from './components/gallery/gallery.component';
 import { CountDownComponent } from './components/count-down/count-down.component';
 import { RewardEnergyComponent } from './components/reward-energy/reward-energy.component';
+import {EntityIdComponent} from "../../components/entity-id/entity-id.component";
 
 const COMPS = [
     InputComponent,
@@ -68,6 +69,7 @@ const COMPS = [
     ButtonComponent,
     CollapsibleComponent,
     TextareaComponent,
+    EntityIdComponent,
     SwiperComponent,
     TierBadgeComponent,
     SvgComponent,

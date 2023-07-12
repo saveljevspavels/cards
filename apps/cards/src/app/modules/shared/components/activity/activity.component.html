@@ -36,6 +36,7 @@
             ></app-svg>
         </div>
     </div>
+    <app-entity-id [id]="activity.id"></app-entity-id>
 </ng-template>
 
 <ng-template #mapViewPopup>
@@ -71,11 +72,11 @@
                         [label]="(card?.reports && card?.reports[myId]) ? 'Reported' : 'Report'"
                         [icon]="'flag'"
                         [type]="(card?.reports && card?.reports[myId]) ? 'danger-filled': 'danger'"></app-button>
-            <app-button (click)="(card?.likes && card?.likes?.indexOf(myId) !== -1) || like(card.id)"
+            <app-button (click)="card?.likedByMe || like(card)"
                         [small]="true"
-                        [label]="(card?.likes && card?.likes?.indexOf(myId) !== -1) ? card?.likes?.length : 'Like'"
+                        [label]="card?.likedByMe ? (card?.likes?.length || 1) : 'Like'"
                         [icon]="'fire'"
-                        [type]="(card?.likes && card?.likes?.indexOf(myId) !== -1) ? 'danger-filled': 'danger'"></app-button>
+                        [type]="card?.likedByMe ? 'danger-filled': 'danger'"></app-button>
         </div>
     </div>
 </ng-template>

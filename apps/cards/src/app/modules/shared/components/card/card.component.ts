@@ -8,6 +8,7 @@ import {Progression} from "../../../../../../../shared/interfaces/card-factory.i
 import {ValidationStatus} from "../../../../../../../shared/services/validation.service";
 import {FormControl} from "@angular/forms";
 import {Subject} from "rxjs";
+import {AthleteService} from "../../../../services/athlete.service";
 
 @Component({
   selector: 'app-card',
@@ -38,13 +39,17 @@ export class CardComponent implements OnInit, OnChanges {
     @Output() photoClicked = new EventEmitter;
 
     public uploadTrigger = new Subject();
+    public isAdmin$ = this.athleteService.isAdmin$;
 
     imageObservable: any;
     visible = true;
 
     activityTypes: string;
 
-    constructor(private cardService: CardService) { }
+    constructor(
+        private cardService: CardService,
+        private athleteService: AthleteService
+    ) { }
 
     ngOnInit() {
         if(this.card) {

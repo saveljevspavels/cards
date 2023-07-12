@@ -2,9 +2,7 @@
      *ngIf="card && visible"
      [ngClass]="{'card--small': small, 'card--locked': locked, 'card--featured': featured}"
 >
-<!--    <div class="card__id">-->
-<!--        {{card.id}}-->
-<!--    </div>-->
+    <app-entity-id [id]="card.id"></app-entity-id>
     <div class="d-flex justify-content-center mt-n1">
         <app-count-down *ngIf="featured"></app-count-down>
     </div>

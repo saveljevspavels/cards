@@ -22,6 +22,7 @@ export interface CardSnapshot extends Card {
     comment?: string;
     attachedImages?: string[];
     likes?: string[];
+    likedByMe?: boolean; // FE use only
     reports?: {[key: string]: string};
 }
 

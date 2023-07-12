@@ -11,12 +11,6 @@
         font-weight: 800;
         font-size: var(--text-size-title);
     }
-    &__id {
-        position: absolute;
-        top: var(--padding-value);
-        right: var(--padding-value);
-        opacity: 0.2;
-    }
 }
 
 .selection-wrapper__data-item {
