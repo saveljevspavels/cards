@@ -79,4 +79,8 @@ export class CardSchemeManagementComponent implements OnInit {
         level.get('cards')?.setValue(currentValue)
     }
 
+    deleteCards() {
+        this.adminService.deleteCards(this.selectedCards.value)
+    }
+
 }

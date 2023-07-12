@@ -42,4 +42,13 @@
     </div>
 </div>
 
-<app-button (buttonClick)="saveSchema()" label="Save Schema"></app-button>
+<div class="d-flex justify-content-between mt-4">
+    <app-button (buttonClick)="deleteCards()"
+                label="Delete Cards"
+                type="danger"
+    ></app-button>
+    <app-button (buttonClick)="saveSchema()"
+                label="Save Schema"
+                type="action"
+    ></app-button>
+</div>

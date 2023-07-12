@@ -60,9 +60,9 @@ export default class GameService {
 
     initEnergyRegen() {
         const rule = new schedule.RecurrenceRule();
-        rule.hour = 21;
+        rule.hour = 0;
         rule.minute = 0;
-        rule.tz = 'Etc/UTC';
+        rule.tz = 'Europe/Riga';
 
         const job = schedule.scheduleJob(rule, async () => {
             this.logger.error(`It's midnight`);
@@ -94,8 +94,9 @@ export default class GameService {
             await this.fireStoreService.cardCollection.update(
                 newCard.id,
                 {
+                    title: `${newCard.title} (Time Limited)`,
                     value: 0,
-                    coinsReward: newCard.coinsReward + (newCard.value * RULES.COINS.FEATURED_CARD_POINT_CONVERSION)
+                    coinsReward: parseInt(String(newCard.coinsReward), 10) + (parseInt(String(newCard.value), 10) * RULES.COINS.FEATURED_CARD_POINT_CONVERSION)
                 }
             ),
             await this.fireStoreService.gameCollection.update(

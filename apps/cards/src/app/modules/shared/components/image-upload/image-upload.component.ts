@@ -65,6 +65,6 @@ export class ImageUploadComponent implements ControlValueAccessor, OnDestroy {
     }
 
     ngOnDestroy() {
-        this.triggerSubscription.unsubscribe();
+        this.triggerSubscription?.unsubscribe();
     }
 }
