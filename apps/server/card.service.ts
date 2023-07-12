@@ -66,11 +66,7 @@ export default class CardService {
                     return
                 }
 
-                await Promise.all([
-                    await this.finishCard(athleteId, cardId),
-                    await this.scoreService.updateScore(athleteId, cardId),
-                    await this.claimCardRewards(athleteId, cardId)
-                ]);
+                await this.claimCardRewards(athleteId, cardId);
             } catch (err) {
                 res.status(400).send(err);
             }
@@ -162,6 +158,14 @@ export default class CardService {
     }
 
     async claimCardRewards(athleteId: string, cardId: string) {
+        await this.finishCard(athleteId, cardId);
+        await Promise.all([
+            await this.scoreService.updateScore(athleteId, cardId),
+            await this.claimCardCoins(athleteId, cardId)
+        ]);
+    }
+
+    async claimCardCoins(athleteId: string, cardId: string) {
         const athlete = await this.athleteService.getAthlete(athleteId);
         const card = await this.getCard(cardId);
         const newEnergy = parseInt(String(athlete.energy)) + parseInt(String(card.energyReward));
@@ -208,7 +212,7 @@ export default class CardService {
         const finishedCards = athlete.cards.finished;
         completedCards.splice(athlete?.cards.completed.indexOf(cardId), 1);
         finishedCards.push(cardId);
-        await this.fireStoreService.athleteCollection.update(athleteId, {
+        return await this.fireStoreService.athleteCollection.update(athleteId, {
             cards: {
                 ...athlete.cards,
                 completed: completedCards,

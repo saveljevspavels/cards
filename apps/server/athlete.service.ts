@@ -5,6 +5,7 @@ import {CONST} from "../../definitions/constants";
 import {RULES} from "../../definitions/rules";
 import Athlete, {AthletePatch} from "../shared/interfaces/athlete.interface";
 import {Logger} from "winston";
+import {of} from "rxjs";
 
 export default class AthleteService {
     constructor(
@@ -43,22 +44,23 @@ export default class AthleteService {
     }
 
     async claimBaseReward(athleteId: string, type: string) {
-        const athlete = await this.fireStoreService.athleteCollection.get(athleteId);
-        if(!athlete) {
-            return;
-        }
+        const athlete = await this.getAthlete(athleteId);
         // @ts-ignore
-        const newCoins = parseInt(String(athlete.coins), 10) + Math.floor(parseInt(athlete.baseCardProgress[type], 10) / RULES.PROGRESS_PRECISION);
+        const reward = Math.floor(parseInt(athlete.baseCardProgress[type], 10) / RULES.PROGRESS_PRECISION);
+        if(!reward || reward === 0) {
+            return of();
+        }
         const newProgress = {...athlete.baseCardProgress};
         // @ts-ignore
-        newProgress[type] = parseInt(athlete.baseCardProgress[type], 10) % RULES.PROGRESS_PRECISION
+        newProgress[type] = parseInt(athlete.baseCardProgress[type], 10) % RULES.PROGRESS_PRECISION;
         await this.fireStoreService.athleteCollection.update(
             athleteId,
             {
-                coins: newCoins,
+                coins: parseInt(String(athlete.coins), 10) + reward,
                 baseCardProgress: newProgress
             }
         )
+        this.logger.info(`Athlete ${athlete.name} claimed ${reward} coins for basic ${type}`);
     }
 
     async saveAthlete(athlete: any) {
@@ -117,13 +119,6 @@ export default class AthleteService {
             profile: athlete.profile,
             name: `${athlete.firstname} ${athlete.lastname}`,
         }
-    }
-
-    async restoreAthletesEnergy(value: number) {
-        const allAthletes = await this.fireStoreService.athleteCollection.all();
-        Promise.all([
-            ...allAthletes.map((athlete: Athlete) => this.addEnergy(athlete.id, value))
-        ]);
     }
 
     async addEnergy(athleteId: string, value: number) {

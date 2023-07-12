@@ -45,7 +45,7 @@ export class CommandsService {
                         break;
                     case COMMANDS.CALCULATE_BASE_WORKOUT:
                         this.activityService.calculateBaseWorkout({
-                            athleteId: this.athleteService.me.value?.id || '',
+                            athleteId: this.athleteService.myId.value,
                             commandId: command.id
                         }).subscribe()
                         break;

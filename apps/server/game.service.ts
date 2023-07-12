@@ -12,6 +12,8 @@ import {RULES} from "../../definitions/rules";
 import Card from "../shared/interfaces/card.interface";
 import {getRandomInt} from "./helpers/util";
 import ScoreService from "./score.service";
+import CardService from "./card.service";
+import Athlete from "../shared/interfaces/athlete.interface";
 
 export default class GameService {
     constructor(
@@ -19,7 +21,8 @@ export default class GameService {
         private fireStoreService: FirestoreService,
         private logger: Logger,
         private athleteService: AthleteService,
-        private scoreService: ScoreService
+        private scoreService: ScoreService,
+        private cardService: CardService
     ) {
         app.post(`${CONST.API_PREFIX}/start-game`, async (req, res) => {
             await fireStoreService.startGame()
@@ -62,7 +65,11 @@ export default class GameService {
 
         const job = schedule.scheduleJob(rule, async () => {
             this.logger.error(`It's midnight`);
-            await this.athleteService.restoreAthletesEnergy(RULES.ENERGY.TIMED_RESTORE);
+            const allAthletes = await this.fireStoreService.athleteCollection.all();
+            allAthletes.map(async (athlete: Athlete) => {
+                await this.athleteService.addEnergy(athlete.id, RULES.ENERGY.TIMED_RESTORE)
+                await this.claimAllRewards(athlete.id)
+            })
         })
     }
 
@@ -141,5 +148,16 @@ export default class GameService {
             ability.energyReward && await this.athleteService.addEnergy(athleteId, ability.energyReward),
             ability.value && await this.scoreService.addPoints(athleteId, ability.value)
         ]);
+    }
+
+    async claimAllRewards(athleteId: string) {
+        const athlete = await this.athleteService.getAthlete(athleteId);
+
+        for(let i = 0; i < (athlete.cards?.completed || []).length; i++) {
+            await this.cardService.claimCardRewards(athleteId, athlete.cards.completed[i]);
+        }
+        for(let i = 0; i < Object.values(CONST.ACTIVITY_TYPES).length; i++) {
+            await this.athleteService.claimBaseReward(athleteId, Object.values(CONST.ACTIVITY_TYPES)[i]);
+        }
     }
 }

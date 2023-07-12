@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import {BehaviorSubject, combineLatest, forkJoin} from "rxjs";
+import {BehaviorSubject, combineLatest, forkJoin, Observable} from "rxjs";
 import {AngularFirestore} from "@angular/fire/firestore";
-import {filter, map, mergeMap} from "rxjs/operators";
+import {filter, map, mergeMap, tap} from "rxjs/operators";
 import {HttpClient} from "@angular/common/http";
 import {environment} from "../../environments/environment";
 import {ConstService} from "./const.service";
@@ -24,8 +24,11 @@ export class AthleteService {
             this.myId,
             this.athleteCollection.valueChanges()
         ]).subscribe(([myId, athletes]: any) => {
-            this.athletes.next(athletes)
-            this.me.next(athletes.find((athlete: Athlete) => athlete.id === myId) || null)
+            this.athletes.next(athletes);
+            const currentAthlete = athletes.find((athlete: Athlete) => athlete.id === myId) || null;
+            if(JSON.stringify(this.me.value) !== JSON.stringify(currentAthlete)) {
+                this.me.next(currentAthlete);
+            }
             AthleteService.permissions.next(this.me.value?.permissions || ['default'])
         });
     }
