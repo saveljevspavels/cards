@@ -34,8 +34,10 @@
         </div>
     </div>
 
-    <div class="order-2" [ngClass]="{'order-2': !openStates.rules, 'order-0 mb-2': openStates.rules}">
-        <app-button styleClass="h-50" icon="rules" label="Rules" (buttonClick)="openRules()"></app-button>
+    <div class="row order-2 " [ngClass]="{'order-2': !openStates.rules, 'order-0 mb-2': openStates.rules}">
+        <div class="offset-lg-3 col-lg-6">
+            <app-button styleClass="h-50" icon="rules" label="Rules" (buttonClick)="openRules()"></app-button>
+        </div>
     </div>
 
 </div>
