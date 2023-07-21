@@ -132,6 +132,22 @@ export default class CardService {
             }
             res.status(200).send();
         });
+
+        app.post(`${CONST.API_PREFIX}/cards/delete`,async (req, res) => {
+            const cardIds = req.body?.cardIds;
+            const athleteId = res.get('athleteId');
+            if(!cardIds) {
+                res.status(400).send('Card Ids missing');
+                return;
+            }
+            try {
+                await this.deleteCards(cardIds);
+                this.logger.error(`Athlete ${athleteId} deleted cards ${cardIds}`);
+            } catch (err) {
+                res.status(400).send(err);
+            }
+            res.status(200).send();
+        });
     }
 
     async unlockBoardLevel(athleteId: string, boardKey: string) {
@@ -219,6 +235,12 @@ export default class CardService {
                 finished: finishedCards
             }
         });
+    }
+
+    async deleteCards(cardIds: string[]): Promise<void> {
+        for(let i = 0; i < cardIds.length; i++) {
+            await this.fireStoreService.cardCollection.delete(cardIds[i]);
+        }
     }
 
     async getCards(cardIds: string[]): Promise<Card[] | []> {

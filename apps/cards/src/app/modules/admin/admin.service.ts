@@ -56,7 +56,7 @@ export class AdminService {
     }
 
     public deleteCards(cardIds: string[]) {
-        return this.http.post(`${environment.baseBE}/delete-cards`, cardIds).subscribe()
+        return this.http.post(`${environment.baseBE}/cards/delete`, {cardIds}).subscribe()
     }
 
     public approveActivity(activityId: any, cardIds: string[]) {
