@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {ConstService} from "../../../../services/const.service";
 import {GameService} from "../../../../services/game.service";
+import {RULES} from "../../../../../../../../definitions/rules";
 
 @Component({
   selector: 'app-rules',
@@ -8,22 +9,62 @@ import {GameService} from "../../../../services/game.service";
   styleUrls: ['./rules.component.scss']
 })
 export class RulesComponent implements OnInit {
-    public rules = [
-        'All activities and scores will be cleared at the start of the competition (27.06 00:00)',
-        'The goal is to get the most points.',
-        'Points are gained by playing cards and getting achievements. You can see all achievements in your profile',
-        'To play a card, you should record an activity that meets all requirements stated on a card.',
-        'For each activity you can play only one card, but get multiple achievements',
-        'New activities are automatically synchronized with Strava and appear in the "Your Pending Activities" list.',
-        'To submit an activity from the list, you need to click on activity, then select a card to play, add photos/comments if necessary.',
-        'Some cards require manual validation, so it might take some time for approval',
-        'Achievements are not automated, so please ask for those in a comment or through a chat',
-        'Card values may change over time, more played card values are decreased, less played card values are increased. This happens when "Cards played" counter is filled',
-        'New, stronger cards are added when counter below the card is filled',
-        'Please try to play a card with activity at the same day you did that activity',
-        'Small/garbage activities can be deleted by clicking on it and scrolling all the way down to "Delete Activity" button',
-        'Each athlete has his/her own run/bike distance requirements for cards for it to be competitive for everyone (this values could be negotiated)',
+    public allRules: RuleSet[] = [
+        {
+            title: 'General',
+            rules: [
+                'It’s a competition, where you engage in various physical activities to complete tasks and earn points',
+                'You have a number of tasks to choose from, each task requires you record a certain activity through Strava',
+                'Strava activities are automatically synchronized and will appear on your Dashboard',
+                'To get points you should submit one of your activities and select which task you want to complete. Attach photo if necessary'
+            ]
+        },
+        {
+            title: 'Tasks',
+            rules: [
+                'To activate the task you need to spend 1 energy. All energy is restored at midnight',
+                'At the beginning you have limited amount of tasks. You can unlock more for coins',
+                'Each task has its activity requirement, your activity should pass that requirement',
+                'Most of the times you should have a photo attachment for the task upon submission',
+                'If task requires to run "3km in a forest" it should be clearly visible in GPS that you did at least 3km in a forest',
+                'If you see any task misuses/cheating you can Report that task. If the report is accepted, task will be rejected for the athlete'
+            ]
+        },
+        {
+            title: 'Time limited tasks',
+            rules: [
+                'Time limited task is the same for everybody, and is changed every 8 hours',
+                'You don\'t have to spend energy to activate it',
+                'Time limited task does not give victory points, but it gives more coins instead',
+                'When you complete the task, new one will appear as scheduled'
+            ]
+        },
+        {
+            title: 'Basic Task',
+            rules: [
+                'You can always submit your activity to "Basic Task" to get bonus coins',
+                'Any activities that are small/not suitable for a regular Tasks could be submitted as a Basic Task',
+                'You will get 1 coin for each full cycle of a Basic Task',
+                'If your activity is longer than Task requirements - all the overflow automatically go to the Basic Task',
+            ]
+        },
+        {
+            title: 'Abilities',
+            rules: [
+                'You have a set of special abilities available in your profile',
+                'Each ability is usable only once',
+            ]
+        },
+        {
+            title: 'Energy',
+            rules: [
+                `${RULES.ENERGY.TIMED_RESTORE} energy points are restored at midnight`,
+                `If you have any unspent energy, you will get ${RULES.COINS.PER_ENERGY_CONVERSION} bonus coins for each energy`
+            ]
+        }
     ]
+
+
 
     public tiers = [
         `Easy (${ConstService.RULES.LEVELS["0"].min}-${ConstService.RULES.LEVELS["0"].max} points)`,
@@ -46,4 +87,9 @@ export class RulesComponent implements OnInit {
         })
     }
 
+}
+
+interface RuleSet {
+    title: string;
+    rules: string[];
 }

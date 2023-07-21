@@ -13,7 +13,7 @@ import {Router} from "@angular/router";
 import {RULES} from "../../../../../../../../definitions/rules";
 import {FileService} from "../../../../services/file.service";
 import {GameService} from "../../../../services/game.service";
-import {filter, first, map} from "rxjs/operators";
+import {filter, first, map, startWith} from "rxjs/operators";
 import {PopupService} from "../../../../services/popup.service";
 
 @Component({
@@ -55,10 +55,11 @@ export class ActiveCardListComponent implements OnInit {
 
   ngOnInit(): void {
     combineLatest([
-      this.athlete,
-      this.cardService.cards,
-      this.selectedActivity$,
+      this.athlete.pipe(startWith(null)),
+      this.cardService.cards.pipe(startWith(null)),
+      this.selectedActivity$.pipe(startWith(null)),
       this.gameService.gameData.pipe(
+          startWith(null),
           map((gameData) => this.cardService.getCard(gameData?.featuredCard || '')),
           filter((card) => card !== NullCard),
       )

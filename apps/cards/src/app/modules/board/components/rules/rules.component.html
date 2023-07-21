@@ -1,34 +1,28 @@
 <div class="rules">
-    <ul class="styled-list">
-        <li *ngFor="let rule of rules">{{rule}}</li>
-    </ul>
-    <div class="rules__tiers mt-4 box mb-3">
-        <p class="text-small light">
-            Color of the cards background defines its difficulty level
-        </p>
-        <h4 class="title text-bold">Card Difficulty Levels</h4>
-        <div class="mt-2" *ngFor="let tier of tiers; let i = index">
-            <app-tier-badge [label]="tier" [tier]="i"></app-tier-badge>
-        </div>
+    <div *ngFor="let ruleSet of allRules">
+        <h4>{{ruleSet.title}}</h4>
+        <ul class="styled-list">
+            <li *ngFor="let rule of ruleSet.rules">{{rule}}</li>
+        </ul>
     </div>
 
-    <div class="rules__creatures mt-4 box mb-3">
-        <p class="text-small light">
-            List of the things that were already caught by someone for "Birdman" and "Disney Princess" achievements
-        </p>
-        <div class="d-flex">
-            <div class="flex-grow-1 rules__creatures-list">
-                <div class="text-bold title m-2">Birds</div>
-                <div class="mr-3 ml-3 mt-1 mb-1" *ngFor="let bird of creatures.birds; let i = index">
-                    {{bird}}
-                </div>
-            </div>
-            <div class="flex-grow-1 rules__creatures-list">
-                <div class="text-bold title m-2">Animals</div>
-                <div class="mr-3 ml-3 mt-1 mb-1" *ngFor="let animal of creatures.animals; let i = index">
-                    {{animal}}
-                </div>
-            </div>
-        </div>
-    </div>
+<!--    <div class="rules__creatures mt-4 box mb-3">-->
+<!--        <p class="text-small light">-->
+<!--            List of the things that were already caught by someone for "Birdman" and "Disney Princess" achievements-->
+<!--        </p>-->
+<!--        <div class="d-flex">-->
+<!--            <div class="flex-grow-1 rules__creatures-list">-->
+<!--                <div class="text-bold title m-2">Birds</div>-->
+<!--                <div class="mr-3 ml-3 mt-1 mb-1" *ngFor="let bird of creatures.birds; let i = index">-->
+<!--                    {{bird}}-->
+<!--                </div>-->
+<!--            </div>-->
+<!--            <div class="flex-grow-1 rules__creatures-list">-->
+<!--                <div class="text-bold title m-2">Animals</div>-->
+<!--                <div class="mr-3 ml-3 mt-1 mb-1" *ngFor="let animal of creatures.animals; let i = index">-->
+<!--                    {{animal}}-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
 </div>
