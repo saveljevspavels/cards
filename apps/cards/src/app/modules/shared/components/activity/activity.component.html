@@ -63,7 +63,7 @@
 <ng-template #contentTemplate>
     <div *ngFor="let card of activity.gameData?.cardSnapshots; trackBy: cardTrackBy" class="box p-2 mb-2">
         <div class="d-flex align-items-center justify-content-between"
-             [ngClass]="{'mb-1': card.attachedImages?.length || activity.map?.summary_polyline}"
+             [ngClass]="{'mb-2': card.attachedImages?.length || activity.map?.summary_polyline}"
         >
             <div class="d-flex align-items-center">
                 <app-athlete *ngIf="activity?.athlete" [athleteId]="activity?.athlete.id"></app-athlete>

@@ -205,9 +205,9 @@ export default class CardService {
     async activateCard(athleteId: string, cardId: string) {
         const card = await this.getCard(cardId);
         const athlete = await this.athleteService.getAthlete(athleteId);
-        if(parseInt(String(athlete.energy), 10) < parseInt(String(card.energyCost), 10)) {
-            this.logger.info(`Athlete ${athlete.firstname} ${athlete.lastname} don't have enough energy to activate card ${card.title}`);
-            throw 'Not enough energy';
+        if(parseInt(String(athlete.coins), 10) < parseInt(String(card.coinsCost), 10)) {
+            this.logger.info(`Athlete ${athlete.firstname} ${athlete.lastname} don't have enough coins to activate card ${card.title}`);
+            throw 'Not enough coins';
         }
         if(athlete.cards.active.length + 1 > RULES.SCHEME.MAX_ACTIVE_CARDS) {
             this.logger.info(`Athlete ${athlete.firstname} ${athlete.lastname} has too much activated cards`);
@@ -218,7 +218,7 @@ export default class CardService {
                 ...athlete.cards,
                 active: [...athlete?.cards.active, card.id]
             },
-            energy: parseInt(String(athlete.energy), 10) - parseInt(String(card.energyCost), 10)
+            coins: parseInt(String(athlete.coins), 10) - parseInt(String(card.coinsCost), 10)
         })
     }
 
@@ -303,13 +303,13 @@ export default class CardService {
             factoryId: factory.id,
             progression: newProgression,
             manualValidation: factory.manualValidation,
-            value: cardPrototype.value,
+            value: parseInt(cardPrototype.value.toString(), 10),
             tier: cardPrototype.tier,
             description: cardPrototype.description,
-            energyCost: cardPrototype.energyCost,
-            energyReward: cardPrototype.energyReward,
-            coinsCost: cardPrototype.coinsCost,
-            coinsReward: cardPrototype.coinsReward,
+            energyCost: parseInt(cardPrototype.energyCost.toString(), 10),
+            energyReward: parseInt(cardPrototype.energyReward.toString(), 10),
+            coinsCost: parseInt(cardPrototype.coinsCost.toString(), 10),
+            coinsReward: parseInt(cardPrototype.coinsReward.toString(), 10),
             cardUses: {
                 usesToProgress: cardPrototype.usesToProgress,
                 progression: 0

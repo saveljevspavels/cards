@@ -2,7 +2,7 @@ import {Component, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
 import {FormBuilder, FormControl} from "@angular/forms";
 import {ConstService} from "../../../../services/const.service";
 import {BehaviorSubject, combineLatest, Subject} from "rxjs";
-import Card from "../../../../../../../shared/interfaces/card.interface";
+import Card, {NullCard} from "../../../../../../../shared/interfaces/card.interface";
 import {CardScheme, CardSchemeBoard} from "../../../../../../../shared/interfaces/card-scheme.interface";
 import {CardService} from "../../../../services/card.service";
 import {AthleteService} from "../../../../services/athlete.service";
@@ -26,6 +26,7 @@ export class CardSchemeComponent implements OnInit {
 
     private unlock$ = new Subject();
     private activate$ = new Subject();
+    private activatedCard$ = new BehaviorSubject<Card>(NullCard);
     @ViewChild('unlockPopup', { static: true }) unlockPopup: ElementRef;
     @ViewChild('activatePopup', { static: true }) activatePopup: ElementRef;
 
@@ -40,8 +41,7 @@ export class CardSchemeComponent implements OnInit {
     constructor(private formBuilder: FormBuilder,
                 private cardService: CardService,
                 private athleteService: AthleteService,
-                private popupService: PopupService,
-                private router: Router
+                private popupService: PopupService
     ) { }
 
     ngOnInit(): void {
@@ -72,8 +72,8 @@ export class CardSchemeComponent implements OnInit {
         })
     }
 
-    activateCard(cardId: string) {
-        if(!cardId) {
+    activateCard(card: Card) {
+        if(!card) {
             return;
         }
         this.loading = true;
@@ -81,22 +81,25 @@ export class CardSchemeComponent implements OnInit {
             first(),
             filter((resolution) => !!resolution)
         ).subscribe(_ => {
-            this.cardService.activateCard(cardId).subscribe(() => {
+            this.cardService.activateCard(card.id).subscribe(() => {
                 this.loading = false;
             }, () => {
                 this.loading = false;
             });
         });
+        this.activatedCard$.next(card);
         this.popupService.showPopup(this.activatePopup);
     }
 
     confirmActivate() {
         this.activate$.next(true);
+        this.activatedCard$.next(NullCard);
         this.popupService.closePopup();
     }
 
     cancelActivate() {
         this.activate$.next(false);
+        this.activatedCard$.next(NullCard);
         this.loading = false;
         this.popupService.closePopup();
     }

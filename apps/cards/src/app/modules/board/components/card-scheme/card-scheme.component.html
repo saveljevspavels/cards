@@ -64,7 +64,7 @@
             </p>
             <div class="mt-4 mb-2 full-width">
                 <app-button type="action" [label]="'Yes'" (buttonClick)="confirmActivate()">
-                    <div class="title ml-2 d-flex justify-content-center">-1<app-svg [height]="20" [icon]="'fire'"></app-svg></div>
+                    <div class="title ml-2 d-flex justify-content-center" *ngIf="(activatedCard$ | async)?.coinsCost > 0">-{{(activatedCard$ | async)?.coinsCost}}<app-svg [height]="20" [icon]="'coin'"></app-svg></div>
                 </app-button>
             </div>
             <div class="mb-3">

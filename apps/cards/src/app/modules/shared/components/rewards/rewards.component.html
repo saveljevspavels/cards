@@ -1,10 +1,18 @@
 <div class="d-flex">
-    <app-reward-money *ngIf="card?.coinsReward"
+    <app-reward-money *ngIf="card?.coinsReward && card?.coinsReward !== 0 && card?.coinsReward !== '0'"
                       [value]="card?.coinsReward"
                       [ngClass]="{'mr-1': card?.value}"
     >
     </app-reward-money>
     <app-reward-points *ngIf="card?.value"
-                       [value]="card?.value">
+                       [value]="card?.value"
+                       [ngClass]="{'mr-1': card?.energyCost}"
+    >
     </app-reward-points>
+    <ng-container *ngIf="!rewardsOnly">
+        <app-reward-energy *ngIf="card?.energyCost && card?.energyCost !== 0 && card?.energyCost !== '0'"
+                           [value]="-card?.energyCost">
+        </app-reward-energy>
+    </ng-container>
+
 </div>

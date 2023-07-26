@@ -2,8 +2,10 @@
     <div class="completed-card__image mb-2" *ngIf="card"
          [style.background-image]="'url(' + card.image + ')'"
     ></div>
-    <h5 class="m-0 mb-1">{{card?.title}}</h5>
-    <app-rewards [card]="card" class="mb-1"></app-rewards>
+    <h5 class="m-0 mb-1 text-center">{{card?.title}}</h5>
+    <app-rewards [card]="card"
+                 [rewardsOnly]="true"
+                 class="mb-1"></app-rewards>
     <app-button (buttonClick)="claimReward()"
                 type="action"
                 styleClass="full-width"

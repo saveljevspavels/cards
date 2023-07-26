@@ -1,12 +1,12 @@
 import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {CardService} from "../../../../services/card.service";
 import {AthleteService} from "../../../../services/athlete.service";
-import {combineLatest, Observable, Subject} from "rxjs";
+import {BehaviorSubject, combineLatest, Observable, Subject} from "rxjs";
 import Athlete from "../../../../../../../shared/interfaces/athlete.interface";
 import {BoardService} from "../../../../services/board.service";
 import {ValidationService} from "../../../../services/validation.service";
 import Card, {NullCard} from "../../../../../../../shared/interfaces/card.interface";
-import {ValidationStatus} from "../../../../../../../shared/services/validation.service";
+import {StaticValidationService, ValidationStatus} from "../../../../../../../shared/services/validation.service";
 import {FormArray, FormControl} from "@angular/forms";
 import {ActivityService} from "../../../../services/activity.service";
 import {Router} from "@angular/router";
@@ -25,6 +25,7 @@ export class ActiveCardListComponent implements OnInit {
   public RULES = RULES;
   public athlete: Observable<Athlete | null> = this.athleteService.me;
   public selectedActivity$ = this.boardService.selectedActivity$;
+  public notEnoughEnergy$ = new BehaviorSubject<boolean>(false);
   public remainderActivity: any = null;
 
   public featuredCard: ValidatedCard | null;
@@ -92,6 +93,10 @@ export class ActiveCardListComponent implements OnInit {
       }
       this.remainderActivity = this.validationService.getActivityRemainder(activity, this.getPlainCards(this.selectedCards.value));
     });
+
+    this.selectedCards.valueChanges.subscribe(selectedCards => {
+      this.updateEnergyCheck(selectedCards);
+    })
   }
 
   updateValidations() {
@@ -210,6 +215,14 @@ export class ActiveCardListComponent implements OnInit {
   cancelSubmit() {
     this.submitConfirmation.next(false);
     this.popupService.closePopup();
+  }
+
+  updateEnergyCheck(selectedCards: ValidatedCard[]) {
+
+
+    this.athlete.pipe(first(), map((athlete) => athlete?.energy || 0)).subscribe((availableEnergy: number) => {
+      this.notEnoughEnergy$.next(StaticValidationService.notEnoughEnergy(availableEnergy, this.getPlainCards(selectedCards)));
+    });
   }
 }
 

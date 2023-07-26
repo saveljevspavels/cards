@@ -9,6 +9,7 @@ import Card from "../../../../../../../shared/interfaces/card.interface";
 export class RewardsComponent implements OnInit {
 
   @Input() card: Card;
+  @Input() rewardsOnly = false;
 
   constructor() { }
 

@@ -97,7 +97,7 @@ export class CardComponent implements OnInit, OnChanges {
         if(!this.canActivate) {
             return;
         }
-        this.activated.emit(this.card.id);
+        this.activated.emit(this.card);
     }
 
     addPhoto(event: Event) {

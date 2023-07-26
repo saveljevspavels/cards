@@ -1,8 +1,8 @@
 .entity-id {
   position: absolute;
-  top: var(--padding-value);
+  top: 0;
   right: var(--padding-value);
-  opacity: 0.2;
+  opacity: 0.5;
   font-size: var(--text-size-small);
   user-select: text!important;
 }

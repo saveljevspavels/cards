@@ -172,6 +172,17 @@ export default class ActivityService {
         }
 
         const cards: Card[] = cardIds.length ? await this.fireStoreService.cardCollection.where([{fieldPath: 'id', opStr: 'in', value: cardIds}]) : [];
+
+        if(cardIds.length > RULES.MAX_CARDS_SUBMIT) {
+            this.logger.info(`Athlete ${athlete.firstname} ${athlete.lastname} ${athlete.id} submitted activity with too many cards ${cardIds}`)
+            throw RESPONSES.ERROR.MAX_CARDS_SUBMIT
+        }
+
+        if(StaticValidationService.notEnoughEnergy(athlete.energy, cards)) {
+            this.logger.info(`Athlete ${athlete.name} ${athlete.id} tried to submit ${cardIds}, without sufficient energy`)
+            throw RESPONSES.ERROR.NOT_ENOUGH_ENERGY
+        }
+
         const cardSnapshots: CardSnapshot[] = cardIds.map((id, index) => {
             return {
                 ...(cards.find(card => card.id === id) || NullCard),
