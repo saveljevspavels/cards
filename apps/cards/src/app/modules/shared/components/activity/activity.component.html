@@ -20,12 +20,25 @@
 </ng-template>
 
 <ng-template #headerTemplate>
-    <div class="d-flex align-items-center justify-content-between mb-2 box p-2">
+    <div class="d-flex align-items-center justify-content-between box p-2"
+         [ngClass]="{'mb-2': activity.gameData?.cardSnapshots.length}"
+    >
         <div class="d-flex align-items-center">
-            <app-athlete *ngIf="activity?.athlete" [size]="'small'" [athleteId]="activity?.athlete.id"></app-athlete>
-            <span class="text-small ml-1">
-            {{activityVerbMap.get(activityType)}} <span class="text-bold">{{activity[validationService.baseActivityTypeMap.get(activityType)] | activityProp : validationService.baseActivityTypeMap.get(activityType)}}</span>
-        </span>
+            <app-athlete *ngIf="activity?.athlete" [size]="'medium'"
+                         [athleteId]="activity?.athlete.id"
+            >
+                <div class="d-flex align-items-center">
+                    <app-activity-type-icon [type]="activityType"
+                                            [width]="14"
+                                            [height]="14"
+                    >
+                    </app-activity-type-icon>
+                    <span class="m-0 ml-1 text-small text-bold">{{activity[validationService.baseActivityTypeMap.get(activityType)] | activityProp : validationService.baseActivityTypeMap.get(activityType)}}</span>
+                </div>
+<!--                <span class="text-small">-->
+<!--                    {{activityVerbMap.get(activityType)}} <span class="text-bold">{{activity[validationService.baseActivityTypeMap.get(activityType)] | activityProp : validationService.baseActivityTypeMap.get(activityType)}}</span>-->
+<!--                </span>-->
+            </app-athlete>
         </div>
         <div *ngIf="activity.map?.summary_polyline">
             <app-svg (click)="showMap()"
@@ -53,11 +66,11 @@
              [ngClass]="{'mb-1': card.attachedImages?.length || activity.map?.summary_polyline}"
         >
             <div class="d-flex align-items-center">
-                <app-athlete *ngIf="activity?.athlete" [size]="'small'" [athleteId]="activity?.athlete.id"></app-athlete>
+                <app-athlete *ngIf="activity?.athlete" [athleteId]="activity?.athlete.id"></app-athlete>
                 &nbsp;
-                <span class="text-small">completed <span class="text-bold">"{{card.title}}"</span></span>
+                <span class="text-medium">completed <span class="text-bold">"{{card.title}}"</span></span>
             </div>
-            <app-image [src]="card.image" class="mr-1" [small]="true"></app-image>
+            <app-image [src]="card.image" [small]="true"></app-image>
         </div>
         <ng-container *ngIf="showReports">
             <p class="color-other" *ngFor="let report of card.reports | keyvalue">{{report.value}} by {{report.key}}</p>

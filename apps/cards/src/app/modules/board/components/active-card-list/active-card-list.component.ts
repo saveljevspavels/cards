@@ -58,23 +58,20 @@ export class ActiveCardListComponent implements OnInit {
       this.athlete.pipe(startWith(null)),
       this.cardService.cards.pipe(startWith(null)),
       this.selectedActivity$.pipe(startWith(null)),
-      this.gameService.gameData.pipe(
-          startWith(null),
-          map((gameData) => this.cardService.getCard(gameData?.featuredCard || '')),
-          filter((card) => card !== NullCard),
-      )
-    ]).subscribe(([athlete, cards, activity, featuredCard]) => {
+      this.gameService.gameData.pipe(startWith(null))
+    ]).subscribe(([athlete, cards, activity, game]) => {
       this.selectedCards.setValue([]);
       if(!athlete && !cards) {
         this.cardList = [];
         return;
       }
 
-      if(featuredCard && [...athlete?.cards?.completed || [], ...athlete?.cards?.finished || []].indexOf(featuredCard.id) === -1) {
-        this.featuredCard = {
+      if(game && game.featuredCard) {
+        const featuredCard = this.cardService.getCard(game.featuredCard);
+        this.featuredCard = [...athlete?.cards?.completed || [], ...athlete?.cards?.finished || []].indexOf(featuredCard.id) === -1 ? {
           card: featuredCard,
           validationStatus: this.validateCard(activity, featuredCard, this.selectedCards.value)
-        }
+        } : null;
       } else {
         this.featuredCard = null;
       }

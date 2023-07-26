@@ -27,23 +27,22 @@
 </div>
 
 <div class="mt-3">
-    <app-collapsible [title]="'Played Cards'"
+    <app-collapsible [title]="'Completed Tasks'"
                      [inclusive]="true"
                      [id]="'payedCards'"
     >
         <div hiddenContent>
             <div class="mt-2">
-                <div *ngFor="let activity of athleteActivities$ | async; let i = index" class="mb-2">
-                    <div *ngFor="let cardSnapShot of activity.gameData.cardSnapshots; let last = last"
-                         [ngClass]="{'mb-2': !last }"
+                <div *ngFor="let cardId of athlete?.cards.finished" class="mb-2">
+                    <app-card
+                            [cardId]="cardId"
+                            [showActivate]="false"
                     >
-                        <app-card
-                                [card]="cardSnapShot"
-                                [showActivate]="false"
-                        >
-                        </app-card>
-                    </div>
+                    </app-card>
                 </div>
+                <div *ngIf="!athlete?.cards.finished.length"
+                     class="text-small mb-2"
+                >No completed tasks yet</div>
             </div>
         </div>
     </app-collapsible>

@@ -9,7 +9,7 @@
     <ng-container *ngFor="let board of boards">
         <ng-container *ngIf="board.key === activeBoard.value">
             <div *ngFor="let level of board.levels; let levelIndex = index">
-                <ng-container *ngIf="level.cards.length">
+                <ng-container *ngIf="level.cards.length && (levelIndex - 1) <= unlockMap.get(board.key)">
                     <h2 class="mb-2 mt-2" *ngIf="(levelIndex - 1) === unlockMap.get(board.key)">Locked Tasks</h2>
                     <div [ngClass]="{'border-primary border-radius p-2 mb-2': (levelIndex - 1) === unlockMap.get(board.key)}">
                         <div class="d-flex flex-column">

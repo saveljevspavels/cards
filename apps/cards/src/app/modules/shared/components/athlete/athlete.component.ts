@@ -19,6 +19,9 @@ export class AthleteComponent implements OnInit {
   @Input()
   size: string = 'medium';
 
+  @Input()
+  hideLastName = false;
+
   constructor(private athleteService: AthleteService) { }
 
   ngOnInit(): void {

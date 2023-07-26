@@ -13,7 +13,9 @@
 </div>
 
 <ng-template #activityTemplate let-activities="activities">
-    <div *ngFor="let activity of activities | sort: 'gameData.submittedAt' : { order: 'desc', type: 'date' }; trackBy: activityTrackBy">
+    <div *ngFor="let activity of activities | sort: 'gameData.submittedAt' : { order: 'desc', type: 'date' }; trackBy: activityTrackBy; let last = last"
+         [ngClass]="{'mb-2': !last}"
+    >
         <app-activity
             [activity]="activity"
             [showComments]="true"

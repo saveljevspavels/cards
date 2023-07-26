@@ -19,7 +19,7 @@
 <div *ngFor="let validatedCard of cardList; let i = index; trackBy: cardTrackBy" class="mb-2">
     <app-card (click)="cardSelected(validatedCard)"
               [card]="validatedCard.card"
-              [showDescription]="false"
+              [showDescription]="true"
               [imagesController]="uploadedImages?.get(i + '')"
               [validationStatus]="validatedCard.validationStatus"
     ></app-card>

@@ -20,7 +20,7 @@ const routes: Routes = [
             {
                 path: '',
                 pathMatch: 'full',
-                redirectTo: 'main'
+                redirectTo: 'activity-list'
             },
             {
                 path: 'main',

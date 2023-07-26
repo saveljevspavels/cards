@@ -17,7 +17,7 @@ export class MobileMenuComponent implements OnInit {
     routes: any = {
         public: [
             {
-                label: 'Activity List',
+                label: 'Activity Feed',
                 icon: 'stars',
                 path: '/board/activity-list'
             },
@@ -27,7 +27,7 @@ export class MobileMenuComponent implements OnInit {
                 icon: 'gauge',
             },
             {
-                label: 'Board',
+                label: 'Tasks',
                 icon: 'board',
                 path: '/board/board'
             },
