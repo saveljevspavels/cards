@@ -27,7 +27,7 @@ export class MobileMenuComponent implements OnInit {
                 icon: 'gauge',
             },
             {
-                label: 'Tasks',
+                label: 'Task Market',
                 icon: 'board',
                 path: '/board/board'
             },

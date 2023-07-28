@@ -5,7 +5,7 @@ import {CONST} from "../../definitions/constants";
 import {generateId, getRandomInt, tierToRoman} from "./helpers/util";
 import {Logger} from "winston";
 import CardFactory, {CardPrototype, Progression} from "../shared/interfaces/card-factory.interface";
-import Card, {CardSnapshot, NullCard} from "../shared/interfaces/card.interface";
+import Card, {CardSnapshot, NullCard, Report} from "../shared/interfaces/card.interface";
 import ScoreService from "./score.service";
 import {RULES} from "../../definitions/rules";
 import {StaticValidationService} from "../shared/services/validation.service";
@@ -95,6 +95,22 @@ export default class CardService {
             }
             try {
                 await this.reportCard(athleteId, cardId, activityId, comment);
+            } catch (err) {
+                res.status(400).send(err);
+            }
+            res.status(200).send();
+        });
+
+        app.post(`${CONST.API_PREFIX}/cards/resolve-report`,async (req, res) => {
+            const cardId = req.body?.cardId;
+            const activityId = req.body?.activityId.toString();
+            const reportId = req.body?.reportId.toString();
+            if(!cardId || !activityId) {
+                res.status(400).send('Card Id/Activity Id missing');
+                return;
+            }
+            try {
+                await this.resolveReport(cardId, activityId, reportId);
             } catch (err) {
                 res.status(400).send(err);
             }
@@ -383,9 +399,9 @@ export default class CardService {
         }
 
         if(!card.reports) {
-            card.reports = {};
+            card.reports = [];
         }
-        card.reports[athleteId] = comment;
+        card.reports.push(this.createReport(athleteId, comment))
 
         await this.fireStoreService.detailedActivityCollection.update(
             activityId,
@@ -394,6 +410,32 @@ export default class CardService {
             }
         )
         this.logger.info(`Card ${card.title} reported for athlete ${activity.athlete.id} by ${athleteId}, comment: ${comment}`);
+    }
+
+    async resolveReport(cardId: string, activityId: string, reportId: string) {
+        const activity = await this.activityService.getActivity(activityId);
+        const gameData = activity.gameData;
+        const card: CardSnapshot = gameData.cardSnapshots.find((cardSnapshot: CardSnapshot) => cardSnapshot.id === cardId)
+        if(!card) {
+            this.logger.info(`Card snapshot ${cardId} does not exist in activity ${activityId}`);
+            throw 'Card snapshot does not exist in activity';
+        }
+
+        const report = card.reports?.find((report: Report) => report.id === reportId);
+        if(!report) {
+            this.logger.info(`Card snapshot ${cardId} has no reports`);
+            throw 'Report does not exist';
+        }
+
+        report.resolved = true;
+
+        await this.fireStoreService.detailedActivityCollection.update(
+            activityId,
+            {
+                gameData
+            }
+        )
+        this.logger.info(`Report resolved for card ${card.title} for athlete ${activity.athlete.id}`);
     }
 
     async likeCard(athleteId: string, cardId: string, activityId: string) {
@@ -461,5 +503,14 @@ export default class CardService {
         ])
 
         this.logger.info(`Card ${card.title} rejected for athlete ${activity.athlete.id}, comment: ${comment}`);
+    }
+
+    createReport(athleteId: string, comment: string): Report {
+        return {
+            id: generateId(),
+            createdBy: athleteId,
+            comment,
+            resolved: false
+        }
     }
 }

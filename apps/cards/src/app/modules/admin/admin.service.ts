@@ -24,7 +24,11 @@ export class AdminService {
             )
         ).valueChanges()
             .pipe(
-                map((activities: any[]) => activities.filter(activity => activity.gameData.cardSnapshots.find((card: CardSnapshot) => card.reports && Object.keys(card.reports).length))
+                map((activities: any[]) => activities.filter(activity =>
+                    activity.gameData.cardSnapshots.find((card: CardSnapshot) =>
+                        (card.reports?.length ? card.reports : [])?.find(report => !report.resolved)
+                    )
+                )
             )
             )
             .subscribe((activities: any) => {

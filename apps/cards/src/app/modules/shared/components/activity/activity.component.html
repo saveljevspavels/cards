@@ -73,7 +73,7 @@
             <app-image [src]="card.image" [small]="true"></app-image>
         </div>
         <ng-container *ngIf="showReports">
-            <p class="color-other" *ngFor="let report of card.reports | keyvalue">{{report.value}} by {{report.key}}</p>
+            <p class="color-other" *ngFor="let report of card.reports">{{report.comment}} by {{report.createdBy}}</p>
         </ng-container>
         <app-gallery [images]="card.attachedImages"
                      [polyline]="activity.map?.summary_polyline"
@@ -82,9 +82,9 @@
         <div class="d-flex justify-content-between mt-2">
             <app-button (click)="report(card.id)"
                         [small]="true"
-                        [label]="(card?.reports && card?.reports[myId]) ? 'Reported' : 'Report'"
+                        [label]="(card?.reportedByMe) ? 'Reported' : 'Report'"
                         [icon]="'flag'"
-                        [type]="(card?.reports && card?.reports[myId]) ? 'danger-filled': 'danger'"></app-button>
+                        [type]="(card?.reportedByMe) ? 'danger-filled': 'danger'"></app-button>
             <app-button (click)="card?.likedByMe || like(card)"
                         [small]="true"
                         [label]="card?.likedByMe ? (card?.likes?.length || 1) : 'Like'"

@@ -39,4 +39,10 @@ export class ActivityReviewComponent implements OnInit {
             this.rejectionComment.reset()
         })
     }
+
+    resolveReport(cardId: string, activityId: string, reportId: string) {
+        this.cardsService.resolveReport(cardId, activityId, reportId).subscribe(_ => {
+            this.rejectionComment.reset()
+        })
+    }
 }

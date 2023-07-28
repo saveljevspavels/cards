@@ -1,4 +1,6 @@
 <div class="reward-bubble d-flex align-items-center {{styleClass}}">
-    <span class="mr-1 text-bold text-medium">{{value > 0 ? '+' : ''}}{{value}}</span>
-    <app-svg height="14" width="14" [icon]="icon"></app-svg>
+    <span class="mr-0 mr-xs-1 text-bold text-small text-xs-medium">{{value > 0 ? '+' : ''}}{{value}}</span>
+
+    <app-svg class='d-block d-xs-none' height="11" width="11" style="margin-left: 1px" [icon]="icon"></app-svg>
+    <app-svg class='d-none d-xs-block' height="14" width="14" [icon]="icon"></app-svg>
 </div>

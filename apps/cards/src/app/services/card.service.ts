@@ -67,6 +67,14 @@ export class CardService {
         })
     }
 
+    resolveReport(cardId: string, activityId: string, reportId: string) {
+        return this.http.post(`${environment.baseBE}/cards/resolve-report`, {
+            cardId,
+            activityId,
+            reportId
+        })
+    }
+
     likeCard(cardId: string, activityId: string) {
         return this.http.post(`${environment.baseBE}/cards/like`, {
             cardId,

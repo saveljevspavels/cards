@@ -16,7 +16,7 @@ import {UtilService} from "../../../../services/util.service";
 import {CONST} from "../../../../../../../../definitions/constants";
 import {StaticValidationService} from "../../../../../../../shared/services/validation.service";
 import {AthleteService} from "../../../../services/athlete.service";
-import {CardSnapshot} from "../../../../../../../shared/interfaces/card.interface";
+import {CardSnapshot, Report} from "../../../../../../../shared/interfaces/card.interface";
 
 @Component({
     selector: 'app-activity',
@@ -73,6 +73,7 @@ export class ActivityComponent implements OnInit, ControlValueAccessor, OnChange
             this.activityType = StaticValidationService.normalizeActivityType(this.activity);
             this.activity.gameData?.cardSnapshots.forEach((cardSnapshot: CardSnapshot) => {
                 cardSnapshot.likedByMe = (cardSnapshot?.likes && cardSnapshot?.likes?.indexOf(this.myId) !== -1);
+                cardSnapshot.reportedByMe = !!cardSnapshot?.reports?.length && !!cardSnapshot?.reports?.find((report: Report) => report.createdBy === this.myId);
             });
         }
     }

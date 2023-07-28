@@ -188,7 +188,7 @@ export default class ActivityService {
                 ...(cards.find(card => card.id === id) || NullCard),
                 comment: comments[index] || '',
                 likes: [],
-                reports: {},
+                reports: [],
                 attachedImages: imageIds[index] || []
             }
         })

@@ -23,7 +23,8 @@ export interface CardSnapshot extends Card {
     attachedImages?: string[];
     likes?: string[];
     likedByMe?: boolean; // FE use only
-    reports?: {[key: string]: string};
+    reportedByMe?: boolean; // FE use only
+    reports?: Report[];
 }
 
 export interface CardUses {
@@ -35,6 +36,13 @@ export interface Validator {
     comparator: string;
     property: string;
     formula: string;
+}
+
+export interface Report {
+    id: string;
+    createdBy: string;
+    comment: string;
+    resolved: boolean;
 }
 
 export const NullCard: Card = {

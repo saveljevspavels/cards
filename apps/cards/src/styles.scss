@@ -204,6 +204,16 @@ h5 {
     font-size: var(--text-size-medium)
 }
 
+@media (min-width: 435px) {
+    .text-xs-small {
+        font-size: var(--text-size-small)
+    }
+
+    .text-xs-medium {
+        font-size: var(--text-size-medium)
+    }
+}
+
 .styled-list {
     list-style: none;
     padding: 0;
