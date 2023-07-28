@@ -40,7 +40,7 @@ export class RulesComponent implements OnInit {
             ]
         },
         {
-            title: 'Basic Task',
+            title: 'Basic Activity',
             rules: [
                 'You can always submit your activity to "Basic Task" to get bonus coins',
                 'Any activities that are small/not suitable for a regular Tasks could be submitted as a Basic Task',

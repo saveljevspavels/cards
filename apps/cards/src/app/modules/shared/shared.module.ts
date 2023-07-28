@@ -50,6 +50,7 @@ import { GalleryComponent } from './components/gallery/gallery.component';
 import { CountDownComponent } from './components/count-down/count-down.component';
 import { RewardEnergyComponent } from './components/reward-energy/reward-energy.component';
 import {EntityIdComponent} from "../../components/entity-id/entity-id.component";
+import {CardPlaceholderComponent} from "./components/card/card-placeholder/card-placeholder.component";
 
 const COMPS = [
     InputComponent,
@@ -107,6 +108,7 @@ const MODULES = [
         GalleryComponent,
         CountDownComponent,
         RewardEnergyComponent,
+        CardPlaceholderComponent
     ],
     imports: [
         CommonModule,
@@ -127,6 +129,7 @@ const MODULES = [
         RewardsComponent,
         RewardPointsComponent,
         RewardEnergyComponent,
+        CardPlaceholderComponent,
     ],
     providers: [
         FileService

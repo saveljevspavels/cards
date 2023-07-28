@@ -99,7 +99,8 @@ export default class GameService {
                 {
                     title: `${newCard.title} (Time Limited)`,
                     value: 0,
-                    coinsReward: parseInt(String(newCard.coinsReward), 10) + (parseInt(String(newCard.value), 10) * RULES.COINS.FEATURED_CARD_POINT_CONVERSION)
+                    coinsReward: parseInt(String(newCard.coinsReward), 10) + (parseInt(String(newCard.value), 10) * RULES.COINS.FEATURED_CARD_POINT_CONVERSION),
+                    energyCost: 0
                 }
             ),
             await this.fireStoreService.gameCollection.update(

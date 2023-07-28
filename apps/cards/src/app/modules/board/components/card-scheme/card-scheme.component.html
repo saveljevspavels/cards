@@ -35,6 +35,14 @@
                         </app-button>
                     </div>
                 </ng-container>
+                <div *ngIf="level.cards.length && levelIndex === unlockMap.get(board.key) + 2">
+                    <div class="mb-2">
+                        <app-card-placeholder></app-card-placeholder>
+                    </div>
+                    <div style="opacity: 0.5;">
+                        <app-card-placeholder></app-card-placeholder>
+                    </div>
+                </div>
             </div>
         </ng-container>
     </ng-container>
