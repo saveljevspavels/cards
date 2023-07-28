@@ -80,8 +80,8 @@ export class AdminService {
         return this.http.post(`${environment.baseBE}/create-card-instances`, body)
     }
 
-    public startGame() {
-        return this.http.post(`${environment.baseBE}/start-game`, {})
+    public startGame(startDate: string) {
+        return this.http.post(`${environment.baseBE}/start-game`, {startDate})
     }
 
     public getLogs(): Observable<Object> {

@@ -127,6 +127,11 @@ hr {
     max-width: unset!important;
 }
 
+.full-height {
+    height: 100%!important;
+    max-height: unset!important;
+}
+
 .title {
     font-weight: 400;
     font-size: var(--text-size-title);

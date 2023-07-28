@@ -164,20 +164,6 @@ export class FirestoreService {
         }
     }
 
-    async startGame() {
-        const game: Game = {
-            cardUses: 0,
-            shifts: 0,
-            startDate: new Date().toISOString().slice(0, 10),
-            featuredCard: null
-        }
-        await this.gameCollection.set(
-            CONST.GAME_ID,
-            game
-        )
-    }
-
-
     async createAchievement(achievement: any) {
         const id = achievement.id || generateId()
         return this.achievementCollection.doc(id).set({

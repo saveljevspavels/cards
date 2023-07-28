@@ -15,6 +15,8 @@ import CardService from "./card.service";
 import Athlete from "../shared/interfaces/athlete.interface";
 import CardFactory from "../shared/interfaces/card-factory.interface";
 import ActivityService from "./activity.service";
+import Game from "../cards/src/app/interfaces/game";
+import {DateService} from "../shared/utils/date.service";
 
 export default class GameService {
     constructor(
@@ -27,7 +29,8 @@ export default class GameService {
         private activityService: ActivityService
     ) {
         app.post(`${CONST.API_PREFIX}/start-game`, async (req, res) => {
-            await fireStoreService.startGame()
+            const startDate = req.body?.startDate;
+            await this.startGame(startDate)
             res.status(200).send({response: RESPONSES.SUCCESS});
         });
 
@@ -78,20 +81,25 @@ export default class GameService {
 
     initFeaturedCardChange() {
         const rule = new schedule.RecurrenceRule();
-        rule.hour = RULES.FEATURED_TASK_HOURS;
+        rule.hour = RULES.FEATURED_TASK_HOURS.REGULAR;
         rule.minute = 0;
         rule.tz = 'Europe/Riga';
 
         const job = schedule.scheduleJob(rule, async () => {
+            const game: Game | null = await this.fireStoreService.gameCollection.get(CONST.GAME_ID);
+            if(game?.startDate === DateService.getToday() && RULES.FEATURED_TASK_HOURS.FIRST_DAY.indexOf(DateService.getCurrentHour()) === -1) {
+                return;
+            }
             await this.changeFeaturedCard();
         })
     }
 
-    async changeFeaturedCard() {
+    async changeFeaturedCard(cardName = '') {
         const allFactories: CardFactory[] = await this.fireStoreService.cardFactoryCollection
             .where([{ fieldPath: 'manualValidation', opStr: '==', value: true}]);
+        const namedFactory = cardName && allFactories.find((factory: CardFactory) => factory.title === cardName);
         const randomFactory = allFactories[getRandomInt(allFactories.length)];
-        const newCard = await this.cardService.createCardFromFactory(randomFactory, 0);
+        const newCard = await this.cardService.createCardFromFactory(namedFactory || randomFactory, 0);
 
         Promise.all([
             await this.fireStoreService.cardCollection.update(
@@ -176,5 +184,19 @@ export default class GameService {
         for(let i = 0; i < Object.values(CONST.ACTIVITY_TYPES).length; i++) {
             await this.athleteService.claimBaseReward(athleteId, Object.values(CONST.ACTIVITY_TYPES)[i]);
         }
+    }
+
+    async startGame(startDate: string) {
+        const game: Game = {
+            cardUses: 0,
+            shifts: 0,
+            startDate,
+            featuredCard: null
+        }
+        await this.fireStoreService.gameCollection.set(
+            CONST.GAME_ID,
+            game
+        )
+        await this.changeFeaturedCard(RULES.STARTING_CARD)
     }
 }
