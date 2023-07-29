@@ -41,7 +41,9 @@
                         [type]="'action'"
                         [disabled]="!canActivate"
                         (buttonClick)="activate()"
-            ></app-button>
+            >
+                <div class="text-small ml-1 d-flex justify-content-center" *ngIf="card.coinsCost > 0">-{{card.coinsCost}}<div class="pl-1"><app-svg [height]="12" [icon]="'coin'"></app-svg></div></div>
+            </app-button>
         </div>
     </div>
     <div *ngIf="imagesController && validationStatus.toString() === ValidationStatus.SELECTED"

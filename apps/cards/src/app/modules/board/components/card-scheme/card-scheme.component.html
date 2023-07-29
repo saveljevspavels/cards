@@ -9,8 +9,7 @@
     <ng-container *ngFor="let board of boards">
         <ng-container *ngIf="board.key === activeBoard.value">
             <div *ngFor="let level of board.levels; let levelIndex = index">
-                <ng-container *ngIf="level.cards.length">
-<!--                <ng-container *ngIf="level.cards.length && (levelIndex - 1) <= unlockMap.get(board.key)">-->
+                <ng-container *ngIf="level.cards.length && (levelIndex - 1) <= unlockMap.get(board.key)">
                     <h2 class="mb-2 mt-2" *ngIf="(levelIndex - 1) === unlockMap.get(board.key)">Locked Tasks</h2>
                     <div [ngClass]="{'border-primary border-radius p-2 mb-2': (levelIndex - 1) === unlockMap.get(board.key)}">
                         <div class="d-flex flex-column">
@@ -19,7 +18,7 @@
                                           (activated)="activateCard($event)"
                                           [showActivate]="true"
                                           [locked]="unlockMap.get(board.key) < levelIndex"
-                                          [canActivate]="(athlete | async)?.energy >= cardMap.get(card).energyCost && (athlete | async)?.cards.active.length < RULES.SCHEME.MAX_ACTIVE_CARDS"
+                                          [canActivate]="(athlete | async)?.coins >= cardMap.get(card).coinsCost && (athlete | async)?.cards.active.length < RULES.SCHEME.MAX_ACTIVE_CARDS"
                                           [card]="cardMap.get(card)"
                                           [styleClass]="'mb-2'"
                                 ></app-card>
@@ -36,14 +35,14 @@
                         </app-button>
                     </div>
                 </ng-container>
-<!--                <div *ngIf="level.cards.length && levelIndex === unlockMap.get(board.key) + 2">-->
-<!--                    <div class="mb-2">-->
-<!--                        <app-card-placeholder></app-card-placeholder>-->
-<!--                    </div>-->
-<!--                    <div style="opacity: 0.5;">-->
-<!--                        <app-card-placeholder></app-card-placeholder>-->
-<!--                    </div>-->
-<!--                </div>-->
+                <div *ngIf="level.cards.length && levelIndex === unlockMap.get(board.key) + 2">
+                    <div class="mb-2">
+                        <app-card-placeholder></app-card-placeholder>
+                    </div>
+                    <div style="opacity: 0.5;">
+                        <app-card-placeholder></app-card-placeholder>
+                    </div>
+                </div>
             </div>
         </ng-container>
     </ng-container>
