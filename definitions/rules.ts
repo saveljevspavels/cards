@@ -92,7 +92,7 @@ export const RULES = {
     },
     PROGRESS_PRECISION: 1000,
     FEATURED_TASK_HOURS: {
-        FIRST_DAY: [20],
+        FIRST_DAY: [12, 20],
         REGULAR: [4, 12, 20]
     },
     ENABLED_ABILITIES: [
@@ -104,5 +104,5 @@ export const RULES = {
         AbilityKey.ENERGY_TO_COINS
     ],
     ABILITY_BASE_WORKOUT_REDUCTION: 0.9,
-    STARTING_CARD: 'Getting Started'
+    STARTING_CARD: ''
 }
