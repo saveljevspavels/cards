@@ -4,7 +4,6 @@ import {filter} from "rxjs/operators";
 import {ConstService} from "../../../../services/const.service";
 import {UtilService} from "../../../../services/util.service";
 import {CardService} from "../../../../services/card.service";
-import {Progression} from "../../../../../../../shared/interfaces/card-factory.interface";
 import {ValidationStatus} from "../../../../../../../shared/services/validation.service";
 import {FormControl} from "@angular/forms";
 import {Subject} from "rxjs";

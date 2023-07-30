@@ -11,6 +11,7 @@ export interface Ability {
 
 export enum AbilityKey {
     BUY_POINT = 'buy_point',
+    BUY_3_POINTS = 'buy_3_points',
     BUY_ENERGY = 'buy_energy',
     BUY_ENERGY_FULL = 'buy_energy_full',
     SELL_ENERGY_FULL = 'sell_energy_full',

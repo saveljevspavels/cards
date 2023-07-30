@@ -92,16 +92,17 @@ export const RULES = {
     },
     PROGRESS_PRECISION: 1000,
     FEATURED_TASK_HOURS: {
-        FIRST_DAY: [12, 20],
+        FIRST_DAY: [4, 12, 20],
         REGULAR: [4, 12, 20]
     },
     ENABLED_ABILITIES: [
         AbilityKey.BUY_ENERGY_FULL,
         AbilityKey.BUY_ENERGY,
         AbilityKey.BUY_POINT,
+        AbilityKey.BUY_3_POINTS,
         AbilityKey.REDUCE_BASE_WORKOUT,
-        AbilityKey.SELL_ENERGY_FULL,
-        AbilityKey.ENERGY_TO_COINS
+        // AbilityKey.SELL_ENERGY_FULL,
+        // AbilityKey.ENERGY_TO_COINS
     ],
     ABILITY_BASE_WORKOUT_REDUCTION: 0.9,
     STARTING_CARD: ''

@@ -24,6 +24,16 @@ export const ABILITIES: Ability[] =
         coinsReward: 0,
     },
     {
+        title: 'Win button',
+        key: AbilityKey.BUY_3_POINTS,
+        description: 'Immediately get 3 victory points',
+        value: 3,
+        energyCost: 0,
+        energyReward: 0,
+        coinsCost: 50,
+        coinsReward: 0,
+    },
+    {
         title: 'Rest Day',
         key: AbilityKey.SELL_ENERGY_FULL,
         description: 'Lose full energy to immediately get 3 victory points',
@@ -50,7 +60,7 @@ export const ABILITIES: Ability[] =
         value: 0,
         energyCost: 0,
         energyReward: RULES.ENERGY.MAX,
-        coinsCost: 25,
+        coinsCost: 30,
         coinsReward: 0,
     },
     {
@@ -70,7 +80,7 @@ export const ABILITIES: Ability[] =
         value: 0,
         energyCost: 0,
         energyReward: 0,
-        coinsCost: 30,
+        coinsCost: 40,
         coinsReward: 0,
     }
 ]
