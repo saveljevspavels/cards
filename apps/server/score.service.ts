@@ -28,7 +28,7 @@ export default class ScoreService {
             {
                 ...score,
                 value: newValue,
-                cardsPlayed: score.cardsPlayed + 1
+                cardsPlayed: score.cardsPlayed + (deduct ? -1 : 1)
             }
         );
 

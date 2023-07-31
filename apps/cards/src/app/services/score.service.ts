@@ -15,7 +15,7 @@ export class ScoreService {
   constructor(private db: AngularFirestore,
               private athleteService: AthleteService) {
     this.scoreCollection.valueChanges().subscribe((scores: any[]) => {
-      this.scores.next(scores);
+      this.scores.next(this.sortScores(scores));
     });
     combineLatest([
       this.athleteService.myId,
@@ -24,8 +24,14 @@ export class ScoreService {
       if(!myId || !scores.length) {
         return;
       }
-      this.scores.next(scores);
+      this.scores.next(this.sortScores(scores));
       this.myScore.next(scores.find((score: Score) => score.athleteId === myId) || null)
     });
+  }
+
+  sortScores(scores: Score[]): Score[] {
+    return scores.sort((a: Score, b: Score) =>
+        b.value - a.value || b.cardsPlayed - a.cardsPlayed
+    )
   }
 }

@@ -7,7 +7,7 @@
             Points
         </div>
     </div>
-    <div *ngFor="let score of scores | async | sort: 'value': { order: 'desc' }; let i = index" class="mb-2">
+    <div *ngFor="let score of scores | async; let i = index" class="mb-2">
         <app-score-item
             [score]="score"
             [position]="i + 1"

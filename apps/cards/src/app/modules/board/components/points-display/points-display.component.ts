@@ -23,7 +23,8 @@ export class PointsDisplayComponent implements OnInit {
 
   ngOnInit(): void {
     this.scoreService.scores.subscribe((scores) => {
-      this.position = this.numberToPosition(scores.findIndex((score: Score) => score.athleteId === this.athleteService.myId.value) + 1);
+      this.position = this.numberToPosition(scores
+          .findIndex((score: Score) => score.athleteId === this.athleteService.myId.value) + 1);
     })
   }
 
