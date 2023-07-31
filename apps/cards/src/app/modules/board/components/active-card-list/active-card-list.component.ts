@@ -213,6 +213,7 @@ export class ActiveCardListComponent implements OnInit {
   }
 
   cancelSubmit() {
+    this.loading = false;
     this.submitConfirmation.next(false);
     this.popupService.closePopup();
   }

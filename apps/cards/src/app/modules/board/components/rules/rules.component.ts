@@ -22,7 +22,7 @@ export class RulesComponent implements OnInit {
         {
             title: 'Tasks',
             rules: [
-                'To activate the task you need to spend 1 energy. All energy is restored at midnight',
+                'To submit a task you need to spend 1 energy. All energy is restored at midnight',
                 'At the beginning you have limited amount of tasks. You can unlock more for coins',
                 'Each task has its activity requirement, your activity should pass that requirement',
                 'Most of the times you should have a photo attachment for the task upon submission',
@@ -34,7 +34,7 @@ export class RulesComponent implements OnInit {
             title: 'Time limited tasks',
             rules: [
                 'Time limited task is the same for everybody, and is changed every 8 hours',
-                'You don\'t have to spend energy to activate it',
+                'You don\'t have to spend energy to submit it',
                 'Time limited task does not give victory points, but it gives more coins instead',
                 'When you complete the task, new one will appear as scheduled'
             ]
