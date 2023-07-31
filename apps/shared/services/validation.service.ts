@@ -13,8 +13,12 @@ export class StaticValidationService {
         [CONST.ACTIVITY_TYPES.WALK, CONST.ACTIVITY_PROPERTIES.DISTANCE],
     ]);
 
+    static requiredEnergy(cards: Card[]): number {
+        return cards.reduce((acc: number, card: Card) => acc + parseInt(card.energyCost.toString(), 10), 0);
+    }
+
     static notEnoughEnergy(availableEnergy: number, cards: Card[]): boolean {
-        const requiredEnergy = cards.reduce((acc: number, card: Card) => acc + parseInt(card.energyCost.toString(), 10), 0);
+        const requiredEnergy = StaticValidationService.requiredEnergy(cards);
         return requiredEnergy > availableEnergy;
     }
 

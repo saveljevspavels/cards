@@ -12,7 +12,6 @@ import {
 import {ControlValueAccessor, FormControl, NG_VALUE_ACCESSOR} from "@angular/forms";
 import {PopupService} from "../../../../services/popup.service";
 import {ConstService} from "../../../../services/const.service";
-import {UtilService} from "../../../../services/util.service";
 import {CONST} from "../../../../../../../../definitions/constants";
 import {StaticValidationService} from "../../../../../../../shared/services/validation.service";
 import {AthleteService} from "../../../../services/athlete.service";

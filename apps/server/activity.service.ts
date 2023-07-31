@@ -197,6 +197,7 @@ export default class ActivityService {
             this.fireStoreService.athleteCollection.update(
                 athlete.id,
                 {
+                    energy: parseInt(athlete.energy.toString(), 10) - StaticValidationService.requiredEnergy(cards),
                     cards: {
                         ...athlete.cards,
                         active: athlete.cards.active.filter(cardId => cardIds.indexOf(cardId) === -1),
