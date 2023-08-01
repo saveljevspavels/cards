@@ -1,5 +1,7 @@
 <div class="{{styleClass}} full-width">
-    <label class="light text-medium">{{label}}</label>
-    <br>
+    <ng-container *ngIf="label">
+        <label class="light text-medium">{{label}}</label>
+        <br>
+    </ng-container>
     <textarea [rows]="rows" [formControl]="fc" maxlength="{{maxLength}}" [placeholder]="placeholder"></textarea>
 </div>

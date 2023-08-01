@@ -20,34 +20,40 @@
 </ng-template>
 
 <ng-template #headerTemplate>
-    <div class="d-flex align-items-center justify-content-between box p-2"
+    <div class="box p-2"
          [ngClass]="{'mb-2': activity.gameData?.cardSnapshots.length}"
     >
-        <div class="d-flex align-items-center">
-            <app-athlete *ngIf="activity?.athlete" [size]="'medium'"
-                         [athleteId]="activity?.athlete.id"
-            >
-                <div class="d-flex align-items-center">
-                    <app-activity-type-icon [type]="activityType"
-                                            [width]="14"
-                                            [height]="14"
-                    >
-                    </app-activity-type-icon>
-                    <span class="m-0 ml-1 text-small text-bold">{{activity[validationService.baseActivityTypeMap.get(activityType)] | activityProp : validationService.baseActivityTypeMap.get(activityType)}}</span>
-                </div>
-<!--                <span class="text-small">-->
-<!--                    {{activityVerbMap.get(activityType)}} <span class="text-bold">{{activity[validationService.baseActivityTypeMap.get(activityType)] | activityProp : validationService.baseActivityTypeMap.get(activityType)}}</span>-->
-<!--                </span>-->
-            </app-athlete>
+        <div class="d-flex align-items-center justify-content-between">
+            <div class="d-flex align-items-center">
+                <app-athlete *ngIf="activity?.athlete" [size]="'medium'"
+                             [athleteId]="activity?.athlete.id"
+                >
+                    <div class="d-flex align-items-center">
+                        <app-activity-type-icon [type]="activityType"
+                                                [width]="14"
+                                                [height]="14"
+                        >
+                        </app-activity-type-icon>
+                        <span class="m-0 ml-1 text-small text-bold">{{activity[validationService.baseActivityTypeMap.get(activityType)] | activityProp : validationService.baseActivityTypeMap.get(activityType)}}</span>
+                    </div>
+                    <!--                <span class="text-small">-->
+                    <!--                    {{activityVerbMap.get(activityType)}} <span class="text-bold">{{activity[validationService.baseActivityTypeMap.get(activityType)] | activityProp : validationService.baseActivityTypeMap.get(activityType)}}</span>-->
+                    <!--                </span>-->
+                </app-athlete>
+            </div>
+            <div *ngIf="activity.map?.summary_polyline">
+                <app-svg (click)="showMap()"
+                         class="pointer"
+                         [icon]="'map'"
+                         height="30"
+                         width="30"
+                ></app-svg>
+            </div>
         </div>
-        <div *ngIf="activity.map?.summary_polyline">
-            <app-svg (click)="showMap()"
-                     class="pointer"
-                     [icon]="'map'"
-                     height="30"
-                     width="30"
-            ></app-svg>
+        <div class="mt-2" *ngIf="activity.gameData.comments">
+            <app-comment [comment]="activity.gameData?.comments"></app-comment>
         </div>
+
     </div>
     <app-entity-id [id]="activity.id"></app-entity-id>
 </ng-template>

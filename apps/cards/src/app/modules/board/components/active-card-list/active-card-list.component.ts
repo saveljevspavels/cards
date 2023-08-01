@@ -15,6 +15,7 @@ import {FileService} from "../../../../services/file.service";
 import {GameService} from "../../../../services/game.service";
 import {filter, first, map, startWith} from "rxjs/operators";
 import {PopupService} from "../../../../services/popup.service";
+import {ConstService} from "../../../../services/const.service";
 
 @Component({
   selector: 'app-active-card-list',
@@ -31,6 +32,7 @@ export class ActiveCardListComponent implements OnInit {
   public featuredCard: ValidatedCard | null;
   public cardList: ValidatedCard[] = [];
   public selectedCards: FormControl = new FormControl([]);
+  public commentControl: FormControl = new FormControl('');
   public uploadedImages: FormArray;
 
   private submitConfirmation = new Subject;
@@ -181,12 +183,15 @@ export class ActiveCardListComponent implements OnInit {
             this.selectedActivity.id,
             cardIds,
             images,
-            []
+            this.commentControl.value.slice(0, ConstService.CONST.COMMENT_LENGTH),
         ).subscribe(_ => {
           this.boardService.deselectActivity();
+          this.selectedCards.setValue([]);
+          this.commentControl.setValue('');
           this.loading = false;
         }, (error => {
           this.selectedCards.setValue([]);
+          this.commentControl.setValue('');
           this.loading = false;
         }))
       }
@@ -219,8 +224,6 @@ export class ActiveCardListComponent implements OnInit {
   }
 
   updateEnergyCheck(selectedCards: ValidatedCard[]) {
-
-
     this.athlete.pipe(first(), map((athlete) => athlete?.energy || 0)).subscribe((availableEnergy: number) => {
       this.notEnoughEnergy$.next(StaticValidationService.notEnoughEnergy(availableEnergy, this.getPlainCards(selectedCards)));
     });

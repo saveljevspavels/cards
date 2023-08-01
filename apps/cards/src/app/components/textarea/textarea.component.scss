@@ -6,4 +6,9 @@ textarea {
     width: 100%;
     border: 0;
     resize: none;
+    font-size: var(--text-size-small);
+    padding: 6px;
+    border-radius: var(--radius);
+    background-color: var(--card-background);
+    font-family: 'Nunito', sans-serif;
 }
