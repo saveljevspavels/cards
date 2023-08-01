@@ -17,10 +17,16 @@ export class ActivityListComponent implements OnInit {
     private report$ = new Subject();
 
     public categories = [
-        'today',
-        'yesterday',
+        'recent',
+        'lastHour',
         'previously'
     ]
+
+    public categoryTitleMap = new Map([
+        ['recent', 'Just Now'],
+        ['lastHour', 'Last Hour'],
+        ['previously', 'Previously'],
+    ])
 
     public approvedActivities: any = this.getEmptyContainer();
 
@@ -35,23 +41,24 @@ export class ActivityListComponent implements OnInit {
     ngOnInit(): void {
         this.activityService.approvedActivities.subscribe(activities => {
             this.approvedActivities = this.getEmptyContainer();
-            const date = new Date();
-            const today = date.toISOString().slice(0, 10)
-            const yesterday = new Date(date.setDate((date).getDate() - 1)).toISOString().slice(0, 10)
+            const now = new Date().valueOf();
             activities.forEach((activity: any) => {
-                  switch((activity.gameData.submittedAt || activity.start_date).slice(0, 10)) {
-                      case today: this.approvedActivities.today.push(activity); break;
-                      case yesterday: this.approvedActivities.yesterday.push(activity); break;
-                      default: this.approvedActivities.previously.push(activity); break;
-                  }
+                const submittedAt = new Date(activity.gameData.submittedAt).valueOf();
+                if((now - submittedAt) < 600000) { // 10min
+                    this.approvedActivities.recent.push(activity);
+                } else if ((now - submittedAt) < 3600000) { // 1h
+                    this.approvedActivities.lastHour.push(activity)
+                } else if ((now - submittedAt) < 28800000) { // 8h
+                    this.approvedActivities.previously.push(activity);
+                }
             })
         })
     }
 
     getEmptyContainer(): any {
         return {
-            today: [],
-            yesterday: [],
+            recent: [],
+            lastHour: [],
             previously: []
         };
     }

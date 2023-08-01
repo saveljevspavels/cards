@@ -2,7 +2,7 @@
 
     <div *ngFor="let category of categories">
         <div *ngIf="approvedActivities[category].length" class="mb-3">
-            <p class="text-small light mb-1 mt-0">{{category | titlecase}}</p>
+            <p class="text-small light mb-1 mt-0">{{categoryTitleMap.get(category)}}</p>
             <ng-container
                 [ngTemplateOutlet]="activityTemplate"
                 [ngTemplateOutletContext]="{activities: approvedActivities[category]}">

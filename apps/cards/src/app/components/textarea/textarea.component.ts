@@ -22,6 +22,9 @@ export class TextareaComponent implements OnInit {
     public styleClass: string;
 
     @Input()
+    public placeholder = '';
+
+    @Input()
     public label: string;
 
     constructor() { }
