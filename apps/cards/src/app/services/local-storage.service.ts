@@ -18,6 +18,10 @@ export class LocalStorageService {
         return localStorage.getItem(item)
     }
 
+    static setValue(item: string, value: string) {
+        return localStorage.setItem(item, value)
+    }
+
     static get jwt(): string {
         return (localStorage.getItem('jwt') || '');
     }

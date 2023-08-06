@@ -50,7 +50,7 @@
                 ></app-svg>
             </div>
         </div>
-        <div class="mt-2" *ngIf="activity.gameData.comments">
+        <div class="mt-2" *ngIf="activity.gameData.comments && activity.gameData.comments.length !== 0">
             <app-comment [comment]="activity.gameData?.comments"></app-comment>
         </div>
 
@@ -93,8 +93,9 @@
                         [type]="(card?.reportedByMe) ? 'danger-filled': 'danger'"></app-button>
             <app-button (click)="card?.likedByMe || like(card)"
                         [small]="true"
-                        [label]="card?.likedByMe ? (card?.likes?.length || 1) : 'Like'"
+                        [label]="card?.likes?.length || 'Like'"
                         [icon]="'fire'"
+                        [fixedWidth]="true"
                         [type]="card?.likedByMe ? 'danger-filled': 'danger'"></app-button>
         </div>
     </div>

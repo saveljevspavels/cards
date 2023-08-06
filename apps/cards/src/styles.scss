@@ -28,6 +28,7 @@
     --color-blue-light: #494ADB66;
     --color-pink: #B754F3;
     --color-danger: var(--color-red);
+    --color-danger-dark: #CE3F23;
 
     --color-primary: var(--color-blue);
     --color-primary-variant: var(--color-blue-dark);
@@ -87,6 +88,7 @@ body {
 .color-secondary-2 {@include color('secondary-2')};
 .color-secondary-3 {@include color('secondary-3')};
 .color-danger {@include color('danger')};
+.color-danger-dark {@include color('danger-dark')};
 .color-run {@include color('run')};
 .color-walk {@include color('walk')};
 .color-ride {@include color('ride')};

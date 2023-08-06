@@ -3,6 +3,7 @@ import {ConstService} from "../../../../services/const.service";
 import {ScoreService} from "../../../../services/score.service";
 import Score from "../../../../../../../shared/interfaces/score.interface";
 import {AthleteService} from "../../../../services/athlete.service";
+import {combineLatest} from "rxjs";
 
 @Component({
   selector: 'app-points-display',
@@ -22,9 +23,12 @@ export class PointsDisplayComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.scoreService.scores.subscribe((scores) => {
+    combineLatest([
+      this.scoreService.scores,
+      this.athleteService.myId
+    ]).subscribe(([scores, myId]) => {
       this.position = this.numberToPosition(scores
-          .findIndex((score: Score) => score.athleteId === this.athleteService.myId.value) + 1);
+          .findIndex((score: Score) => score.athleteId === myId) + 1);
     })
   }
 

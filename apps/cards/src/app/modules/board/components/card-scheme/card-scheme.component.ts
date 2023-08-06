@@ -9,6 +9,7 @@ import {AthleteService} from "../../../../services/athlete.service";
 import {distinctUntilChanged, filter, first} from "rxjs/operators";
 import {PopupService} from "../../../../services/popup.service";
 import {Router} from "@angular/router";
+import {LocalStorageService} from "../../../../services/local-storage.service";
 
 @Component({
   selector: 'app-card-scheme',
@@ -57,7 +58,7 @@ export class CardSchemeComponent implements OnInit {
             }
             this.boards = scheme.boards;
             if(!this.activeBoard.value && scheme.boards.length) {
-                this.activeBoard.setValue(this.boards[0].key);
+                this.activeBoard.setValue(LocalStorageService.getValue('activeBoard') || this.boards[0].key);
             }
             this.unlockMap = new Map<string, number>(this.boards.map((board) => {
                 return [board.key, athlete.unlocks[board.key] || 0];
@@ -102,6 +103,11 @@ export class CardSchemeComponent implements OnInit {
         this.activatedCard$.next(NullCard);
         this.loading = false;
         this.popupService.closePopup();
+    }
+
+    setActiveBoard(boardName: string) {
+        this.activeBoard.setValue(boardName);
+        LocalStorageService.setValue('activeBoard', boardName);
     }
 
     unlockLevel(boardKey: string) {

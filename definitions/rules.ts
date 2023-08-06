@@ -101,8 +101,8 @@ export const RULES = {
         AbilityKey.BUY_POINT,
         AbilityKey.BUY_3_POINTS,
         AbilityKey.REDUCE_BASE_WORKOUT,
-        // AbilityKey.SELL_ENERGY_FULL,
-        // AbilityKey.ENERGY_TO_COINS
+        AbilityKey.SELL_ENERGY_FULL,
+        AbilityKey.ENERGY_TO_COINS
     ],
     ABILITY_BASE_WORKOUT_REDUCTION: 0.9,
     STARTING_CARD: ''

@@ -16,6 +16,7 @@ export class ButtonComponent implements OnInit {
     @Input() transparent = false;
     @Input() styleClass = '';
     @Input() small = false;
+    @Input() fixedWidth = false;
 
     @Output() buttonClick = new EventEmitter()
 

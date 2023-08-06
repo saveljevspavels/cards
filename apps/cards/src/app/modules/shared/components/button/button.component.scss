@@ -30,6 +30,9 @@
             }
         }
     }
+    &--fixed-width {
+        width: 74px!important;
+    }
     &--action {
         background-color: var(--color-blue);
         border-color: var(--color-blue);
@@ -47,6 +50,14 @@
     &--danger-filled {
         background-color: var(--color-danger);
         border-color: var(--color-danger);
+        color: var(--acticity-background);
+        app-svg {
+            fill: var(--acticity-background);
+        }
+    }
+    &--danger-filled-dark {
+        background-color: var(--color-danger-dark);
+        border-color: var(--color-danger-dark);
         color: var(--acticity-background);
         app-svg {
             fill: var(--acticity-background);

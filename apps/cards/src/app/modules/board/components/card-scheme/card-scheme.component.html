@@ -2,7 +2,7 @@
     <div class="mb-2">
         <app-board-selection [boards]="boards"
                              [activeBoard]="activeBoard.value"
-                             (boardSelected)="activeBoard.setValue($event)"
+                             (boardSelected)="setActiveBoard($event)"
         ></app-board-selection>
     </div>
     <h2 class="mb-2 mt-3">Available Tasks</h2>
