@@ -186,7 +186,6 @@ export default class ActivityService {
         const cardSnapshots: CardSnapshot[] = cardIds.map((id, index) => {
             return {
                 ...(cards.find(card => card.id === id) || NullCard),
-                comment: comments[index] || '',
                 likes: [],
                 reports: [],
                 attachedImages: imageIds[index] || []
