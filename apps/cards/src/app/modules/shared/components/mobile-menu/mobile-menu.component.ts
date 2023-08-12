@@ -34,7 +34,8 @@ export class MobileMenuComponent implements OnInit {
             {
                 label: 'Leaderboard',
                 icon: 'leaderboard',
-                path: '/board/leaderboard'
+                path: '/board/leaderboard',
+                permission: 'leaderboard'
             },
             {
                 label: 'Profile',

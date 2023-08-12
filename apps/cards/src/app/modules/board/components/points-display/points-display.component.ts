@@ -4,6 +4,7 @@ import {ScoreService} from "../../../../services/score.service";
 import Score from "../../../../../../../shared/interfaces/score.interface";
 import {AthleteService} from "../../../../services/athlete.service";
 import {combineLatest} from "rxjs";
+import {PERMISSIONS} from "../../../../constants/permissions";
 
 @Component({
   selector: 'app-points-display',
@@ -13,7 +14,9 @@ import {combineLatest} from "rxjs";
 export class PointsDisplayComponent implements OnInit {
 
   public RULES = ConstService.RULES;
+  public PERMISSIONS = PERMISSIONS;
   public myScore$ = this.scoreService.myScore;
+  public hasPermission$ = this.athleteService.hasPermission$;
 
   public position: string;
 

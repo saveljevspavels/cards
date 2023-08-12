@@ -11,6 +11,7 @@ import {RulesComponent} from "./components/rules/rules.component";
 import {BoardParentComponent} from "./components/board-parent/board-parent.component";
 import {SubmittingActivityComponent} from "./components/submitting-activity/submitting-activity.component";
 import {CardBoardComponent} from "./components/card-board/card-board.component";
+import {LeaderboardGuard} from "../../guards/leaderboard.guard";
 
 const routes: Routes = [
     {
@@ -40,7 +41,8 @@ const routes: Routes = [
             },
             {
                 path: 'leaderboard',
-                component: LeaderboardComponent
+                component: LeaderboardComponent,
+                canActivate: [LeaderboardGuard]
             },
             {
                 path: 'athletes',

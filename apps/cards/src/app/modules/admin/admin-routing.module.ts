@@ -9,6 +9,7 @@ import {LogsComponent} from "./components/logs/logs.component";
 import {AdminParentComponent} from "./components/admin-parent/admin-parent.component";
 import {AchievementManagementComponent} from "./components/achievement-management/achievement-management.component";
 import {CardSchemeManagementComponent} from "./components/card-scheme-management/card-scheme-management.component";
+import {GameStatsComponent} from "./components/game-stats/game-stats.component";
 
 const routes: Routes = [
     {
@@ -39,6 +40,10 @@ const routes: Routes = [
             {
                 path: 'achievement-management',
                 component: AchievementManagementComponent
+            },
+            {
+                path: 'stats',
+                component: GameStatsComponent
             },
             {
                 path: 'logs',

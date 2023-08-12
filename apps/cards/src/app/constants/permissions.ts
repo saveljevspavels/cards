@@ -4,4 +4,5 @@ export const PERMISSIONS = {
     LOGS: 'admin-logs',
     CARD_MANAGEMENT: 'card-management',
     DEFAULT: 'default',
+    LEADERBOARD: 'leaderboard',
 }

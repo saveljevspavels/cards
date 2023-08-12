@@ -1,13 +1,14 @@
 import { Injectable } from '@angular/core';
 import {BehaviorSubject, combineLatest, forkJoin, Observable} from "rxjs";
 import {AngularFirestore} from "@angular/fire/firestore";
-import {filter, map, mergeMap, tap} from "rxjs/operators";
+import {filter, map, mergeMap, pairwise, tap} from "rxjs/operators";
 import {HttpClient} from "@angular/common/http";
 import {environment} from "../../environments/environment";
 import {ConstService} from "./const.service";
 import Athlete from "../../../../shared/interfaces/athlete.interface";
 import {CONST} from "../../../../../definitions/constants";
 import {PERMISSIONS} from "../constants/permissions";
+import {Router} from "@angular/router";
 
 @Injectable({
     providedIn: 'root'
@@ -21,8 +22,11 @@ export class AthleteService {
     public isAdmin$ = AthleteService.permissions.pipe((map((permissions) => permissions?.indexOf(PERMISSIONS.ADMIN) !== -1)));
     private athleteCollection = this.db.collection(ConstService.CONST.COLLECTIONS.ATHLETES);
 
-    constructor(private db: AngularFirestore,
-                private http: HttpClient) {
+    constructor(
+        private db: AngularFirestore,
+        private http: HttpClient,
+        private router: Router
+    ) {
         combineLatest([
             this.myId,
             this.athleteCollection.valueChanges()
@@ -34,6 +38,12 @@ export class AthleteService {
             }
             AthleteService.permissions.next(this.me.value?.permissions || [])
         });
+
+        AthleteService.permissions.pipe(pairwise()).subscribe(([oldPermissions, newPermissions]) => {
+            if((newPermissions || []).length < (oldPermissions || []).length) {
+                this.router.navigateByUrl('/board');
+            }
+        })
     }
 
     static permissionPromise() {
@@ -43,6 +53,12 @@ export class AthleteService {
                     resolve(true);
                 });
         });
+    }
+
+    hasPermission$(permission: string): Observable<boolean> {
+        return AthleteService.permissions.pipe(map((permissions) => {
+            return permissions?.indexOf(permission) !== -1;
+        }));
     }
 
     hasPermission(permission: string): boolean{
