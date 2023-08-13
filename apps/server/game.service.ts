@@ -64,7 +64,7 @@ export default class GameService {
 
     initEnergyRegen() {
         const rule = new schedule.RecurrenceRule();
-        rule.hour = 0;
+        rule.hour = 12; // TODO: revert
         rule.minute = 0;
         rule.tz = 'Europe/Riga';
 
@@ -73,7 +73,7 @@ export default class GameService {
             const allAthletes = await this.fireStoreService.athleteCollection.all();
             allAthletes.map(async (athlete: Athlete) => {
                 await this.activityService.submitAllActivities(athlete.id);
-                await this.athleteService.addEnergy(athlete.id, RULES.ENERGY.TIMED_RESTORE);
+                // await this.athleteService.addEnergy(athlete.id, RULES.ENERGY.TIMED_RESTORE); // TODO: revert
                 await this.claimAllRewards(athlete.id);
             })
         })
@@ -81,7 +81,7 @@ export default class GameService {
 
     initFeaturedCardChange() {
         const rule = new schedule.RecurrenceRule();
-        rule.hour = RULES.FEATURED_TASK_HOURS.REGULAR;
+        rule.hour = [0]; // TODO: revert
         rule.minute = 0;
         rule.tz = 'Europe/Riga';
 
