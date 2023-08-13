@@ -1,4 +1,46 @@
 <div class="row">
+    <div class="col-md-12">
+        <h3>Most Liked Received</h3>
+        <div class="" *ngFor="let athlete of (totalLikes | sort : 'value' : {order: 'desc', type: 'number'} | slice:0:3)">
+            <span>{{athlete.name}} likes: {{athlete.value}}</span>
+        </div>
+        <h3>Gave Most Likes</h3>
+        <div class="" *ngFor="let athlete of (gaveTotalLikes | sort : 'value' : {order: 'desc', type: 'number'} | slice:0:3)">
+            <span>{{athlete.name}} likes: {{athlete.value}}</span>
+        </div>
+        <h3>Top Wanderer</h3>
+        <div class="" *ngFor="let athlete of (mostWanderer | sort : 'value' : {order: 'desc', type: 'number'} | slice:0:3)">
+            <span>{{athlete.name}} completed cards: {{athlete.value}}</span>
+        </div>
+        <h3>Top Photohunter</h3>
+        <div class="" *ngFor="let athlete of (mostPhotohunter | sort : 'value' : {order: 'desc', type: 'number'} | slice:0:3)">
+            <span>{{athlete.name}} completed cards: {{athlete.value}}</span>
+        </div>
+        <h3>Top Multitasker</h3>
+        <div class="" *ngFor="let athlete of (mostMultitasker | sort : 'value' : {order: 'desc', type: 'number'} | slice:0:3)">
+            <span>{{athlete.name}} completed cards: {{athlete.value}}</span>
+        </div>
+        <h3>Most Distance Run</h3>
+        <div class="" *ngFor="let athlete of (totalDistanceRun | sort : 'value' : {order: 'desc', type: 'number'} | slice:0:3)">
+            <span>{{athlete.name}} run km: {{athlete.value | distance}}</span>
+        </div>
+        <h3>Most Distance Walked</h3>
+        <div class="" *ngFor="let athlete of (totalDistanceWalk | sort : 'value' : {order: 'desc', type: 'number'} | slice:0:3)">
+            <span>{{athlete.name}} walked km: {{athlete.value | distance}}</span>
+        </div>
+        <h3>Most Distance Bike</h3>
+        <div class="" *ngFor="let athlete of (totalDistanceBike | sort : 'value' : {order: 'desc', type: 'number'} | slice:0:3)">
+            <span>{{athlete.name}} biked km: {{athlete.value | distance}}</span>
+        </div>
+        <h3>Most Time Exercised</h3>
+        <div class="" *ngFor="let athlete of (totalTimeOther | sort : 'value' : {order: 'desc', type: 'number'} | slice:0:3)">
+            <span>{{athlete.name}} exercised time: {{athlete.value | time}}</span>
+        </div>
+        <h3>Most Coins Earned</h3>
+        <div class="" *ngFor="let athlete of (coinsEarned | sort : 'value' : {order: 'desc', type: 'number'} | slice:0:3)">
+            <span>{{athlete.name}} earned: {{athlete.value}}</span>
+        </div>
+    </div>
     <div class="col-md-6">
         <h3>Stats</h3>
         <h4>Totals</h4>
@@ -18,7 +60,7 @@
             <p>Total time: {{stats.totalTime | time}}</p>
         </ng-template>
     </div>
-    <div class="col-md-6">
+    <div class="col-md-12">
         <div *ngFor="let card of stats.cards">
             <p><span class="text-bold">{{card.title}}</span> Uses: {{card.uses}}</p>
         </div>

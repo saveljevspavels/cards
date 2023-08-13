@@ -1,6 +1,16 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {CONST} from "../../../../../../../../definitions/constants";
 import {ActivityService} from "../../../../services/activity.service";
+import {combineLatest} from "rxjs";
+import {AthleteService} from "../../../../services/athlete.service";
+import {CardSnapshot} from "../../../../../../../shared/interfaces/card.interface";
+import {filter, first} from "rxjs/operators";
+import {StaticValidationService} from "../../../../../../../shared/services/validation.service";
+import {CardService} from "../../../../services/card.service";
+import {AdminService} from "../../admin.service";
+import Athlete from "../../../../../../../shared/interfaces/athlete.interface";
+import {Ability, AbilityKey} from "../../../../../../../shared/interfaces/ability.interface";
+import {ABILITIES} from "../../../../../../../../definitions/abilities";
 
 @Component({
   selector: 'app-game-stats',
@@ -8,6 +18,17 @@ import {ActivityService} from "../../../../services/activity.service";
   styleUrls: ['./game-stats.component.scss']
 })
 export class GameStatsComponent implements OnInit {
+
+  public totalLikes: any[] = [];
+  public gaveTotalLikes: any[] = [];
+  public totalDistanceRun: any[] = [];
+  public totalDistanceWalk: any[] = [];
+  public totalDistanceBike: any[] = [];
+  public totalTimeOther: any[] = [];
+  public mostWanderer: any[] = [];
+  public mostPhotohunter: any[] = [];
+  public mostMultitasker: any[] = [];
+  public coinsEarned: any[] = [];
 
   public stats: any = {
     activityAmount: 0,
@@ -35,11 +56,158 @@ export class GameStatsComponent implements OnInit {
     }
   };
 
-  constructor(private activityService: ActivityService) { }
+  constructor(
+      private activityService: ActivityService,
+      private athleteService: AthleteService,
+      private cardsService: CardService,
+      private adminService: AdminService
+  ) { }
 
   ngOnInit(): void {
-    this.activityService.approvedActivities.subscribe(activities => {
+    combineLatest([
+      this.activityService.approvedActivities,
+      this.athleteService.athletes,
+      this.cardsService.cardScheme,
+      this.adminService.cardFactories
+    ])
+        .pipe(
+            filter(([activities, athletes, cardScheme, cardFactories]) => activities.length && athletes.length && cardScheme && cardFactories.length),
+            first()
+        )
+        .subscribe(([activities, athletes, cardScheme, cardFactories]) => {
       console.log('activities', activities)
+      const wandererCards = cardScheme.boards.find(scheme => scheme.key === 'wanderer')?.levels.reduce((acc: string[], level) => {return [...acc, ...level.cards]}, [])
+      const photohunterCards = cardScheme.boards.find(scheme => scheme.key === 'photo')?.levels.reduce((acc: string[], level) => {return [...acc, ...level.cards]}, [])
+      const multitaskerCards = cardScheme.boards.find(scheme => scheme.key === 'jack')?.levels.reduce((acc: string[], level) => {return [...acc, ...level.cards]}, [])
+      const allCards = [
+          ...(wandererCards || []),
+          ...(photohunterCards || []),
+          ...(multitaskerCards || [])
+      ]
+
+      this.totalLikes = athletes.map((athlete: any) => {
+        return {
+          name: athlete.name,
+          value: activities.reduce((acc: number, activity: any) => {
+            if (activity.athlete.id.toString() === athlete.id) {
+              acc = acc + activity.gameData.cardSnapshots.reduce((snapshotAcc: number, snapshot: CardSnapshot) => snapshotAcc + (snapshot.likes || []).length, 0)
+            }
+            return acc;
+          }, 0)
+        }
+      });
+      this.gaveTotalLikes = athletes.map((athlete: any) => {
+        return {
+          name: athlete.name,
+          value: activities.reduce((acc: number, activity: any) => {
+            acc = acc + activity.gameData.cardSnapshots.reduce((snapshotAcc: number, snapshot: CardSnapshot) => ((snapshot.likes || []).indexOf(athlete.id) !== -1) ? 1 : 0, 0)
+            return acc;
+          }, 0)
+        }
+      });
+
+      this.mostWanderer = athletes.map((athlete: Athlete) => {
+        return {
+          name: athlete.name,
+          value: athlete.cards.finished.reduce((acc: number, cardId: string) => {
+            if(wandererCards?.indexOf(cardId) !== -1) {
+              acc++;
+            }
+            return acc;
+          }, 0)
+        }
+      });
+
+      this.mostPhotohunter = athletes.map((athlete: Athlete) => {
+        return {
+          name: athlete.name,
+          value: athlete.cards.finished.reduce((acc: number, cardId: string) => {
+            if(photohunterCards?.indexOf(cardId) !== -1) {
+              acc++;
+            }
+            return acc;
+          }, 0)
+        }
+      });
+
+      this.mostMultitasker = athletes.map((athlete: Athlete) => {
+        return {
+          name: athlete.name,
+          value: athlete.cards.finished.reduce((acc: number, cardId: string) => {
+            if(multitaskerCards?.indexOf(cardId) !== -1) {
+              acc++;
+            }
+            return acc;
+          }, 0)
+        }
+      });
+      this.totalDistanceRun = athletes.map((athlete: any) => {
+        return {
+          name: athlete.name,
+          value: activities.reduce((acc: number, activity: any) => {
+            if((activity.athlete.id).toString() === athlete.id && StaticValidationService.normalizeActivityType(activity) === CONST.ACTIVITY_TYPES.RUN) {
+              acc = acc + activity.distance
+            }
+            return acc;
+          }, 0)
+        }
+      });
+      this.totalDistanceBike = athletes.map((athlete: any) => {
+        return {
+          name: athlete.name,
+          value: activities.reduce((acc: number, activity: any) => {
+            if((activity.athlete.id).toString() === athlete.id && StaticValidationService.normalizeActivityType(activity) === CONST.ACTIVITY_TYPES.RIDE) {
+              acc = acc + activity.distance
+            }
+            return acc;
+          }, 0)
+        }
+      });
+      this.totalDistanceWalk = athletes.map((athlete: any) => {
+        return {
+          name: athlete.name,
+          value: activities.reduce((acc: number, activity: any) => {
+            if((activity.athlete.id).toString() === athlete.id && StaticValidationService.normalizeActivityType(activity) === CONST.ACTIVITY_TYPES.WALK) {
+              acc = acc + activity.distance
+            }
+            return acc;
+          }, 0)
+        }
+      });
+      this.totalTimeOther = athletes.map((athlete: any) => {
+        return {
+          name: athlete.name,
+          value: activities.reduce((acc: number, activity: any) => {
+            if((activity.athlete.id).toString() === athlete.id && StaticValidationService.normalizeActivityType(activity) === CONST.ACTIVITY_TYPES.OTHER) {
+              acc = acc + activity.elapsed_time
+            }
+            return acc;
+          }, 0)
+        }
+      });
+
+      this.coinsEarned = athletes.map((athlete: Athlete) => {
+        return {
+          name: athlete.name,
+          value: athlete.coins
+              + Object.values(athlete.unlocks).reduce((acc: number, value: number) => {
+            switch (value) {
+              case 1: return acc + 5;
+              case 2: return acc + 15;
+              case 3: return acc + 30;
+              case 4: return acc + 50;
+              default: return acc;
+            }
+          }, 0)
+          + athlete.usedAbilities.reduce((acc: number, abilityKey: AbilityKey) => acc + (ABILITIES.find(ability => ability.key === abilityKey)?.coinsCost || 0), 0)
+          + athlete.cards.finished.reduce((acc: number, cardId: string) => acc + ((allCards.indexOf(cardId) !== -1) ? 1 : 0), 0)
+        }
+      });
+      console.log('athletes', athletes)
+
+
+
+
       this.stats.activityAmount = activities.length;
       this.stats.totalTime = activities.reduce((acc: any, i: any) => {
         acc = Math.floor(acc + i.elapsed_time);
@@ -55,8 +223,6 @@ export class GameStatsComponent implements OnInit {
         this.stats[type].totalDistance = this.stats[type].totalDistance + activity.distance;
         this.stats[type].totalTime = this.stats[type].totalTime + activity.elapsed_time;
       })
-      console.log('stats', this.stats)
-
     })
   }
 

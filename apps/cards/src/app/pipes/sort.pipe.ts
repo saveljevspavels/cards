@@ -22,9 +22,19 @@ export class ArraySortPipe  implements PipeTransform {
             ...options
         }
 
-        array.sort((a: any, b: any) => {
-            const valA = options?.type === 'date' ? new Date(this.getProperty(a, path)) : this.getProperty(a, path);
-            const valB = options?.type === 'date' ? new Date(this.getProperty(b, path)) : this.getProperty(b, path);
+        array = array.sort((a: any, b: any) => {
+            let valA = this.getProperty(a, path);
+            let valB = this.getProperty(b, path);
+            switch (options?.type) {
+                case 'date':
+                    valA = new Date(valA);
+                    valB = new Date(valB);
+                    break;
+                case 'number':
+                    valA = valA || 0;
+                    valB = valB || 0;
+                    break;
+            }
             if (valA < valB) {
                 return options?.order === 'asc' ? -1 : 1;
             } else if (valA > valB) {
