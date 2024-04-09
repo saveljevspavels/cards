@@ -29,6 +29,7 @@
     --color-pink: #B754F3;
     --color-danger: var(--color-red);
     --color-danger-dark: #CE3F23;
+    --color-strava: #FC4C02;
 
     --color-primary: var(--color-blue);
     --color-primary-variant: var(--color-blue-dark);
@@ -51,7 +52,7 @@
 
     --margin: 16px;
 
-    --menu-height: 56px;
+    --menu-height: 60px;
     --header-height: 50px;
 }
 
@@ -93,6 +94,7 @@ body {
 .color-walk {@include color('walk')};
 .color-ride {@include color('ride')};
 .color-other {@include color('other')};
+.color-strava {@include color('strava')};
 
 .background-primary {@include background('primary')};
 .background-primary-variant {@include background('primary-variant')};
@@ -211,6 +213,12 @@ h5 {
     font-size: var(--text-size-medium)
 }
 
+.link {
+    font-size: var(--text-size-medium);
+    color: var(--color-text);
+    text-decoration: underline;
+}
+
 @media (min-width: 435px) {
     .text-xs-small {
         font-size: var(--text-size-small)
@@ -280,6 +288,10 @@ h5 {
 .w-90 {
     width: 90px !important;
     max-width: unset!important;
+}
+
+.mt-0-5 {
+    margin-top: 2px;
 }
 
 .mt-1-5 {

@@ -5,6 +5,7 @@ import {AuthRoutingModule} from "./auth-routing.module";
 import { AuthReturnComponent } from './components/auth-return/auth-return.component';
 import {SharedModule} from "../shared/shared.module";
 import {WaitingRoomComponent} from "./waiting-room/waiting-room.component";
+import { StravaConnectButtonComponent } from './components/strava-connect-button/strava-connect-button.component';
 
 
 
@@ -12,7 +13,8 @@ import {WaitingRoomComponent} from "./waiting-room/waiting-room.component";
     declarations: [
         LoginComponent,
         AuthReturnComponent,
-        WaitingRoomComponent
+        WaitingRoomComponent,
+        StravaConnectButtonComponent
     ],
     imports: [
         CommonModule,

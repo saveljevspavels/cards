@@ -10,16 +10,20 @@
 
     <app-entity-id [id]="activity.id"></app-entity-id>
 
-    <app-button *ngIf="active; else submitButton"
-                [small]="true"
-                type="action"
-                [label]="'Cancel'"
-                (buttonClick)="cancel()"></app-button>
-    <ng-template #submitButton>
-        <app-button [small]="true"
+    <div class="d-flex align-items-center">
+        <app-strava-link class="mr-2" [id]="activity.id"></app-strava-link>
+
+        <app-button *ngIf="active; else submitButton"
+                    [small]="true"
                     type="action"
-                    [label]="'Submit'"
-                    [disabled]="disabled"
-                    (buttonClick)="submit()"></app-button>
-    </ng-template>
+                    [label]="'Cancel'"
+                    (buttonClick)="cancel()"></app-button>
+        <ng-template #submitButton>
+            <app-button [small]="true"
+                        type="action"
+                        [label]="'Submit'"
+                        [disabled]="disabled"
+                        (buttonClick)="submit()"></app-button>
+        </ng-template>
+    </div>
 </div>

@@ -28,7 +28,7 @@
                 <app-athlete *ngIf="activity?.athlete" [size]="'medium'"
                              [athleteId]="activity?.athlete.id"
                 >
-                    <div class="d-flex align-items-center">
+                    <div class="d-flex align-items-center mt-0-5">
                         <app-activity-type-icon [type]="activityType"
                                                 [width]="14"
                                                 [height]="14"
@@ -41,19 +41,17 @@
                     <!--                </span>-->
                 </app-athlete>
             </div>
-            <div *ngIf="activity.map?.summary_polyline">
-                <app-svg (click)="showMap()"
-                         class="pointer"
-                         [icon]="'map'"
-                         height="30"
-                         width="30"
-                ></app-svg>
-            </div>
         </div>
         <div class="mt-2" *ngIf="activity.gameData.comments && activity.gameData.comments.length !== 0">
             <app-comment [comment]="activity.gameData?.comments"></app-comment>
         </div>
-
+        <div class="d-flex justify-content-between mt-2">
+            <app-link *ngIf="activity.map?.summary_polyline; else mapPlaceholder" [text]="'View Map'" (click)="showMap()"></app-link>
+            <ng-template #mapPlaceholder>
+                <div>&nbsp;</div>
+            </ng-template>
+            <app-strava-link [activityId]="activity.id"></app-strava-link>
+        </div>
     </div>
     <app-entity-id [id]="activity.id"></app-entity-id>
 </ng-template>

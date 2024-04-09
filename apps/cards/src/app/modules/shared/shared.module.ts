@@ -52,6 +52,9 @@ import { RewardEnergyComponent } from './components/reward-energy/reward-energy.
 import {EntityIdComponent} from "../../components/entity-id/entity-id.component";
 import {CardPlaceholderComponent} from "./components/card/card-placeholder/card-placeholder.component";
 import { CommentComponent } from './components/comment/comment.component';
+import { StravaPoweredComponent } from './components/strava-powered/strava-powered.component';
+import { StravaLinkComponent } from './components/strava-link/strava-link.component';
+import { LinkComponent } from './components/link/link.component';
 
 const COMPS = [
     InputComponent,
@@ -110,7 +113,10 @@ const MODULES = [
         CountDownComponent,
         RewardEnergyComponent,
         CardPlaceholderComponent,
-        CommentComponent
+        CommentComponent,
+        StravaPoweredComponent,
+        StravaLinkComponent,
+        LinkComponent
     ],
     imports: [
         CommonModule,
@@ -132,6 +138,8 @@ const MODULES = [
         RewardPointsComponent,
         RewardEnergyComponent,
         CardPlaceholderComponent,
+        ImageComponent,
+        StravaPoweredComponent,
     ],
     providers: [
         FileService

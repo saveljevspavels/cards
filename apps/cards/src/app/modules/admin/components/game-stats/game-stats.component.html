@@ -1,8 +1,20 @@
 <div class="row">
     <div class="col-md-12">
-        <h3>Most Liked Received</h3>
+        <h3>Most Likes Received</h3>
         <div class="" *ngFor="let athlete of (totalLikes | sort : 'value' : {order: 'desc', type: 'number'} | slice:0:3)">
             <span>{{athlete.name}} likes: {{athlete.value}}</span>
+        </div>
+        <h3>Most Photos Attached</h3>
+        <div class="" *ngFor="let athlete of (mostPhotos | sort : 'value' : {order: 'desc', type: 'number'} | slice:0:3)">
+            <span>{{athlete.name}} photos: {{athlete.value}}</span>
+        </div>
+        <h3>Most Comments created</h3>
+        <div class="" *ngFor="let athlete of (mostComments | sort : 'value' : {order: 'desc', type: 'number'} | slice:0:3)">
+            <span>{{athlete.name}} comments: {{athlete.value}}</span>
+        </div>
+        <h3>Total comment length</h3>
+        <div class="" *ngFor="let athlete of (totalCommentLength | sort : 'value' : {order: 'desc', type: 'number'} | slice:0:3)">
+            <span>{{athlete.name}} wrote symbols: {{athlete.value}}</span>
         </div>
         <h3>Gave Most Likes</h3>
         <div class="" *ngFor="let athlete of (gaveTotalLikes | sort : 'value' : {order: 'desc', type: 'number'} | slice:0:3)">

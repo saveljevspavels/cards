@@ -29,6 +29,9 @@ export class GameStatsComponent implements OnInit {
   public mostPhotohunter: any[] = [];
   public mostMultitasker: any[] = [];
   public coinsEarned: any[] = [];
+  public mostPhotos: any[] = [];
+  public mostComments: any[] = [];
+  public totalCommentLength: any[] = [];
 
   public stats: any = {
     activityAmount: 0,
@@ -91,6 +94,39 @@ export class GameStatsComponent implements OnInit {
           value: activities.reduce((acc: number, activity: any) => {
             if (activity.athlete.id.toString() === athlete.id) {
               acc = acc + activity.gameData.cardSnapshots.reduce((snapshotAcc: number, snapshot: CardSnapshot) => snapshotAcc + (snapshot.likes || []).length, 0)
+            }
+            return acc;
+          }, 0)
+        }
+      });
+      this.mostPhotos = athletes.map((athlete: any) => {
+        return {
+          name: athlete.name,
+          value: activities.reduce((acc: number, activity: any) => {
+            if (activity.athlete.id.toString() === athlete.id) {
+              acc = acc + activity.gameData.cardSnapshots.reduce((snapshotAcc: number, snapshot: CardSnapshot) => snapshotAcc + (snapshot.attachedImages || []).length, 0)
+            }
+            return acc;
+          }, 0)
+        }
+      });
+      this.mostComments = athletes.map((athlete: any) => {
+        return {
+          name: athlete.name,
+          value: activities.reduce((acc: number, activity: any) => {
+            if (activity.athlete.id.toString() === athlete.id) {
+              acc = acc + activity.gameData.comments !== '' ? 1 : 0;
+            }
+            return acc;
+          }, 0)
+        }
+      });
+      this.totalCommentLength = athletes.map((athlete: any) => {
+        return {
+          name: athlete.name,
+          value: activities.reduce((acc: number, activity: any) => {
+            if (activity.athlete.id.toString() === athlete.id) {
+              acc = acc + (activity.gameData.comments?.length || 0);
             }
             return acc;
           }, 0)
