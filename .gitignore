@@ -25,6 +25,7 @@
 # IDEs and editors
 /.idea
 .project
+.angular
 .classpath
 .c9/
 *.launch
@@ -57,3 +58,5 @@ log.log
 
 # Data
 creatures.json
+
+.nx/cache

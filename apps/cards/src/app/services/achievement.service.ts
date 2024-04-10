@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import {BehaviorSubject, Observable} from "rxjs";
-import {AngularFirestore} from "@angular/fire/firestore";
+import {AngularFirestore} from "@angular/fire/compat/firestore";
 import {LocalStorageService} from "./local-storage.service";
 import {HttpClient} from "@angular/common/http";
 import {environment} from "../../environments/environment";
@@ -47,7 +47,7 @@ export class AchievementService {
         })
     }
 
-    assignAchievement(athleteId: string, achievementId: string) {
+    assignAchievement(athleteId: string | null, achievementId: string) {
         return this.http.post(`${environment.baseBE}/assign-achievement`, {
             athleteId,
             achievementId

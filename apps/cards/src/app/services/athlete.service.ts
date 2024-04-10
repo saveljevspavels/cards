@@ -1,14 +1,13 @@
 import { Injectable } from '@angular/core';
-import {BehaviorSubject, combineLatest, forkJoin, Observable} from "rxjs";
-import {AngularFirestore} from "@angular/fire/firestore";
-import {filter, map, mergeMap, pairwise, tap} from "rxjs/operators";
+import {BehaviorSubject, combineLatest, Observable} from "rxjs";
+import {filter, map, pairwise} from "rxjs/operators";
 import {HttpClient} from "@angular/common/http";
 import {environment} from "../../environments/environment";
 import {ConstService} from "./const.service";
 import Athlete from "../../../../shared/interfaces/athlete.interface";
-import {CONST} from "../../../../../definitions/constants";
 import {PERMISSIONS} from "../constants/permissions";
 import {Router} from "@angular/router";
+import {AngularFirestore} from "@angular/fire/compat/firestore";
 
 @Injectable({
     providedIn: 'root'

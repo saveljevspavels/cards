@@ -44,7 +44,7 @@ export class CardFilterComponent implements OnInit {
         }
     })
 
-    form = this.formBuilder.group({
+    form: FormGroup = this.formBuilder.group({
         filterActivity: [LocalStorageService.getValue('filterActivity') || 'all']
     })
 

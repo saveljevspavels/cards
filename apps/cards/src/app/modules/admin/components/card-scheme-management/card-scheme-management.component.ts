@@ -68,8 +68,11 @@ export class CardSchemeManagementComponent implements OnInit {
     }
 
     addCards(level: FormGroup) {
+        if(!this.selectedCards.value?.length) {
+            return;
+        }
         const currentValue = level.get('cards')?.value;
-        level.get('cards')?.setValue([...currentValue, ...this.selectedCards.value])
+        level.get('cards')?.setValue([...currentValue, ...(this.selectedCards.value || [])])
         this.selectedCards.setValue([]);
     }
 
@@ -80,7 +83,10 @@ export class CardSchemeManagementComponent implements OnInit {
     }
 
     deleteCards() {
-        this.adminService.deleteCards(this.selectedCards.value)
+        if(!this.selectedCards.value?.length) {
+            return;
+        }
+        this.adminService.deleteCards(this.selectedCards.value || [])
     }
 
 }

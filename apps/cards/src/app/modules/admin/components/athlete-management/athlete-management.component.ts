@@ -37,7 +37,10 @@ export class AthleteManagementComponent implements OnInit {
     }
 
     updateBaseWorkout() {
+        if(this.selectedAthletes.value?.length === 0 || this.selectedType.value !== null) return;
+
         const baseWorkoutPatch: any = {};
+        // @ts-ignore
         baseWorkoutPatch[this.selectedType.value[0]] = Object.entries(this.form.value).reduce((acc: any, entry: any) => {
             if(entry[1] > 0) {
                 acc[entry[0]] = parseFloat(entry[1]);
@@ -45,12 +48,13 @@ export class AthleteManagementComponent implements OnInit {
             return acc;
         }, {})
         this.athleteService.updateBaseWorkout(
-            this.selectedAthletes.value,
+            this.selectedAthletes.value || [],
             baseWorkoutPatch
         ).subscribe()
     }
 
     setPermissions() {
-        this.athleteService.setPermissions(this.selectedAthletes.value, this.selectedPermissions.value).subscribe()
+        if(this.selectedAthletes.value?.length === 0 || this.selectedPermissions.value?.length === 0) return;
+        this.athleteService.setPermissions(this.selectedAthletes.value || [], this.selectedPermissions.value || []).subscribe()
     }
 }

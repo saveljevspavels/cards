@@ -39,8 +39,8 @@
     </div>
 
     <app-button [disabled]="
-        !selectedAthletes.value.length
-        || !selectedType.value.length
+        !selectedAthletes.value?.length
+        || !selectedType.value?.length
         || form.invalid" (buttonClick)="updateBaseWorkout()" [label]="'Set Base Workout'"></app-button>
 
     <app-selection-wrapper
@@ -56,5 +56,5 @@
         </ng-template>
     </app-selection-wrapper>
 
-    <app-button [disabled]="!selectedAthletes.value.length || !selectedPermissions.value.length" (buttonClick)="setPermissions()" [label]="'Set Permissions'"></app-button>
+    <app-button [disabled]="!selectedAthletes.value?.length || !selectedPermissions.value?.length" (buttonClick)="setPermissions()" [label]="'Set Permissions'"></app-button>
 </div>

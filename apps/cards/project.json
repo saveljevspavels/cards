@@ -1,0 +1,95 @@
+{
+    "name": "cards",
+    "$schema": "../../node_modules/nx/schemas/project-schema.json",
+    "projectType": "application",
+    "sourceRoot": "apps/cards/src",
+    "prefix": "app",
+    "targets": {
+        "build": {
+            "executor": "@angular-devkit/build-angular:browser",
+            "outputs": ["{options.outputPath}"],
+            "options": {
+                "outputPath": "dist/apps/cards",
+                "index": "apps/cards/src/index.html",
+                "main": "apps/cards/src/main.ts",
+                "polyfills": "apps/cards/src/polyfills.ts",
+                "tsConfig": "apps/cards/tsconfig.app.json",
+                "inlineStyleLanguage": "scss",
+                "assets": [
+                    "apps/cards/src/favicon.ico",
+                    "apps/cards/src/apple-touch-icon.png",
+                    "apps/cards/src/icon.svg",
+                    "apps/cards/src/icon-192.png",
+                    "apps/cards/src/icon-512.png",
+                    "apps/cards/src/manifest.webmanifest",
+                    "apps/cards/src/assets",
+                    "apps/cards/src/sw.js",
+                    "apps/cards/src/fallback.html"
+                ],
+                "styles": [
+                    "apps/cards/src/styles.scss",
+                    "node_modules/primeng/resources/themes/saga-blue/theme.css",
+                    "node_modules/primeng/resources/primeng.min.css",
+                    "node_modules/primeicons/primeicons.css"
+                ],
+                "scripts": [],
+                "serviceWorker": true,
+                "ngswConfigPath": "apps/cards/ngsw-config.json"
+            },
+            "configurations": {
+                "production": {
+                    "fileReplacements": [
+                        {
+                            "replace": "apps/cards/src/environments/environment.ts",
+                            "with": "apps/cards/src/environments/environment.prod.ts"
+                        },
+                        {
+                            "replace": "definitions/firebaseConfig.json",
+                            "with": "definitions/firebaseConfig.prod.json"
+                        }
+                    ],
+                    "outputHashing": "all"
+                },
+                "development": {
+                    "buildOptimizer": false,
+                    "optimization": false,
+                    "vendorChunk": true,
+                    "extractLicenses": false,
+                    "sourceMap": true,
+                    "namedChunks": true
+                }
+            },
+            "defaultConfiguration": "production"
+        },
+        "serve": {
+            "executor": "@angular-devkit/build-angular:dev-server",
+            "configurations": {
+                "production": {
+                    "proxyConfig": "apps/cards/src/proxy.conf.json",
+                    "buildTarget": "cards:build:production"
+                },
+                "development": {
+                    "proxyConfig": "apps/cards/src/proxy.conf.json",
+                    "buildTarget": "cards:build:development"
+                }
+            },
+            "defaultConfiguration": "development"
+        },
+        "extract-i18n": {
+            "executor": "@angular-devkit/build-angular:extract-i18n",
+            "options": {
+                "buildTarget": "cards:build"
+            }
+        },
+        "lint": {
+            "executor": "@nx/eslint:lint"
+        },
+        "test": {
+            "executor": "@nx/jest:jest",
+            "outputs": ["{workspaceRoot}/coverage/apps/cards"],
+            "options": {
+                "jestConfig": "apps/cards/jest.config.js"
+            }
+        }
+    }
+}

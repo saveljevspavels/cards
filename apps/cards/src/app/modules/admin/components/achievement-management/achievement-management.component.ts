@@ -39,7 +39,7 @@ export class AchievementManagementComponent implements OnInit {
     }
 
     async save() {
-        const image = this.imageControl.value.length ? (await this.fileService.uploadImages(this.imageControl.value))[0] : this.form.value?.image;
+        const image = this.imageControl.value?.length ? (await this.fileService.uploadImages(this.imageControl.value || []))[0] : this.form.value?.image;
         this.achievementService.createAchievement({
             ...this.form.value,
             image: image ? image : null
@@ -53,6 +53,9 @@ export class AchievementManagementComponent implements OnInit {
     }
 
     assign(id: string) {
+        if(this.athleteControl.value !== null) {
+            return;
+        }
         this.achievementService.assignAchievement(this.athleteControl.value, id).subscribe(() => {})
     }
 

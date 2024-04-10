@@ -1,10 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import {ActivityService} from "../../../../services/activity.service";
 import {AdminService} from "../../admin.service";
 import {FormControl} from "@angular/forms";
 import {SwPush} from "@angular/service-worker";
 import {PushNotificationsService} from "../../../../services/pushNotifications.service";
-import {CONST} from "../../../../../../../../definitions/constants";
 import {CardService} from "../../../../services/card.service";
 
 @Component({
@@ -35,7 +33,7 @@ export class ActivityReviewComponent implements OnInit {
     }
 
     rejectCard(cardId: string, activityId: string) {
-        this.cardsService.rejectCard(cardId, activityId, this.rejectionComment.value).subscribe(_ => {
+        this.cardsService.rejectCard(cardId, activityId, this.rejectionComment.value || '').subscribe(_ => {
             this.rejectionComment.reset()
         })
     }

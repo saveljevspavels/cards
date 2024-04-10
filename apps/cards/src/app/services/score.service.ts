@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import {BehaviorSubject, combineLatest, forkJoin} from "rxjs";
-import {AngularFirestore} from "@angular/fire/firestore";
 import {ConstService} from "./const.service";
 import Score from "../../../../shared/interfaces/score.interface";
 import {AthleteService} from "./athlete.service";
+import {AngularFirestore} from "@angular/fire/compat/firestore";
 
 @Injectable()
 export class ScoreService {

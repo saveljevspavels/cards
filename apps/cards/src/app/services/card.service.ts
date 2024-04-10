@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
-import {BehaviorSubject, combineLatest} from "rxjs";
-import {AngularFirestore} from "@angular/fire/firestore";
+import {BehaviorSubject} from "rxjs";
 import {ConstService} from "./const.service";
 import Card, {NullCard} from "../../../../shared/interfaces/card.interface";
 import {CardScheme} from "../../../../shared/interfaces/card-scheme.interface";
 import {environment} from "../../environments/environment";
 import {HttpClient} from "@angular/common/http";
+import {AngularFirestore} from "@angular/fire/compat/firestore";
 
 @Injectable({
   providedIn: 'root'

@@ -48,7 +48,7 @@ export class ActivityListComponent implements OnInit {
                     this.approvedActivities.recent.push(activity);
                 } else if ((now - submittedAt) < 3600000) { // 1h
                     this.approvedActivities.lastHour.push(activity)
-                } else if ((now - submittedAt) < 28800000) { // 8h
+                } else if ((now - submittedAt) < 28800000000) { // 8h
                     this.approvedActivities.previously.push(activity);
                 }
             })
@@ -72,7 +72,7 @@ export class ActivityListComponent implements OnInit {
             first(),
             filter((resolution) => !!resolution)
         ).subscribe(_ => {
-            this.cardService.reportCard(cardId, activityId, this.reportComment.value).subscribe(_ => {
+            this.cardService.reportCard(cardId, activityId, this.reportComment.value || '').subscribe(_ => {
                 this.reportComment.setValue('');
             });
         })

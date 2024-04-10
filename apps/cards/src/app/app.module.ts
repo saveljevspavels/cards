@@ -5,10 +5,6 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import {RouterModule} from "@angular/router";
 
-import { AngularFireModule } from '@angular/fire';
-import { AngularFirestoreModule } from '@angular/fire/firestore';
-import { AngularFireStorageModule } from '@angular/fire/storage';
-import { AngularFireAuthModule } from '@angular/fire/auth';
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
 import {HttpMainInterceptor} from "./services/http.interceptor";
@@ -21,6 +17,10 @@ import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import {AthleteService} from "./services/athlete.service";
 import {SharedModule} from "./modules/shared/shared.module";
 import { ServiceWorkerModule } from '@angular/service-worker';
+import {AngularFireModule} from "@angular/fire/compat";
+import {AngularFirestoreModule} from "@angular/fire/compat/firestore";
+import {AngularFireAuthModule} from "@angular/fire/compat/auth";
+import {AngularFireStorageModule} from "@angular/fire/compat/storage";
 
 const firebaseConfig = FIREBASE_CONFIG;
 

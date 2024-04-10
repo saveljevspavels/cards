@@ -8,6 +8,7 @@ import CardFactory, {
     Progression
 } from "../../../../../../../shared/interfaces/card-factory.interface";
 import {UtilService} from "../../../../services/util.service";
+import {Validator} from "../../../../../../../shared/interfaces/card.interface";
 
 @Component({
   selector: 'app-card-create',
@@ -34,10 +35,10 @@ export class CardCreateComponent implements OnInit, OnChanges {
     ngOnInit(): void {
         this.form = this.initForm()
         this.cardAmount.valueChanges.subscribe((amount) => {
-            this.updateFormCardAmount(this.form, amount)
+            this.updateFormCardAmount(this.form, amount || 1)
         })
         this.validatorAmount.valueChanges.subscribe((amount) => {
-            this.updateValidatorAmount(this.form, amount)
+            this.updateValidatorAmount(this.form, amount || 1)
         })
     }
 
@@ -51,22 +52,22 @@ export class CardCreateComponent implements OnInit, OnChanges {
     }
 
     get cardAmountIterator() {
-        return [...Array(parseInt(this.cardAmount.value, 10)).keys()]
+        return [...Array(parseInt(this.cardAmount.value?.toString() || '1', 10)).keys()]
     }
 
     get validatorAmountIterator() {
-        return [...Array(parseInt(this.validatorAmount.value, 10)).keys()]
+        return [...Array(parseInt(this.validatorAmount.value?.toString() || '1', 10)).keys()]
     }
 
     async submit() {
-        const image = this.imageControl.value.length ? (await this.fileService.uploadImages(this.imageControl.value))[0] : this.selectedCardFactory?.image;
+        const image = this.imageControl.value?.length ? (await this.fileService.uploadImages(this.imageControl.value || []))[0] : this.selectedCardFactory?.image;
         const newFactory: CardFactory = {
             ...this.form.value,
             image: image ? image : null
         };
-        newFactory.cards = Object.values(newFactory.cards)
-        newFactory.cards.forEach((prototype: CardPrototype) => {
-            prototype.validators = Object.values(prototype.validators)
+        newFactory.cards = Object.values(this.form.value.cards) as CardPrototype[];
+        newFactory.cards.forEach((prototype: any) => {
+            prototype.validators = Object.values(prototype.validators) as Validator[];
         })
         this.adminService.createCardFactory(newFactory).subscribe(() => {
             this.form = this.initForm()
@@ -81,17 +82,17 @@ export class CardCreateComponent implements OnInit, OnChanges {
             manualValidation: [false],
             progression: [Progression.NONE]
         })
-        this.updateFormCardAmount(form, this.cardAmount.value)
+        this.updateFormCardAmount(form, this.cardAmount.value || 1)
         form.get('progression')?.valueChanges.subscribe(progression => {
             switch (progression) {
                 case Progression.TIERS:
                 case Progression.CHAIN:
-                    for(let i = 0; i < this.cardAmount.value; i++) {
+                    for(let i = 0; i < (this.cardAmount.value || 1); i++) {
                         this.form.get('cards.' + i + '.tier')?.setValue(i)
                     }
                     break;
                 case Progression.FLAT:
-                    for(let i = 0; i < this.cardAmount.value; i++) {
+                    for(let i = 0; i < (this.cardAmount.value || 1); i++) {
                         this.form.get('cards.' + i + '.tier')?.setValue(0)
                     }
                     break;
@@ -115,7 +116,7 @@ export class CardCreateComponent implements OnInit, OnChanges {
             coinsCost: ['0', [Validators.required]],
             coinsReward: ['1', [Validators.required]],
         })
-        this.setValidatorsToCardGroup(cardGroup, this.validatorAmount.value)
+        this.setValidatorsToCardGroup(cardGroup, this.validatorAmount.value || 1)
         return cardGroup;
     }
 
@@ -149,7 +150,7 @@ export class CardCreateComponent implements OnInit, OnChanges {
     }
 
     updateValidatorAmount(form: FormGroup, amount: number) {
-        for(let card = 0; card < this.cardAmount.value; card++) {
+        for(let card = 0; card < (this.cardAmount.value || 1); card++) {
             const cardGroup = (<FormGroup>form.get('cards.' + card));
             this.setValidatorsToCardGroup(cardGroup, amount)
         }
@@ -177,7 +178,7 @@ export class CardCreateComponent implements OnInit, OnChanges {
     }
 
     copyCards(cardValue: any) {
-        for(let i = 0; i < this.cardAmount.value; i++) {
+        for(let i = 0; i < (this.cardAmount.value || 1); i++) {
             this.form.get('cards.' + i)?.setValue(cardValue)
         }
     }

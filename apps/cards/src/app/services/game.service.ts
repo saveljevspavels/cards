@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
 import {BehaviorSubject} from "rxjs";
-import {AngularFirestore} from "@angular/fire/firestore";
 import Game from "../interfaces/game";
 import {ConstService} from "./const.service";
 import {environment} from "../../environments/environment";
 import {HttpClient} from "@angular/common/http";
 import {AbilityKey} from "../../../../shared/interfaces/ability.interface";
+import {AngularFirestore} from "@angular/fire/compat/firestore";
 
 @Injectable({
   providedIn: 'root'

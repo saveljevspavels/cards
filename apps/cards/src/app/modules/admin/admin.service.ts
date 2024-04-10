@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import {AngularFirestore} from "@angular/fire/firestore";
 import {BehaviorSubject, Observable} from "rxjs";
 import {HttpClient} from "@angular/common/http";
 import {COMMANDS} from "../../constants/commands";
@@ -9,6 +8,7 @@ import CardFactory from "../../../../../shared/interfaces/card-factory.interface
 import {CardScheme} from "../../../../../shared/interfaces/card-scheme.interface";
 import {map} from "rxjs/operators";
 import {CardSnapshot} from "../../../../../shared/interfaces/card.interface";
+import {AngularFirestore} from "@angular/fire/compat/firestore";
 
 @Injectable()
 export class AdminService {

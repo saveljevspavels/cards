@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import {AngularFireStorage} from "@angular/fire/storage";
 import {UtilService} from "./util.service";
+import {AngularFireStorage} from "@angular/fire/compat/storage";
 
 @Injectable()
 export class FileService {

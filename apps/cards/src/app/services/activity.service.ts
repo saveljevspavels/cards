@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import {AngularFirestore} from "@angular/fire/firestore";
 import {BehaviorSubject} from "rxjs";
 import {HttpClient} from "@angular/common/http";
 import {debounceTime, distinctUntilChanged, filter} from "rxjs/operators";
@@ -7,6 +6,7 @@ import {environment} from "../../environments/environment";
 import {AthleteService} from "./athlete.service";
 import {ConstService} from "./const.service";
 import Athlete from "../../../../shared/interfaces/athlete.interface";
+import {AngularFirestore} from "@angular/fire/compat/firestore";
 
 @Injectable({
     providedIn: 'root'

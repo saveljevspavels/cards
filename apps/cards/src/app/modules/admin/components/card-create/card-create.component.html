@@ -1,7 +1,7 @@
 <h4>Create new card factory</h4>
 <app-input [label]="'Card Amount'" [fc]="cardAmount"></app-input>
 <app-input [label]="'Validator Amount'" [fc]="validatorAmount"></app-input>
-<ng-container *ngIf="validatorAmount.value > 0">
+<ng-container *ngIf="validatorAmount?.value > 0">
     Base properties for comparison:
     <ul>
         <li *ngFor="let property of workoutProperties">

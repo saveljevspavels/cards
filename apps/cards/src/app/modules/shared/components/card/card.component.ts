@@ -102,7 +102,7 @@ export class CardComponent implements OnInit, OnChanges {
     addPhoto(event: Event) {
         event.stopPropagation();
         if(this.imagesController) {
-            this.uploadTrigger.next();
+            this.uploadTrigger.next(null);
         }
     }
 }

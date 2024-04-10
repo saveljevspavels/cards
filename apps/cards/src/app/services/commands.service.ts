@@ -1,13 +1,12 @@
 import {Injectable} from "@angular/core";
-import {AngularFirestore} from "@angular/fire/firestore";
-import {distinctUntilChanged, filter} from "rxjs/operators";
+import {distinctUntilChanged, filter, flatMap} from "rxjs/operators";
 import {COMMANDS} from "../constants/commands";
 import {ActivityService} from "./activity.service";
 import {GameService} from "./game.service";
 import {combineLatest} from "rxjs";
 import {AthleteService} from "./athlete.service";
 import {ConstService} from "./const.service";
-import {flatMap} from "rxjs/internal/operators";
+import {AngularFirestore} from "@angular/fire/compat/firestore";
 
 @Injectable({
     providedIn: 'root'
