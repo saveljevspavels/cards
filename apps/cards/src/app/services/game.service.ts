@@ -5,7 +5,7 @@ import {ConstService} from "./const.service";
 import {environment} from "../../environments/environment";
 import {HttpClient} from "@angular/common/http";
 import {AbilityKey} from "../../../../shared/interfaces/ability.interface";
-import {AngularFirestore} from "@angular/fire/compat/firestore";
+import {AngularFirestore, AngularFirestoreDocument} from "@angular/fire/compat/firestore";
 
 @Injectable({
   providedIn: 'root'
@@ -13,10 +13,11 @@ import {AngularFirestore} from "@angular/fire/compat/firestore";
 export class GameService {
 
     public gameData = new BehaviorSubject<Game | null>(null);
-    private gameDocument = this.db.collection(ConstService.CONST.COLLECTIONS.GAME).doc(ConstService.CONST.GAME_ID);
+    private gameDocument: AngularFirestoreDocument<Game>;
 
     constructor(private db: AngularFirestore,
                 private http: HttpClient) {
+        this.gameDocument = this.db.collection(ConstService.CONST.COLLECTIONS.GAME).doc(ConstService.CONST.GAME_ID);
         this.gameDocument.valueChanges().subscribe((game: any) => {
             this.gameData.next(game)
         });

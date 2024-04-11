@@ -7,7 +7,7 @@ import {ConstService} from "./const.service";
 import Athlete from "../../../../shared/interfaces/athlete.interface";
 import {PERMISSIONS} from "../constants/permissions";
 import {Router} from "@angular/router";
-import {AngularFirestore} from "@angular/fire/compat/firestore";
+import {AngularFirestore, AngularFirestoreCollection} from "@angular/fire/compat/firestore";
 
 @Injectable({
     providedIn: 'root'
@@ -19,18 +19,19 @@ export class AthleteService {
     public myId = new BehaviorSubject<string>('');
     public static permissions = new BehaviorSubject<string[] | null>(null);
     public isAdmin$ = AthleteService.permissions.pipe((map((permissions) => permissions?.indexOf(PERMISSIONS.ADMIN) !== -1)));
-    private athleteCollection = this.db.collection(ConstService.CONST.COLLECTIONS.ATHLETES);
+    private athleteCollection: AngularFirestoreCollection;
 
     constructor(
         private db: AngularFirestore,
         private http: HttpClient,
         private router: Router
     ) {
+        this.athleteCollection = this.db.collection(ConstService.CONST.COLLECTIONS.ATHLETES);
         combineLatest([
             this.myId,
             this.athleteCollection.valueChanges()
         ]).subscribe(([myId, athletes]: any) => {
-            this.athletes.next(athletes);
+            this.athletes.next(athletes as Athlete[]);
             const currentAthlete = athletes.find((athlete: Athlete) => athlete.id === myId) || null;
             if(JSON.stringify(this.me.value) !== JSON.stringify(currentAthlete)) {
                 this.me.next(currentAthlete);

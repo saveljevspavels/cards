@@ -260,7 +260,7 @@ export default class CardService {
     }
 
     async getCards(cardIds: string[]): Promise<Card[] | []> {
-        return await this.fireStoreService.cardCollection.where([{fieldPath: 'id', opStr: 'in', value: cardIds}]);
+        return await this.fireStoreService.cardCollection.whereQuery([{fieldPath: 'id', opStr: 'in', value: cardIds}]);
     }
 
     async getCard(cardId: string): Promise<Card> {
@@ -370,8 +370,8 @@ export default class CardService {
 
     async updateCardUses(cardIds: string[]) {
         if(cardIds.length) {
-            const cards = await this.fireStoreService.cardCollection.where([{ fieldPath: 'id', opStr: 'in', value: cardIds}])
-            cards.forEach((card) => {
+            const cards = await this.fireStoreService.cardCollection.whereQuery([{ fieldPath: 'id', opStr: 'in', value: cardIds}])
+            cards.forEach((card: Card) => {
                 const newProgression = card.cardUses.progression + 1;
                 this.fireStoreService.cardCollection.update(
                     card.id,

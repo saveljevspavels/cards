@@ -96,7 +96,7 @@ export default class GameService {
 
     async changeFeaturedCard(cardName = '') {
         const allFactories: CardFactory[] = await this.fireStoreService.cardFactoryCollection
-            .where([{ fieldPath: 'manualValidation', opStr: '==', value: true}]);
+            .whereQuery([{ fieldPath: 'manualValidation', opStr: '==', value: true}]);
         const namedFactory = cardName && allFactories.find((factory: CardFactory) => factory.title === cardName);
         const randomFactory = allFactories[getRandomInt(allFactories.length)];
         const newCard = await this.cardService.createCardFromFactory(namedFactory || randomFactory, 0);

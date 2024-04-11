@@ -115,7 +115,7 @@ export default class ActivityService {
 
     async updatePersonalBests(activity: any, cardIds: string[]) {
         if(cardIds.length) {
-            const cards = await this.fireStoreService.cardCollection.where([{ fieldPath: 'id', opStr: 'in', value: cardIds}])
+            const cards = await this.fireStoreService.cardCollection.whereQuery([{ fieldPath: 'id', opStr: 'in', value: cardIds}])
             const baseWorkoutPatch: any = {};
             const normalizedType = StaticValidationService.normalizeActivityType(activity);
             baseWorkoutPatch[normalizedType] = {};
@@ -136,7 +136,7 @@ export default class ActivityService {
     }
 
     async submitAllActivities(athleteId: string) {
-        const activities = await this.fireStoreService.detailedActivityCollection.where([
+        const activities = await this.fireStoreService.detailedActivityCollection.whereQuery([
             {fieldPath: 'athlete.id', opStr: '==', value: parseInt(athleteId, 10)},
             {fieldPath: 'gameData.status', opStr: '==', value: CONST.ACTIVITY_STATUSES.NEW},
         ]);
@@ -171,7 +171,7 @@ export default class ActivityService {
             throw RESPONSES.ERROR.MAX_CARDS_SUBMIT
         }
 
-        const cards: Card[] = cardIds.length ? await this.fireStoreService.cardCollection.where([{fieldPath: 'id', opStr: 'in', value: cardIds}]) : [];
+        const cards: Card[] = cardIds.length ? await this.fireStoreService.cardCollection.whereQuery([{fieldPath: 'id', opStr: 'in', value: cardIds}]) : [];
 
         if(cardIds.length > RULES.MAX_CARDS_SUBMIT) {
             this.logger.info(`Athlete ${athlete.firstname} ${athlete.lastname} ${athlete.id} submitted activity with too many cards ${cardIds}`)

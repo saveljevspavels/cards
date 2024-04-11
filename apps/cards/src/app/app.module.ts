@@ -17,10 +17,12 @@ import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import {AthleteService} from "./services/athlete.service";
 import {SharedModule} from "./modules/shared/shared.module";
 import { ServiceWorkerModule } from '@angular/service-worker';
-import {AngularFireModule} from "@angular/fire/compat";
 import {AngularFirestoreModule} from "@angular/fire/compat/firestore";
 import {AngularFireAuthModule} from "@angular/fire/compat/auth";
 import {AngularFireStorageModule} from "@angular/fire/compat/storage";
+import {initializeApp, provideFirebaseApp} from "@angular/fire/app";
+import {getFirestore, provideFirestore} from "@angular/fire/firestore";
+import {AngularFireModule} from "@angular/fire/compat";
 
 const firebaseConfig = FIREBASE_CONFIG;
 
@@ -33,6 +35,8 @@ const firebaseConfig = FIREBASE_CONFIG;
         AppRoutingModule,
         RouterModule,
         AngularFireModule.initializeApp(firebaseConfig),
+        provideFirebaseApp(() => initializeApp(firebaseConfig)),
+        provideFirestore(() => getFirestore()),
         AngularFirestoreModule.enablePersistence(), // firestore
         AngularFireAuthModule, // auth
         AngularFireStorageModule, // storage,

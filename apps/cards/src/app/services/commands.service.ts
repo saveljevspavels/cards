@@ -1,34 +1,33 @@
-import {Injectable} from "@angular/core";
+import {inject, Injectable} from "@angular/core";
 import {distinctUntilChanged, filter, flatMap} from "rxjs/operators";
 import {COMMANDS} from "../constants/commands";
 import {ActivityService} from "./activity.service";
 import {GameService} from "./game.service";
-import {combineLatest} from "rxjs";
+import {combineLatest, Observable} from "rxjs";
 import {AthleteService} from "./athlete.service";
 import {ConstService} from "./const.service";
-import {AngularFirestore} from "@angular/fire/compat/firestore";
+import {collection, collectionData, Firestore, query, where} from "@angular/fire/firestore";
 
 @Injectable({
     providedIn: 'root'
 })
 export class CommandsService {
+    firestore: Firestore = inject(Firestore);
 
-    constructor(private db: AngularFirestore,
-                private activityService: ActivityService,
+    constructor(private activityService: ActivityService,
                 private athleteService: AthleteService,
                 private gameService: GameService
                 ) {
     }
 
     init() {
+        const commandsCollection = collection(this.firestore, ConstService.CONST.COLLECTIONS.COMMANDS);
         this.athleteService.myId.pipe(
             distinctUntilChanged(),
             filter(id => !!id),
             flatMap((id) =>
                 combineLatest([
-                    this.db.collection(
-                        ConstService.CONST.COLLECTIONS.COMMANDS,
-                        (ref) => ref.where('athleteId', '==', id)).valueChanges().pipe(distinctUntilChanged()),
+                    (collectionData(query(commandsCollection, where('athleteId', '==', id))) as Observable<any>).pipe(distinctUntilChanged()),
                     this.gameService.gameData.asObservable()
                 ])
             )

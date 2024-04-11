@@ -5,7 +5,7 @@ import Card, {NullCard} from "../../../../shared/interfaces/card.interface";
 import {CardScheme} from "../../../../shared/interfaces/card-scheme.interface";
 import {environment} from "../../environments/environment";
 import {HttpClient} from "@angular/common/http";
-import {AngularFirestore} from "@angular/fire/compat/firestore";
+import {AngularFirestore, AngularFirestoreCollection, AngularFirestoreDocument} from "@angular/fire/compat/firestore";
 
 @Injectable({
   providedIn: 'root'
@@ -14,13 +14,15 @@ export class CardService {
 
     public cards = new BehaviorSubject<Card[]>([]);
     public cardScheme = new BehaviorSubject<CardScheme>({boards: []});
-    private cardCollection = this.db.collection(ConstService.CONST.COLLECTIONS.CARDS);
-    private cardSchemeDocument = this.db.collection(ConstService.CONST.COLLECTIONS.SCHEME).doc(ConstService.CONST.SCHEME_ID);
+    private cardCollection: AngularFirestoreCollection;
+    private cardSchemeDocument: AngularFirestoreDocument<CardScheme>;
 
     constructor(
         private http: HttpClient,
         private db: AngularFirestore,
         ) {
+        this.cardCollection = this.db.collection(ConstService.CONST.COLLECTIONS.CARDS);
+        this.cardSchemeDocument = this.db.collection(ConstService.CONST.COLLECTIONS.SCHEME).doc(ConstService.CONST.SCHEME_ID);
         this.cardCollection.valueChanges().subscribe((cards: any[]) => {
             this.cards.next(cards)
         });

@@ -31,8 +31,7 @@ export default class AdminService {
     }
 
     async saveSchema(scheme: CardScheme, id: string = CONST.SCHEME_ID) {
-        const schemeDoc = this.fireStoreService.schemeCollection.doc(id);
-        await schemeDoc.set(scheme);
+        await this.fireStoreService.schemeCollection.set(id, scheme);
         this.logger.info(`Scheme ${id} saved`)
     }
 }

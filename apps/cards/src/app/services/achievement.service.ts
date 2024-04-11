@@ -1,14 +1,12 @@
 import { Injectable } from '@angular/core';
 import {BehaviorSubject, Observable} from "rxjs";
-import {AngularFirestore} from "@angular/fire/compat/firestore";
-import {LocalStorageService} from "./local-storage.service";
 import {HttpClient} from "@angular/common/http";
 import {environment} from "../../environments/environment";
-import Hand from "../interfaces/hand";
 import {ConstService} from "./const.service";
 import {Achievement} from "../interfaces/achievement";
 import {filter, map} from "rxjs/operators";
 import {UtilService} from "./util.service";
+import {AngularFirestore, AngularFirestoreCollection} from "@angular/fire/compat/firestore";
 
 @Injectable({
   providedIn: 'root'
@@ -16,12 +14,13 @@ import {UtilService} from "./util.service";
 export class AchievementService {
 
     public achievements = new BehaviorSubject<Achievement[]>([]);
-    private achievementCollection = this.db.collection(ConstService.CONST.COLLECTIONS.ACHIEVEMENTS);
+    private readonly achievementCollection: AngularFirestoreCollection;
 
     constructor(private db: AngularFirestore,
                 private http: HttpClient) {
+        this.achievementCollection = this.db.collection(ConstService.CONST.COLLECTIONS.ACHIEVEMENTS);
         this.achievementCollection.valueChanges().subscribe((achievements: any[]) => {
-            this.achievements.next(UtilService.sortByProp(achievements))
+            this.achievements.next(UtilService.sortByProp(achievements as any[]))
         });
     }
 

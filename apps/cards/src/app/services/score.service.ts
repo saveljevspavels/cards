@@ -3,17 +3,18 @@ import {BehaviorSubject, combineLatest, forkJoin} from "rxjs";
 import {ConstService} from "./const.service";
 import Score from "../../../../shared/interfaces/score.interface";
 import {AthleteService} from "./athlete.service";
-import {AngularFirestore} from "@angular/fire/compat/firestore";
+import {AngularFirestore, AngularFirestoreCollection} from "@angular/fire/compat/firestore";
 
 @Injectable()
 export class ScoreService {
 
   public scores = new BehaviorSubject<any>([]);
   public myScore = new BehaviorSubject<Score | null>(null);
-  private scoreCollection = this.db.collection(ConstService.CONST.COLLECTIONS.SCORES);
+  private scoreCollection: AngularFirestoreCollection<Score>;
 
   constructor(private db: AngularFirestore,
               private athleteService: AthleteService) {
+    this.scoreCollection = this.db.collection(ConstService.CONST.COLLECTIONS.SCORES);
     this.scoreCollection.valueChanges().subscribe((scores: any[]) => {
       this.scores.next(this.sortScores(scores));
     });
@@ -24,7 +25,7 @@ export class ScoreService {
       if(!myId || !scores.length) {
         return;
       }
-      this.scores.next(this.sortScores(scores));
+      this.scores.next(this.sortScores(scores as Score[]));
       this.myScore.next(scores.find((score: Score) => score.athleteId === myId) || null)
     });
   }
