@@ -1,0 +1,7 @@
+<div class="progress-bar" [ngStyle]="{'opacity': opacity}" *ngIf="visible">
+    <p-progressBar [value]="value">
+        <ng-template pTemplate="content" let-value>
+            <span>{{value}}%&nbsp;Uploading...</span>
+        </ng-template>
+    </p-progressBar>
+</div>

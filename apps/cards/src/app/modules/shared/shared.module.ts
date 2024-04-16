@@ -55,6 +55,7 @@ import { CommentComponent } from './components/comment/comment.component';
 import { StravaPoweredComponent } from './components/strava-powered/strava-powered.component';
 import { StravaLinkComponent } from './components/strava-link/strava-link.component';
 import { LinkComponent } from './components/link/link.component';
+import {ProgressBarComponent} from "./components/progress-bar.component";
 
 const COMPS = [
     InputComponent,
@@ -83,7 +84,8 @@ const COMPS = [
     SvgTemplatesComponent,
     ScoreItemComponent,
     PopupComponent,
-    GoogleMapComponent
+    GoogleMapComponent,
+    ProgressBarComponent
 ]
 
 const MODULES = [
@@ -141,8 +143,5 @@ const MODULES = [
         ImageComponent,
         StravaPoweredComponent,
     ],
-    providers: [
-        FileService
-    ]
 })
 export class SharedModule { }
