@@ -4,6 +4,18 @@ import {AngularFireStorage} from "@angular/fire/compat/storage";
 import imageCompression from "browser-image-compression";
 import ExifReader from 'exifreader';
 import {BehaviorSubject} from "rxjs";
+import {CompressionType, UploadedImage} from "../../../../shared/interfaces/image-upload.interface";
+
+export interface UploadStatus {
+    total: number;
+    loaded: number;
+    active: boolean;
+}
+
+const TARGET_DIRECTORIES: Map<CompressionType, string> = new Map<CompressionType, string>([
+    [CompressionType.REGULAR, 'images'],
+    [CompressionType.THUMBNAIL, 'thumbnails']
+]);
 
 @Injectable({
     providedIn: 'root'
@@ -18,8 +30,8 @@ export class FileService {
 
     constructor(private storage: AngularFireStorage) {}
 
-    async uploadImages(files: any[]): Promise<string[]> {
-        const uploadedFileIds: string[] = []
+    async uploadImages(files: any[]): Promise<UploadedImage[]> {
+        const uploadedImages: UploadedImage[] = []
         if(files.length) {
             this.uploadStatus.next({
                 loaded: 0,
@@ -27,24 +39,44 @@ export class FileService {
                 active: true,
             });
             await Promise.all(files.map(async (file) => {
-                const id = UtilService.generateId()
-                this.getFileMetadata(file);
-                const compressedImage = await this.compressImage(file);
-                await this.storage.upload(`images/${id}`, compressedImage);
-                const url: string = await this.storage.ref(`images/${id}`).getDownloadURL().toPromise()
-                uploadedFileIds.push(url);
+                uploadedImages.push(await this.uploadImageFile(file));
                 this.uploadStatus.next({...this.uploadStatus.value, loaded: this.uploadStatus.value.loaded + 1});
             }));
             this.uploadStatus.next({...this.uploadStatus.value, active: false});
         }
-        return uploadedFileIds;
+        return uploadedImages;
     }
 
-    async compressImage(imageFile: File): Promise<Blob> {
-        const options = {
-            maxSizeMB: 1,
-            maxWidthOrHeight: 2160,
-            useWebWorker: true,
+    async uploadImageFile(file: File): Promise<UploadedImage> {
+        const id = UtilService.generateId();
+        const uploadedImage: UploadedImage = {
+            id,
+            urls: {},
+            timestamp: await this.getFileTimestamp(file),
+        }
+        for (const type of [CompressionType.REGULAR, CompressionType.THUMBNAIL]) {
+            const compressedImage = await this.compressImage(file, type);
+            await this.storage.upload(`${TARGET_DIRECTORIES.get(type)}/${id}`, compressedImage);
+            uploadedImage.urls[type] = await this.storage.ref(`${TARGET_DIRECTORIES.get(type)}/${id}`).getDownloadURL().toPromise();
+        }
+        return uploadedImage;
+    }
+
+    async compressImage(imageFile: File, type: CompressionType): Promise<Blob> {
+        let options;
+        switch (type) {
+            case CompressionType.THUMBNAIL:
+                options = {
+                    maxSizeMB: 0.1,
+                    maxWidthOrHeight: 200,
+                    useWebWorker: true,
+                };
+                break;
+            default: options = {
+                maxSizeMB: 1,
+                maxWidthOrHeight: 2160,
+                useWebWorker: true,
+            };
         }
         try {
             return await imageCompression(imageFile, options);
@@ -54,17 +86,9 @@ export class FileService {
         }
     }
 
-    async getFileMetadata(file: File): Promise<any> {
+    async getFileTimestamp(file: File): Promise<string> {
         const tags = await ExifReader.load(file);
         const imageDate = tags['DateTimeOriginal']?.description;
-        const unprocessedTagValue = tags['DateTimeOriginal']?.value;
-        // console.log('Image date:', imageDate);
-        // console.log('Unprocessed tag value:', unprocessedTagValue);
+        return imageDate ?? '';
     }
-}
-
-export interface UploadStatus {
-    total: number;
-    loaded: number;
-    active: boolean;
 }

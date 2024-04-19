@@ -1,5 +1,6 @@
 import {Component, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
 import {PopupService} from "../../../../services/popup.service";
+import {CompressionType, UploadedImage} from "../../../../../../../shared/interfaces/image-upload.interface";
 
 @Component({
   selector: 'app-gallery',
@@ -8,7 +9,9 @@ import {PopupService} from "../../../../services/popup.service";
 })
 export class GalleryComponent implements OnInit {
 
-  @Input() public images: string[];
+  COMPRESSION_TYPE = CompressionType;
+
+  @Input() public images: UploadedImage[];
   @Input() public polyline: string;
   @Input() activityType: string;
   @ViewChild('gallery', { static: true }) gallery: ElementRef;

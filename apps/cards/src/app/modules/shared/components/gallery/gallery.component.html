@@ -2,7 +2,7 @@
     <div *ngFor="let image of images; let i = index"
          class="mr-1"
     >
-        <app-image [src]="image"
+        <app-image [src]="image.urls ? image.urls[COMPRESSION_TYPE.THUMBNAIL] : ''"
                    (click)="openGallery(i)"
         ></app-image>
     </div>

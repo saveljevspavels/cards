@@ -18,7 +18,6 @@ export class ProgressBarComponent {
             if(!status) {
                 return;
             }
-            console.log('STATUS', status);
             this.value = Math.ceil((status.loaded / status.total) * 100);
             if(status.active) {
                 this.visible = true;

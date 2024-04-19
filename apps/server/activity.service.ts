@@ -9,6 +9,7 @@ import Card, {CardSnapshot, NullCard} from "../shared/interfaces/card.interface"
 import Athlete from "../shared/interfaces/athlete.interface";
 import AthleteService from "./athlete.service";
 import {ConstService} from "../cards/src/app/services/const.service";
+import {UploadedImage} from "../shared/interfaces/image-upload.interface";
 
 export default class ActivityService {
     constructor(
@@ -150,7 +151,7 @@ export default class ActivityService {
         }
     }
 
-    async submitActivity(activityId: number, cardIds: string[], imageIds: string[][], comments: string) {
+    async submitActivity(activityId: number, cardIds: string[], images: UploadedImage[][], comments: string) {
         const activity = await this.getActivity(activityId);
         const athlete = await this.athleteService.getAthlete(activity.athlete.id);
         const featuredCard = (await this.fireStoreService.gameCollection.get(CONST.GAME_ID))?.featuredCard;
@@ -188,7 +189,7 @@ export default class ActivityService {
                 ...(cards.find(card => card.id === id) || NullCard),
                 likes: [],
                 reports: [],
-                attachedImages: imageIds[index] || []
+                attachedImages: images[index] || []
             }
         })
 

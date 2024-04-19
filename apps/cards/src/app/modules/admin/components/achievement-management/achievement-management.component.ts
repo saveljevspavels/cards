@@ -6,6 +6,7 @@ import {AchievementService} from "../../../../services/achievement.service";
 import {Achievement} from "../../../../interfaces/achievement";
 import {AthleteService} from "../../../../services/athlete.service";
 import {Option} from "../../../../components/select/select.component";
+import {CompressionType} from "../../../../../../../shared/interfaces/image-upload.interface";
 
 @Component({
   selector: 'app-achievement-management',
@@ -39,7 +40,7 @@ export class AchievementManagementComponent implements OnInit {
     }
 
     async save() {
-        const image = this.imageControl.value?.length ? (await this.fileService.uploadImages(this.imageControl.value || []))[0] : this.form.value?.image;
+        const image = this.imageControl.value?.length ? (await this.fileService.uploadImages(this.imageControl.value || []))[0].urls[CompressionType.REGULAR] : this.form.value?.image;
         this.achievementService.createAchievement({
             ...this.form.value,
             image: image ? image : null

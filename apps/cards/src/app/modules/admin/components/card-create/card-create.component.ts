@@ -9,6 +9,7 @@ import CardFactory, {
 } from "../../../../../../../shared/interfaces/card-factory.interface";
 import {UtilService} from "../../../../services/util.service";
 import {Validator} from "../../../../../../../shared/interfaces/card.interface";
+import {CompressionType} from "../../../../../../../shared/interfaces/image-upload.interface";
 
 @Component({
   selector: 'app-card-create',
@@ -60,7 +61,7 @@ export class CardCreateComponent implements OnInit, OnChanges {
     }
 
     async submit() {
-        const image = this.imageControl.value?.length ? (await this.fileService.uploadImages(this.imageControl.value || []))[0] : this.selectedCardFactory?.image;
+        const image = this.imageControl.value?.length ? (await this.fileService.uploadImages(this.imageControl.value || []))[0].urls[CompressionType.REGULAR] : this.selectedCardFactory?.image;
         const newFactory: CardFactory = {
             ...this.form.value,
             image: image ? image : null

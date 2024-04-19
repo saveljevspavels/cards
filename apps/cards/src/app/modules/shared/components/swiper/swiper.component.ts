@@ -1,5 +1,6 @@
 import {Component, Input} from '@angular/core';
 import {PopupService} from "../../../../services/popup.service";
+import {CompressionType, UploadedImage} from "../../../../../../../shared/interfaces/image-upload.interface";
 
 @Component({
     selector: 'app-swiper',
@@ -8,7 +9,8 @@ import {PopupService} from "../../../../services/popup.service";
 })
 export class SwiperComponent {
 
-    @Input() images = [];
+    COMPRESSION_TYPE = CompressionType;
+    @Input() images: UploadedImage[] = [];
     @Input() slideIndex = 0;
     @Input() polyline: string;
     @Input() activityType: string;

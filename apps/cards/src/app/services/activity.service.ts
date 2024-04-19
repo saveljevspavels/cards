@@ -7,6 +7,7 @@ import {AthleteService} from "./athlete.service";
 import {ConstService} from "./const.service";
 import Athlete from "../../../../shared/interfaces/athlete.interface";
 import {AngularFirestore} from "@angular/fire/compat/firestore";
+import {UploadedImage} from "../../../../shared/interfaces/image-upload.interface";
 
 @Injectable({
     providedIn: 'root'
@@ -70,7 +71,7 @@ export class ActivityService {
         })
     }
 
-    submitActivity(activityId: string, cardIds: string[], images: string[][], comments: string[]) {
+    submitActivity(activityId: string, cardIds: string[], images: UploadedImage[][], comments: string[]) {
         return this.http.post(`${environment.baseBE}/submit-activity`, {
             activityId,
             cardIds,

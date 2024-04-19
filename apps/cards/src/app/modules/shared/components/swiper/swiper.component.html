@@ -7,7 +7,7 @@
     <div class="swiper__image mr-1"
          [ngClass]="{'d-none': slideIndex !== i}"
          *ngFor="let image of images; let i = index"
-         [style.background-image]="'url(' + image + ')'"
+         [style.background-image]="'url(' + image.urls[COMPRESSION_TYPE.REGULAR] + ')'"
     >
     </div>
     <div *ngIf="polyline"
