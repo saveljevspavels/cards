@@ -243,7 +243,7 @@ export class DataCollection<T> {
     }
 
     async all(): Promise<T[] | []> {
-        return await getDocs(this._collection) as unknown as T[] | undefined || [];
+        return ((await getDocs(this._collection)).docs).map(doc => doc.data()) as unknown as T[] | undefined || [];
     }
 
     async exists(documentName: string): Promise<boolean> {

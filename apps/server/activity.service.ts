@@ -179,11 +179,6 @@ export default class ActivityService {
             throw RESPONSES.ERROR.MAX_CARDS_SUBMIT
         }
 
-        if(StaticValidationService.notEnoughEnergy(athlete.energy, cards)) {
-            this.logger.info(`Athlete ${athlete.name} ${athlete.id} tried to submit ${cardIds}, without sufficient energy`)
-            throw RESPONSES.ERROR.NOT_ENOUGH_ENERGY
-        }
-
         const cardSnapshots: CardSnapshot[] = cardIds.map((id, index) => {
             return {
                 ...(cards.find(card => card.id === id) || NullCard),
@@ -197,7 +192,6 @@ export default class ActivityService {
             this.fireStoreService.athleteCollection.update(
                 athlete.id,
                 {
-                    energy: parseInt(athlete.energy.toString(), 10) - StaticValidationService.requiredEnergy(cards),
                     cards: {
                         ...athlete.cards,
                         active: athlete.cards.active.filter(cardId => cardIds.indexOf(cardId) === -1),

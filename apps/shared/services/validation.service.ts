@@ -1,8 +1,8 @@
 import {RULES} from "../../../definitions/rules";
 import {CONST} from "../../../definitions/constants";
 import Card, {CardSnapshot, Validator} from "../interfaces/card.interface";
-import Athlete, {BaseCardProgress, BaseWorkout} from "../interfaces/athlete.interface";
-import {first, map} from "rxjs/operators";
+import {BaseCardProgress, BaseWorkout} from "../interfaces/athlete.interface";
+import {StaticAthleteHelperService} from "./athlete.helper.service";
 
 export class StaticValidationService {
 
@@ -15,6 +15,10 @@ export class StaticValidationService {
 
     static requiredEnergy(cards: Card[]): number {
         return cards.reduce((acc: number, card: Card) => acc + parseInt(card.energyCost.toString(), 10), 0);
+    }
+
+    static notEnoughCoins(availableCoins: number, fatigue: number): boolean {
+        return StaticAthleteHelperService.getCardActivationCost(fatigue) > availableCoins;
     }
 
     static notEnoughEnergy(availableEnergy: number, cards: Card[]): boolean {

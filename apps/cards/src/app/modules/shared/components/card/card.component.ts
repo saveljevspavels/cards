@@ -1,6 +1,6 @@
 import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
 import Card, {Validator} from "../../../../../../../shared/interfaces/card.interface";
-import {filter} from "rxjs/operators";
+import {filter, map} from "rxjs/operators";
 import {ConstService} from "../../../../services/const.service";
 import {UtilService} from "../../../../services/util.service";
 import {CardService} from "../../../../services/card.service";
@@ -8,6 +8,7 @@ import {ValidationStatus} from "../../../../../../../shared/services/validation.
 import {FormControl} from "@angular/forms";
 import {Subject} from "rxjs";
 import {AthleteService} from "../../../../services/athlete.service";
+import {AthleteHelperService} from "../../../../services/athlete.helper.service";
 
 @Component({
   selector: 'app-card',
@@ -39,6 +40,7 @@ export class CardComponent implements OnInit, OnChanges {
 
     public uploadTrigger = new Subject();
     public isAdmin$ = this.athleteService.isAdmin$;
+    public activationCost$ = this.athleteService.me.pipe(map(_ => this.athleteHelperService.getCardActivationCost()));
 
     imageObservable: any;
     visible = true;
@@ -47,7 +49,8 @@ export class CardComponent implements OnInit, OnChanges {
 
     constructor(
         private cardService: CardService,
-        private athleteService: AthleteService
+        private athleteService: AthleteService,
+        private athleteHelperService: AthleteHelperService,
     ) { }
 
     ngOnInit() {

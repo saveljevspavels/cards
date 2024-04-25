@@ -10,6 +10,7 @@ export default interface Athlete {
     permissions: string[];
     achievements: string[];
     energy: number;
+    fatigue: number;
     coins: number;
     cards: {
         active: string[],

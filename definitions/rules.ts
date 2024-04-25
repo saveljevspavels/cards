@@ -70,6 +70,13 @@ export const RULES = {
     CARD_VALUE_MIN: 1,
     CARD_VALUE_MAX: 10,
     MAX_CARDS_SUBMIT: 4,
+    FATIGUE: {
+        MIN: 0,
+        MAX: 99,
+        BASE: 0,
+        TIMED_RESTORE: 5
+    },
+    CARD_PER_FATIGUE_ACTIVATION_COST: [1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144],
     ENERGY: {
         MIN: 0,
         MAX: 3,

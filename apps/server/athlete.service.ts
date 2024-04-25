@@ -95,6 +95,7 @@ export default class AthleteService {
             permissions: [],
             achievements: [],
             energy: RULES.ENERGY.BASE,
+            fatigue: RULES.FATIGUE.BASE,
             coins: RULES.COINS.BASE,
             cards: {
                 active: [],
@@ -121,8 +122,7 @@ export default class AthleteService {
         }
     }
 
-    async addEnergy(athleteId: string, value: number) {
-        const athlete = await this.getAthlete(athleteId);
+    async addEnergy(athlete: Athlete, value: number) {
         const excessEnergy = ((athlete.energy || 0) + value) - RULES.ENERGY.MAX;
         const newVal = Math.min((athlete.energy || 0) + value, RULES.ENERGY.MAX)
         await this.fireStoreService.athleteCollection.update(
@@ -135,15 +135,14 @@ export default class AthleteService {
         this.logger.info(`Athlete ${athlete.firstname} ${athlete.lastname} ${athlete.id} restored ${value} energy, now ${newVal}, and ${(excessEnergy > 0 ? excessEnergy * RULES.COINS.PER_ENERGY_CONVERSION : 0)} coins`)
     }
 
-    async spendEnergy(athleteId: string, amount: number) {
-        const athlete = await this.getAthlete(athleteId);
+    async spendEnergy(athlete: Athlete, amount: number) {
         if(athlete.energy < amount) {
             this.logger.info(`Athlete ${athlete.name} don't have enough energy (${amount}) to spend. Has ${athlete.energy}`);
             throw 'Not enough energy';
         }
 
         await this.fireStoreService.athleteCollection.update(
-            athleteId,
+            athlete.id,
             {
                 energy: athlete.energy - amount
             }
@@ -151,15 +150,41 @@ export default class AthleteService {
         this.logger.info(`Athlete ${athlete.firstname} ${athlete.lastname} spent ${amount} energy, now ${athlete.energy - amount}`)
     }
 
-    async spendCoins(athleteId: string, amount: number) {
-        const athlete = await this.getAthlete(athleteId);
+    async increaseFatigue(athlete: Athlete, amount: number): Promise<void> {
+        if(athlete.fatigue >= RULES.FATIGUE.MAX) {
+            this.logger.info(`Athlete ${athlete.name} fatigue is at max (${athlete.fatigue}). Can't increase`);
+            throw 'Max. fatigue reached';
+        }
+
+        const newFatigue = parseInt(String(athlete.fatigue), 10) + parseInt(String(amount), 10);
+        await this.fireStoreService.athleteCollection.update(
+            athlete.id,
+            {
+                fatigue: newFatigue
+            }
+        )
+        this.logger.info(`Athlete ${athlete.firstname} ${athlete.lastname} fatigue increased by ${amount}, now ${newFatigue}`)
+    }
+
+    async decreaseFatigue(athlete: Athlete, amount: number): Promise<void> {
+        const newFatigue = Math.max(athlete.energy - amount, RULES.FATIGUE.MIN)
+        await this.fireStoreService.athleteCollection.update(
+            athlete.id,
+            {
+                fatigue: newFatigue
+            }
+        )
+        this.logger.info(`Athlete ${athlete.firstname} ${athlete.lastname} fatigue lowered by ${amount}, now ${newFatigue}`)
+    }
+
+    async spendCoins(athlete: Athlete, amount: number) {
         if(athlete.coins < amount) {
             this.logger.info(`Athlete ${athlete.name} don't have enough coins (${amount}) to spend. Has ${athlete.coins}`);
             throw 'Not enough coins';
         }
 
         await this.fireStoreService.athleteCollection.update(
-            athleteId,
+            athlete.id,
             {
                 coins: athlete.coins - amount
             }

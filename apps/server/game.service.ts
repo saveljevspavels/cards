@@ -64,8 +64,8 @@ export default class GameService {
 
     initEnergyRegen() {
         const rule = new schedule.RecurrenceRule();
-        rule.hour = 12; // TODO: revert
-        rule.minute = 0;
+        rule.hour = 20;
+        rule.minute = 6;
         rule.tz = 'Europe/Riga';
 
         const job = schedule.scheduleJob(rule, async () => {
@@ -73,7 +73,7 @@ export default class GameService {
             const allAthletes = await this.fireStoreService.athleteCollection.all();
             allAthletes.map(async (athlete: Athlete) => {
                 await this.activityService.submitAllActivities(athlete.id);
-                // await this.athleteService.addEnergy(athlete.id, RULES.ENERGY.TIMED_RESTORE); // TODO: revert
+                await this.athleteService.decreaseFatigue(athlete, RULES.FATIGUE.TIMED_RESTORE);
                 await this.claimAllRewards(athlete.id);
             })
         })
@@ -81,7 +81,7 @@ export default class GameService {
 
     initFeaturedCardChange() {
         const rule = new schedule.RecurrenceRule();
-        rule.hour = [0]; // TODO: revert
+        rule.hour = RULES.FEATURED_TASK_HOURS.REGULAR;
         rule.minute = 0;
         rule.tz = 'Europe/Riga';
 
@@ -134,8 +134,8 @@ export default class GameService {
         }
 
         Promise.all([
-            ability.coinsCost && await this.athleteService.spendCoins(athleteId, ability.coinsCost),
-            ability.energyCost && await this.athleteService.spendEnergy(athleteId, ability.energyCost),
+            ability.coinsCost && await this.athleteService.spendCoins(athlete, ability.coinsCost),
+            ability.energyCost && await this.athleteService.increaseFatigue(athlete, ability.energyCost),
             await this.fireStoreService.athleteCollection.update(
                 athleteId,
                 {
@@ -169,8 +169,8 @@ export default class GameService {
         }
 
         Promise.all([
-            ability.coinsReward && await this.athleteService.spendCoins(athleteId, -ability.coinsReward),
-            ability.energyReward && await this.athleteService.addEnergy(athleteId, ability.energyReward),
+            ability.coinsReward && await this.athleteService.spendCoins(athlete, -ability.coinsReward),
+            ability.energyReward && await this.athleteService.addEnergy(athlete, ability.energyReward),
             ability.value && await this.scoreService.addPoints(athleteId, ability.value)
         ]);
     }

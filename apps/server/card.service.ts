@@ -11,6 +11,7 @@ import {RULES} from "../../definitions/rules";
 import {StaticValidationService} from "../shared/services/validation.service";
 import AthleteService from "./athlete.service";
 import ActivityService from "./activity.service";
+import {StaticAthleteHelperService} from "../shared/services/athlete.helper.service";
 
 export default class CardService {
     constructor(
@@ -221,7 +222,8 @@ export default class CardService {
     async activateCard(athleteId: string, cardId: string) {
         const card = await this.getCard(cardId);
         const athlete = await this.athleteService.getAthlete(athleteId);
-        if(parseInt(String(athlete.coins), 10) < parseInt(String(card.coinsCost), 10)) {
+
+        if(StaticValidationService.notEnoughCoins(athlete.coins, athlete.fatigue)) {
             this.logger.info(`Athlete ${athlete.firstname} ${athlete.lastname} don't have enough coins to activate card ${card.title}`);
             throw 'Not enough coins';
         }
@@ -229,13 +231,19 @@ export default class CardService {
             this.logger.info(`Athlete ${athlete.firstname} ${athlete.lastname} has too much activated cards`);
             throw 'Too much active cards';
         }
-        await this.fireStoreService.athleteCollection.update(athleteId, {
-            cards: {
-                ...athlete.cards,
-                active: [...athlete?.cards.active, card.id]
-            },
-            coins: parseInt(String(athlete.coins), 10) - parseInt(String(card.coinsCost), 10)
-        })
+
+        await Promise.all([
+            this.athleteService.spendCoins(athlete, StaticAthleteHelperService.getCardActivationCost(athlete.fatigue)),
+            this.athleteService.increaseFatigue(athlete, card.energyCost),
+            this.fireStoreService.athleteCollection.update(athleteId, {
+                cards: {
+                    ...athlete.cards,
+                    active: [...athlete?.cards.active, card.id]
+                },
+                coins: parseInt(String(athlete.coins), 10) - parseInt(String(card.coinsCost), 10)
+            })
+        ])
+        this.logger.info(`Athlete ${athlete.firstname} ${athlete.lastname} has activated ${card.title} for ${card.energyCost} energy and ${card.coinsCost} coins`);
     }
 
     async finishCard(athleteId: string, cardId: string) {

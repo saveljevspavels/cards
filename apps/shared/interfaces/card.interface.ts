@@ -1,4 +1,5 @@
 import {Progression} from "./card-factory.interface";
+import {UploadedImage} from "./image-upload.interface";
 
 export default interface Card {
     title: string;
@@ -20,7 +21,7 @@ export default interface Card {
 
 export interface CardSnapshot extends Card {
     comment?: string;
-    attachedImages?: string[];
+    attachedImages?: UploadedImage[];
     likes?: string[];
     likedByMe?: boolean; // FE use only
     reportedByMe?: boolean; // FE use only
