@@ -2,7 +2,7 @@ import {RULES} from "../../../definitions/rules";
 import {CONST} from "../../../definitions/constants";
 
 export const generateId = () => {
-    return Math.random().toString(36);
+    return Math.random().toString(36).substring(2);
 }
 
 export const parseResponse = (response: any, reqBody: any, callback: any) => {

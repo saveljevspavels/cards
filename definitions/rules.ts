@@ -1,7 +1,7 @@
 import {AbilityKey} from "../apps/shared/interfaces/ability.interface";
 
 export const RULES = {
-    HAND_SIZE: 3,
+    FEATURED_CARD_ENABLED: false,
     DEFAULT_BASE_WORKOUT: {
         run: {
             distance: 4000,
@@ -23,11 +23,6 @@ export const RULES = {
             distance: 5000,
             elapsed_time: 1800
         }
-    },
-    PROGRESSIVE_CHALLENGE: {
-      MAX_ACTIVE: 4,
-      MAX_QUEUED: 99,
-      NEW_DAILY: 2
     },
     LEVEL_EXPERIENCE: [
         20, 20, 20, 20, 20,
@@ -111,6 +106,16 @@ export const RULES = {
         MAX_ACTIVE_CARDS: 3
     },
     PROGRESS_PRECISION: 1000,
+    PROGRESSIVE_CHALLENGE: {
+        ENABLED: true,
+        HOURS: {
+            FIRST_DAY: [0],
+            REGULAR: [0]
+        },
+        MAX_ACTIVE: 6,
+        MAX_QUEUED: 99,
+        NEW_DAILY: 2
+    },
     FEATURED_TASK_HOURS: {
         FIRST_DAY: [4, 12, 20],
         REGULAR: [4, 12, 20]

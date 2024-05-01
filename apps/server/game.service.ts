@@ -17,6 +17,7 @@ import CardFactory from "../shared/interfaces/card-factory.interface";
 import ActivityService from "./activity.service";
 import Game from "../cards/src/app/interfaces/game";
 import {DateService} from "../shared/utils/date.service";
+import {ProgressiveChallenge} from "../shared/interfaces/progressive-challenge.interface";
 
 export default class GameService {
     constructor(
@@ -59,13 +60,18 @@ export default class GameService {
         });
 
         this.initEnergyRegen();
-        this.initFeaturedCardChange();
+        if(RULES.FEATURED_CARD_ENABLED) {
+            this.initFeaturedCardChange();
+        }
+        if(RULES.PROGRESSIVE_CHALLENGE.ENABLED) {
+            this.initChallengeAddition();
+        }
     }
 
     initEnergyRegen() {
         const rule = new schedule.RecurrenceRule();
-        rule.hour = 20;
-        rule.minute = 6;
+        rule.hour = 0;
+        rule.minute = 0;
         rule.tz = 'Europe/Riga';
 
         const job = schedule.scheduleJob(rule, async () => {
@@ -92,6 +98,48 @@ export default class GameService {
             }
             await this.changeFeaturedCard();
         })
+    }
+
+    initChallengeAddition() {
+        const rule = new schedule.RecurrenceRule();
+        rule.hour = RULES.PROGRESSIVE_CHALLENGE.HOURS.REGULAR;
+        rule.minute = 0;
+        rule.tz = 'Europe/Riga';
+
+        const job = schedule.scheduleJob(rule, async () => {
+            const game: Game | null = await this.fireStoreService.gameCollection.get(CONST.GAME_ID);
+            if(game?.startDate === DateService.getToday() && RULES.PROGRESSIVE_CHALLENGE.HOURS.FIRST_DAY.indexOf(DateService.getCurrentHour()) === -1) {
+                return;
+            }
+            await this.pushNewChallenges();
+        })
+    }
+
+    async pushNewChallenges() {
+        const game: Game | null = await this.fireStoreService.gameCollection.get(CONST.GAME_ID);
+        if(!game) {
+            return;
+        }
+        const activeChallenges: string[] = game.activeChallenges || [];
+        const allChallenges: ProgressiveChallenge[] = await this.fireStoreService.challengeCollection.all();
+        const availableChallenges = allChallenges.filter((challenge: ProgressiveChallenge) => activeChallenges.indexOf(challenge.id) === -1);
+        let newChallenges = [];
+        if(availableChallenges.length > RULES.PROGRESSIVE_CHALLENGE.NEW_DAILY) {
+            for(let i = 0; i < RULES.PROGRESSIVE_CHALLENGE.NEW_DAILY; i++) {
+                newChallenges.push(availableChallenges.splice(getRandomInt(availableChallenges.length), 1)[0]);
+            }
+        } else if (availableChallenges.length > 0) {
+            newChallenges = availableChallenges;
+        } else {
+            this.logger.error(`Can't add new challenges, all challenges are already active.`);
+            return;
+        }
+        await this.fireStoreService.gameCollection.update(CONST.GAME_ID,
+            {
+                activeChallenges: [...activeChallenges, ...newChallenges.map((challenge: ProgressiveChallenge) => challenge.id)]
+            }
+        );
+        this.logger.info(`New challenges added:  ${newChallenges.map((challenge: ProgressiveChallenge) => challenge.title).join(', ')}`);
     }
 
     async changeFeaturedCard(cardName = '') {
@@ -198,6 +246,11 @@ export default class GameService {
             CONST.GAME_ID,
             game
         )
-        await this.changeFeaturedCard(RULES.STARTING_CARD)
+        if(RULES.FEATURED_CARD_ENABLED) {
+            await this.changeFeaturedCard(RULES.STARTING_CARD)
+        }
+        if(RULES.PROGRESSIVE_CHALLENGE.ENABLED) {
+            await this.pushNewChallenges();
+        }
     }
 }
