@@ -3,4 +3,5 @@ export default interface Game {
     shifts: number;
     featuredCard: string | null;
     startDate: string;
+    activeChallenges: string[];
 }

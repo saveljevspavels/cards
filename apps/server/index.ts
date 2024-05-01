@@ -17,6 +17,7 @@ import AuthService from "./auth.service";
 import {Logger} from "winston";
 import {AuthInterceptor} from "./helpers/auth.interceptor";
 import ScoreService from "./score.service";
+import {ChallengeService} from "./challenge.service";
 
 const app: Express = express().use(
     bodyParser.json(),
@@ -38,4 +39,5 @@ const imageService = new ImageService(app, fireStoreService);
 const gameService = new GameService(app, fireStoreService, logger, athleteService, scoreService, cardService, activityService);
 const achievementService = new AchievementService(app, fireStoreService);
 const authService = new AuthService(app, fireStoreService, logger, athleteService);
+const challengeService = new ChallengeService(app, fireStoreService, logger);
 

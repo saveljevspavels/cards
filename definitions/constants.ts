@@ -20,7 +20,8 @@ export const CONST = {
         ACHIEVEMENTS: "achievements",
         GAME: "game",
         SESSIONS: "sessions",
-        SCHEME: "scheme"
+        SCHEME: "scheme",
+        CHALLENGES: "challenges",
     },
     ACTIVITY_PROPERTIES: {
         DISTANCE: "distance",
@@ -48,4 +49,11 @@ export const CONST = {
     GAME_ID: "game1",
     SCHEME_ID: "main",
     COMMENT_LENGTH: 300,
+}
+
+export enum ActivityType {
+    RUN = "run",
+    RIDE = "ride",
+    WALK = "walk",
+    OTHER = "other",
 }

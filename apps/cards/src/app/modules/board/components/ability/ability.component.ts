@@ -4,6 +4,7 @@ import {AthleteService} from "../../../../services/athlete.service";
 import {GameService} from "../../../../services/game.service";
 import {PopupService} from "../../../../services/popup.service";
 import Athlete from "../../../../../../../shared/interfaces/athlete.interface";
+import {ButtonType} from "../../../shared/components/button/button.component";
 
 @Component({
   selector: 'app-ability',
@@ -11,6 +12,8 @@ import Athlete from "../../../../../../../shared/interfaces/athlete.interface";
   styleUrls: ['./ability.component.scss']
 })
 export class AbilityComponent implements OnInit {
+
+  readonly ButtonType = ButtonType;
 
   @Input() ability: Ability;
   @Input() athlete: Athlete;

@@ -16,6 +16,7 @@ import {GameService} from "../../../../services/game.service";
 import {filter, first, map, startWith} from "rxjs/operators";
 import {PopupService} from "../../../../services/popup.service";
 import {ConstService} from "../../../../services/const.service";
+import {ButtonType} from "../../../shared/components/button/button.component";
 
 @Component({
   selector: 'app-active-card-list',
@@ -23,6 +24,7 @@ import {ConstService} from "../../../../services/const.service";
   styleUrls: ['./active-card-list.component.scss']
 })
 export class ActiveCardListComponent implements OnInit {
+  readonly ButtonType = ButtonType;
   public RULES = RULES;
   public athlete: Observable<Athlete | null> = this.athleteService.me;
   public selectedActivity$ = this.boardService.selectedActivity$;

@@ -29,11 +29,11 @@ export class UtilService {
     }
 
     static getTier(value: number) {
-        if(value >= ConstService.RULES.LEVELS["0"].min && value <= ConstService.RULES.LEVELS["0"].max) return 0
-        if(value >= ConstService.RULES.LEVELS["1"].min && value <= ConstService.RULES.LEVELS["1"].max) return 1
-        if(value >= ConstService.RULES.LEVELS["2"].min && value <= ConstService.RULES.LEVELS["2"].max) return 2
-        if(value >= ConstService.RULES.LEVELS["3"].min && value <= ConstService.RULES.LEVELS["3"].max) return 3
-        if(value >= ConstService.RULES.LEVELS["4"].min && value <= ConstService.RULES.LEVELS["4"].max) return 4
+        if(value >= ConstService.RULES.CARD_LEVELS["0"].min && value <= ConstService.RULES.CARD_LEVELS["0"].max) return 0
+        if(value >= ConstService.RULES.CARD_LEVELS["1"].min && value <= ConstService.RULES.CARD_LEVELS["1"].max) return 1
+        if(value >= ConstService.RULES.CARD_LEVELS["2"].min && value <= ConstService.RULES.CARD_LEVELS["2"].max) return 2
+        if(value >= ConstService.RULES.CARD_LEVELS["3"].min && value <= ConstService.RULES.CARD_LEVELS["3"].max) return 3
+        if(value >= ConstService.RULES.CARD_LEVELS["4"].min && value <= ConstService.RULES.CARD_LEVELS["4"].max) return 4
         return 0;
     }
 

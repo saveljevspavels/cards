@@ -9,6 +9,7 @@ import {FormControl} from "@angular/forms";
 import {Subject} from "rxjs";
 import {AthleteService} from "../../../../services/athlete.service";
 import {AthleteHelperService} from "../../../../services/athlete.helper.service";
+import {ButtonType} from "../button/button.component";
 
 @Component({
   selector: 'app-card',
@@ -18,6 +19,7 @@ import {AthleteHelperService} from "../../../../services/athlete.helper.service"
 export class CardComponent implements OnInit, OnChanges {
     public RULES = ConstService.RULES;
     public ValidationStatus = ValidationStatus;
+    readonly ButtonType = ButtonType;
 
     @Input() public card: Card;
     @Input() public cardId: string;

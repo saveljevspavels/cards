@@ -29,7 +29,7 @@
                     <ng-container [ngTemplateOutlet]="cardShortHand" [ngTemplateOutletContext]="{card: cardMap.get(card)}"></ng-container>
                     <app-button label="Remove"
                                 styleClass="technical"
-                                [type]="'danger'"
+                                [type]="ButtonType.DANGER"
                                 (buttonClick)="removeCard(level, card)">
                     </app-button>
                 </div>

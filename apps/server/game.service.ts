@@ -191,7 +191,8 @@ export default class GameService {
             cardUses: 0,
             shifts: 0,
             startDate,
-            featuredCard: null
+            featuredCard: null,
+            activeChallenges: []
         }
         await this.fireStoreService.gameCollection.set(
             CONST.GAME_ID,

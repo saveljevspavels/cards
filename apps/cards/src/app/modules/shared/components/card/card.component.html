@@ -26,11 +26,11 @@
             </div>
         </div>
         <div class="card__value">
-            <app-rewards [card]="card"></app-rewards>
+            <app-rewards [card]="card" [rewardsOnly]="true"></app-rewards>
             <app-button *ngIf="validationStatus.toString() === ValidationStatus.SELECTED"
                         [small]="true"
                         [styleClass]="'mt-1-5 full-width'"
-                        [type]="'action'"
+                        [type]="ButtonType.ACTION"
                         (buttonClick)="addPhoto($event)"
                         [icon]="'camera'"
             ></app-button>
@@ -38,7 +38,7 @@
                         [small]="true"
                         [styleClass]="'mt-1-5 full-width'"
                         label="Activate"
-                        [type]="'action'"
+                        [type]="ButtonType.ACTION"
                         [disabled]="!canActivate"
                         (buttonClick)="activate()"
             >

@@ -97,6 +97,8 @@ export default class AthleteService {
             energy: RULES.ENERGY.BASE,
             fatigue: RULES.FATIGUE.BASE,
             coins: RULES.COINS.BASE,
+            experience: 0,
+            level: 1,
             cards: {
                 active: [],
                 completed: [],

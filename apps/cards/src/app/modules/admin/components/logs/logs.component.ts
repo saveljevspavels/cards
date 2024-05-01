@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {AdminService} from "../../admin.service";
 import {LogItem} from "../../../../interfaces/log-item";
 import {FormControl} from "@angular/forms";
+import {ButtonType} from "../../../shared/components/button/button.component";
 
 @Component({
   selector: 'app-logs',
@@ -15,6 +16,7 @@ export class LogsComponent implements OnInit {
     public allLogs: LogItem[] = [];
     public searchControl = new FormControl('');
     public searchResult: any = [];
+    readonly ButtonType = ButtonType;
 
     constructor(private adminService: AdminService) { }
 

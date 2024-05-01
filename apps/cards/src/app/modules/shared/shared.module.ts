@@ -55,7 +55,9 @@ import { CommentComponent } from './components/comment/comment.component';
 import { StravaPoweredComponent } from './components/strava-powered/strava-powered.component';
 import { StravaLinkComponent } from './components/strava-link/strava-link.component';
 import { LinkComponent } from './components/link/link.component';
-import {ProgressBarComponent} from "./components/progress-bar.component";
+import {ProgressBarComponent} from "./components/progress-bar/progress-bar.component";
+import {ChallengeComponent} from "./components/challenge/challenge.component";
+import {ChallengeBarComponent} from "./components/challenge/challenge-bar.component";
 
 const COMPS = [
     InputComponent,
@@ -85,7 +87,9 @@ const COMPS = [
     ScoreItemComponent,
     PopupComponent,
     GoogleMapComponent,
-    ProgressBarComponent
+    ProgressBarComponent,
+    ChallengeComponent,
+    ChallengeBarComponent,
 ]
 
 const MODULES = [

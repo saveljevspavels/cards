@@ -67,11 +67,11 @@ export class RulesComponent implements OnInit {
 
 
     public tiers = [
-        `Easy (${ConstService.RULES.LEVELS["0"].min}-${ConstService.RULES.LEVELS["0"].max} points)`,
-        `Normal (${ConstService.RULES.LEVELS["1"].min}-${ConstService.RULES.LEVELS["1"].max} points)`,
-        `Hard (${ConstService.RULES.LEVELS["2"].min}-${ConstService.RULES.LEVELS["2"].max} points)`,
-        `Very Hard (${ConstService.RULES.LEVELS["3"].min}-${ConstService.RULES.LEVELS["3"].max} points)`,
-        `Help me Jesus (${ConstService.RULES.LEVELS["4"].min}+ points)`,
+        `Easy (${ConstService.RULES.CARD_LEVELS["0"].min}-${ConstService.RULES.CARD_LEVELS["0"].max} points)`,
+        `Normal (${ConstService.RULES.CARD_LEVELS["1"].min}-${ConstService.RULES.CARD_LEVELS["1"].max} points)`,
+        `Hard (${ConstService.RULES.CARD_LEVELS["2"].min}-${ConstService.RULES.CARD_LEVELS["2"].max} points)`,
+        `Very Hard (${ConstService.RULES.CARD_LEVELS["3"].min}-${ConstService.RULES.CARD_LEVELS["3"].max} points)`,
+        `Help me Jesus (${ConstService.RULES.CARD_LEVELS["4"].min}+ points)`,
     ]
 
     constructor(private gameService: GameService) { }

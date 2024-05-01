@@ -7,6 +7,7 @@ import {Achievement} from "../../../../interfaces/achievement";
 import {AthleteService} from "../../../../services/athlete.service";
 import {Option} from "../../../../components/select/select.component";
 import {CompressionType} from "../../../../../../../shared/interfaces/image-upload.interface";
+import {ButtonType} from "../../../shared/components/button/button.component";
 
 @Component({
   selector: 'app-achievement-management',
@@ -16,6 +17,7 @@ import {CompressionType} from "../../../../../../../shared/interfaces/image-uplo
 export class AchievementManagementComponent implements OnInit {
     public CONST = ConstService.CONST
     public achievements = this.achievementService.achievements;
+    readonly ButtonType = ButtonType;
 
     public form: FormGroup;
     public athleteOptions: Option[] = [];

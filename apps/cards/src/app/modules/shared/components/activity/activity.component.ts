@@ -16,6 +16,7 @@ import {CONST} from "../../../../../../../../definitions/constants";
 import {StaticValidationService} from "../../../../../../../shared/services/validation.service";
 import {AthleteService} from "../../../../services/athlete.service";
 import {CardSnapshot, Report} from "../../../../../../../shared/interfaces/card.interface";
+import {ButtonType} from "../button/button.component";
 
 @Component({
     selector: 'app-activity',
@@ -31,6 +32,7 @@ import {CardSnapshot, Report} from "../../../../../../../shared/interfaces/card.
 export class ActivityComponent implements OnInit, ControlValueAccessor, OnChanges {
     public CONST = ConstService.CONST;
     public myId = this.athleteService.myId.value;
+    readonly ButtonType = ButtonType;
 
     public selectedCards = new FormControl([])
     public imageObservables: any;

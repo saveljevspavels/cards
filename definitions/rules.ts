@@ -24,7 +24,20 @@ export const RULES = {
             elapsed_time: 1800
         }
     },
-    LEVELS: {
+    PROGRESSIVE_CHALLENGE: {
+      MAX_ACTIVE: 4,
+      MAX_QUEUED: 99,
+      NEW_DAILY: 2
+    },
+    LEVEL_EXPERIENCE: [
+        20, 20, 20, 20, 20,
+        30, 30, 30, 30, 30,
+        40, 40, 40, 40, 40,
+        50, 50, 50, 50, 50,
+        60, 60, 60, 60, 60,
+        70, 70, 70, 70, 70,
+    ],
+    CARD_LEVELS: {
         0: {
             min: 1,
             max: 2

@@ -10,7 +10,7 @@
             <app-reward-energy *ngIf="ability.energyReward" [value]="ability.energyReward"></app-reward-energy>
         </div>
         <app-button [label]="'Activate'"
-                    [type]="'action'"
+                    [type]="ButtonType.ACTION"
                     [small]="true"
                     [styleClass]="'mt-1-5 w-90'"
                     [loading]="loading"

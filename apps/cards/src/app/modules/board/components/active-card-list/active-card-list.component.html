@@ -41,7 +41,7 @@
         >
         </app-textarea>
     </div>
-    <app-button [type]="'action'"
+    <app-button [type]="ButtonType.ACTION"
                 [label]="(notEnoughEnergy$ | async) ? 'Not enough energy' : 'Submit'"
                 (buttonClick)="submitActivity()"
                 [disabled]="loading"

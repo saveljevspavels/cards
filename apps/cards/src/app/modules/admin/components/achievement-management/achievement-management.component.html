@@ -31,7 +31,7 @@
             <app-button (buttonClick)="editAchievement(achievement)" class="ml-4" label="Edit"></app-button>
             <app-button [disabled]="!athleteControl.value" (buttonClick)="assign(achievement.id)" class="ml-4" label="Assign"></app-button>
         </div>
-        <app-button (buttonClick)="delete(achievement.id)" class="button--danger" label="Delete"></app-button>
+        <app-button (buttonClick)="delete(achievement.id)" [type]="ButtonType.DANGER" label="Delete"></app-button>
     </div>
 </div>
 

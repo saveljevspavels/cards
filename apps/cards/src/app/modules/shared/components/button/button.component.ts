@@ -8,11 +8,13 @@ import {Component, EventEmitter, Input, OnInit, Output, ViewEncapsulation} from 
 })
 export class ButtonComponent implements OnInit {
 
+    readonly ButtonType = ButtonType;
+
     @Input() label: string;
     @Input() icon: string;
     @Input() disabled = false;
     @Input() loading = false;
-    @Input() type: string;
+    @Input() type: ButtonType;
     @Input() transparent = false;
     @Input() styleClass = '';
     @Input() small = false;
@@ -31,4 +33,13 @@ export class ButtonComponent implements OnInit {
         }
     }
 
+}
+
+export enum ButtonType {
+    DANGER = 'danger',
+    DANGER_FILLED = 'danger-filled',
+    DANGER_FILLED_DARK = 'danger-filled-dark',
+    SUCCESS = 'success',
+    ACTION = 'action',
+    FILLED = 'filled',
 }

@@ -17,23 +17,23 @@ export class CardFilterComponent implements OnInit {
     levels = [
         {
             title: 'Easy',
-            description: `${ConstService.RULES.LEVELS["0"].min}-${ConstService.RULES.LEVELS["0"].max} points`
+            description: `${ConstService.RULES.CARD_LEVELS["0"].min}-${ConstService.RULES.CARD_LEVELS["0"].max} points`
         },
         {
             title: 'Normal',
-            description: `${ConstService.RULES.LEVELS["1"].min}-${ConstService.RULES.LEVELS["1"].max} points`
+            description: `${ConstService.RULES.CARD_LEVELS["1"].min}-${ConstService.RULES.CARD_LEVELS["1"].max} points`
         },
         {
             title: 'Hard',
-            description: `${ConstService.RULES.LEVELS["2"].min}-${ConstService.RULES.LEVELS["2"].max} points`
+            description: `${ConstService.RULES.CARD_LEVELS["2"].min}-${ConstService.RULES.CARD_LEVELS["2"].max} points`
         },
         {
             title: 'Very Hard',
-            description: `${ConstService.RULES.LEVELS["3"].min}-${ConstService.RULES.LEVELS["3"].max} points`
+            description: `${ConstService.RULES.CARD_LEVELS["3"].min}-${ConstService.RULES.CARD_LEVELS["3"].max} points`
         },
         {
             title: 'Help me Jesus',
-            description: `${ConstService.RULES.LEVELS["4"].min}+ points`
+            description: `${ConstService.RULES.CARD_LEVELS["4"].min}+ points`
         }
     ]
 

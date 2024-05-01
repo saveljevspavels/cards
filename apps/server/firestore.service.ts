@@ -17,6 +17,7 @@ import Game from "../cards/src/app/interfaces/game";
 import CardFactory from "../shared/interfaces/card-factory.interface";
 import {collection, deleteDoc, doc, Firestore, getDoc, getDocs, setDoc, updateDoc, query, where} from "firebase/firestore";
 import CollectionReference = firebase.firestore.CollectionReference;
+import {ProgressiveChallenge} from "../shared/interfaces/progressive-challenge.interface";
 
 export class FirestoreService {
     logger: Logger;
@@ -35,6 +36,7 @@ export class FirestoreService {
     public gameCollection: DataCollection<Game>;
     public sessionCollection: DataCollection<any>;
     public schemeCollection: DataCollection<any>;
+    public challengeCollection: DataCollection<ProgressiveChallenge>;
 
     constructor(logger: Logger) {
         this.logger = logger;
@@ -63,6 +65,7 @@ export class FirestoreService {
         this.gameCollection = new DataCollection<Game>(this.db, CONST.COLLECTIONS.GAME);
         this.sessionCollection = new DataCollection<any>(this.db, CONST.COLLECTIONS.SESSIONS);
         this.schemeCollection = new DataCollection<any>(this.db, CONST.COLLECTIONS.SCHEME);
+        this.challengeCollection = new DataCollection<any>(this.db, CONST.COLLECTIONS.CHALLENGES);
     }
 
     errorHandlerWrap(methodName: string, method: any) {

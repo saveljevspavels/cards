@@ -1,5 +1,5 @@
 import {Component, OnChanges, ViewEncapsulation} from '@angular/core';
-import {FileService} from "../../../services/file.service";
+import {FileService} from "../../../../services/file.service";
 
 @Component({
     selector: 'app-progress-bar',

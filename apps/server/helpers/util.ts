@@ -2,7 +2,7 @@ import {RULES} from "../../../definitions/rules";
 import {CONST} from "../../../definitions/constants";
 
 export const generateId = () => {
-    return Math.random().toString(36).substring(7);
+    return Math.random().toString(36);
 }
 
 export const parseResponse = (response: any, reqBody: any, callback: any) => {
@@ -48,10 +48,10 @@ export const tierToRoman = (number: number): string => {
 }
 
 export const getTier = (value: number) => {
-    if(value >= RULES.LEVELS["0"].min && value <= RULES.LEVELS["0"].max) return 0
-    if(value >= RULES.LEVELS["1"].min && value <= RULES.LEVELS["1"].max) return 1
-    if(value >= RULES.LEVELS["2"].min && value <= RULES.LEVELS["2"].max) return 2
-    if(value >= RULES.LEVELS["3"].min && value <= RULES.LEVELS["3"].max) return 3
-    if(value >= RULES.LEVELS["4"].min && value <= RULES.LEVELS["4"].max) return 4
+    if(value >= RULES.CARD_LEVELS["0"].min && value <= RULES.CARD_LEVELS["0"].max) return 0
+    if(value >= RULES.CARD_LEVELS["1"].min && value <= RULES.CARD_LEVELS["1"].max) return 1
+    if(value >= RULES.CARD_LEVELS["2"].min && value <= RULES.CARD_LEVELS["2"].max) return 2
+    if(value >= RULES.CARD_LEVELS["3"].min && value <= RULES.CARD_LEVELS["3"].max) return 3
+    if(value >= RULES.CARD_LEVELS["4"].min && value <= RULES.CARD_LEVELS["4"].max) return 4
     return 0;
 }

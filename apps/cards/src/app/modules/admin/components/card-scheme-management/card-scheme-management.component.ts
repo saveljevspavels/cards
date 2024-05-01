@@ -7,6 +7,7 @@ import {RULES} from "../../../../../../../../definitions/rules";
 import Card from "../../../../../../../shared/interfaces/card.interface";
 import {CardScheme} from "../../../../../../../shared/interfaces/card-scheme.interface";
 import {CardService} from "../../../../services/card.service";
+import {ButtonType} from "../../../shared/components/button/button.component";
 
 @Component({
   selector: 'app-card-scheme-management',
@@ -16,6 +17,7 @@ import {CardService} from "../../../../services/card.service";
 export class CardSchemeManagementComponent implements OnInit {
     public CONST = ConstService.CONST
     public RULES = ConstService.RULES
+    readonly ButtonType = ButtonType;
     public selectedCards = new FormControl([]);
     public allCards: BehaviorSubject<Card[]> = this.cardService.cards;
     public cardScheme: BehaviorSubject<CardScheme> = this.cardService.cardScheme;

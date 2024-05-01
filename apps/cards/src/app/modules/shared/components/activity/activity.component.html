@@ -88,13 +88,13 @@
                         [small]="true"
                         [label]="(card?.reportedByMe) ? 'Reported' : 'Report'"
                         [icon]="'flag'"
-                        [type]="(card?.reportedByMe) ? 'danger-filled': 'danger'"></app-button>
+                        [type]="(card?.reportedByMe) ? ButtonType.DANGER_FILLED: ButtonType.DANGER"></app-button>
             <app-button (click)="card?.likedByMe || like(card)"
                         [small]="true"
                         [label]="card?.likes?.length || 'Like'"
                         [icon]="'fire'"
                         [fixedWidth]="true"
-                        [type]="card?.likedByMe ? 'danger-filled': 'danger'"></app-button>
+                        [type]="card?.likedByMe ? ButtonType.DANGER_FILLED: ButtonType.DANGER"></app-button>
         </div>
     </div>
 </ng-template>

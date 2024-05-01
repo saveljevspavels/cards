@@ -16,7 +16,7 @@
     --popup-background: #00000066;
     --card-shadow: 2px 5px 7px rgba(0, 0, 0, 0.1);
     --color-disabled: #ddd;
-    --color-text: rgba(15, 15, 49, 1);
+    --color-text: #0F0F31;
     --color-text-lighter: #0F0F3180;
     --color-text-light: rgba(15, 15, 49, 0.5);
     --color-pass: limegreen;
@@ -189,6 +189,11 @@ h5 {
     font-weight: 400;
 }
 
+h6 {
+    font-size: 10px;
+}
+
+
 .color {
     &--tier-0 { color: var(--color-main-0); }
     &--tier-1 { color: var(--color-main-1); }
@@ -296,4 +301,12 @@ h5 {
 
 .mt-1-5 {
     margin-top: 6px;
+}
+
+.mb-0-5 {
+    margin-bottom: 2px;
+}
+
+.mb-1-5 {
+    margin-bottom: 6px;
 }

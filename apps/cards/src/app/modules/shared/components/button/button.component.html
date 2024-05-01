@@ -1,11 +1,11 @@
 <div class="button {{styleClass}}" (click)="click($event)" [ngClass]="{
         'button--disabled': disabled || loading,
-        'button--danger': type === 'danger',
-        'button--danger-filled': type === 'danger-filled',
-        'button--danger-filled-dark': type === 'danger-filled-dark',
-        'button--success': type === 'success',
-        'button--action': type === 'action',
-        'button--filled': type === 'filled',
+        'button--danger': type === ButtonType.DANGER,
+        'button--danger-filled': type === ButtonType.DANGER_FILLED,
+        'button--danger-filled-dark': type === ButtonType.DANGER_FILLED_DARK,
+        'button--success': type === ButtonType.SUCCESS,
+        'button--action': type === ButtonType.ACTION,
+        'button--filled': type === ButtonType.FILLED,
         'button--fixed-width': fixedWidth,
         'button--transparent': transparent,
         'button--small': small

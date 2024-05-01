@@ -11,6 +11,8 @@ export default interface Athlete {
     achievements: string[];
     energy: number;
     fatigue: number;
+    level: number;
+    experience: number;
     coins: number;
     cards: {
         active: string[],
