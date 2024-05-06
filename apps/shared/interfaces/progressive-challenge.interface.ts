@@ -1,10 +1,10 @@
-import {ActivityType} from "../../../definitions/constants";
+import {ActivityType} from "./activity.interface";
 
 export interface ProgressiveChallenge {
     id: string;
     stat: ChallengeStatType;
     targetValue: number;
-    activityType: ActivityType;
+    activityType: ActivityType | null;
     title: string;
     description: string;
     notes: string[];
@@ -20,6 +20,7 @@ export enum ChallengeStatType {
     MOVING_TIME = "MOVING_TIME",
     ELAPSED_TIME = "ELAPSED_TIME",
     COMPLETED_TASKS = "COMPLETED_TASKS",
+    BASIC_TASKS = "BASIC_TASKS",
     HEARTBEATS = "HEARTBEATS",
     ELEVATION_GAIN = "ELEVATION_GAIN",
 }

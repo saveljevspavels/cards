@@ -1,5 +1,5 @@
 import {Component, Input} from '@angular/core';
-import {ActivityType} from "../../../../../../../../definitions/constants";
+import {ActivityType} from "../../../../../../../shared/interfaces/activity.interface";
 
 @Component({
     selector: 'app-challenge-bar',

@@ -400,7 +400,7 @@ export default class CardService {
     async reportCard(athleteId: string, cardId: string, activityId: string, comment: string) {
         const activity = await this.activityService.getActivity(activityId);
         const gameData = activity.gameData;
-        const card: CardSnapshot = gameData.cardSnapshots.find((cardSnapshot: CardSnapshot) => cardSnapshot.id === cardId)
+        const card = gameData.cardSnapshots.find((cardSnapshot: CardSnapshot) => cardSnapshot.id === cardId)
         if(!card) {
             this.logger.info(`Card snapshot ${cardId} does not exist in activity ${activityId}`);
             throw 'Card snapshot does not exist in activity';
@@ -423,7 +423,7 @@ export default class CardService {
     async resolveReport(cardId: string, activityId: string, reportId: string) {
         const activity = await this.activityService.getActivity(activityId);
         const gameData = activity.gameData;
-        const card: CardSnapshot = gameData.cardSnapshots.find((cardSnapshot: CardSnapshot) => cardSnapshot.id === cardId)
+        const card = gameData.cardSnapshots.find((cardSnapshot: CardSnapshot) => cardSnapshot.id === cardId)
         if(!card) {
             this.logger.info(`Card snapshot ${cardId} does not exist in activity ${activityId}`);
             throw 'Card snapshot does not exist in activity';
@@ -449,7 +449,7 @@ export default class CardService {
     async likeCard(athleteId: string, cardId: string, activityId: string) {
         const activity = await this.activityService.getActivity(activityId);
         const gameData = activity.gameData;
-        const card: CardSnapshot = gameData.cardSnapshots.find((cardSnapshot: CardSnapshot) => cardSnapshot.id === cardId)
+        const card = gameData.cardSnapshots.find((cardSnapshot: CardSnapshot) => cardSnapshot.id === cardId)
         if(!card) {
             this.logger.info(`Card snapshot ${cardId} does not exist in activity ${activityId}`);
             throw 'Card snapshot does not exist in activity';
@@ -477,7 +477,7 @@ export default class CardService {
     async rejectCard(cardId: string, activityId: string, comment: string) {
         const activity = await this.activityService.getActivity(activityId);
         const gameData = activity.gameData;
-        const card: CardSnapshot = gameData.cardSnapshots.find((cardSnapshot: CardSnapshot) => cardSnapshot.id === cardId)
+        const card = gameData.cardSnapshots.find((cardSnapshot: CardSnapshot) => cardSnapshot.id === cardId)
         if(!card) {
             this.logger.info(`Card snapshot ${cardId} does not exist in activity ${activityId}`);
             throw 'Card snapshot does not exist in activity';

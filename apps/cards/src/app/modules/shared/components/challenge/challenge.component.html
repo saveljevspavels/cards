@@ -1,24 +1,31 @@
-<div class="box challenge">
-    <div class="d-flex justify-content-between align-items-end">
-        <div class="d-flex align-items-center mb-0-5">
-            <app-activity-type-icon [height]="18" [type]="challenge.activityType"></app-activity-type-icon>
-            <h5>{{challenge.title}}</h5>
+<div class="box challenge full-height">
+    <div class="d-flex flex-column justify-content-between full-height">
+        <div>
+            <div class="d-flex justify-content-between align-items-end">
+                <div class="d-flex align-items-center mb-0-5">
+                    <app-activity-type-icon [height]="18" [type]="challenge.activityType"></app-activity-type-icon>
+                    <h5>{{challenge.title}}</h5>
+                </div>
+                <h6 [ngSwitch]="challenge.stat" class="mt-1 mb-0">
+                    <ng-container *ngSwitchCase="ChallengeStatType.DISTANCE">
+                        {{progressToShow | distance}}/{{challenge.targetValue | distance}}
+                    </ng-container>
+                    <ng-container *ngSwitchCase="ChallengeStatType.ELAPSED_TIME">
+                        {{progressToShow | minutes}}/{{challenge.targetValue | minutes}}
+                    </ng-container>
+                    <ng-container *ngSwitchCase="ChallengeStatType.MOVING_TIME">
+                        {{progressToShow | minutes}}/{{challenge.targetValue | minutes}}
+                    </ng-container>
+                    <ng-container *ngSwitchDefault>
+                        {{progressToShow}}/{{challenge.targetValue}}
+                    </ng-container>
+                </h6>
+            </div>
+            <app-challenge-bar [target]="challenge.targetValue" [activityType]="challenge.activityType" [value]="progressToShow"></app-challenge-bar>
+            <p class="text-small mb-0">{{challenge.description}}</p>
         </div>
-        <h6 [ngSwitch]="challenge.stat" class="mt-1 mb-0">
-            <ng-container *ngSwitchCase="ChallengeStatType.DISTANCE">
-                {{progressToShow | distance}}/{{challenge.targetValue | distance}}
-            </ng-container>
-            <ng-container *ngSwitchCase="ChallengeStatType.ELAPSED_TIME">
-                {{progressToShow | minutes}}/{{challenge.targetValue | minutes}}
-            </ng-container>
-            <ng-container *ngSwitchCase="ChallengeStatType.MOVING_TIME">
-                {{progressToShow | minutes}}/{{challenge.targetValue | minutes}}
-            </ng-container>
-            <ng-container *ngSwitchDefault>
-                {{progressToShow}}/{{challenge.targetValue}}
-            </ng-container>
-        </h6>
+        <div class="d-flex justify-content-end">
+            <app-reward-experience [value]="challenge.rewards.experience"></app-reward-experience>
+        </div>
     </div>
-    <app-challenge-bar [target]="challenge.targetValue" [activityType]="challenge.activityType" [value]="progressToShow"></app-challenge-bar>
-    <p class="text-small mb-0">{{challenge.description}}</p>
 </div>

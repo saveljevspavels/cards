@@ -26,6 +26,7 @@ import { AddCardButtonComponent } from './components/add-card-button/add-card-bu
 import { PointsDisplayComponent } from './components/points-display/points-display.component';
 import { AbilitiesComponent } from './components/abilities/abilities.component';
 import { AbilityComponent } from './components/ability/ability.component';
+import {ActiveChallengesComponent} from "./components/active-challenges/active-challenges.component";
 
 @NgModule({
     declarations: [
@@ -51,7 +52,8 @@ import { AbilityComponent } from './components/ability/ability.component';
         AddCardButtonComponent,
         PointsDisplayComponent,
         AbilitiesComponent,
-        AbilityComponent
+        AbilityComponent,
+        ActiveChallengesComponent
     ],
     imports: [
         CommonModule,

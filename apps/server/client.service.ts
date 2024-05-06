@@ -6,6 +6,7 @@ import {CONST} from "../../definitions/constants";
 import {RULES} from "../../definitions/rules";
 import axios from "axios";
 import {Logger} from "winston";
+import {ActivityStatus} from "../shared/interfaces/activity.interface";
 
 export default class ClientService {
 
@@ -50,7 +51,7 @@ export default class ClientService {
                         this.fireStoreService.deletePendingActivity(activity.id),
                         this.fireStoreService.addDetailedActivity({ ...activity,
                             gameData: {
-                                status: CONST.ACTIVITY_STATUSES.NEW
+                                status: ActivityStatus.NEW
                             }
                         })
                     ])

@@ -10,13 +10,16 @@ import Athlete from "../shared/interfaces/athlete.interface";
 import AthleteService from "./athlete.service";
 import {ConstService} from "../cards/src/app/services/const.service";
 import {UploadedImage} from "../shared/interfaces/image-upload.interface";
+import {ChallengeService} from "./challenge.service";
+import {Activity, ActivityStatus} from "../shared/interfaces/activity.interface";
 
 export default class ActivityService {
     constructor(
         private app: Express,
         private fireStoreService: FirestoreService,
         private logger: Logger,
-        private athleteService: AthleteService
+        private athleteService: AthleteService,
+        private challengeService: ChallengeService,
     ) {
         app.post(`${CONST.API_PREFIX}/submit-activity`, async (req, res) => {
             try {
@@ -26,9 +29,10 @@ export default class ActivityService {
                     req.body.images,
                     req.body.comments
                 )
-                await this.tryAutoApprove(req.body.activityId)
+                // await this.tryAutoApprove(req.body.activityId) // TODO: uncomment before commit
             } catch (err) {
-                res.status(400).send(err);
+                console.log(err);
+                res.status(500).send(err);
             }
             res.status(200).send();
         });
@@ -55,8 +59,8 @@ export default class ActivityService {
         });
     }
 
-    async getActivity(activityId: number | string): Promise<any> {
-        const activity: any = await this.fireStoreService.detailedActivityCollection.get(activityId.toString());
+    async getActivity(activityId: number | string): Promise<Activity> {
+        const activity: Activity = await this.fireStoreService.detailedActivityCollection.get(activityId.toString());
         if(!activity) {
             this.logger.info(`Activity ${activityId} does not exist`);
             throw 'Activity does not exist';
@@ -86,7 +90,7 @@ export default class ActivityService {
         const activity = await this.getActivity(activityId);
         const athlete = await this.athleteService.getAthlete(activity.athlete.id);
 
-        if(activity.gameData.status === CONST.ACTIVITY_STATUSES.APPROVED) {
+        if(activity.gameData.status === ActivityStatus.APPROVED) {
             this.logger.error(`Activity ${activity.id} was already approved for athlete ${activity.athlete.id.toString()}`)
             return;
         }
@@ -96,14 +100,14 @@ export default class ActivityService {
             {
             gameData: {
                 ...activity.gameData,
-                status: CONST.ACTIVITY_STATUSES.APPROVED,
+                status: ActivityStatus.APPROVED,
             }
         })
 
         this.logger.info(`Activity ${activity.id} was approved for athlete ${athlete.firstname} ${athlete.lastname} with cards ${activity.gameData.cardSnapshots.map((card: CardSnapshot) => card.title)}`)
     }
 
-    async updateBaseCard(athlete: Athlete, activity: any, cardSnapshots: CardSnapshot[]) {
+    async updateBaseCard(athlete: Athlete, activity: Activity, cardSnapshots: CardSnapshot[]) {
         const baseWorkout = athlete.baseWorkout;
         const remainderActivity = StaticValidationService.getActivityRemainder(activity, cardSnapshots, baseWorkout);
         return await this.fireStoreService.athleteCollection.update(
@@ -114,7 +118,7 @@ export default class ActivityService {
         )
     }
 
-    async updatePersonalBests(activity: any, cardIds: string[]) {
+    async updatePersonalBests(activity: Activity, cardIds: string[]) {
         if(cardIds.length) {
             const cards = await this.fireStoreService.cardCollection.whereQuery([{ fieldPath: 'id', opStr: 'in', value: cardIds}])
             const baseWorkoutPatch: any = {};
@@ -139,7 +143,7 @@ export default class ActivityService {
     async submitAllActivities(athleteId: string) {
         const activities = await this.fireStoreService.detailedActivityCollection.whereQuery([
             {fieldPath: 'athlete.id', opStr: '==', value: parseInt(athleteId, 10)},
-            {fieldPath: 'gameData.status', opStr: '==', value: CONST.ACTIVITY_STATUSES.NEW},
+            {fieldPath: 'gameData.status', opStr: '==', value: ActivityStatus.NEW},
         ]);
         for(let i = 0; i < activities.length; i++) {
             try {
@@ -161,8 +165,8 @@ export default class ActivityService {
             throw RESPONSES.ERROR.CARD_NOT_ACTIVATED
         }
 
-        if(activity.gameData.status !== CONST.ACTIVITY_STATUSES.NEW
-            && activity.gameData.status !== CONST.ACTIVITY_STATUSES.REJECTED) {
+        if(activity.gameData.status !== ActivityStatus.NEW
+            && activity.gameData.status !== ActivityStatus.REJECTED) {
             this.logger.info(`Athlete ${athlete.firstname} ${athlete.lastname} ${athlete.id} submitted activity ${activityId} with invalid status ${activity.gameData.status}`)
             throw RESPONSES.ERROR.WRONG_ACTIVITY_STATUS
         }
@@ -188,30 +192,33 @@ export default class ActivityService {
             }
         })
 
-        await Promise.all([
-            this.fireStoreService.athleteCollection.update(
-                athlete.id,
-                {
-                    cards: {
-                        ...athlete.cards,
-                        active: athlete.cards.active.filter(cardId => cardIds.indexOf(cardId) === -1),
-                        completed: [...athlete.cards.completed, ...cardIds]
-                    }
-                }
+        await this.challengeService.evaluateChallengeProgress(activity, athlete);
 
-            ),
-            this.fireStoreService.detailedActivityCollection.update(
-                activityId.toString(),
-                {
-                    gameData: {
-                        status: CONST.ACTIVITY_STATUSES.SUBMITTED,
-                        submittedAt: new Date().toISOString(),
-                        cardIds,
-                        cardSnapshots, // Storing card snapshots
-                        comments
-                    }
-                })
-        ])
+        // TODO: uncomment before commit
+        // await Promise.all([
+        //     this.fireStoreService.athleteCollection.update(
+        //         athlete.id,
+        //         {
+        //             cards: {
+        //                 ...athlete.cards,
+        //                 active: athlete.cards.active.filter(cardId => cardIds.indexOf(cardId) === -1),
+        //                 completed: [...athlete.cards.completed, ...cardIds]
+        //             }
+        //         }
+        //
+        //     ),
+        //     this.fireStoreService.detailedActivityCollection.update(
+        //         activityId.toString(),
+        //         {
+        //             gameData: {
+        //                 status: ActivityStatus.SUBMITTED,
+        //                 submittedAt: new Date().toISOString(),
+        //                 cardIds,
+        //                 cardSnapshots, // Storing card snapshots
+        //                 comments
+        //             }
+        //         })
+        // ])
 
         this.logger.info(`Athlete ${athlete.firstname} ${athlete.lastname} ${athlete.id} submitted activity with ${cardIds}`)
     }
@@ -227,7 +234,7 @@ export default class ActivityService {
                     cardIds: [],
                     images: [],
                     comments,
-                    status: CONST.ACTIVITY_STATUSES.NEW,
+                    status: ActivityStatus.NEW,
                 }
             })
         this.logger.info(`Activity ${activity.type} ${activityId} was rejected for athlete ${activity.athlete.id.toString()}`)
@@ -242,7 +249,7 @@ export default class ActivityService {
                     ...activity.gameData,
                     cardSnapshots: [],
                     cardIds: [],
-                    status: CONST.ACTIVITY_STATUSES.DELETED,
+                    status: ActivityStatus.DELETED,
                 }
             })
         this.logger.info(`Activity ${activityId} was deleted for athlete ${activity.athlete.id.toString()}`)

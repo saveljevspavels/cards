@@ -1,13 +1,6 @@
 export const CONST = {
     STRAVA_BASE: "https://www.strava.com",
     API_PREFIX: "/api",
-    ACTIVITY_STATUSES: {
-        NEW: "new",
-        SUBMITTED: "submitted",
-        REJECTED: "rejected",
-        APPROVED: "approved",
-        DELETED: "deleted"
-    },
     COLLECTIONS: {
         PENDING_ACTIVITIES: "pending_activities",
         DETAILED_ACTIVITIES: "detailed_activities",
@@ -22,6 +15,7 @@ export const CONST = {
         SESSIONS: "sessions",
         SCHEME: "scheme",
         CHALLENGES: "challenges",
+        CHALLENGE_PROGRESS: "challenge_progress",
     },
     ACTIVITY_PROPERTIES: {
         DISTANCE: "distance",
@@ -51,9 +45,3 @@ export const CONST = {
     COMMENT_LENGTH: 300,
 }
 
-export enum ActivityType {
-    RUN = "run",
-    RIDE = "ride",
-    WALK = "walk",
-    OTHER = "other",
-}

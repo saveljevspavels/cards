@@ -3,6 +3,7 @@ import {CONST} from "../../../definitions/constants";
 import Card, {CardSnapshot, Validator} from "../interfaces/card.interface";
 import {BaseCardProgress, BaseWorkout} from "../interfaces/athlete.interface";
 import {StaticAthleteHelperService} from "./athlete.helper.service";
+import {Activity} from "../interfaces/activity.interface";
 
 export class StaticValidationService {
 
@@ -26,7 +27,7 @@ export class StaticValidationService {
         return requiredEnergy > availableEnergy;
     }
 
-    static normalizeActivityType(activity: any): string {
+    static normalizeActivityType(activity: Activity): string {
         if(!activity || activity.distance === 0) {
             return CONST.ACTIVITY_TYPES.OTHER;
         }

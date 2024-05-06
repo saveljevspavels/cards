@@ -8,6 +8,7 @@ import {ConstService} from "./const.service";
 import Athlete from "../../../../shared/interfaces/athlete.interface";
 import {AngularFirestore} from "@angular/fire/compat/firestore";
 import {UploadedImage} from "../../../../shared/interfaces/image-upload.interface";
+import {ActivityStatus} from "../../../../shared/interfaces/activity.interface";
 
 @Injectable({
     providedIn: 'root'
@@ -36,7 +37,7 @@ export class ActivityService {
                 (ref: any) => (
                     ref
                         .where('athlete.id', '==', parseInt(me?.id || '', 10))
-                        .where('gameData.status', '==', ConstService.CONST.ACTIVITY_STATUSES.NEW)
+                        .where('gameData.status', '==', ActivityStatus.NEW)
                 )
             ).valueChanges().subscribe((activities: any) => {
                 this.newActivities.next(activities)
@@ -45,7 +46,7 @@ export class ActivityService {
 
         db.collection(
             ConstService.CONST.COLLECTIONS.DETAILED_ACTIVITIES,
-            (ref: any) => ref.where('gameData.status', '==', ConstService.CONST.ACTIVITY_STATUSES.APPROVED)
+            (ref: any) => ref.where('gameData.status', '==', ActivityStatus.APPROVED)
         ).valueChanges().subscribe((activities: any) => {
             this.approvedActivities.next(activities)
         });

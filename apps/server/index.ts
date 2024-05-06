@@ -33,11 +33,11 @@ const clientService = new ClientService(app, fireStoreService, logger);
 const adminService = new AdminService(app, fireStoreService, logger);
 const scoreService = new ScoreService(app, fireStoreService, logger);
 const athleteService = new AthleteService(app, fireStoreService, logger);
-const activityService = new ActivityService(app, fireStoreService, logger, athleteService);
+const challengeService = new ChallengeService(app, fireStoreService, logger);
+const activityService = new ActivityService(app, fireStoreService, logger, athleteService, challengeService);
 const cardService = new CardService(app, fireStoreService, logger, scoreService, athleteService, activityService);
 const imageService = new ImageService(app, fireStoreService);
 const gameService = new GameService(app, fireStoreService, logger, athleteService, scoreService, cardService, activityService);
 const achievementService = new AchievementService(app, fireStoreService);
 const authService = new AuthService(app, fireStoreService, logger, athleteService);
-const challengeService = new ChallengeService(app, fireStoreService, logger);
 

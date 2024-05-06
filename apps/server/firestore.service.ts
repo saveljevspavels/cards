@@ -18,6 +18,8 @@ import CardFactory from "../shared/interfaces/card-factory.interface";
 import {collection, deleteDoc, doc, Firestore, getDoc, getDocs, setDoc, updateDoc, query, where} from "firebase/firestore";
 import CollectionReference = firebase.firestore.CollectionReference;
 import {ProgressiveChallenge} from "../shared/interfaces/progressive-challenge.interface";
+import {ChallengeProgress} from "../shared/classes/challenge-progress";
+import {JsonObjectInterface} from "../shared/interfaces/json-object.interface";
 
 export class FirestoreService {
     logger: Logger;
@@ -37,6 +39,7 @@ export class FirestoreService {
     public sessionCollection: DataCollection<any>;
     public schemeCollection: DataCollection<any>;
     public challengeCollection: DataCollection<ProgressiveChallenge>;
+    public challengeProgressCollection: DataCollection<ChallengeProgress>;
 
     constructor(logger: Logger) {
         this.logger = logger;
@@ -66,6 +69,7 @@ export class FirestoreService {
         this.sessionCollection = new DataCollection<any>(this.db, CONST.COLLECTIONS.SESSIONS);
         this.schemeCollection = new DataCollection<any>(this.db, CONST.COLLECTIONS.SCHEME);
         this.challengeCollection = new DataCollection<any>(this.db, CONST.COLLECTIONS.CHALLENGES);
+        this.challengeProgressCollection = new DataCollection<any>(this.db, CONST.COLLECTIONS.CHALLENGE_PROGRESS);
     }
 
     errorHandlerWrap(methodName: string, method: any) {
@@ -254,7 +258,11 @@ export class DataCollection<T> {
     }
 
     async set(documentName: string, value: T): Promise<void> {
-        return await setDoc(doc(this._collection, documentName), value as unknown as { [field: string]: T });
+        let valueToSet: any = value;
+        if((value as JsonObjectInterface).toJSONObject()) {
+            valueToSet = (value as JsonObjectInterface).toJSONObject();
+        }
+        return await setDoc(doc(this._collection, documentName), valueToSet as unknown as { [field: string]: T });
     }
 
     async update(documentName: string, value: any): Promise<void> {

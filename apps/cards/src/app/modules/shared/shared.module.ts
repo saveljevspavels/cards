@@ -58,6 +58,7 @@ import { LinkComponent } from './components/link/link.component';
 import {ProgressBarComponent} from "./components/progress-bar/progress-bar.component";
 import {ChallengeComponent} from "./components/challenge/challenge.component";
 import {ChallengeBarComponent} from "./components/challenge/challenge-bar.component";
+import {RewardExperienceComponent} from "./components/reward-experience/reward-experience.component";
 
 const COMPS = [
     InputComponent,
@@ -90,6 +91,7 @@ const COMPS = [
     ProgressBarComponent,
     ChallengeComponent,
     ChallengeBarComponent,
+    RewardExperienceComponent
 ]
 
 const MODULES = [
