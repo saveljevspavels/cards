@@ -1,4 +1,4 @@
-import {Component, Input, OnChanges, SimpleChanges} from '@angular/core';
+import {Component, EventEmitter, Input, OnChanges, Output, SimpleChanges} from '@angular/core';
 import {
     ChallengeStatType,
     ProgressiveChallenge
@@ -14,12 +14,19 @@ export class ChallengeComponent implements OnChanges {
 
     @Input() currentProgress: number;
     @Input() challenge: ProgressiveChallenge;
+    @Output() finishChallenge = new EventEmitter<void>();
+    public completed: boolean;
 
     public progressToShow: number;
 
     ngOnChanges(changes: SimpleChanges) {
         if(changes.currentProgress) {
             this.progressToShow = Math.min(this.currentProgress, this.challenge.targetValue);
+            this.completed = this.currentProgress >= this.challenge.targetValue;
         }
+    }
+
+    finish(): void {
+        this.finishChallenge.emit();
     }
 }

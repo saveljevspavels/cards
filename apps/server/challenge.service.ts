@@ -27,6 +27,26 @@ export class ChallengeService {
                 res.status(500).send({});
             }
         });
+
+        app.post(`${CONST.API_PREFIX}/challenges/finish`, async (req, res) => {
+            const token = res.get('accessToken');
+            const athleteId = res.get('athleteId');
+            if(!token) {
+                return;
+            }
+            if(!req.body.challengeId || !athleteId) {
+                res.status(400).send('Challenge Id or Athlete Id missing');
+                return;
+            }
+
+            try {
+                await this.finishChallenge(athleteId, req.body.challengeId)
+                res.status(200).send({});
+            } catch (err) {
+                this.logger.error(`Error finishing a challenge ${err}`);
+                res.status(500).send({});
+            }
+        });
     }
 
     async createChallenge(challenge: ProgressiveChallenge) {
@@ -35,6 +55,40 @@ export class ChallengeService {
             challenge
         );
         this.logger.info(`New challenge created: ${challenge.title}`);
+    }
+
+    async finishChallenge(athleteId: string, challengeId: string) {
+        const [challenge, progress, athlete]: [ProgressiveChallenge | null, ChallengeProgress | null, Athlete | null] = await Promise.all([
+            this.fireStoreService.challengeCollection.get(challengeId),
+            this.fireStoreService.challengeProgressCollection.get(athleteId),
+            this.fireStoreService.athleteCollection.get(athleteId)
+        ]);
+        if(!challenge || !athlete || !progress) {
+            this.logger.error(`Challenge ${challengeId} does not exist`);
+            throw `Challenge ${challengeId} does not exist`;
+        }
+        if(!progress.challengeValues[challengeId]) {
+            this.logger.error(`Challenge ${challengeId} is not in progress`);
+            throw `Challenge ${challengeId} is not in progress`;
+        }
+        if(progress.finishedChallenges.indexOf(challengeId) !== -1) {
+            this.logger.error(`Challenge ${challengeId} is already finished`);
+            throw `Challenge ${challengeId} is already finished`;
+        }
+        if(progress.completedChallenges.indexOf(challengeId) === -1 || progress.challengeValues[challengeId] < challenge.targetValue) {
+            this.logger.error(`Challenge ${challengeId} is not completed yet`);
+            throw `Challenge ${challengeId} is not completed yet`;
+        }
+        progress.finishedChallenges.push(challengeId);
+        await Promise.all([
+            this.fireStoreService.challengeProgressCollection.update(athleteId, {
+                finishedChallenges: [...progress.finishedChallenges, challengeId]
+            }),
+            this.fireStoreService.athleteCollection.update(athleteId, {
+                experience: parseInt(String(athlete.experience || 0), 10) + parseInt(String(challenge.rewards.experience), 10)
+            })
+        ]);
+        this.logger.info(`Challenge ${challengeId} finished by ${athleteId}`);
     }
 
     async getAllChallenges(): Promise<ProgressiveChallenge[]> {
@@ -47,6 +101,9 @@ export class ChallengeService {
         const challenges = await this.getActiveChallenges(progress);
         challenges.forEach(challenge => {
             this.progressChallenge(activity, challenge, progress);
+        });
+        challenges.forEach(challenge => {
+            this.completeApplicableChallenge(challenge, progress);
         });
         await this.fireStoreService.challengeProgressCollection.set(athlete.id, progress);
     }
@@ -77,6 +134,14 @@ export class ChallengeService {
                 break;
         }
 
+        return progress;
+    }
+
+    completeApplicableChallenge(challenge: ProgressiveChallenge, progress: ChallengeProgress): ChallengeProgress {
+        const currentValue = progress.challengeValues[challenge.id] || 0;
+        if(currentValue >= challenge.targetValue) {
+            progress.completeChallenge(challenge.id);
+        }
         return progress;
     }
 

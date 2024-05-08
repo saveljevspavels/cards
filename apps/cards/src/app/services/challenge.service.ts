@@ -47,11 +47,15 @@ export class ChallengeService {
         }))
     }
 
-
+    finishChallenge(challengeId: String) {
+        return this.http.post(`${environment.baseBE}/challenges/finish`, {
+            challengeId
+        })
+    }
 
     createChallenge(challenge: ProgressiveChallenge) {
         return this.http.post(`${environment.baseBE}/challenges/create`, {
             challenge
-        })
+        });
     }
 }

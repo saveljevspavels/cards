@@ -21,9 +21,12 @@ export class ActiveChallengesComponent {
             this.challengeService.myProgress$
         ]).subscribe(([challenges, progress]) => {
             this.activeChallenges = challenges
-                .filter(challenge => (progress?.finishedChallenges || []).indexOf(challenge.id) === -1)
-                .filter(challenge => (progress?.completedChallenges || []).indexOf(challenge.id) === -1);
+                .filter(challenge => (progress?.finishedChallenges || []).indexOf(challenge.id) === -1);
             this.challengeValues = progress.challengeValues || {};
         });
+    }
+
+    finishChallenge(challengeId: String): void {
+        this.challengeService.finishChallenge(challengeId).subscribe(() => {});
     }
 }

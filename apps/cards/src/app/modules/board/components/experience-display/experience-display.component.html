@@ -1,0 +1,8 @@
+<div class="box d-flex flex-column align-items-center full-height">
+    <div class="d-flex full-width justify-content-center mt-1 mb-2">
+        <app-svg [icon]="'experience'" [height]="32" [width]="34" [styleClass]="'color-primary'"></app-svg>
+    </div>
+    <span class="full-width justify-content-center d-flex">Your experience:</span>
+    <span class="text-bold title mt-1">{{(athlete$ | async)?.experience || 0}}</span>
+    <p class="text-small light m-0 text-center">Gain experience to get new rewards</p>
+</div>

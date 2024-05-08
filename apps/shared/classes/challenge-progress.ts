@@ -18,7 +18,7 @@ export class ChallengeProgress implements IChallengeProgress, JsonObjectInterfac
         return new ChallengeProgress(json['athleteId'], json['completedChallenges'], json['finishedChallenges'], json['challengeValues']);
     }
 
-    progressChallenge(challengeId: string, value: number) {
+    progressChallenge(challengeId: string, value: number): void {
         if(value <= 0) {
             return;
         }
@@ -26,6 +26,12 @@ export class ChallengeProgress implements IChallengeProgress, JsonObjectInterfac
             this.challengeValues[challengeId] = 0;
         }
         this.challengeValues[challengeId] += value;
+    }
+
+    completeChallenge(challengeId: string): void {
+        if(this.challengeValues[challengeId] && this.completedChallenges.indexOf(challengeId) === -1) {
+            this.completedChallenges.push(challengeId);
+        }
     }
 
     toString(): string {

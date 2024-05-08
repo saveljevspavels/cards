@@ -27,6 +27,7 @@ import { PointsDisplayComponent } from './components/points-display/points-displ
 import { AbilitiesComponent } from './components/abilities/abilities.component';
 import { AbilityComponent } from './components/ability/ability.component';
 import {ActiveChallengesComponent} from "./components/active-challenges/active-challenges.component";
+import {ExperienceDisplayComponent} from "./components/experience-display/experience-display.component";
 
 @NgModule({
     declarations: [
@@ -53,7 +54,8 @@ import {ActiveChallengesComponent} from "./components/active-challenges/active-c
         PointsDisplayComponent,
         AbilitiesComponent,
         AbilityComponent,
-        ActiveChallengesComponent
+        ActiveChallengesComponent,
+        ExperienceDisplayComponent
     ],
     imports: [
         CommonModule,

@@ -1,4 +1,4 @@
-<div class="box challenge full-height">
+<div class="box challenge full-height {{completed || 'challenge--completed'}}">
     <div class="d-flex flex-column justify-content-between full-height">
         <div>
             <div class="d-flex justify-content-between align-items-end">
@@ -24,8 +24,24 @@
             <app-challenge-bar [target]="challenge.targetValue" [activityType]="challenge.activityType" [value]="progressToShow"></app-challenge-bar>
             <p class="text-small mb-0">{{challenge.description}}</p>
         </div>
-        <div class="d-flex justify-content-end">
+        <div class="d-flex {{completed ? 'justify-content-between' : 'justify-content-end'}}" *ngIf="!completed; else completedTemplate">
             <app-reward-experience [value]="challenge.rewards.experience"></app-reward-experience>
         </div>
+        <ng-template #completedTemplate>
+            <div class="d-flex justify-content-center mt-1">
+                <app-button (buttonClick)="finish()"
+                            type="action"
+                            styleClass="full-width"
+                            label="Claim Reward"
+                            [small]="true">
+                    <div class="text-small ml-1 d-flex justify-content-center" *ngIf="challenge.rewards.experience > 0">
+                        {{challenge.rewards.experience}}
+                        <div class="pl-1">
+                            <app-svg [height]="12" [icon]="'experience'" styleClass="color-background"></app-svg>
+                        </div>
+                    </div>
+                </app-button>
+            </div>
+        </ng-template>
     </div>
 </div>
