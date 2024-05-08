@@ -79,7 +79,6 @@ export class ChallengeService {
             this.logger.error(`Challenge ${challengeId} is not completed yet`);
             throw `Challenge ${challengeId} is not completed yet`;
         }
-        progress.finishedChallenges.push(challengeId);
         await Promise.all([
             this.fireStoreService.challengeProgressCollection.update(athleteId, {
                 finishedChallenges: [...progress.finishedChallenges, challengeId]

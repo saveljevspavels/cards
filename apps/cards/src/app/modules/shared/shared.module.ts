@@ -59,6 +59,7 @@ import {ProgressBarComponent} from "./components/progress-bar/progress-bar.compo
 import {ChallengeComponent} from "./components/challenge/challenge.component";
 import {ChallengeBarComponent} from "./components/challenge/challenge-bar.component";
 import {RewardExperienceComponent} from "./components/reward-experience/reward-experience.component";
+import {NumberTransitionComponent} from "./components/number-transition/number-transition.component";
 
 const COMPS = [
     InputComponent,
@@ -124,7 +125,8 @@ const MODULES = [
         CommentComponent,
         StravaPoweredComponent,
         StravaLinkComponent,
-        LinkComponent
+        LinkComponent,
+        NumberTransitionComponent
     ],
     imports: [
         CommonModule,
@@ -148,6 +150,7 @@ const MODULES = [
         CardPlaceholderComponent,
         ImageComponent,
         StravaPoweredComponent,
+        NumberTransitionComponent,
     ],
 })
 export class SharedModule { }

@@ -3,6 +3,8 @@
         <app-svg [icon]="'experience'" [height]="32" [width]="34" [styleClass]="'color-primary'"></app-svg>
     </div>
     <span class="full-width justify-content-center d-flex">Your experience:</span>
-    <span class="text-bold title mt-1">{{(athlete$ | async)?.experience || 0}}</span>
+    <span class="text-bold title mt-1">
+        <app-number-transition [value]="(athlete$ | async)?.experience || 0"></app-number-transition>
+    </span>
     <p class="text-small light m-0 text-center">Gain experience to get new rewards</p>
 </div>

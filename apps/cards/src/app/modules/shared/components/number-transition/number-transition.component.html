@@ -1,0 +1,14 @@
+<ng-container [ngSwitch]="pipeType">
+    <ng-container *ngSwitchCase="'distance'">
+        {{displayValue | distance}}
+    </ng-container>
+    <ng-container *ngSwitchCase="'minutes'">
+        {{displayValue | minutes}}
+    </ng-container>
+    <ng-container *ngSwitchCase="'percent'">
+        {{displayValue | percent}}
+    </ng-container>
+    <ng-container *ngSwitchDefault>
+        {{displayValue}}
+    </ng-container>
+</ng-container>
