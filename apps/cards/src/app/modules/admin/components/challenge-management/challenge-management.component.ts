@@ -40,7 +40,7 @@ export class ChallengeManagementComponent implements OnInit {
             id: [challengeToEdit?.id || generateId()],
             targetValue: [challengeToEdit?.targetValue || 0],
             title: [challengeToEdit?.title || '', [Validators.required]],
-            activityType: [challengeToEdit?.activityType || null, [Validators.required]],
+            activityType: [challengeToEdit?.activityType || null],
             description: [challengeToEdit?.description || '', [Validators.required]],
             notes: [challengeToEdit?.notes || ['']],
             stat: [challengeToEdit?.stat || ChallengeStatType.DISTANCE, [Validators.required]],

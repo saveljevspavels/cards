@@ -7,6 +7,7 @@ import Athlete from "../shared/interfaces/athlete.interface";
 import {Activity} from "../shared/interfaces/activity.interface";
 import {ChallengeProgress} from "../shared/classes/challenge-progress";
 import {StaticValidationService} from "../shared/services/validation.service";
+import {RULES} from "../../definitions/rules";
 
 export class ChallengeService {
     constructor(
@@ -149,6 +150,7 @@ export class ChallengeService {
         return (await this.getAllChallenges())
             .filter(challenge => game ? game.activeChallenges.indexOf(challenge.id) !== -1 : false) // Filter out inactive challenges
             .filter(challenge => progress ? progress.finishedChallenges.indexOf(challenge.id) === -1 : true) // Filter out finished challenges
-            .filter(challenge => progress ? progress.completedChallenges.indexOf(challenge.id) === -1 : true); // Filter out completed challenges;
+            .filter(challenge => progress ? progress.completedChallenges.indexOf(challenge.id) === -1 : true) // Filter out completed challenges;
+            .splice(0, RULES.PROGRESSIVE_CHALLENGE.MAX_ACTIVE); // Limit the number of active challenges
     }
 }

@@ -258,9 +258,11 @@ export class DataCollection<T> {
     }
 
     async set(documentName: string, value: T): Promise<void> {
-        let valueToSet: any = value;
-        if((value as JsonObjectInterface).toJSONObject()) {
+        let valueToSet: any;
+        try {
             valueToSet = (value as JsonObjectInterface).toJSONObject();
+        } catch (e) {
+            valueToSet = value;
         }
         return await setDoc(doc(this._collection, documentName), valueToSet as unknown as { [field: string]: T });
     }
