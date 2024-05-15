@@ -17,7 +17,7 @@ export class EnergyLineComponent implements OnInit {
 
     ngOnInit(): void {
         this.athlete$.subscribe((athlete) => {
-            this.currentEnergy = athlete?.energy || 0;
+            this.currentEnergy = athlete?.currencies.energy || 0;
         })
     }
 }

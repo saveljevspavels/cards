@@ -4,7 +4,7 @@ import {filter, map, pairwise} from "rxjs/operators";
 import {HttpClient} from "@angular/common/http";
 import {environment} from "../../environments/environment";
 import {ConstService} from "./const.service";
-import Athlete from "../../../../shared/interfaces/athlete.interface";
+import Athlete from "../../../../shared/classes/athlete.class";
 import {PERMISSIONS} from "../constants/permissions";
 import {Router} from "@angular/router";
 import {AngularFirestore, AngularFirestoreCollection} from "@angular/fire/compat/firestore";

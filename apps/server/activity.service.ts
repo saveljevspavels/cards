@@ -6,7 +6,7 @@ import {RULES} from "../../definitions/rules";
 import {Logger} from "winston";
 import {StaticValidationService} from "../shared/services/validation.service";
 import Card, {CardSnapshot, NullCard} from "../shared/interfaces/card.interface";
-import Athlete from "../shared/interfaces/athlete.interface";
+import Athlete from "../shared/classes/athlete.class";
 import AthleteService from "./athlete.service";
 import {ConstService} from "../cards/src/app/services/const.service";
 import {UploadedImage} from "../shared/interfaces/image-upload.interface";

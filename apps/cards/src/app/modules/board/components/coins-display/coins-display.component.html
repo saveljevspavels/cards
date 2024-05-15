@@ -4,7 +4,7 @@
     </div>
     <span class="full-width justify-content-center d-flex">Your money:</span>
     <span class="text-bold title mt-1">
-        <app-number-transition [value]="(athlete$ | async)?.coins || 0"></app-number-transition>
+        <app-number-transition [value]="(athlete$ | async)?.currencies.coins || 0"></app-number-transition>
     </span>
     <p class="text-small light m-0 text-center">Use your savings to unlock new tasks</p>
 </div>

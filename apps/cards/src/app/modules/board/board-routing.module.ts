@@ -12,6 +12,7 @@ import {BoardParentComponent} from "./components/board-parent/board-parent.compo
 import {SubmittingActivityComponent} from "./components/submitting-activity/submitting-activity.component";
 import {CardBoardComponent} from "./components/card-board/card-board.component";
 import {LeaderboardGuard} from "../../guards/leaderboard.guard";
+import {LevelOverviewComponent} from "./components/level-overview/level-overview.component";
 
 const routes: Routes = [
     {
@@ -38,6 +39,10 @@ const routes: Routes = [
             {
                 path: 'activity-list',
                 component: ActivityListComponent
+            },
+            {
+                path: 'level-overview',
+                component: LevelOverviewComponent
             },
             {
                 path: 'leaderboard',

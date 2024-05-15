@@ -5,6 +5,7 @@ import Score from "../../../../../../../shared/interfaces/score.interface";
 import {AthleteService} from "../../../../services/athlete.service";
 import {combineLatest} from "rxjs";
 import {PERMISSIONS} from "../../../../constants/permissions";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-points-display',
@@ -22,7 +23,8 @@ export class PointsDisplayComponent implements OnInit {
 
   constructor(
       private scoreService: ScoreService,
-      private athleteService: AthleteService
+      private athleteService: AthleteService,
+      private router: Router
   ) { }
 
   ngOnInit(): void {
@@ -49,4 +51,7 @@ export class PointsDisplayComponent implements OnInit {
     }
   }
 
+  goToLeaderboard() {
+    this.router.navigateByUrl('board/leaderboard');
+  }
 }

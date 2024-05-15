@@ -60,6 +60,7 @@ import {ChallengeComponent} from "./components/challenge/challenge.component";
 import {ChallengeBarComponent} from "./components/challenge/challenge-bar.component";
 import {RewardExperienceComponent} from "./components/reward-experience/reward-experience.component";
 import {NumberTransitionComponent} from "./components/number-transition/number-transition.component";
+import {LevelComponent} from "./components/level/level.component";
 
 const COMPS = [
     InputComponent,
@@ -92,7 +93,8 @@ const COMPS = [
     ProgressBarComponent,
     ChallengeComponent,
     ChallengeBarComponent,
-    RewardExperienceComponent
+    RewardExperienceComponent,
+    LevelComponent
 ]
 
 const MODULES = [

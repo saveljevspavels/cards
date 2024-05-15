@@ -5,7 +5,7 @@ import {debounceTime, distinctUntilChanged, filter} from "rxjs/operators";
 import {environment} from "../../environments/environment";
 import {AthleteService} from "./athlete.service";
 import {ConstService} from "./const.service";
-import Athlete from "../../../../shared/interfaces/athlete.interface";
+import Athlete from "../../../../shared/classes/athlete.class";
 import {AngularFirestore} from "@angular/fire/compat/firestore";
 import {UploadedImage} from "../../../../shared/interfaces/image-upload.interface";
 import {ActivityStatus} from "../../../../shared/interfaces/activity.interface";

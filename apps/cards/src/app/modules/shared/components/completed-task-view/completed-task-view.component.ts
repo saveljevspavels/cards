@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {AthleteService} from "../../../../services/athlete.service";
 import {Observable} from "rxjs";
-import Athlete from "../../../../../../../shared/interfaces/athlete.interface";
+import Athlete from "../../../../../../../shared/classes/athlete.class";
 
 @Component({
   selector: 'app-completed-task-view',

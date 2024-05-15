@@ -4,18 +4,18 @@ import {JsonObjectInterface} from "../interfaces/json-object.interface";
 export class ChallengeProgress implements IChallengeProgress, JsonObjectInterface {
     athleteId: string;
     completedChallenges: string[];
-    finishedChallenges: string[];
+    claimedChallenges: string[];
     challengeValues: {[key: string]: number};
 
-    constructor(athleteId: string, completedChallenges: string[] = [], finishedChallenges: string[] = [], values: {[key: string]: number} = {}) {
+    constructor(athleteId: string, completedChallenges: string[] = [], claimedChallenges: string[] = [], values: {[key: string]: number} = {}) {
         this.athleteId = athleteId;
         this.completedChallenges = completedChallenges;
-        this.finishedChallenges = finishedChallenges;
+        this.claimedChallenges = claimedChallenges;
         this.challengeValues = values;
     }
 
     static fromJSONObject(json: any): ChallengeProgress {
-        return new ChallengeProgress(json['athleteId'], json['completedChallenges'], json['finishedChallenges'], json['challengeValues']);
+        return new ChallengeProgress(json['athleteId'], json['completedChallenges'], json['claimedChallenges'], json['challengeValues']);
     }
 
     progressChallenge(challengeId: string, value: number): void {
@@ -35,14 +35,14 @@ export class ChallengeProgress implements IChallengeProgress, JsonObjectInterfac
     }
 
     toString(): string {
-        return `Progress for ${this.athleteId}: ${this.completedChallenges.length} completed, ${this.finishedChallenges.length} finished, ${Object.keys(this.challengeValues).length} values`;
+        return `Progress for ${this.athleteId}: ${this.completedChallenges.length} completed, ${this.claimedChallenges.length} claimed, ${Object.keys(this.challengeValues).length} values`;
     }
 
     toJSONObject(): object {
         return {
             athleteId: this.athleteId,
             completedChallenges: this.completedChallenges,
-            finishedChallenges: this.finishedChallenges,
+            claimedChallenges: this.claimedChallenges,
             challengeValues: this.challengeValues
         }
     }

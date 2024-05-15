@@ -10,7 +10,7 @@ import 'firebase/compat/firestore';
 import {Logger} from "winston";
 import {CONST} from "../../definitions/constants";
 import Card from "../shared/interfaces/card.interface";
-import Athlete from "../shared/interfaces/athlete.interface";
+import Athlete from "../shared/classes/athlete.class";
 import WhereFilterOp = firebase.firestore.WhereFilterOp;
 import Score from "../shared/interfaces/score.interface";
 import Game from "../cards/src/app/interfaces/game";
@@ -268,7 +268,13 @@ export class DataCollection<T> {
     }
 
     async update(documentName: string, value: any): Promise<void> {
-        return await updateDoc(doc(this._collection, documentName), value);
+        let valueToSet: any;
+        try {
+            valueToSet = (value as JsonObjectInterface).toJSONObject();
+        } catch (e) {
+            valueToSet = value;
+        }
+        return await updateDoc(doc(this._collection, documentName), valueToSet);
     }
 
     async delete(documentName: string): Promise<void> {

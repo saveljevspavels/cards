@@ -14,7 +14,7 @@ export class ChallengeComponent implements OnChanges {
 
     @Input() currentProgress: number;
     @Input() challenge: ProgressiveChallenge;
-    @Output() finishChallenge = new EventEmitter<void>();
+    @Output() claimChallenge = new EventEmitter<void>();
     public completed: boolean;
 
     public progressToShow: number;
@@ -26,7 +26,7 @@ export class ChallengeComponent implements OnChanges {
         }
     }
 
-    finish(): void {
-        this.finishChallenge.emit();
+    claim(): void {
+        this.claimChallenge.emit();
     }
 }

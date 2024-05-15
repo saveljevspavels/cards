@@ -11,6 +11,6 @@ export class AthleteHelperService {
     }
 
     getCardActivationCost(): any {
-        return StaticAthleteHelperService.getCardActivationCost(this.athleteService.me.value?.fatigue || 0);
+        return StaticAthleteHelperService.getCardActivationCost(this.athleteService.me.value?.currencies.fatigue || 0);
     }
 }

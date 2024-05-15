@@ -47,8 +47,14 @@ export class ChallengeService {
         }))
     }
 
-    finishChallenge(challengeId: String) {
-        return this.http.post(`${environment.baseBE}/challenges/finish`, {
+    claimLevelReward(levelIndex: number) {
+        return this.http.post(`${environment.baseBE}/challenges/level/claim`, {
+            levelIndex
+        })
+    }
+
+    claimChallenge(challengeId: String) {
+        return this.http.post(`${environment.baseBE}/challenges/claim`, {
             challengeId
         })
     }

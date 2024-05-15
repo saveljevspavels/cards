@@ -3,7 +3,7 @@ import {Ability, AbilityKey} from "../../../../../../../shared/interfaces/abilit
 import {AthleteService} from "../../../../services/athlete.service";
 import {GameService} from "../../../../services/game.service";
 import {PopupService} from "../../../../services/popup.service";
-import Athlete from "../../../../../../../shared/interfaces/athlete.interface";
+import Athlete from "../../../../../../../shared/classes/athlete.class";
 import {ButtonType} from "../../../shared/components/button/button.component";
 
 @Component({

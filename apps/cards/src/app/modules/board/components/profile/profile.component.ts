@@ -8,7 +8,7 @@ import {Achievement} from "../../../../interfaces/achievement";
 import {Observable} from "rxjs";
 import {ActivityService} from "../../../../services/activity.service";
 import {map} from "rxjs/operators";
-import Athlete from "../../../../../../../shared/interfaces/athlete.interface";
+import Athlete from "../../../../../../../shared/classes/athlete.class";
 
 @Component({
   selector: 'app-profile',

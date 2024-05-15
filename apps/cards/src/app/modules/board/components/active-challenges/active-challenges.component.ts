@@ -22,13 +22,13 @@ export class ActiveChallengesComponent {
             this.challengeService.myProgress$
         ]).subscribe(([challenges, progress]) => {
             this.activeChallenges = challenges
-                .filter(challenge => (progress?.finishedChallenges || []).indexOf(challenge.id) === -1)
+                .filter(challenge => (progress?.claimedChallenges || []).indexOf(challenge.id) === -1)
                 .splice(0, RULES.PROGRESSIVE_CHALLENGE.MAX_ACTIVE);
             this.challengeValues = progress.challengeValues || {};
         });
     }
 
-    finishChallenge(challengeId: String): void {
-        this.challengeService.finishChallenge(challengeId).subscribe(() => {});
+    claimChallenge(challengeId: String): void {
+        this.challengeService.claimChallenge(challengeId).subscribe(() => {});
     }
 }

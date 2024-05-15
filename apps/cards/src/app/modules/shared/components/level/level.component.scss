@@ -1,0 +1,18 @@
+@import "./apps/cards/src/styles";
+
+.level {
+    height: 100px;
+    &--claimed {
+        .level__content {
+            opacity: 0.5;
+        }
+    }
+    .challenge-bar.challenge-bar--vertical{
+        height: 120px !important;
+        box-sizing: border-box;
+        margin-top: -20px;
+        border-radius: 0;
+        border-top: 0;
+        border-bottom: 0;
+    }
+}

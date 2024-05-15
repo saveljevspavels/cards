@@ -15,7 +15,7 @@
                     [styleClass]="'mt-1-5 w-90'"
                     [loading]="loading"
                     (buttonClick)="openConfirmation()"
-                    [disabled]="ability.coinsCost ? athlete.coins < ability.coinsCost : ability.energyCost ? athlete.energy < ability.energyCost : false"
+                    [disabled]="ability.coinsCost ? athlete?.currencies.coins < ability.coinsCost : ability.energyCost ? athlete?.currencies.energy < ability.energyCost : false"
         >
             <ng-container [ngTemplateOutlet]="price"></ng-container>
         </app-button>

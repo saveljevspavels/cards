@@ -3,17 +3,22 @@ import {FirestoreService} from "./firestore.service";
 import {Logger} from "winston";
 import {CONST} from "../../definitions/constants";
 import {ChallengeStatType, ProgressiveChallenge} from "../shared/interfaces/progressive-challenge.interface";
-import Athlete from "../shared/interfaces/athlete.interface";
+import Athlete from "../shared/classes/athlete.class";
 import {Activity} from "../shared/interfaces/activity.interface";
 import {ChallengeProgress} from "../shared/classes/challenge-progress";
 import {StaticValidationService} from "../shared/services/validation.service";
 import {RULES} from "../../definitions/rules";
+import AthleteService from "./athlete.service";
+import {LEVEL_REWARDS} from "../../definitions/level_rewards";
+import ScoreService from "./score.service";
 
 export class ChallengeService {
     constructor(
         private app: Express,
         private fireStoreService: FirestoreService,
-        private logger: Logger
+        private logger: Logger,
+        private athleteService: AthleteService,
+        private scoreService: ScoreService
     ) {
         app.post(`${CONST.API_PREFIX}/challenges/create`,async (req, res) => {
             const token = res.get('accessToken');
@@ -29,7 +34,7 @@ export class ChallengeService {
             }
         });
 
-        app.post(`${CONST.API_PREFIX}/challenges/finish`, async (req, res) => {
+        app.post(`${CONST.API_PREFIX}/challenges/claim`, async (req, res) => {
             const token = res.get('accessToken');
             const athleteId = res.get('athleteId');
             if(!token) {
@@ -41,10 +46,30 @@ export class ChallengeService {
             }
 
             try {
-                await this.finishChallenge(athleteId, req.body.challengeId)
+                await this.claimChallenge(athleteId, req.body.challengeId)
                 res.status(200).send({});
             } catch (err) {
-                this.logger.error(`Error finishing a challenge ${err}`);
+                this.logger.error(`Error claiming a challenge ${err}`);
+                res.status(500).send({});
+            }
+        });
+
+        app.post(`${CONST.API_PREFIX}/challenges/level/claim`, async (req, res) => {
+            const token = res.get('accessToken');
+            const athleteId = res.get('athleteId');
+            if(!token) {
+                return;
+            }
+            if((!req.body.levelIndex && req.body.levelIndex !== 0) || !athleteId) {
+                res.status(400).send('Level Index or Athlete Id missing');
+                return;
+            }
+
+            try {
+                await this.claimLevelReward(athleteId, req.body.levelIndex)
+                res.status(200).send({});
+            } catch (err) {
+                this.logger.error(`Error claiming a level reward ${err}`);
                 res.status(500).send({});
             }
         });
@@ -58,7 +83,27 @@ export class ChallengeService {
         this.logger.info(`New challenge created: ${challenge.title}`);
     }
 
-    async finishChallenge(athleteId: string, challengeId: string) {
+    async claimLevelReward(athleteId: string, levelIndex: number) {
+        const athlete: Athlete = await this.athleteService.getAthlete(athleteId);
+        if(athlete?.level < levelIndex + 1) {
+            this.logger.error(`Athlete ${athleteId} is not on level ${levelIndex}`);
+            throw `Athlete ${athleteId} is not on level ${levelIndex} yet`;
+        }
+        if(athlete?.claimedLevelRewards?.indexOf(levelIndex) > -1) {
+            this.logger.error(`Athlete ${athleteId} has already claimed level ${levelIndex}`);
+            throw `Athlete ${athleteId} has already claimed level ${levelIndex}`;
+        }
+
+
+        athlete.claimLevelRewards(levelIndex);
+        await Promise.all([
+            LEVEL_REWARDS[levelIndex].points ? this.scoreService.addPoints(athleteId, LEVEL_REWARDS[levelIndex].points) : Promise.resolve(),
+            this.athleteService.updateAthlete(athlete)
+        ]);
+        this.logger.info(`Level ${levelIndex} rewards ${LEVEL_REWARDS[levelIndex]} claimed by ${athlete.name}`);
+    }
+
+    async claimChallenge(athleteId: string, challengeId: string) {
         const [challenge, progress, athlete]: [ProgressiveChallenge | null, ChallengeProgress | null, Athlete | null] = await Promise.all([
             this.fireStoreService.challengeCollection.get(challengeId),
             this.fireStoreService.challengeProgressCollection.get(athleteId),
@@ -72,9 +117,9 @@ export class ChallengeService {
             this.logger.error(`Challenge ${challengeId} is not in progress`);
             throw `Challenge ${challengeId} is not in progress`;
         }
-        if(progress.finishedChallenges.indexOf(challengeId) !== -1) {
-            this.logger.error(`Challenge ${challengeId} is already finished`);
-            throw `Challenge ${challengeId} is already finished`;
+        if(progress.claimedChallenges.indexOf(challengeId) !== -1) {
+            this.logger.error(`Challenge ${challengeId} is already claimed`);
+            throw `Challenge ${challengeId} is already claimed`;
         }
         if(progress.completedChallenges.indexOf(challengeId) === -1 || progress.challengeValues[challengeId] < challenge.targetValue) {
             this.logger.error(`Challenge ${challengeId} is not completed yet`);
@@ -82,13 +127,13 @@ export class ChallengeService {
         }
         await Promise.all([
             this.fireStoreService.challengeProgressCollection.update(athleteId, {
-                finishedChallenges: [...progress.finishedChallenges, challengeId]
+                claimedChallenges: [...progress.claimedChallenges, challengeId]
             }),
             this.fireStoreService.athleteCollection.update(athleteId, {
-                experience: parseInt(String(athlete.experience || 0), 10) + parseInt(String(challenge.rewards.experience), 10)
+                experience: parseInt(String(athlete.currencies.experience || 0), 10) + parseInt(String(challenge.rewards.experience), 10)
             })
         ]);
-        this.logger.info(`Challenge ${challengeId} finished by ${athleteId}`);
+        this.logger.info(`Challenge ${challengeId} claimed by ${athleteId}`);
     }
 
     async getAllChallenges(): Promise<ProgressiveChallenge[]> {
@@ -149,7 +194,7 @@ export class ChallengeService {
         const game = await this.fireStoreService.gameCollection.get(CONST.GAME_ID);
         return (await this.getAllChallenges())
             .filter(challenge => game ? game.activeChallenges.indexOf(challenge.id) !== -1 : false) // Filter out inactive challenges
-            .filter(challenge => progress ? progress.finishedChallenges.indexOf(challenge.id) === -1 : true) // Filter out finished challenges
+            .filter(challenge => progress ? progress.claimedChallenges.indexOf(challenge.id) === -1 : true) // Filter out claimed challenges
             .filter(challenge => progress ? progress.completedChallenges.indexOf(challenge.id) === -1 : true) // Filter out completed challenges;
             .splice(0, RULES.PROGRESSIVE_CHALLENGE.MAX_ACTIVE); // Limit the number of active challenges
     }

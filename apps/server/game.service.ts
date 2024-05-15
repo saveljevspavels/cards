@@ -12,7 +12,7 @@ import {RULES} from "../../definitions/rules";
 import {getRandomInt} from "./helpers/util";
 import ScoreService from "./score.service";
 import CardService from "./card.service";
-import Athlete from "../shared/interfaces/athlete.interface";
+import Athlete from "../shared/classes/athlete.class";
 import CardFactory from "../shared/interfaces/card-factory.interface";
 import ActivityService from "./activity.service";
 import Game from "../cards/src/app/interfaces/game";

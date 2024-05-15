@@ -33,14 +33,14 @@
     >
         <div hiddenContent>
             <div class="mt-2">
-                <div *ngFor="let cardId of athlete?.cards.finished" class="mb-2">
+                <div *ngFor="let cardId of athlete?.cards.claimed" class="mb-2">
                     <app-card
                             [cardId]="cardId"
                             [showActivate]="false"
                     >
                     </app-card>
                 </div>
-                <div *ngIf="!athlete?.cards.finished.length"
+                <div *ngIf="!athlete?.cards.claimed.length"
                      class="text-small mb-2"
                 >No completed tasks yet</div>
             </div>

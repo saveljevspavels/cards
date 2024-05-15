@@ -170,7 +170,7 @@ export default class CardService {
     async unlockBoardLevel(athleteId: string, boardKey: string) {
         const athlete = await this.athleteService.getAthlete(athleteId);
 
-        const currentMoney = athlete.coins || 0;
+        const currentMoney = athlete.currencies.coins || 0;
         const currentLevel = athlete.unlocks[boardKey] || 0;
         const nextLevel = currentLevel + 1;
         const price = RULES.COINS.BASE_UNLOCK_PRICE + (nextLevel * RULES.COINS.PER_LEVEL_PRICE);
@@ -183,7 +183,9 @@ export default class CardService {
         await this.fireStoreService.athleteCollection.update(
             athleteId,
             {
-                coins: currentMoney - price,
+                currencies: {
+                    coins: currentMoney - price,
+                },
                 unlocks: newUnlocks
             }
         )
@@ -191,7 +193,7 @@ export default class CardService {
     }
 
     async claimCardRewards(athleteId: string, cardId: string) {
-        await this.finishCard(athleteId, cardId);
+        await this.claimCard(athleteId, cardId);
         await Promise.all([
             await this.scoreService.updateScore(athleteId, cardId),
             await this.claimCardCoins(athleteId, cardId)
@@ -201,7 +203,7 @@ export default class CardService {
     async claimCardCoins(athleteId: string, cardId: string) {
         const athlete = await this.athleteService.getAthlete(athleteId);
         const card = await this.getCard(cardId);
-        const newEnergy = parseInt(String(athlete.energy)) + parseInt(String(card.energyReward));
+        const newEnergy = parseInt(String(athlete.currencies.energy)) + parseInt(String(card.energyReward));
         let bonusCoins = 0;
         if(newEnergy > RULES.ENERGY.MAX) {
             bonusCoins = (newEnergy - RULES.ENERGY.MAX) * RULES.COINS.PER_ENERGY_CONVERSION;
@@ -209,8 +211,10 @@ export default class CardService {
         await this.fireStoreService.athleteCollection.update(
             athleteId,
             {
-                coins: parseInt(String(athlete.coins), 10) + parseInt(String(card.coinsReward), 10) + bonusCoins,
-                energy: Math.min(newEnergy, RULES.ENERGY.MAX),
+                currencies: {
+                    coins: parseInt(String(athlete.currencies.coins), 10) + parseInt(String(card.coinsReward), 10) + bonusCoins,
+                    energy: Math.min(newEnergy, RULES.ENERGY.MAX),
+                }
             }
         )
         this.logger.info(`Athlete ${athlete.name} claimed ${parseInt(String(card.coinsReward), 10) + bonusCoins} coins for card ${card.title}`);
@@ -223,7 +227,7 @@ export default class CardService {
         const card = await this.getCard(cardId);
         const athlete = await this.athleteService.getAthlete(athleteId);
 
-        if(StaticValidationService.notEnoughCoins(athlete.coins, athlete.fatigue)) {
+        if(StaticValidationService.notEnoughCoins(athlete.currencies.coins, athlete.currencies.fatigue)) {
             this.logger.info(`Athlete ${athlete.firstname} ${athlete.lastname} don't have enough coins to activate card ${card.title}`);
             throw 'Not enough coins';
         }
@@ -233,30 +237,32 @@ export default class CardService {
         }
 
         await Promise.all([
-            this.athleteService.spendCoins(athlete, StaticAthleteHelperService.getCardActivationCost(athlete.fatigue)),
+            this.athleteService.spendCoins(athlete, StaticAthleteHelperService.getCardActivationCost(athlete.currencies.fatigue)),
             this.athleteService.increaseFatigue(athlete, card.energyCost),
             this.fireStoreService.athleteCollection.update(athleteId, {
                 cards: {
                     ...athlete.cards,
                     active: [...athlete?.cards.active, card.id]
                 },
-                coins: parseInt(String(athlete.coins), 10) - parseInt(String(card.coinsCost), 10)
+                currencies: {
+                    coins: parseInt(String(athlete.currencies.coins), 10) - parseInt(String(card.coinsCost), 10)
+                }
             })
         ])
         this.logger.info(`Athlete ${athlete.firstname} ${athlete.lastname} has activated ${card.title} for ${card.energyCost} energy and ${card.coinsCost} coins`);
     }
 
-    async finishCard(athleteId: string, cardId: string) {
+    async claimCard(athleteId: string, cardId: string) {
         const athlete = await this.athleteService.getAthlete(athleteId);
         const completedCards = athlete.cards.completed;
-        const finishedCards = athlete.cards.finished;
-        completedCards.splice(athlete?.cards.completed.indexOf(cardId), 1);
-        finishedCards.push(cardId);
+        const claimedCards = athlete.cards.claimed;
+        completedCards.splice((athlete?.cards.completed || []).indexOf(cardId), 1);
+        claimedCards.push(cardId);
         return await this.fireStoreService.athleteCollection.update(athleteId, {
             cards: {
                 ...athlete.cards,
                 completed: completedCards,
-                finished: finishedCards
+                claimed: claimedCards
             }
         });
     }
@@ -483,18 +489,20 @@ export default class CardService {
             throw 'Card snapshot does not exist in activity';
         }
         const owner = await this.athleteService.getAthlete(activity.athlete.id);
-        const finished = owner.cards?.finished.find(card => card == cardId);
+        const claimed = owner.cards?.claimed.find(card => card == cardId);
 
         Promise.all([
-            finished ? await this.scoreService.updateScore(owner.id, cardId, true) : null,
+            claimed ? await this.scoreService.updateScore(owner.id, cardId, true) : null,
             await this.fireStoreService.athleteCollection.update(
                 owner.id,
                 {
-                    coins: finished ? owner.coins - card.coinsReward : owner.coins,
+                    currencies: {
+                        coins: claimed ? (owner.currencies.coins || 0) - card.coinsReward : owner.currencies.coins,
+                    },
                     baseCardProgress: StaticValidationService.updateBaseCardProgressFromCard(activity, card, owner.baseWorkout, owner.baseCardProgress),
                     cards: {
                         ...owner.cards,
-                        finished: owner.cards?.finished.filter(card => card !== cardId),
+                        claimed: owner.cards?.claimed.filter(card => card !== cardId),
                         completed: owner.cards?.completed.filter(card => card !== cardId),
                     }
                 }

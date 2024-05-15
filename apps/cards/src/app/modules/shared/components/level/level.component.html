@@ -1,0 +1,40 @@
+<div class="level box" [ngClass]="{'level--completed': completed, 'level--claimed': claimed}">
+    <div class="d-flex full-height justify-content-between">
+        <h4 class="mt-0 mb-0">Level {{levelIndex + 1}}</h4>
+        <div class="level__content d-flex justify-content-around align-items-center flex-grow-1">
+            <app-reward-money *ngIf="LEVEL_REWARDS[levelIndex].coins"
+                              [value]="LEVEL_REWARDS[levelIndex].coins"
+                              [big]="true"
+            ></app-reward-money>
+            <div *ngIf="LEVEL_REWARDS[levelIndex].chests">
+                chest
+            </div>
+            <div *ngIf="LEVEL_REWARDS[levelIndex].perks">
+                perk
+            </div>
+            <app-reward-points *ngIf="LEVEL_REWARDS[levelIndex].points"
+                               [value]="LEVEL_REWARDS[levelIndex].points"
+                               [big]="true"
+            ></app-reward-points>
+            <app-reward-experience *ngIf="LEVEL_REWARDS[levelIndex].experience"
+                               [value]="LEVEL_REWARDS[levelIndex].experience"
+                               [big]="true"
+            ></app-reward-experience>
+
+            <app-button *ngIf="(!claimed && levelIndex < currentLevel) || (progress >= LEVEL_EXPERIENCE[levelIndex] && levelIndex === currentLevel)"
+                        [type]="'action'"
+                        (click)="claimReward()"
+            >
+                Claim
+            </app-button>
+        </div>
+        <div *ngIf="!completed" class="align-self-end mr-1">
+            Exp: {{levelIndex < currentLevel ? LEVEL_EXPERIENCE[levelIndex] : levelIndex > currentLevel ? 0 : progress}}/{{LEVEL_EXPERIENCE[levelIndex]}}
+        </div>
+        <app-challenge-bar
+                [value]="levelIndex < currentLevel ? LEVEL_EXPERIENCE[levelIndex] : levelIndex > currentLevel ? 0 : progress"
+                [target]="LEVEL_EXPERIENCE[levelIndex]"
+                [activityType]="'primary'"
+                [vertical]="true"></app-challenge-bar>
+    </div>
+</div>

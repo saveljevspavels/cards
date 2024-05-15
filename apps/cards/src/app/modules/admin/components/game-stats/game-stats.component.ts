@@ -8,7 +8,7 @@ import {filter, first} from "rxjs/operators";
 import {StaticValidationService} from "../../../../../../../shared/services/validation.service";
 import {CardService} from "../../../../services/card.service";
 import {AdminService} from "../../admin.service";
-import Athlete from "../../../../../../../shared/interfaces/athlete.interface";
+import Athlete from "../../../../../../../shared/classes/athlete.class";
 import {Ability, AbilityKey} from "../../../../../../../shared/interfaces/ability.interface";
 import {ABILITIES} from "../../../../../../../../definitions/abilities";
 
@@ -145,7 +145,7 @@ export class GameStatsComponent implements OnInit {
       this.mostWanderer = athletes.map((athlete: Athlete) => {
         return {
           name: athlete.name,
-          value: athlete.cards.finished.reduce((acc: number, cardId: string) => {
+          value: athlete.cards.claimed.reduce((acc: number, cardId: string) => {
             if(wandererCards?.indexOf(cardId) !== -1) {
               acc++;
             }
@@ -157,7 +157,7 @@ export class GameStatsComponent implements OnInit {
       this.mostPhotohunter = athletes.map((athlete: Athlete) => {
         return {
           name: athlete.name,
-          value: athlete.cards.finished.reduce((acc: number, cardId: string) => {
+          value: athlete.cards.claimed.reduce((acc: number, cardId: string) => {
             if(photohunterCards?.indexOf(cardId) !== -1) {
               acc++;
             }
@@ -169,7 +169,7 @@ export class GameStatsComponent implements OnInit {
       this.mostMultitasker = athletes.map((athlete: Athlete) => {
         return {
           name: athlete.name,
-          value: athlete.cards.finished.reduce((acc: number, cardId: string) => {
+          value: athlete.cards.claimed.reduce((acc: number, cardId: string) => {
             if(multitaskerCards?.indexOf(cardId) !== -1) {
               acc++;
             }
@@ -225,7 +225,7 @@ export class GameStatsComponent implements OnInit {
       this.coinsEarned = athletes.map((athlete: Athlete) => {
         return {
           name: athlete.name,
-          value: athlete.coins
+          value: (athlete?.currencies.coins || 0)
               + Object.values(athlete.unlocks).reduce((acc: number, value: number) => {
             switch (value) {
               case 1: return acc + 5;
@@ -236,7 +236,7 @@ export class GameStatsComponent implements OnInit {
             }
           }, 0)
           + athlete.usedAbilities.reduce((acc: number, abilityKey: AbilityKey) => acc + (ABILITIES.find(ability => ability.key === abilityKey)?.coinsCost || 0), 0)
-          + athlete.cards.finished.reduce((acc: number, cardId: string) => acc + ((allCards.indexOf(cardId) !== -1) ? 1 : 0), 0)
+          + athlete.cards.claimed.reduce((acc: number, cardId: string) => acc + ((allCards.indexOf(cardId) !== -1) ? 1 : 0), 0)
         }
       });
       console.log('athletes', athletes)

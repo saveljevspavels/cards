@@ -7,7 +7,8 @@ import {Component, Input, OnInit} from '@angular/core';
 })
 export class RewardMoneyComponent implements OnInit {
 
-  @Input() value: number
+  @Input() value: number;
+  @Input() big = false;
 
   constructor() { }
 

@@ -11,5 +11,6 @@ export class ChallengeBarComponent {
 
     @Input() value: number;
     @Input() target: number;
+    @Input() vertical: boolean;
     @Input() activityType: ActivityType;
 }

@@ -2,7 +2,7 @@ import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {CardService} from "../../../../services/card.service";
 import {AthleteService} from "../../../../services/athlete.service";
 import {BehaviorSubject, combineLatest, Observable, Subject} from "rxjs";
-import Athlete from "../../../../../../../shared/interfaces/athlete.interface";
+import Athlete from "../../../../../../../shared/classes/athlete.class";
 import {BoardService} from "../../../../services/board.service";
 import {ValidationService} from "../../../../services/validation.service";
 import Card, {NullCard} from "../../../../../../../shared/interfaces/card.interface";
@@ -73,7 +73,7 @@ export class ActiveCardListComponent implements OnInit {
 
       if(game && game.featuredCard) {
         const featuredCard = this.cardService.getCard(game.featuredCard);
-        this.featuredCard = [...athlete?.cards?.completed || [], ...athlete?.cards?.finished || []].indexOf(featuredCard.id) === -1 ? {
+        this.featuredCard = [...athlete?.cards?.completed || [], ...athlete?.cards?.claimed || []].indexOf(featuredCard.id) === -1 ? {
           card: featuredCard,
           validationStatus: this.validateCard(activity, featuredCard, this.selectedCards.value)
         } : null;
@@ -226,7 +226,7 @@ export class ActiveCardListComponent implements OnInit {
   }
 
   updateEnergyCheck(selectedCards: ValidatedCard[]) {
-    this.athlete.pipe(first(), map((athlete) => athlete?.energy || 0)).subscribe((availableEnergy: number) => {
+    this.athlete.pipe(first(), map((athlete) => athlete?.currencies.energy || 0)).subscribe((availableEnergy: number) => {
       this.notEnoughEnergy$.next(StaticValidationService.notEnoughEnergy(availableEnergy, this.getPlainCards(selectedCards)));
     });
   }

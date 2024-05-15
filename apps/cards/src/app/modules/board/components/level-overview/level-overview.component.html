@@ -1,0 +1,20 @@
+<div class="d-flex flex-column">
+    <div class="row flex-md-nowrap flex-sm-wrap order-1">
+        <div class="offset-lg-4 offset-sm-2 offset-xs-0 col-lg-4 col-sm-8 col-12">
+            <div class="d-flex flex-column">
+                <div class="mb-2" *ngFor="let reward of LEVEL_REWARDS; let i = index">
+                    <app-level
+                        [levelIndex]="i"
+                        [completed]="(athlete$ | async).level > i"
+                        [reward]="reward"
+                        [currentLevel]="(athlete$ | async).level"
+                        [progress]="(athlete$ | async).currencies.experience"
+                        [claimed]="(athlete$ | async).claimedLevelRewards.indexOf(i) !== -1"
+                        (claim)="claimReward(i)"
+                    ></app-level>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

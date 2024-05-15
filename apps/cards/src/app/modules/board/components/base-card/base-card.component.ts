@@ -1,5 +1,5 @@
 import {Component, Input, OnChanges, OnInit} from '@angular/core';
-import Athlete from "../../../../../../../shared/interfaces/athlete.interface";
+import Athlete from "../../../../../../../shared/classes/athlete.class";
 import {AthleteService} from "../../../../services/athlete.service";
 import {Observable} from "rxjs";
 import {UtilService} from "../../../../services/util.service";

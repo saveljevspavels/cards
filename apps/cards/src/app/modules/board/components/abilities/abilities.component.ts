@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {Ability, AbilityKey} from "../../../../../../../shared/interfaces/ability.interface";
 import {ABILITIES} from "../../../../../../../../definitions/abilities";
 import {AthleteService} from "../../../../services/athlete.service";
-import Athlete from "../../../../../../../shared/interfaces/athlete.interface";
+import Athlete from "../../../../../../../shared/classes/athlete.class";
 import {RULES} from "../../../../../../../../definitions/rules";
 
 @Component({

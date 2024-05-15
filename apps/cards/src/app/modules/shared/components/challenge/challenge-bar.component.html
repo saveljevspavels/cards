@@ -1,3 +1,3 @@
-<div class="challenge-bar">
-    <div class="challenge-bar__fill background-{{activityType ? activityType?.toString() : 'secondary-3' }}" [ngStyle]="{'width.%': ((value / target) * 100)}"></div>
+<div class="challenge-bar" [ngClass]="{'challenge-bar--vertical': vertical, 'challenge-bar--horizontal': !vertical}">
+    <div class="challenge-bar__fill background-{{activityType ? activityType?.toString() : 'secondary-3' }}" [ngStyle]="{'width.%': ((value / target) * 100), 'height.%': ((value / target) * 100)}"></div>
 </div>
