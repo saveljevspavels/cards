@@ -115,13 +115,13 @@ export default class Athlete implements JsonObjectInterface {
     claimLevelRewards(level: number) {
         const rewards = LEVEL_REWARDS[level];
         if(!rewards) return;
-        this.currencies.coins += rewards.coins || 0;
-        this.currencies.experience += rewards.experience || 0;
-        this.currencies.chests += rewards.chests || 0;
-        this.currencies.perks += rewards.perks || 0;
-        this.currencies.random_perks += rewards.random_perks || 0;
-        this.currencies.energy += rewards.energy || 0;
-        this.currencies.fatigue += rewards.fatigue || 0;
+        this.currencies.coins = (this.currencies.coins || 0) + rewards.coins || 0;
+        this.currencies.experience = (this.currencies.experience || 0) + rewards.experience || 0;
+        this.currencies.chests = (this.currencies.chests || 0) + rewards.chests || 0;
+        this.currencies.perks = (this.currencies.perks || 0) + rewards.perks || 0;
+        this.currencies.random_perks = (this.currencies.random_perks || 0) + rewards.random_perks || 0;
+        this.currencies.energy = (this.currencies.energy || 0) + rewards.energy || 0;
+        this.currencies.fatigue = (this.currencies.fatigue || 0) + rewards.fatigue || 0;
 
         this.claimedLevelRewards.push(level);
     }

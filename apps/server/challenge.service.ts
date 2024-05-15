@@ -46,7 +46,8 @@ export class ChallengeService {
             }
 
             try {
-                await this.claimChallenge(athleteId, req.body.challengeId)
+                await this.claimChallenge(athleteId, req.body.challengeId);
+                await this.levelUp(athleteId);
                 res.status(200).send({});
             } catch (err) {
                 this.logger.error(`Error claiming a challenge ${err}`);
@@ -100,14 +101,14 @@ export class ChallengeService {
             LEVEL_REWARDS[levelIndex].points ? this.scoreService.addPoints(athleteId, LEVEL_REWARDS[levelIndex].points) : Promise.resolve(),
             this.athleteService.updateAthlete(athlete)
         ]);
-        this.logger.info(`Level ${levelIndex} rewards ${LEVEL_REWARDS[levelIndex]} claimed by ${athlete.name}`);
+        this.logger.info(`Level ${levelIndex + 1} rewards ${LEVEL_REWARDS[levelIndex]} claimed by ${athlete.name}`);
     }
 
     async claimChallenge(athleteId: string, challengeId: string) {
-        const [challenge, progress, athlete]: [ProgressiveChallenge | null, ChallengeProgress | null, Athlete | null] = await Promise.all([
+        const [challenge, progress, athlete]: [ProgressiveChallenge | null, ChallengeProgress | null, Athlete] = await Promise.all([
             this.fireStoreService.challengeCollection.get(challengeId),
             this.fireStoreService.challengeProgressCollection.get(athleteId),
-            this.fireStoreService.athleteCollection.get(athleteId)
+            this.athleteService.getAthlete(athleteId),
         ]);
         if(!challenge || !athlete || !progress) {
             this.logger.error(`Challenge ${challengeId} does not exist`);
@@ -130,10 +131,22 @@ export class ChallengeService {
                 claimedChallenges: [...progress.claimedChallenges, challengeId]
             }),
             this.fireStoreService.athleteCollection.update(athleteId, {
-                experience: parseInt(String(athlete.currencies.experience || 0), 10) + parseInt(String(challenge.rewards.experience), 10)
+                currencies: {
+                    experience: parseInt(String(athlete.currencies.experience || 0), 10) + parseInt(String(challenge.rewards.experience), 10)
+                }
             })
         ]);
         this.logger.info(`Challenge ${challengeId} claimed by ${athleteId}`);
+    }
+
+    async levelUp(athleteId: string) {
+        const athlete: Athlete = await this.athleteService.getAthlete(athleteId);
+        while (athlete.level < LEVEL_REWARDS.length && athlete.currencies.experience >= RULES.LEVEL_EXPERIENCE[athlete.level]) {
+            athlete.level++;
+            athlete.currencies.experience -= RULES.LEVEL_EXPERIENCE[athlete.level];
+        }
+        await this.athleteService.updateAthlete(athlete);
+        this.logger.info(`Athlete ${athlete.name} leveled up to ${athlete.level}`);
     }
 
     async getAllChallenges(): Promise<ProgressiveChallenge[]> {

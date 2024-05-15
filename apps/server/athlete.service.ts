@@ -139,12 +139,12 @@ export default class AthleteService {
             throw 'Max. fatigue reached';
         }
 
-        const newFatigue = parseInt(String(athlete.currencies.fatigue), 10) + parseInt(String(amount), 10);
+        const newFatigue = parseInt(String(athlete.currencies.fatigue || 0), 10) + parseInt(String(amount), 10);
         await this.fireStoreService.athleteCollection.update(
             athlete.id,
             {
                 currencies: {
-
+                    fatigue: newFatigue
                 }
             }
         )
@@ -171,7 +171,9 @@ export default class AthleteService {
         await this.fireStoreService.athleteCollection.update(
             athlete.id,
             {
-                coins: athlete.currencies.coins - amount
+                currencies: {
+                    coins: athlete.currencies.coins - amount
+                }
             }
         )
         this.logger.info(`Athlete ${athlete.name} spent ${amount} coins, now ${athlete.currencies.coins - amount}`)
