@@ -6,6 +6,7 @@ import {RULES} from "../../definitions/rules";
 import Athlete, {AthletePatch} from "../shared/classes/athlete.class";
 import {Logger} from "winston";
 import {of} from "rxjs";
+import {Currencies} from "../shared/classes/currencies.class";
 
 export default class AthleteService {
     constructor(
@@ -104,15 +105,11 @@ export default class AthleteService {
     async addEnergy(athlete: Athlete, value: number) {
         const excessEnergy = ((athlete.currencies.energy || 0) + value) - RULES.ENERGY.MAX;
         const newVal = Math.min((athlete.currencies.energy || 0) + value, RULES.ENERGY.MAX)
-        await this.fireStoreService.athleteCollection.update(
-            athlete.id.toString(),
-            {
-                currencies: {
-                    energy: newVal,
-                    coins: (athlete.currencies.coins || 0) + (excessEnergy > 0 ? excessEnergy * RULES.COINS.PER_ENERGY_CONVERSION : 0)
-                }
-            }
-        )
+
+        athlete.currencies.energy = newVal;
+        athlete.currencies.coins = (athlete.currencies.coins || 0) + (excessEnergy > 0 ? excessEnergy * RULES.COINS.PER_ENERGY_CONVERSION : 0);
+        await this.updateAthlete(athlete);
+
         this.logger.info(`Athlete ${athlete.firstname} ${athlete.lastname} ${athlete.id} restored ${value} energy, now ${newVal}, and ${(excessEnergy > 0 ? excessEnergy * RULES.COINS.PER_ENERGY_CONVERSION : 0)} coins`)
     }
 
@@ -122,14 +119,9 @@ export default class AthleteService {
             throw 'Not enough energy';
         }
 
-        await this.fireStoreService.athleteCollection.update(
-            athlete.id,
-            {
-                currencies: {
-                    energy: athlete.currencies.energy - amount
-                }
-            }
-        )
+        athlete.currencies.energy = athlete.currencies.energy - amount;
+        await this.updateAthlete(athlete);
+
         this.logger.info(`Athlete ${athlete.firstname} ${athlete.lastname} spent ${amount} energy, now ${athlete.currencies.energy - amount}`)
     }
 
@@ -140,25 +132,16 @@ export default class AthleteService {
         }
 
         const newFatigue = parseInt(String(athlete.currencies.fatigue || 0), 10) + parseInt(String(amount), 10);
-        await this.fireStoreService.athleteCollection.update(
-            athlete.id,
-            {
-                currencies: {
-                    fatigue: newFatigue
-                }
-            }
-        )
+
+        athlete.currencies.fatigue = newFatigue;
+        await this.updateAthlete(athlete);
         this.logger.info(`Athlete ${athlete.firstname} ${athlete.lastname} fatigue increased by ${amount}, now ${newFatigue}`)
     }
 
     async decreaseFatigue(athlete: Athlete, amount: number): Promise<void> {
         const newFatigue = Math.max(athlete.currencies.energy - amount, RULES.FATIGUE.MIN)
-        await this.fireStoreService.athleteCollection.update(
-            athlete.id,
-            {
-                fatigue: newFatigue
-            }
-        )
+        athlete.currencies.fatigue = newFatigue;
+        await this.updateAthlete(athlete);
         this.logger.info(`Athlete ${athlete.firstname} ${athlete.lastname} fatigue lowered by ${amount}, now ${newFatigue}`)
     }
 
@@ -168,14 +151,8 @@ export default class AthleteService {
             throw 'Not enough coins';
         }
 
-        await this.fireStoreService.athleteCollection.update(
-            athlete.id,
-            {
-                currencies: {
-                    coins: athlete.currencies.coins - amount
-                }
-            }
-        )
+        athlete.currencies.coins = athlete.currencies.coins - amount;
+        await this.updateAthlete(athlete);
         this.logger.info(`Athlete ${athlete.name} spent ${amount} coins, now ${athlete.currencies.coins - amount}`)
     }
 }

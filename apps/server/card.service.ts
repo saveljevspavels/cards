@@ -180,15 +180,11 @@ export default class CardService {
         }
         const newUnlocks = {...athlete.unlocks};
         newUnlocks[boardKey] = nextLevel;
-        await this.fireStoreService.athleteCollection.update(
-            athleteId,
-            {
-                currencies: {
-                    coins: currentMoney - price,
-                },
-                unlocks: newUnlocks
-            }
-        )
+
+        athlete.currencies.coins = currentMoney - price;
+        athlete.unlocks = newUnlocks;
+        await this.athleteService.updateAthlete(athlete);
+
         this.logger.error(`Athlete ${athlete.firstname} ${athlete.lastname} unlocked ${boardKey} ${nextLevel} for ${price} coins (had ${currentMoney}, now has ${currentMoney - price})`);
     }
 
@@ -208,15 +204,11 @@ export default class CardService {
         if(newEnergy > RULES.ENERGY.MAX) {
             bonusCoins = (newEnergy - RULES.ENERGY.MAX) * RULES.COINS.PER_ENERGY_CONVERSION;
         }
-        await this.fireStoreService.athleteCollection.update(
-            athleteId,
-            {
-                currencies: {
-                    coins: parseInt(String(athlete.currencies.coins), 10) + parseInt(String(card.coinsReward), 10) + bonusCoins,
-                    energy: Math.min(newEnergy, RULES.ENERGY.MAX),
-                }
-            }
-        )
+
+        athlete.currencies.coins = parseInt(String(athlete.currencies.coins), 10) + parseInt(String(card.coinsReward), 10) + bonusCoins;
+        athlete.currencies.energy = Math.min(newEnergy, RULES.ENERGY.MAX);
+        await this.athleteService.updateAthlete(athlete);
+
         this.logger.info(`Athlete ${athlete.name} claimed ${parseInt(String(card.coinsReward), 10) + bonusCoins} coins for card ${card.title}`);
         if(parseInt(String(card.energyReward))) {
             this.logger.error(`Athlete restored ${card.energyReward} energy for card ${card.title}`);
@@ -236,20 +228,15 @@ export default class CardService {
             throw 'Too much active cards';
         }
 
+        const coinsCost = StaticAthleteHelperService.getCardActivationCost(athlete.currencies.fatigue);
+        athlete.cards.active = [...athlete?.cards.active, card.id];
+
         await Promise.all([
-            this.athleteService.spendCoins(athlete, StaticAthleteHelperService.getCardActivationCost(athlete.currencies.fatigue)),
+            this.athleteService.spendCoins(athlete, coinsCost),
             this.athleteService.increaseFatigue(athlete, card.energyCost),
-            this.fireStoreService.athleteCollection.update(athleteId, {
-                cards: {
-                    ...athlete.cards,
-                    active: [...athlete?.cards.active, card.id]
-                },
-                currencies: {
-                    coins: parseInt(String(athlete.currencies.coins), 10) - parseInt(String(card.coinsCost), 10)
-                }
-            })
+            this.athleteService.updateAthlete(athlete)
         ])
-        this.logger.info(`Athlete ${athlete.firstname} ${athlete.lastname} has activated ${card.title} for ${card.energyCost} energy and ${card.coinsCost} coins`);
+        this.logger.info(`Athlete ${athlete.firstname} ${athlete.lastname} has activated ${card.title} for ${card.energyCost} energy and ${coinsCost} coins`);
     }
 
     async claimCard(athleteId: string, cardId: string) {
@@ -491,22 +478,15 @@ export default class CardService {
         const owner = await this.athleteService.getAthlete(activity.athlete.id);
         const claimed = owner.cards?.claimed.find(card => card == cardId);
 
+
+        owner.currencies.coins = claimed ? (owner.currencies.coins || 0) - card.coinsReward : owner.currencies.coins;
+        owner.baseCardProgress = StaticValidationService.updateBaseCardProgressFromCard(activity, card, owner.baseWorkout, owner.baseCardProgress);
+        owner.cards.claimed = owner.cards.claimed.filter(card => card !== cardId);
+        owner.cards.completed = owner.cards.completed.filter(card => card !== cardId);
+
         Promise.all([
             claimed ? await this.scoreService.updateScore(owner.id, cardId, true) : null,
-            await this.fireStoreService.athleteCollection.update(
-                owner.id,
-                {
-                    currencies: {
-                        coins: claimed ? (owner.currencies.coins || 0) - card.coinsReward : owner.currencies.coins,
-                    },
-                    baseCardProgress: StaticValidationService.updateBaseCardProgressFromCard(activity, card, owner.baseWorkout, owner.baseCardProgress),
-                    cards: {
-                        ...owner.cards,
-                        claimed: owner.cards?.claimed.filter(card => card !== cardId),
-                        completed: owner.cards?.completed.filter(card => card !== cardId),
-                    }
-                }
-            ),
+            await this.athleteService.updateAthlete(owner),
             await this.fireStoreService.detailedActivityCollection.update(
                 activityId,
                 {

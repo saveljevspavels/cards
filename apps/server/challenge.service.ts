@@ -126,15 +126,14 @@ export class ChallengeService {
             this.logger.error(`Challenge ${challengeId} is not completed yet`);
             throw `Challenge ${challengeId} is not completed yet`;
         }
+
+        athlete.currencies.experience = parseInt(String(athlete.currencies.experience || 0), 10) + parseInt(String(challenge.rewards.experience), 10);
+
         await Promise.all([
             this.fireStoreService.challengeProgressCollection.update(athleteId, {
                 claimedChallenges: [...progress.claimedChallenges, challengeId]
             }),
-            this.fireStoreService.athleteCollection.update(athleteId, {
-                currencies: {
-                    experience: parseInt(String(athlete.currencies.experience || 0), 10) + parseInt(String(challenge.rewards.experience), 10)
-                }
-            })
+            this.athleteService.updateAthlete(athlete)
         ]);
         this.logger.info(`Challenge ${challengeId} claimed by ${athleteId}`);
     }

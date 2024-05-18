@@ -18,7 +18,7 @@
                                           (activated)="activateCard($event)"
                                           [showActivate]="true"
                                           [locked]="unlockMap.get(board.key) < levelIndex"
-                                          [canActivate]="(athlete | async)?.coins >= cardMap.get(card).coinsCost && (athlete | async)?.cards.active.length < RULES.SCHEME.MAX_ACTIVE_CARDS"
+                                          [canActivate]="(athlete | async)?.currencies.coins >= cardMap.get(card).coinsCost && (athlete | async)?.cards.active.length < RULES.SCHEME.MAX_ACTIVE_CARDS"
                                           [card]="cardMap.get(card)"
                                           [styleClass]="'mb-2'"
                                 ></app-card>
@@ -27,7 +27,7 @@
                         <app-button
                                 *ngIf="unlockMap.get(board.key) === levelIndex - 1"
                                 label="Unlock for -{{(RULES.COINS.BASE_UNLOCK_PRICE + (RULES.COINS.PER_LEVEL_PRICE * levelIndex))}}"
-                                [disabled]="(RULES.COINS.BASE_UNLOCK_PRICE + (RULES.COINS.PER_LEVEL_PRICE * levelIndex)) > (athlete | async)?.coins"
+                                [disabled]="(RULES.COINS.BASE_UNLOCK_PRICE + (RULES.COINS.PER_LEVEL_PRICE * levelIndex)) > (athlete | async)?.currencies.coins"
                                 (buttonClick)="unlockLevel(board.key)"
                                 type="action"
                         >
@@ -72,7 +72,7 @@
             </p>
             <div class="mt-4 mb-2 full-width">
                 <app-button type="action" [label]="'Yes'" (buttonClick)="confirmActivate()">
-                    <div class="title ml-2 d-flex justify-content-center" *ngIf="(activatedCard$ | async)?.coinsCost > 0">-{{(activatedCard$ | async)?.coinsCost}}<app-svg [height]="20" [icon]="'coin'"></app-svg></div>
+                    <div class="title ml-2 d-flex justify-content-center" *ngIf="(activationCost$ | async) > 0">-{{(activationCost$ | async)}}<app-svg [height]="20" [icon]="'coin'"></app-svg></div>
                 </app-button>
             </div>
             <div class="mb-3">

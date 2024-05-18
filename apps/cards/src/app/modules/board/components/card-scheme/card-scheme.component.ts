@@ -6,10 +6,11 @@ import Card, {NullCard} from "../../../../../../../shared/interfaces/card.interf
 import {CardScheme, CardSchemeBoard} from "../../../../../../../shared/interfaces/card-scheme.interface";
 import {CardService} from "../../../../services/card.service";
 import {AthleteService} from "../../../../services/athlete.service";
-import {distinctUntilChanged, filter, first} from "rxjs/operators";
+import {distinctUntilChanged, filter, first, map} from "rxjs/operators";
 import {PopupService} from "../../../../services/popup.service";
 import {Router} from "@angular/router";
 import {LocalStorageService} from "../../../../services/local-storage.service";
+import {AthleteHelperService} from "../../../../services/athlete.helper.service";
 
 @Component({
   selector: 'app-card-scheme',
@@ -27,7 +28,8 @@ export class CardSchemeComponent implements OnInit {
 
     private unlock$ = new Subject();
     private activate$ = new Subject();
-    private activatedCard$ = new BehaviorSubject<Card>(NullCard);
+    public activatedCard$ = new BehaviorSubject<Card>(NullCard);
+    public activationCost$ = this.athleteService.me.pipe(map(_ => this.athleteHelperService.getCardActivationCost()));
     @ViewChild('unlockPopup', { static: true }) unlockPopup: ElementRef;
     @ViewChild('activatePopup', { static: true }) activatePopup: ElementRef;
 
@@ -42,7 +44,8 @@ export class CardSchemeComponent implements OnInit {
     constructor(private formBuilder: FormBuilder,
                 private cardService: CardService,
                 private athleteService: AthleteService,
-                private popupService: PopupService
+                private popupService: PopupService,
+                private athleteHelperService: AthleteHelperService,
     ) { }
 
     ngOnInit(): void {
