@@ -44,21 +44,6 @@ export default class GameService {
             }
         });
 
-        app.post(`${CONST.API_PREFIX}/game/ability`,async (req, res) => {
-            const abilityKey = req.body?.abilityKey;
-            const athleteId = res.get('athleteId');
-            if(!abilityKey || !athleteId) {
-                res.status(400).send('Ability Key or Athlete Id missing');
-                return;
-            }
-            try {
-                await this.useAbility(athleteId, abilityKey);
-            } catch (err) {
-                res.status(400).send(err);
-            }
-            res.status(200).send();
-        });
-
         this.initEnergyRegen();
         if(RULES.FEATURED_CARD_ENABLED) {
             this.initFeaturedCardChange();
@@ -167,60 +152,6 @@ export default class GameService {
             )
         ])
         this.logger.error(`New featured card ${newCard.title}`);
-    }
-
-    async useAbility(athleteId: string, abilityKey: AbilityKey) {
-        const athlete = await this.athleteService.getAthlete(athleteId);
-        const ability = ABILITIES.find(ability => ability.key === abilityKey);
-        if(!ability) {
-            this.logger.info(`Athlete ${athlete.name} tried to activate invalid activity: ${abilityKey}`);
-            throw 'Invalid ability';
-        }
-        if(athlete.usedAbilities.indexOf(abilityKey) !== -1) {
-            this.logger.info(`Athlete ${athlete.name} already used ability ${abilityKey}`);
-            throw 'Already used';
-        }
-
-        Promise.all([
-            ability.coinsCost && await this.athleteService.spendCoins(athlete, ability.coinsCost),
-            ability.energyCost && await this.athleteService.increaseFatigue(athlete, ability.energyCost),
-            await this.fireStoreService.athleteCollection.update(
-                athleteId,
-                {
-                    usedAbilities: [
-                        ...athlete.usedAbilities,
-                        abilityKey
-                    ]
-                }
-            )
-        ])
-
-        switch (abilityKey) {
-            case AbilityKey.REDUCE_BASE_WORKOUT:
-                await this.fireStoreService.updateBaseWorkout(
-                    [athleteId],
-                    {
-                        run: {
-                            distance: Math.ceil((athlete.baseWorkout.run?.distance || RULES.DEFAULT_BASE_WORKOUT.run.distance) * 0.9),
-                        },
-                        ride: {
-                            distance: Math.ceil((athlete.baseWorkout.ride?.distance || RULES.DEFAULT_BASE_WORKOUT.ride.distance) * 0.9),
-                        },
-                        walk: {
-                            distance: Math.ceil((athlete.baseWorkout.walk?.distance || RULES.DEFAULT_BASE_WORKOUT.walk.distance) * 0.9),
-                        }
-                    }
-                )
-                break;
-            case AbilityKey.RESET_CARD:
-                break;
-        }
-
-        Promise.all([
-            ability.coinsReward && await this.athleteService.spendCoins(athlete, -ability.coinsReward),
-            ability.energyReward && await this.athleteService.addEnergy(athlete, ability.energyReward),
-            ability.value && await this.scoreService.addPoints(athleteId, ability.value)
-        ]);
     }
 
     async claimAllRewards(athleteId: string) {

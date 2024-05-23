@@ -7,13 +7,15 @@ import {RULES} from "../../definitions/rules";
 import axios from "axios";
 import {Logger} from "winston";
 import {ActivityStatus} from "../shared/interfaces/activity.interface";
+import AthleteService from "./athlete.service";
 
 export default class ClientService {
 
     constructor(
         private app: Express,
         private fireStoreService: FirestoreService,
-        private logger: Logger
+        private logger: Logger,
+        private athleteService: AthleteService,
     ) {
 
         app.post(`${CONST.API_PREFIX}/calculate-base-workout`,async (req, res) => {
@@ -120,7 +122,7 @@ export default class ClientService {
                 })
             })
 
-            await this.fireStoreService.updateBaseWorkout([athleteId], baseWorkoutPatch)
+            await this.athleteService.updateBaseWorkout([athleteId], baseWorkoutPatch)
         })
     }
 }

@@ -157,27 +157,6 @@ export class FirestoreService {
         this.logger.info(`Cards ${cards} deleted`)
     }
 
-    async updateBaseWorkout(athleteIds: string[], baseWorkoutPatch: any) {
-        const athletes = await this.athleteCollection.whereQuery([{fieldPath: 'id', opStr: 'in', value: athleteIds}])
-        athletes.forEach((athlete) => {
-            const currentBaseWorkout = athlete.baseWorkout;
-            this.athleteCollection.update(
-                athlete.id,
-                {
-                    baseWorkout: {
-                        ...currentBaseWorkout,
-                        ...Object.keys(baseWorkoutPatch).reduce((acc: any, type) => {
-                            // @ts-ignore
-                            acc[type] = {...currentBaseWorkout[type], ...baseWorkoutPatch[type]}
-                            return acc;
-                        }, {})
-                    }
-                }
-            )
-            this.logger.info(`Base workout updated for ${athlete.firstname} ${athlete.lastname} ${athlete.id} with ${JSON.stringify(baseWorkoutPatch)}`)
-        })
-    }
-
     async setPermissions(athleteIds: string[], permissions: string[]) {
         for (let id of athleteIds) {
 

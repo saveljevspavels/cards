@@ -24,6 +24,7 @@ export default class Athlete implements JsonObjectInterface {
     baseCardProgress: BaseCardProgress;
     unlocks: {[key: string]: number};
     usedAbilities: AbilityKey[];
+    perks: {[key: string]: number} = {};
 
     constructor(
         id: string,
@@ -44,7 +45,8 @@ export default class Athlete implements JsonObjectInterface {
         },
         baseCardProgress: BaseCardProgress,
         unlocks: {[key: string]: number},
-        usedAbilities: AbilityKey[]
+        usedAbilities: AbilityKey[],
+        perks: {[key: string]: number} = {}
     ) {
         this.id = id;
         this.firstname = firstName;
@@ -61,6 +63,7 @@ export default class Athlete implements JsonObjectInterface {
         this.baseCardProgress = baseCardProgress;
         this.unlocks = unlocks;
         this.usedAbilities = usedAbilities;
+        this.perks = perks;
     }
 
     static fromJSONObject(json: any) {
@@ -79,7 +82,8 @@ export default class Athlete implements JsonObjectInterface {
             json['cards'],
             json['baseCardProgress'],
             json['unlocks'],
-            json['usedAbilities']
+            json['usedAbilities'],
+            json['perks'],
         )
     }
 
@@ -108,7 +112,16 @@ export default class Athlete implements JsonObjectInterface {
                 other: 0
             },
             {},
-            []
+            [],
+            {
+                experience_per_task_bonus: 0,
+                see_future_challenge: 0,
+                task_queue_size_bonus: 0,
+                base_walk_experience_bonus: 0,
+                base_run_experience_bonus: 0,
+                base_ride_experience_bonus: 0,
+                base_other_experience_bonus: 0,
+            }
         )
     }
 
@@ -138,7 +151,7 @@ export default class Athlete implements JsonObjectInterface {
             achievements: this.achievements,
             level: this.level,
             claimedLevelRewards: this.claimedLevelRewards,
-            currencies: this.currencies,
+            currencies: this.currencies.toJSONObject(),
             cards: this.cards,
             baseCardProgress: this.baseCardProgress,
             unlocks: this.unlocks,
@@ -156,24 +169,24 @@ export interface AthletePatch {
 }
 
 export interface BaseWorkout {
-    run?: {
-        distance?: number;
+    run: {
+        distance: number;
         average_speed?: number;
         time_3k?: number;
         time_5k?: number;
         time_10k?: number;
     }
-    ride?: {
-        distance?: number;
+    ride: {
+        distance: number;
         average_speed?: number;
         time_40k?: number;
     };
-    walk?: {
-        distance?: number;
+    walk: {
+        distance: number;
     };
-    other?: {
-        distance?: number;
-        elapsed_time?: number;
+    other: {
+        distance: number;
+        elapsed_time: number;
     }
 }
 

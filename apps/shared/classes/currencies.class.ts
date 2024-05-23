@@ -47,4 +47,17 @@ export class Currencies {
     toString(): string {
         return `Currencies(${Object.entries(this).filter(([key, value]) => value).map(([key, value]) => `${key}: ${value}`).join(', ')})`;
     }
+
+    toJSONObject(): any {
+        return {
+            coins: this.coins,
+            points: this.points,
+            experience: this.experience,
+            chests: this.chests,
+            perks: this.perks,
+            random_perks: this.random_perks,
+            energy: this.energy,
+            fatigue: this.fatigue
+        };
+    }
 }

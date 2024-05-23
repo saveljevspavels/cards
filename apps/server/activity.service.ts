@@ -135,7 +135,7 @@ export default class ActivityService {
                 })
             })
             if(Object.keys(baseWorkoutPatch[normalizedType]).length) {
-                await this.fireStoreService.updateBaseWorkout([activity.athlete.id.toString()], baseWorkoutPatch)
+                await this.athleteService.updateBaseWorkout([activity.athlete.id.toString()], baseWorkoutPatch)
             }
         }
     }

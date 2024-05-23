@@ -18,6 +18,7 @@ import {Logger} from "winston";
 import {AuthInterceptor} from "./helpers/auth.interceptor";
 import ScoreService from "./score.service";
 import {ChallengeService} from "./challenge.service";
+import AbilityService from "./ability.service";
 
 const app: Express = express().use(
     bodyParser.json(),
@@ -29,15 +30,16 @@ const app: Express = express().use(
 const logger: Logger = LoggerService.init(app);
 const fireStoreService = new FirestoreService(logger);
 const webhookService = new WebhookService(app, fireStoreService);
-const clientService = new ClientService(app, fireStoreService, logger);
 const adminService = new AdminService(app, fireStoreService, logger);
 const scoreService = new ScoreService(app, fireStoreService, logger);
 const athleteService = new AthleteService(app, fireStoreService, logger);
+const clientService = new ClientService(app, fireStoreService, logger, athleteService);
 const challengeService = new ChallengeService(app, fireStoreService, logger, athleteService, scoreService);
 const activityService = new ActivityService(app, fireStoreService, logger, athleteService, challengeService);
 const cardService = new CardService(app, fireStoreService, logger, scoreService, athleteService, activityService);
 const imageService = new ImageService(app, fireStoreService);
 const gameService = new GameService(app, fireStoreService, logger, athleteService, scoreService, cardService, activityService);
+const abilityService = new AbilityService(app, fireStoreService, logger, athleteService, scoreService, cardService, activityService);
 const achievementService = new AchievementService(app, fireStoreService);
 const authService = new AuthService(app, fireStoreService, logger, athleteService);
 

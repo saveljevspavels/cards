@@ -1,6 +1,7 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {ConstService} from "../../../../services/const.service";
 import {UtilService} from "../../../../services/util.service";
+import {BaseWorkout} from "../../../../../../../shared/classes/athlete.class";
 
 @Component({
     selector: 'app-base-workout-info',
@@ -15,7 +16,7 @@ export class BaseWorkoutInfoComponent implements OnInit {
     activityTypes = ConstService.CONST.ACTIVITY_TYPES;
 
     @Input() public showPersonalBests = true;
-    @Input() public baseWorkout: any;
+    @Input() public baseWorkout: BaseWorkout;
     @Input() public self = false;
 
     public personalBests = [

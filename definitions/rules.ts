@@ -1,23 +1,24 @@
 import {AbilityKey} from "../apps/shared/interfaces/ability.interface";
+import {BaseWorkout} from "../apps/shared/classes/athlete.class";
 
 export const RULES = {
     FEATURED_CARD_ENABLED: false,
-    DEFAULT_BASE_WORKOUT: {
+    DEFAULT_BASE_WORKOUT: <BaseWorkout>{
         run: {
-            distance: 4000,
+            distance: 3000,
             average_speed: 2.56,
             time_3k: 1620,
             time_5k: 2700,
             time_10k: 5400
         },
         ride: {
-            distance: 10000,
+            distance: 8000,
             average_speed: 5,
             time_10k: 2400,
             time_40k: 10800
         },
         walk: {
-            distance: 3500
+            distance: 4000
         },
         other: {
             distance: 5000,
@@ -121,14 +122,29 @@ export const RULES = {
         REGULAR: [4, 12, 20]
     },
     ENABLED_ABILITIES: [
-        AbilityKey.BUY_ENERGY_FULL,
-        AbilityKey.BUY_ENERGY,
-        AbilityKey.BUY_POINT,
-        AbilityKey.BUY_3_POINTS,
-        AbilityKey.REDUCE_BASE_WORKOUT,
-        AbilityKey.SELL_ENERGY_FULL,
-        AbilityKey.ENERGY_TO_COINS
+        // AbilityKey.BUY_ENERGY_FULL,
+        // AbilityKey.BUY_ENERGY,
+        // AbilityKey.BUY_POINT,
+        // AbilityKey.BUY_3_POINTS,
+        // AbilityKey.REDUCE_BASE_WORKOUT,
+        // AbilityKey.SELL_ENERGY_FULL,
+        // AbilityKey.ENERGY_TO_COINS,
+
+        AbilityKey.REDUCE_WALK_WORKOUT,
+        AbilityKey.REDUCE_RUN_WORKOUT,
+        AbilityKey.REDUCE_RIDE_WORKOUT,
+        AbilityKey.REDUCE_OTHER_WORKOUT,
+        AbilityKey.EXPERIENCE_PER_TASK_BONUS,
+        AbilityKey.SEE_FUTURE_CHALLENGE,
+        AbilityKey.FLAT_EXPERIENCE_BONUS,
+        AbilityKey.TASK_QUEUE_SIZE_BONUS,
+        AbilityKey.BASE_WALK_EXPERIENCE_BONUS,
+        AbilityKey.BASE_RUN_EXPERIENCE_BONUS,
+        AbilityKey.BASE_RIDE_EXPERIENCE_BONUS,
+        AbilityKey.BASE_OTHER_EXPERIENCE_BONUS,
     ],
     ABILITY_BASE_WORKOUT_REDUCTION: 0.9,
+    ABILITY_EXTRA_EXPERIENCE: 1,
+    ABILITY_FLAT_EXPERIENCE: 25,
     STARTING_CARD: ''
 }

@@ -28,7 +28,7 @@ export class GameService {
     }
 
     useAbility(abilityKey: AbilityKey) {
-        return this.http.post(`${environment.baseBE}/game/ability`,
+        return this.http.post(`${environment.baseBE}/abilities/activate`,
             {
                 abilityKey
             }

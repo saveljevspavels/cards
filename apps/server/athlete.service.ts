@@ -19,7 +19,7 @@ export default class AthleteService {
                 res.status(400).send({response: RESPONSES.ERROR.INVALID_ATHLETE});
                 return;
             }
-            await fireStoreService.updateBaseWorkout(req.body.athleteIds, req.body.baseWorkout)
+            await this.updateBaseWorkout(req.body.athleteIds, req.body.baseWorkout)
             res.status(200).send({response: RESPONSES.SUCCESS});
         });
 
@@ -154,5 +154,22 @@ export default class AthleteService {
         athlete.currencies.coins = athlete.currencies.coins - amount;
         await this.updateAthlete(athlete);
         this.logger.info(`Athlete ${athlete.name} spent ${amount} coins, now ${athlete.currencies.coins - amount}`)
+    }
+
+    async updateBaseWorkout(athleteIds: string[], baseWorkoutPatch: any) {
+        const athletes = await this.fireStoreService.athleteCollection.whereQuery([{fieldPath: 'id', opStr: 'in', value: athleteIds}])
+        athletes.forEach((athlete) => {
+            const currentBaseWorkout = athlete.baseWorkout;
+            athlete.baseWorkout = {
+                ...currentBaseWorkout,
+                ...Object.keys(baseWorkoutPatch).reduce((acc: any, type) => {
+                    // @ts-ignore
+                    acc[type] = {...currentBaseWorkout[type], ...baseWorkoutPatch[type]}
+                    return acc;
+                }, {})
+            }
+            this.updateAthlete(athlete);
+            this.logger.info(`Base workout updated for ${athlete.firstname} ${athlete.lastname} ${athlete.id} with ${JSON.stringify(baseWorkoutPatch)}`)
+        })
     }
 }
