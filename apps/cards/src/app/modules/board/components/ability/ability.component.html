@@ -9,13 +9,13 @@
             <app-reward-points *ngIf="ability.value" [value]="ability.value"></app-reward-points>
             <app-reward-energy *ngIf="ability.energyReward" [value]="ability.energyReward"></app-reward-energy>
         </div>
-        <app-button [label]="'Activate'"
+        <app-button *ngIf="showActivationButton"
+                    [label]="'Activate'"
                     [type]="ButtonType.ACTION"
                     [small]="true"
                     [styleClass]="'mt-1-5 w-90'"
                     [loading]="loading"
                     (buttonClick)="openConfirmation()"
-                    [disabled]="ability.coinsCost ? athlete?.currencies.coins < ability.coinsCost : ability.energyCost ? athlete?.currencies.energy < ability.energyCost : false"
         >
             <ng-container [ngTemplateOutlet]="price"></ng-container>
         </app-button>

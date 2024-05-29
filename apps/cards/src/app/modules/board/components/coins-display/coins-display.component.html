@@ -2,7 +2,7 @@
     <div class="d-flex full-width justify-content-center mt-1 mb-2">
         <app-svg [icon]="'piggy_bank'" [height]="32" [width]="34" [styleClass]="'color-secondary-3'"></app-svg>
     </div>
-    <span class="full-width justify-content-center d-flex">Your money:</span>
+    <span class="full-width justify-content-center d-flex">Your coins:</span>
     <span class="text-bold title mt-1">
         <app-number-transition [value]="(athlete$ | async)?.currencies.coins || 0"></app-number-transition>
     </span>

@@ -75,54 +75,56 @@ export default class ClientService {
     }
 
     async calculateBaseWorkout(accessToken: string, athleteId: string) {
-        this.getAthleteActivities(accessToken).then(async activities => {
-            const baseWorkoutPatch: any = {};
-            const properties = [
-                CONST.ACTIVITY_PROPERTIES.DISTANCE,
-                CONST.ACTIVITY_PROPERTIES.AVERAGE_SPEED
-            ]
-            const types = [
-                CONST.ACTIVITY_TYPES.RUN,
-                CONST.ACTIVITY_TYPES.RIDE,
-            ]
+        const athlete = await this.athleteService.getAthlete(athleteId);
+        const activities = await this.getAthleteActivities(accessToken);
 
-            types.forEach(type => {
-                const typedActivities = activities
-                    .filter((activity: any) => activity.type.toUpperCase().indexOf(type.toUpperCase()) !== -1)
+        const baseWorkoutPatch: any = {};
+        const properties = [
+            CONST.ACTIVITY_PROPERTIES.DISTANCE,
+            CONST.ACTIVITY_PROPERTIES.AVERAGE_SPEED
+        ]
+        const types = [
+            CONST.ACTIVITY_TYPES.RUN,
+            CONST.ACTIVITY_TYPES.RIDE,
+        ]
 
-                const total = typedActivities.reduce((acc: any, activity: any) => {
-                    properties.forEach(prop => {
-                        if(!acc[prop]) {
-                            acc[prop] = []
-                        }
-                        acc[prop].push(activity[prop])
-                    })
-                    return acc
-                }, {})
+        types.forEach(type => {
+            const typedActivities = activities
+                .filter((activity: any) => activity.type.toUpperCase().indexOf(type.toUpperCase()) !== -1)
 
-
+            const total = typedActivities.reduce((acc: any, activity: any) => {
                 properties.forEach(prop => {
-                    let values = total[prop];
-                    if(!baseWorkoutPatch[type]) {
-                        baseWorkoutPatch[type] = {}
+                    if(!acc[prop]) {
+                        acc[prop] = []
                     }
-                    if(values && values.length >= 4) {
-                        values = values.sort((a: number, b: number) => a - b);
-                        while (values.length > 4) {
-                            values.length % 2 ? values.pop() : values.shift()
-                        }
-                        const sum = values.reduce((acc: any, item: any) => acc + item, 0)
-                        baseWorkoutPatch[type][prop] = (sum/values.length);
-                        // @ts-ignore
-                        baseWorkoutPatch[type][prop] = baseWorkoutPatch[type][prop] - baseWorkoutPatch[type][prop] % RULES.ESTIMATION_ACCURACY[prop];
-                    } else {
-                        // @ts-ignore
-                        baseWorkoutPatch[type][prop] = RULES.DEFAULT_BASE_WORKOUT[type][prop]
-                    }
+                    acc[prop].push(activity[prop])
                 })
-            })
+                return acc
+            }, {})
 
-            await this.athleteService.updateBaseWorkout([athleteId], baseWorkoutPatch)
+
+            properties.forEach(prop => {
+                let values = total[prop];
+                if(!baseWorkoutPatch[type]) {
+                    baseWorkoutPatch[type] = {}
+                }
+                if(values && values.length >= 4) {
+                    values = values.sort((a: number, b: number) => a - b);
+                    while (values.length > 4) {
+                        values.length % 2 ? values.pop() : values.shift()
+                    }
+                    const sum = values.reduce((acc: any, item: any) => acc + item, 0)
+                    baseWorkoutPatch[type][prop] = (sum/values.length);
+                    // @ts-ignore
+                    baseWorkoutPatch[type][prop] = baseWorkoutPatch[type][prop] - baseWorkoutPatch[type][prop] % RULES.ESTIMATION_ACCURACY[prop];
+                } else {
+                    // @ts-ignore
+                    baseWorkoutPatch[type][prop] = RULES.DEFAULT_BASE_WORKOUT[type][prop]
+                }
+            })
         })
+
+        this.athleteService.updateBaseWorkout(athlete, baseWorkoutPatch)
+        await this.athleteService.updateAthlete(athlete);
     }
 }

@@ -4,6 +4,7 @@ import {RULES} from "./rules";
 export const ABILITIES: Ability[] =
 [
     {
+        image: 'images/muscle_sticker.png',
         title: 'Walker Texas Ranger',
         key: AbilityKey.REDUCE_WALK_WORKOUT,
         description: 'Reduce distance requirements for most of the walking tasks by 10%',
@@ -14,6 +15,7 @@ export const ABILITIES: Ability[] =
         coinsReward: 0,
     },
     {
+        image: 'images/muscle_sticker.png',
         title: 'Run Forest Run',
         key: AbilityKey.REDUCE_RUN_WORKOUT,
         description: 'Reduce distance requirements for most of the running tasks by 10%',
@@ -24,6 +26,7 @@ export const ABILITIES: Ability[] =
         coinsReward: 0,
     },
     {
+        image: 'images/muscle_sticker.png',
         title: 'Easy Rider',
         key: AbilityKey.REDUCE_RIDE_WORKOUT,
         description: 'Reduce distance requirements for most of the riding tasks by 10%',
@@ -34,6 +37,7 @@ export const ABILITIES: Ability[] =
         coinsReward: 0,
     },
     {
+        image: 'images/muscle_sticker.png',
         title: 'Gym Rat',
         key: AbilityKey.REDUCE_OTHER_WORKOUT,
         description: 'Reduce time requirements for most of the non-walking/running/riding tasks by 10%',
@@ -44,6 +48,7 @@ export const ABILITIES: Ability[] =
         coinsReward: 0,
     },
     {
+        image: 'images/muscle_sticker.png',
         title: 'Extra Walker',
         key: AbilityKey.BASE_WALK_EXPERIENCE_BONUS,
         description: 'Each completed Basic walking activity gives 1 extra experience point',
@@ -54,6 +59,7 @@ export const ABILITIES: Ability[] =
         coinsReward: 0,
     },
     {
+        image: 'images/muscle_sticker.png',
         title: 'Extra Runner',
         key: AbilityKey.BASE_RUN_EXPERIENCE_BONUS,
         description: 'Each completed Basic running activity gives 1 extra experience point',
@@ -64,6 +70,7 @@ export const ABILITIES: Ability[] =
         coinsReward: 0,
     },
     {
+        image: 'images/muscle_sticker.png',
         title: 'Extra Rider',
         key: AbilityKey.BASE_RIDE_EXPERIENCE_BONUS,
         description: 'Each completed Basic riding activity gives 1 extra experience point',
@@ -74,6 +81,7 @@ export const ABILITIES: Ability[] =
         coinsReward: 0,
     },
     {
+        image: 'images/muscle_sticker.png',
         title: 'Extra Gym',
         key: AbilityKey.BASE_OTHER_EXPERIENCE_BONUS,
         description: 'Each completed Basic non-walking/running/riding activity gives 1 extra experience point',
@@ -84,6 +92,7 @@ export const ABILITIES: Ability[] =
         coinsReward: 0,
     },
     {
+        image: 'images/muscle_sticker.png',
         title: 'Procrastinator',
         key: AbilityKey.TASK_QUEUE_SIZE_BONUS,
         description: 'Increase the maximum number of tasks you can have activated at the same time by 1',
@@ -94,6 +103,7 @@ export const ABILITIES: Ability[] =
         coinsReward: 0,
     },
     {
+        image: 'images/muscle_sticker.png',
         title: 'Fortune Teller',
         key: AbilityKey.SEE_FUTURE_CHALLENGE,
         description: 'You can see into future and know what challenge will come up next',
@@ -104,6 +114,7 @@ export const ABILITIES: Ability[] =
         coinsReward: 0,
     },
     {
+        image: 'images/muscle_sticker.png',
         title: 'Task Master',
         key: AbilityKey.EXPERIENCE_PER_TASK_BONUS,
         description: 'Each completed task gives 1 extra experience point',
@@ -114,10 +125,11 @@ export const ABILITIES: Ability[] =
         coinsReward: 0,
     },
     {
+        image: 'images/muscle_sticker.png',
         title: 'Breakthrough',
         key: AbilityKey.FLAT_EXPERIENCE_BONUS,
         description: 'Immediately get 25 experience points',
-        value: 25,
+        value: 0,
         energyCost: 0,
         energyReward: 0,
         coinsCost: 0,
@@ -126,6 +138,7 @@ export const ABILITIES: Ability[] =
 
 
     {
+        image: 'images/muscle_sticker.png',
         title: 'Reset Task',
         key: AbilityKey.RESET_CARD,
         description: 'You can reset any played card so it could be played again',
@@ -136,6 +149,7 @@ export const ABILITIES: Ability[] =
         coinsReward: 0,
     },
     {
+        image: 'images/muscle_sticker.png',
         title: 'Victory point',
         key: AbilityKey.BUY_POINT,
         description: 'Immediately get 1 victory point',
@@ -146,6 +160,7 @@ export const ABILITIES: Ability[] =
         coinsReward: 0,
     },
     {
+        image: 'images/muscle_sticker.png',
         title: 'Win button',
         key: AbilityKey.BUY_3_POINTS,
         description: 'Immediately get 3 victory points',
@@ -156,6 +171,7 @@ export const ABILITIES: Ability[] =
         coinsReward: 0,
     },
     {
+        image: 'images/muscle_sticker.png',
         title: 'Rest Day',
         key: AbilityKey.SELL_ENERGY_FULL,
         description: 'Lose full energy to immediately get 3 victory points',
@@ -166,6 +182,7 @@ export const ABILITIES: Ability[] =
         coinsReward: 0,
     },
     {
+        image: 'images/muscle_sticker.png',
         title: 'Energy Shot',
         key: AbilityKey.BUY_ENERGY,
         description: 'Immediately restore 1 energy',
@@ -176,6 +193,7 @@ export const ABILITIES: Ability[] =
         coinsReward: 0,
     },
     {
+        image: 'images/muscle_sticker.png',
         title: 'Energy Boost',
         key: AbilityKey.BUY_ENERGY_FULL,
         description: 'Immediately restore full energy',
@@ -186,6 +204,7 @@ export const ABILITIES: Ability[] =
         coinsReward: 0,
     },
     {
+        image: 'images/muscle_sticker.png',
         title: 'All In',
         key: AbilityKey.ENERGY_TO_COINS,
         description: 'Spend full energy to get 20 coins',
@@ -196,6 +215,7 @@ export const ABILITIES: Ability[] =
         coinsReward: 20,
     },
     {
+        image: 'images/muscle_sticker.png',
         title: 'Go Easy',
         key: AbilityKey.REDUCE_BASE_WORKOUT,
         description: 'Reduce distance requirements for most of the tasks by 10%',

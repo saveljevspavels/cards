@@ -29,6 +29,7 @@ import { AbilityComponent } from './components/ability/ability.component';
 import {ActiveChallengesComponent} from "./components/active-challenges/active-challenges.component";
 import {ExperienceDisplayComponent} from "./components/experience-display/experience-display.component";
 import {LevelOverviewComponent} from "./components/level-overview/level-overview.component";
+import {InventoryComponent} from "../shared/components/inventory/inventory.component";
 
 @NgModule({
     declarations: [
@@ -57,7 +58,8 @@ import {LevelOverviewComponent} from "./components/level-overview/level-overview
         AbilityComponent,
         ActiveChallengesComponent,
         ExperienceDisplayComponent,
-        LevelOverviewComponent
+        LevelOverviewComponent,
+        InventoryComponent
     ],
     imports: [
         CommonModule,

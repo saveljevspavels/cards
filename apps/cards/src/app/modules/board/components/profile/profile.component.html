@@ -2,6 +2,17 @@
     <app-athlete [size]="'big'" [athlete]="athlete"></app-athlete>
 </div>
 
+<div class="mt-3">
+    <app-collapsible [title]="'Inventory'"
+                     [inclusive]="true"
+                     [id]="'inventory'"
+    >
+        <div hiddenContent>
+            <app-inventory [currencies]="athlete?.currencies"></app-inventory>
+        </div>
+    </app-collapsible>
+</div>
+
 <!--<div class="mt-3">-->
 <!--    <app-collapsible [title]="'Base Workout Stats'"-->
 <!--                     [inclusive]="true"-->
@@ -13,18 +24,6 @@
 <!--    </app-collapsible>-->
 <!--</div>-->
 
-<div class="mt-3" *ngIf="self">
-    <app-collapsible [title]="'Special Abilities'"
-                     [inclusive]="true"
-                     [id]="'specialAbilities'"
-    >
-        <div hiddenContent>
-            <div class="mb-3 mt-2">
-                <app-abilities></app-abilities>
-            </div>
-        </div>
-    </app-collapsible>
-</div>
 
 <div class="mt-3">
     <app-collapsible [title]="'Completed Tasks'"

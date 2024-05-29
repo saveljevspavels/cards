@@ -1,11 +1,17 @@
 <ng-container *ngIf="athlete">
-    <div class="text-small mb-2">{{abilities.length ? 'Each ability is usable only once' : 'All available abilities used!'}}</div>
-    <ng-container *ngFor="let ability of abilities">
-        <div class="mb-2">
-            <app-ability
-                    [ability]="ability"
-                    [athlete]="athlete"
-            ></app-ability>
-        </div>
-    </ng-container>
+    <div class="d-flex flex-wrap">
+        <app-selection-wrapper
+                [singleSelection]="true"
+                [formControl]="selectedAbility"
+                [template]="abilityTemplate"
+                [dataItems]="abilities"
+                [idKey]="'key'"
+        >
+            <ng-template #abilityTemplate let-dataItem="dataItem">
+                <app-ability
+                        [ability]="dataItem"
+                ></app-ability>
+            </ng-template>
+        </app-selection-wrapper>
+    </div>
 </ng-container>

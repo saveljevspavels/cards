@@ -19,7 +19,7 @@ export default class AthleteService {
                 res.status(400).send({response: RESPONSES.ERROR.INVALID_ATHLETE});
                 return;
             }
-            await this.updateBaseWorkout(req.body.athleteIds, req.body.baseWorkout)
+            await this.updateBaseWorkoutsForAthletes(req.body.athleteIds, req.body.baseWorkout)
             res.status(200).send({response: RESPONSES.SUCCESS});
         });
 
@@ -86,7 +86,7 @@ export default class AthleteService {
     }
 
     async updateAthlete(athlete: Athlete) {
-        await this.fireStoreService.athleteCollection.update(athlete.id.toString(), athlete);
+        await this.fireStoreService.athleteCollection.update(athlete.id.toString(), athlete.toJSONObject());
     }
 
     createAthlete(athlete: any): Athlete {
@@ -102,40 +102,42 @@ export default class AthleteService {
         }
     }
 
-    async addEnergy(athlete: Athlete, value: number) {
+    addEnergy(athlete: Athlete, value: number): void {
+        if(value === 0) {
+            return;
+        }
         const excessEnergy = ((athlete.currencies.energy || 0) + value) - RULES.ENERGY.MAX;
         const newVal = Math.min((athlete.currencies.energy || 0) + value, RULES.ENERGY.MAX)
 
         athlete.currencies.energy = newVal;
         athlete.currencies.coins = (athlete.currencies.coins || 0) + (excessEnergy > 0 ? excessEnergy * RULES.COINS.PER_ENERGY_CONVERSION : 0);
-        await this.updateAthlete(athlete);
 
         this.logger.info(`Athlete ${athlete.firstname} ${athlete.lastname} ${athlete.id} restored ${value} energy, now ${newVal}, and ${(excessEnergy > 0 ? excessEnergy * RULES.COINS.PER_ENERGY_CONVERSION : 0)} coins`)
     }
 
-    async spendEnergy(athlete: Athlete, amount: number) {
+    spendEnergy(athlete: Athlete, amount: number): void {
         if(athlete.currencies.energy < amount) {
             this.logger.info(`Athlete ${athlete.name} don't have enough energy (${amount}) to spend. Has ${athlete.currencies.energy}`);
             throw 'Not enough energy';
         }
 
         athlete.currencies.energy = athlete.currencies.energy - amount;
-        await this.updateAthlete(athlete);
 
         this.logger.info(`Athlete ${athlete.firstname} ${athlete.lastname} spent ${amount} energy, now ${athlete.currencies.energy - amount}`)
     }
 
-    async increaseFatigue(athlete: Athlete, amount: number): Promise<void> {
-        if(athlete.currencies.fatigue >= RULES.FATIGUE.MAX) {
-            this.logger.info(`Athlete ${athlete.name} fatigue is at max (${athlete.currencies.fatigue}). Can't increase`);
-            throw 'Max. fatigue reached';
+    increaseFatigue(athlete: Athlete, amount: number): void {
+        if (amount === 0) {
+            return;
+        }
+        try {
+            athlete.increaseFatigue(amount);
+        } catch (e) {
+            this.logger.info(`Athlete ${athlete.name} can't increase fatigue by ${amount} due to ${e}`);
+            throw e;
         }
 
-        const newFatigue = parseInt(String(athlete.currencies.fatigue || 0), 10) + parseInt(String(amount), 10);
-
-        athlete.currencies.fatigue = newFatigue;
-        await this.updateAthlete(athlete);
-        this.logger.info(`Athlete ${athlete.firstname} ${athlete.lastname} fatigue increased by ${amount}, now ${newFatigue}`)
+        this.logger.info(`Athlete ${athlete.name} fatigue increased by ${amount}, now ${athlete.currencies.fatigue}`)
     }
 
     async decreaseFatigue(athlete: Athlete, amount: number): Promise<void> {
@@ -145,31 +147,41 @@ export default class AthleteService {
         this.logger.info(`Athlete ${athlete.firstname} ${athlete.lastname} fatigue lowered by ${amount}, now ${newFatigue}`)
     }
 
-    async spendCoins(athlete: Athlete, amount: number) {
-        if(athlete.currencies.coins < amount) {
+    spendCoins(athlete: Athlete, amount: number) {
+        if(amount === 0) {
+            return;
+        }
+        try {
+            athlete.spendCoins(amount);
+        } catch (e) {
             this.logger.info(`Athlete ${athlete.name} don't have enough coins (${amount}) to spend. Has ${athlete.currencies.coins}`);
             throw 'Not enough coins';
         }
-
-        athlete.currencies.coins = athlete.currencies.coins - amount;
-        await this.updateAthlete(athlete);
         this.logger.info(`Athlete ${athlete.name} spent ${amount} coins, now ${athlete.currencies.coins - amount}`)
     }
 
-    async updateBaseWorkout(athleteIds: string[], baseWorkoutPatch: any) {
-        const athletes = await this.fireStoreService.athleteCollection.whereQuery([{fieldPath: 'id', opStr: 'in', value: athleteIds}])
-        athletes.forEach((athlete) => {
-            const currentBaseWorkout = athlete.baseWorkout;
-            athlete.baseWorkout = {
-                ...currentBaseWorkout,
-                ...Object.keys(baseWorkoutPatch).reduce((acc: any, type) => {
-                    // @ts-ignore
-                    acc[type] = {...currentBaseWorkout[type], ...baseWorkoutPatch[type]}
-                    return acc;
-                }, {})
-            }
-            this.updateAthlete(athlete);
-            this.logger.info(`Base workout updated for ${athlete.firstname} ${athlete.lastname} ${athlete.id} with ${JSON.stringify(baseWorkoutPatch)}`)
-        })
+
+    async updateBaseWorkoutsForAthletes(athleteIds: string[], baseWorkoutPatch: any): Promise<any> {
+        for (const athleteId of athleteIds) {
+            const athlete = await this.getAthlete(athleteId);
+            this.updateBaseWorkout(athlete, baseWorkoutPatch);
+            await this.updateAthlete(athlete);
+        }
+    }
+
+    updateBaseWorkout(athlete: Athlete, baseWorkoutPatch: any): void {
+        athlete.updateBaseWorkout(baseWorkoutPatch);
+        this.logger.info(`Base workout updated for ${athlete.name} ${athlete.id} with ${JSON.stringify(baseWorkoutPatch)}`)
+    }
+
+    addExperience(athlete: Athlete, experience: number): void {
+        if (experience === 0) {
+            return;
+        }
+        const levelBefore = athlete.level;
+        athlete.addExperience(experience);
+        if(athlete.level > levelBefore) {
+            this.logger.info(`Athlete ${athlete.name} got ${experience} experience, leveled up to ${athlete.level}`)
+        }
     }
 }

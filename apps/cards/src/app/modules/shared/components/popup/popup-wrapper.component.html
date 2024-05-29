@@ -1,0 +1,17 @@
+<ng-template #templateRef>
+    <div class="popup box" [ngClass]="{'popup--wide': wide}">
+        <div class="d-flex flex-column align-items-center">
+            <div class="mt-5 pt-2 mb-4 text-center">
+                <p class="color-primary">{{title}}</p>
+                {{description}}
+            </div>
+            <ng-content></ng-content>
+            <div class="mt-4 mb-2 full-width">
+                <app-button type="action" [label]="confirmText" (buttonClick)="confirm()"></app-button>
+            </div>
+            <div class="mb-3">
+                <app-button (buttonClick)="cancel()" [label]="cancelText"></app-button>
+            </div>
+        </div>
+    </div>
+</ng-template>

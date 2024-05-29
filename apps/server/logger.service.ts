@@ -8,7 +8,7 @@ export default class LoggerService {
     static init(app: Express) {
         app.get(`${CONST.API_PREFIX}/admin/logs`, (req, res) => {
             try {
-                let data = fs.readFileSync('log.log', 'utf8')
+                let data = fs.readFileSync('logs/log.log', 'utf8')
                 data = JSON.parse('[' + data.trim().slice(0, -1) + ']');
                 res.status(200).send(data);
             } catch (err) {
@@ -18,7 +18,7 @@ export default class LoggerService {
 
         const transports = [
             // @ts-ignore
-            new winston.transports.File({ filename: 'log.log', timestamp: true })
+            new winston.transports.File({ filename: 'logs/log.log', timestamp: true })
         ]
         if(process.env.NODE_ENV !== 'prod') {
             // @ts-ignore

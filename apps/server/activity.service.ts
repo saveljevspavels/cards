@@ -134,8 +134,11 @@ export default class ActivityService {
                     })
                 })
             })
+
             if(Object.keys(baseWorkoutPatch[normalizedType]).length) {
-                await this.athleteService.updateBaseWorkout([activity.athlete.id.toString()], baseWorkoutPatch)
+                const athlete = await this.athleteService.getAthlete(activity.athlete.id.toString());
+                this.athleteService.updateBaseWorkout(athlete, baseWorkoutPatch);
+                await this.athleteService.updateAthlete(athlete);
             }
         }
     }

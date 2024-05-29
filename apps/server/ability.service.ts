@@ -22,12 +22,9 @@ import {ProgressiveChallenge} from "../shared/interfaces/progressive-challenge.i
 export default class AbilityService {
     constructor(
         private app: Express,
-        private fireStoreService: FirestoreService,
         private logger: Logger,
         private athleteService: AthleteService,
         private scoreService: ScoreService,
-        private cardService: CardService,
-        private activityService: ActivityService
     ) {
         app.post(`${CONST.API_PREFIX}/abilities/activate`,async (req, res) => {
             const abilityKey = req.body?.abilityKey;
@@ -49,32 +46,23 @@ export default class AbilityService {
         const athlete = await this.athleteService.getAthlete(athleteId);
         const ability = ABILITIES.find(ability => ability.key === abilityKey);
         if(!ability) {
-            this.logger.info(`Athlete ${athlete.name} tried to activate invalid activity: ${abilityKey}`);
+            this.logger.info(`Athlete ${athlete.name} tried to activate invalid ability: ${abilityKey}`);
             throw 'Invalid ability';
         }
-        if(athlete.usedAbilities.indexOf(abilityKey) !== -1) {
-            this.logger.info(`Athlete ${athlete.name} already used ability ${abilityKey}`);
-            throw 'Already used';
+        if(athlete.currencies.perks <= 0) {
+            this.logger.info(`Athlete ${athlete.name} tried to activate ability ${abilityKey} without perks`);
+            throw 'No abilities available';
         }
 
-        await Promise.all([
-            ability.coinsCost && await this.athleteService.spendCoins(athlete, ability.coinsCost),
-            ability.energyCost && await this.athleteService.increaseFatigue(athlete, ability.energyCost),
-            await this.fireStoreService.athleteCollection.update(
-                athleteId,
-                {
-                    usedAbilities: [
-                        ...athlete.usedAbilities,
-                        abilityKey
-                    ]
-                }
-            )
-        ])
+        athlete.currencies.perks -= 1;
+        athlete.usedAbilities.push(abilityKey);
+        this.athleteService.spendCoins(athlete, ability.coinsCost);
+        this.athleteService.increaseFatigue(athlete, ability.energyCost);
 
         switch (abilityKey) {
             case AbilityKey.REDUCE_BASE_WORKOUT:
-                await this.athleteService.updateBaseWorkout(
-                    [athleteId],
+                this.athleteService.updateBaseWorkout(
+                    athlete,
                     {
                         run: {
                             distance: this.reduceBaseWorkout(athlete.baseWorkout.run.distance),
@@ -89,8 +77,8 @@ export default class AbilityService {
                 )
                 break;
             case AbilityKey.REDUCE_WALK_WORKOUT:
-                await this.athleteService.updateBaseWorkout(
-                    [athleteId],
+                this.athleteService.updateBaseWorkout(
+                    athlete,
                     {
                         walk: {
                             distance: this.reduceBaseWorkout(athlete.baseWorkout.walk.distance),
@@ -99,8 +87,8 @@ export default class AbilityService {
                 );
                 break;
             case AbilityKey.REDUCE_RUN_WORKOUT:
-                await this.athleteService.updateBaseWorkout(
-                    [athleteId],
+                this.athleteService.updateBaseWorkout(
+                    athlete,
                     {
                         run: {
                             distance: this.reduceBaseWorkout(athlete.baseWorkout.run.distance),
@@ -109,8 +97,8 @@ export default class AbilityService {
                 );
                 break;
             case AbilityKey.REDUCE_RIDE_WORKOUT:
-                await this.athleteService.updateBaseWorkout(
-                    [athleteId],
+                this.athleteService.updateBaseWorkout(
+                    athlete,
                     {
                         ride: {
                             distance: this.reduceBaseWorkout(athlete.baseWorkout.ride.distance),
@@ -119,8 +107,8 @@ export default class AbilityService {
                 );
                 break;
             case AbilityKey.REDUCE_OTHER_WORKOUT:
-                await this.athleteService.updateBaseWorkout(
-                    [athleteId],
+                this.athleteService.updateBaseWorkout(
+                    athlete,
                     {
                         other: {
                             elapsed_time: this.reduceBaseWorkout(athlete.baseWorkout.other.elapsed_time),
@@ -129,51 +117,43 @@ export default class AbilityService {
                 );
                 break;
             case AbilityKey.BASE_WALK_EXPERIENCE_BONUS:
-                this.addPerk(athlete, AbilityKey.BASE_WALK_EXPERIENCE_BONUS);
+                athlete.addPerk(AbilityKey.BASE_WALK_EXPERIENCE_BONUS);
                 break;
             case AbilityKey.BASE_RUN_EXPERIENCE_BONUS:
-                this.addPerk(athlete, AbilityKey.BASE_RUN_EXPERIENCE_BONUS);
+                athlete.addPerk(AbilityKey.BASE_RUN_EXPERIENCE_BONUS);
                 break;
             case AbilityKey.BASE_RIDE_EXPERIENCE_BONUS:
-                this.addPerk(athlete, AbilityKey.BASE_RIDE_EXPERIENCE_BONUS);
+                athlete.addPerk(AbilityKey.BASE_RIDE_EXPERIENCE_BONUS);
                 break;
             case AbilityKey.BASE_OTHER_EXPERIENCE_BONUS:
-                this.addPerk(athlete, AbilityKey.BASE_OTHER_EXPERIENCE_BONUS);
+                athlete.addPerk(AbilityKey.BASE_OTHER_EXPERIENCE_BONUS);
                 break;
             case AbilityKey.EXPERIENCE_PER_TASK_BONUS:
-                this.addPerk(athlete, AbilityKey.EXPERIENCE_PER_TASK_BONUS);
+                athlete.addPerk(AbilityKey.EXPERIENCE_PER_TASK_BONUS);
                 break;
             case AbilityKey.SEE_FUTURE_CHALLENGE:
-                this.addPerk(athlete, AbilityKey.SEE_FUTURE_CHALLENGE);
+                athlete.addPerk(AbilityKey.SEE_FUTURE_CHALLENGE);
                 break;
             case AbilityKey.TASK_QUEUE_SIZE_BONUS:
-                this.addPerk(athlete, AbilityKey.TASK_QUEUE_SIZE_BONUS);
+                athlete.addPerk(AbilityKey.TASK_QUEUE_SIZE_BONUS);
                 break;
             case AbilityKey.FLAT_EXPERIENCE_BONUS:
-                athlete.currencies.experience += RULES.ABILITY_FLAT_EXPERIENCE;
-                await this.athleteService.updateAthlete(athlete);
+                this.athleteService.addExperience(athlete, RULES.ABILITY_FLAT_EXPERIENCE);
                 break;
             case AbilityKey.RESET_CARD:
                 break;
         }
 
-        Promise.all([
-            ability.coinsReward && await this.athleteService.spendCoins(athlete, -ability.coinsReward),
-            ability.energyReward && await this.athleteService.addEnergy(athlete, ability.energyReward),
-            ability.value && await this.scoreService.addPoints(athleteId, ability.value)
+        this.athleteService.spendCoins(athlete, -ability.coinsReward);
+        this.athleteService.addEnergy(athlete, ability.energyReward);
+
+        await Promise.all([
+            ability.value && await this.scoreService.addPoints(athleteId, ability.value),
+            this.athleteService.updateAthlete(athlete)
         ]);
     }
 
     reduceBaseWorkout(distance: number): number {
         return Math.ceil((distance) * RULES.ABILITY_BASE_WORKOUT_REDUCTION);
-    }
-
-    addPerk(athlete: Athlete, perk: AbilityKey): Athlete {
-        if(athlete.perks[perk] || athlete.perks[perk] === 0) {
-            athlete.perks[perk] += 1;
-        } else {
-            athlete.perks[perk] = 1;
-        }
-        return athlete;
     }
 }

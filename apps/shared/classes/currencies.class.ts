@@ -44,6 +44,10 @@ export class Currencies {
         return new Currencies(0, 0, 0, chests);
     }
 
+    static withPerks(perks: number): Currencies {
+        return new Currencies(0, 0, 0, 0, perks);
+    }
+
     toString(): string {
         return `Currencies(${Object.entries(this).filter(([key, value]) => value).map(([key, value]) => `${key}: ${value}`).join(', ')})`;
     }
@@ -59,5 +63,18 @@ export class Currencies {
             energy: this.energy,
             fatigue: this.fatigue
         };
+    }
+
+    static fromJSONObject(json: any): Currencies {
+        return new Currencies(
+            json['coins'],
+            json['points'],
+            json['experience'],
+            json['chests'],
+            json['perks'],
+            json['random_perks'],
+            json['energy'],
+            json['fatigue']
+        );
     }
 }

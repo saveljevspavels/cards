@@ -78,7 +78,7 @@ export default class Athlete implements JsonObjectInterface {
             json['achievements'],
             json['level'],
             json['claimedLevelRewards'],
-            json['currencies'],
+            Currencies.fromJSONObject(json['currencies']),
             json['cards'],
             json['baseCardProgress'],
             json['unlocks'],
@@ -125,6 +125,53 @@ export default class Athlete implements JsonObjectInterface {
         )
     }
 
+    spendCoins(amount: number) {
+        if(this.currencies.coins < amount) {
+            throw 'Not enough coins';
+        }
+        this.currencies.coins -= amount;
+    }
+
+    increaseFatigue(amount: number) {
+        if(this.currencies.fatigue >= RULES.FATIGUE.MAX) {
+            throw 'Max. fatigue reached';
+        }
+
+        this.currencies.fatigue = parseInt(String(this.currencies.fatigue || 0), 10) + parseInt(String(amount), 10);
+    }
+
+    updateBaseWorkout(baseWorkoutPatch: any) {
+        const currentBaseWorkout = this.baseWorkout;
+        this.baseWorkout = {
+            ...currentBaseWorkout,
+            ...Object.keys(baseWorkoutPatch).reduce((acc: any, type) => {
+                // @ts-ignore
+                acc[type] = {...currentBaseWorkout[type], ...baseWorkoutPatch[type]}
+                return acc;
+            }, {})
+        }
+    }
+
+    addPerk(perk: AbilityKey) {
+        if(this.perks[perk] || this.perks[perk] === 0) {
+            this.perks[perk] += 1;
+        } else {
+            this.perks[perk] = 1;
+        }
+    }
+
+    addExperience(amount: number) {
+        this.currencies.experience = parseInt(String(this.currencies.experience || 0), 10) + parseInt(String(amount), 10);
+        this.levelUp();
+    }
+
+    levelUp() {
+        while (this.level < LEVEL_REWARDS.length && this.currencies.experience >= RULES.LEVEL_EXPERIENCE[this.level]) {
+            this.currencies.experience -= RULES.LEVEL_EXPERIENCE[this.level];
+            this.level++;
+        }
+    }
+
     claimLevelRewards(level: number) {
         const rewards = LEVEL_REWARDS[level];
         if(!rewards) return;
@@ -155,7 +202,8 @@ export default class Athlete implements JsonObjectInterface {
             cards: this.cards,
             baseCardProgress: this.baseCardProgress,
             unlocks: this.unlocks,
-            usedAbilities: this.usedAbilities
+            usedAbilities: this.usedAbilities,
+            perks: this.perks,
         }
     }
 }

@@ -1,4 +1,5 @@
 export interface Ability {
+    image: string;
     title: string;
     key: AbilityKey;
     description: string;
@@ -30,5 +31,4 @@ export enum AbilityKey {
     ENERGY_TO_COINS = 'energy_to_coins',
     RESET_CARD = 'reset_card',
     REDUCE_BASE_WORKOUT = 'reduce_base_workout',
-
 }

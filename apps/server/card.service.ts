@@ -230,9 +230,9 @@ export default class CardService {
 
         const coinsCost = StaticAthleteHelperService.getCardActivationCost(athlete.currencies.fatigue);
         athlete.cards.active = [...athlete?.cards.active, card.id];
+        this.athleteService.spendCoins(athlete, coinsCost)
 
         await Promise.all([
-            this.athleteService.spendCoins(athlete, coinsCost),
             this.athleteService.increaseFatigue(athlete, card.energyCost),
             this.athleteService.updateAthlete(athlete)
         ])

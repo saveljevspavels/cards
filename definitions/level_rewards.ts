@@ -6,7 +6,7 @@ export const LEVEL_REWARDS: Currencies[] = [
     Currencies.withChests(1),
     Currencies.withPoints(1),
     Currencies.withExperience(1),
-    Currencies.withCoins(8),
+    Currencies.withPerks(1),
     Currencies.withCoins(8),
     Currencies.withCoins(8),
     Currencies.withCoins(8),

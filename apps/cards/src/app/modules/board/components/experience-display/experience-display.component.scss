@@ -1,0 +1,8 @@
+.experience-display {
+  position: relative;
+  &__level {
+    pointer-events: none;
+    position: absolute;
+    top: 3px;
+  }
+}

@@ -1,0 +1,27 @@
+<div>
+    <div *ngIf="currencies.perks">
+        <h4>Unclaimed perks ({{currencies.perks}})</h4>
+        <app-button type="action" (buttonClick)="openAbilitySelection()">Choose</app-button>
+    </div>
+    <div *ngIf="currencies.random_perks">
+        <h4>Unclaimed random perks ({{currencies.random_perks}})</h4>
+        <app-button type="action">Claim</app-button>
+    </div>
+    <div *ngIf="currencies.chests">
+        <h4>Unclaimed chests ({{currencies.chests}})</h4>
+        <app-button type="action">Open</app-button>
+    </div>
+</div>
+
+
+<app-popup-wrapper
+        [templateControl]="abilitySelectionPopupControl"
+        [title]="'Available Perks'"
+        [description]="'You can select any one that you like'"
+        [confirmText]="'Yes'"
+        [cancelText]="'Cancel'"
+        [wide]="true"
+        (onConfirm)="selectAbility()"
+>
+    <app-abilities [selectedAbility]="selectedAbility"></app-abilities>
+</app-popup-wrapper>

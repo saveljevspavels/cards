@@ -13,7 +13,6 @@ import {SelectionWrapperComponent} from "./components/selection-wrapper/selectio
 import {FileUploadModule} from "primeng/fileupload";
 import {HttpClientModule} from "@angular/common/http";
 import {ImageUploadComponent} from "./components/image-upload/image-upload.component";
-import {FileService} from "../../services/file.service";
 import {InputTextareaModule} from "primeng/inputtextarea";
 import {BaseWorkoutInfoComponent} from "./components/base-workout-info/base-workout-info.component";
 import {SelectComponent} from "../../components/select/select.component";
@@ -61,6 +60,7 @@ import {ChallengeBarComponent} from "./components/challenge/challenge-bar.compon
 import {RewardExperienceComponent} from "./components/reward-experience/reward-experience.component";
 import {NumberTransitionComponent} from "./components/number-transition/number-transition.component";
 import {LevelComponent} from "./components/level/level.component";
+import {PopupWrapperComponent} from "./components/popup/popup-wrapper.component";
 
 const COMPS = [
     InputComponent,
@@ -94,7 +94,8 @@ const COMPS = [
     ChallengeComponent,
     ChallengeBarComponent,
     RewardExperienceComponent,
-    LevelComponent
+    LevelComponent,
+    PopupWrapperComponent
 ]
 
 const MODULES = [

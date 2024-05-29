@@ -47,7 +47,6 @@ export class ChallengeService {
 
             try {
                 await this.claimChallenge(athleteId, req.body.challengeId);
-                await this.levelUp(athleteId);
                 res.status(200).send({});
             } catch (err) {
                 this.logger.error(`Error claiming a challenge ${err}`);
@@ -95,7 +94,6 @@ export class ChallengeService {
             throw `Athlete ${athleteId} has already claimed level ${levelIndex}`;
         }
 
-
         athlete.claimLevelRewards(levelIndex);
         await Promise.all([
             LEVEL_REWARDS[levelIndex].points ? this.scoreService.addPoints(athleteId, LEVEL_REWARDS[levelIndex].points) : Promise.resolve(),
@@ -127,7 +125,7 @@ export class ChallengeService {
             throw `Challenge ${challengeId} is not completed yet`;
         }
 
-        athlete.currencies.experience = parseInt(String(athlete.currencies.experience || 0), 10) + parseInt(String(challenge.rewards.experience), 10);
+        this.athleteService.addExperience(athlete, challenge.rewards.experience);
 
         await Promise.all([
             this.fireStoreService.challengeProgressCollection.update(athleteId, {
@@ -136,16 +134,6 @@ export class ChallengeService {
             this.athleteService.updateAthlete(athlete)
         ]);
         this.logger.info(`Challenge ${challengeId} claimed by ${athleteId}`);
-    }
-
-    async levelUp(athleteId: string) {
-        const athlete: Athlete = await this.athleteService.getAthlete(athleteId);
-        while (athlete.level < LEVEL_REWARDS.length && athlete.currencies.experience >= RULES.LEVEL_EXPERIENCE[athlete.level]) {
-            athlete.level++;
-            athlete.currencies.experience -= RULES.LEVEL_EXPERIENCE[athlete.level];
-        }
-        await this.athleteService.updateAthlete(athlete);
-        this.logger.info(`Athlete ${athlete.name} leveled up to ${athlete.level}`);
     }
 
     async getAllChallenges(): Promise<ProgressiveChallenge[]> {
