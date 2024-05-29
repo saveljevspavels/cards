@@ -9,7 +9,7 @@
             <div class="mt-4 mb-2 full-width">
                 <app-button type="action" [label]="confirmText" (buttonClick)="confirm()"></app-button>
             </div>
-            <div class="mb-3">
+            <div class="mb-3" *ngIf="showCancel">
                 <app-button (buttonClick)="cancel()" [label]="cancelText"></app-button>
             </div>
         </div>

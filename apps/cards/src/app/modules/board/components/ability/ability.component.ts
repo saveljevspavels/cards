@@ -1,4 +1,4 @@
-import {Component, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
+import {Component, ElementRef, Input, OnChanges, OnInit, SimpleChanges, ViewChild} from '@angular/core';
 import {Ability, AbilityKey} from "../../../../../../../shared/interfaces/ability.interface";
 import {GameService} from "../../../../services/game.service";
 import {PopupService} from "../../../../services/popup.service";
@@ -9,7 +9,7 @@ import {ButtonType} from "../../../shared/components/button/button.component";
   templateUrl: './ability.component.html',
   styleUrls: ['./ability.component.scss']
 })
-export class AbilityComponent implements OnInit {
+export class AbilityComponent {
 
   readonly ButtonType = ButtonType;
 
@@ -24,9 +24,6 @@ export class AbilityComponent implements OnInit {
       private gameService: GameService,
       private popupService: PopupService
   ) { }
-
-  ngOnInit(): void {
-  }
 
   useAbility(activityKey: AbilityKey) {
     this.loading = true;

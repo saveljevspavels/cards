@@ -41,7 +41,7 @@ const activityService = new ActivityService(app, fireStoreService, logger, athle
 const cardService = new CardService(app, fireStoreService, logger, scoreService, athleteService, activityService);
 const imageService = new ImageService(app, fireStoreService);
 const gameService = new GameService(app, fireStoreService, logger, athleteService, scoreService, cardService, activityService);
-const abilityService = new AbilityService(app, fireStoreService, logger, athleteService, scoreService, cardService, activityService);
+const abilityService = new AbilityService(app, logger, athleteService, scoreService);
 const achievementService = new AchievementService(app, fireStoreService);
 const authService = new AuthService(app, fireStoreService, logger, athleteService);
 

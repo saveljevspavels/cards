@@ -3,7 +3,7 @@ import fs from "fs";
 import {Express} from "express";
 import {FirestoreService} from "./firestore.service";
 import {CONST} from "../../definitions/constants";
-import {AbilityKey} from "../shared/interfaces/ability.interface";
+import {Ability, AbilityKey} from "../shared/interfaces/ability.interface";
 import AthleteService from "./athlete.service";
 import {Logger} from "winston";
 import {ABILITIES} from "../../definitions/abilities";
@@ -34,32 +34,64 @@ export default class AbilityService {
                 return;
             }
             try {
-                await this.useAbility(athleteId, abilityKey);
+                await this.consumeAbility(athleteId, abilityKey);
             } catch (err) {
                 res.status(400).send(err);
             }
             res.status(200).send();
         });
+
+        app.post(`${CONST.API_PREFIX}/abilities/random`, async (req, res) => {
+            const athleteId = res.get('athleteId');
+            if(!athleteId) {
+                res.status(400).send('Athlete Id missing');
+                return;
+            }
+            try {
+                const abilityKey = await this.consumeRandomAbility(athleteId);
+                res.status(200).send({abilityKey});
+            } catch (err) {
+                res.status(400).send(err);
+            }
+        });
     }
 
-    async useAbility(athleteId: string, abilityKey: AbilityKey) {
+    async consumeRandomAbility(athleteId: string) {
+        this.logger.info(`Athlete ${athleteId} is trying to consume random ability`);
         const athlete = await this.athleteService.getAthlete(athleteId);
-        const ability = ABILITIES.find(ability => ability.key === abilityKey);
-        if(!ability) {
-            this.logger.info(`Athlete ${athlete.name} tried to activate invalid ability: ${abilityKey}`);
-            throw 'Invalid ability';
+        if(athlete.currencies.random_perks <= 0) {
+            this.logger.info(`Athlete ${athlete.name} don't have random perks to activate`);
+            throw 'No random perks available';
         }
+        const ability = this.getAbility(this.getRandomAbilityKey());
+        athlete.currencies.random_perks -= 1;
+        await this.activateAbility(athlete, ability);
+        return ability.key;
+    }
+
+    getRandomAbilityKey(): AbilityKey {
+        return RULES.ENABLED_ABILITIES[getRandomInt(RULES.ENABLED_ABILITIES.length)];
+    }
+
+    async consumeAbility(athleteId: string, abilityKey: AbilityKey) {
+        this.logger.info(`Athlete ${athleteId} is trying to consume ability ${abilityKey}`);
+        const athlete = await this.athleteService.getAthlete(athleteId);
+        const ability = this.getAbility(abilityKey);
         if(athlete.currencies.perks <= 0) {
             this.logger.info(`Athlete ${athlete.name} tried to activate ability ${abilityKey} without perks`);
             throw 'No abilities available';
         }
 
         athlete.currencies.perks -= 1;
-        athlete.usedAbilities.push(abilityKey);
+        await this.activateAbility(athlete, ability);
+    }
+
+    async activateAbility(athlete: Athlete, ability: Ability) {
+        athlete.usedAbilities.push(ability.key);
         this.athleteService.spendCoins(athlete, ability.coinsCost);
         this.athleteService.increaseFatigue(athlete, ability.energyCost);
 
-        switch (abilityKey) {
+        switch (ability.key) {
             case AbilityKey.REDUCE_BASE_WORKOUT:
                 this.athleteService.updateBaseWorkout(
                     athlete,
@@ -148,12 +180,22 @@ export default class AbilityService {
         this.athleteService.addEnergy(athlete, ability.energyReward);
 
         await Promise.all([
-            ability.value && await this.scoreService.addPoints(athleteId, ability.value),
+            ability.value && await this.scoreService.addPoints(athlete.id, ability.value),
             this.athleteService.updateAthlete(athlete)
         ]);
+        this.logger.info(`Athlete ${athlete.name} activated ability ${ability.key}`);
     }
 
     reduceBaseWorkout(distance: number): number {
         return Math.ceil((distance) * RULES.ABILITY_BASE_WORKOUT_REDUCTION);
+    }
+
+    getAbility(abilityKey: AbilityKey): Ability {
+        const ability = ABILITIES.find(ability => ability.key === abilityKey);
+        if(!ability) {
+            this.logger.info(`Ability ${abilityKey} not found`);
+            throw 'Ability not found';
+        }
+        return ability;
     }
 }

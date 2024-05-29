@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
-import {BehaviorSubject} from "rxjs";
+import {BehaviorSubject, Observable} from "rxjs";
 import Game from "../interfaces/game";
 import {ConstService} from "./const.service";
 import {environment} from "../../environments/environment";
 import {HttpClient} from "@angular/common/http";
 import {AbilityKey} from "../../../../shared/interfaces/ability.interface";
 import {AngularFirestore, AngularFirestoreDocument} from "@angular/fire/compat/firestore";
+import {map} from "rxjs/operators";
 
 @Injectable({
   providedIn: 'root'
@@ -33,5 +34,11 @@ export class GameService {
                 abilityKey
             }
         )
+    }
+
+    getRandomAbility(): Observable<AbilityKey> {
+        return this.http.post(`${environment.baseBE}/abilities/random`, {}).pipe(
+            map((res: any) => res.abilityKey)
+        );
     }
 }

@@ -61,7 +61,7 @@ export default class GameService {
 
         const job = schedule.scheduleJob(rule, async () => {
             this.logger.error(`It's midnight`);
-            const allAthletes = await this.fireStoreService.athleteCollection.all();
+            const allAthletes = (await this.fireStoreService.athleteCollection.all()).map((athlete: Athlete) => Athlete.fromJSONObject(athlete));
             allAthletes.map(async (athlete: Athlete) => {
                 await this.activityService.submitAllActivities(athlete.id);
                 await this.athleteService.decreaseFatigue(athlete, RULES.FATIGUE.TIMED_RESTORE);

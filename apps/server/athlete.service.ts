@@ -54,13 +54,9 @@ export default class AthleteService {
         const newProgress = {...athlete.baseCardProgress};
         // @ts-ignore
         newProgress[type] = parseInt(athlete.baseCardProgress[type], 10) % RULES.PROGRESS_PRECISION;
-        await this.fireStoreService.athleteCollection.update(
-            athleteId,
-            {
-                coins: parseInt(String(athlete.currencies.coins), 10) + reward,
-                baseCardProgress: newProgress
-            }
-        )
+        athlete.currencies.coins = parseInt(String(athlete.currencies.coins), 10) + reward;
+        athlete.baseCardProgress = newProgress;
+        await this.updateAthlete(athlete);
         this.logger.info(`Athlete ${athlete.name} claimed ${reward} coins for basic ${type}`);
     }
 

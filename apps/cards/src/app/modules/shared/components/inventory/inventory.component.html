@@ -5,7 +5,8 @@
     </div>
     <div *ngIf="currencies.random_perks">
         <h4>Unclaimed random perks ({{currencies.random_perks}})</h4>
-        <app-button type="action">Claim</app-button>
+        <app-button type="action" (buttonClick)="getRandomAbility()">Claim</app-button>
+        {{selectedAbility.value}}
     </div>
     <div *ngIf="currencies.chests">
         <h4>Unclaimed chests ({{currencies.chests}})</h4>
@@ -24,4 +25,15 @@
         (onConfirm)="selectAbility()"
 >
     <app-abilities [selectedAbility]="selectedAbility"></app-abilities>
+</app-popup-wrapper>
+
+<app-popup-wrapper
+        [templateControl]="abilityGainedPopupControl"
+        [title]="'You have new perk!'"
+        [description]="'From now on you have new perk activated'"
+        [confirmText]="'Ok'"
+        [showCancel]="false"
+        (onConfirm)="activatedAbilityPopupClose()"
+>
+    <app-ability *ngIf="activatedAbility" [ability]="activatedAbility"></app-ability>
 </app-popup-wrapper>
