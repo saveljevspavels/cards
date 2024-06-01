@@ -26,7 +26,7 @@
             </div>
         </div>
         <div class="card__value">
-            <app-rewards [card]="card" [rewardsOnly]="true"></app-rewards>
+            <app-rewards [perks]="(me | async)?.perks" [card]="card" [rewardsOnly]="true"></app-rewards>
             <app-button *ngIf="validationStatus.toString() === ValidationStatus.SELECTED"
                         [small]="true"
                         [styleClass]="'mt-1-5 full-width'"

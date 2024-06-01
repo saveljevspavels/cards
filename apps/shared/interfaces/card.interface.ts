@@ -10,6 +10,7 @@ export default interface Card {
     value: number;
     energyCost: number;
     energyReward: number;
+    experienceReward: number;
     coinsCost: number;
     coinsReward: number;
     cardUses: CardUses;
@@ -57,6 +58,7 @@ export const NullCard: Card = {
     energyReward: 0,
     coinsCost: 0,
     coinsReward: 0,
+    experienceReward: 0,
     cardUses: {
       progression: 0,
       usesToProgress: 0,

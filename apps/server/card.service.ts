@@ -12,6 +12,9 @@ import {StaticValidationService} from "../shared/services/validation.service";
 import AthleteService from "./athlete.service";
 import ActivityService from "./activity.service";
 import {StaticAthleteHelperService} from "../shared/services/athlete.helper.service";
+import Athlete from "../shared/classes/athlete.class";
+import {Currencies} from "../shared/classes/currencies.class";
+import {AbilityKey} from "../shared/interfaces/ability.interface";
 
 export default class CardService {
     constructor(
@@ -189,27 +192,30 @@ export default class CardService {
     }
 
     async claimCardRewards(athleteId: string, cardId: string) {
-        await this.claimCard(athleteId, cardId);
+        const athlete = await this.athleteService.getAthlete(athleteId);
+        const card = await this.getCard(cardId);
+        await this.claimCard(athlete, cardId);
         await Promise.all([
-            await this.scoreService.updateScore(athleteId, cardId),
-            await this.claimCardCoins(athleteId, cardId)
+            await this.scoreService.updateScore(athleteId, card),
+            await this.claimCardCurrencies(athlete, card)
         ]);
     }
 
-    async claimCardCoins(athleteId: string, cardId: string) {
-        const athlete = await this.athleteService.getAthlete(athleteId);
-        const card = await this.getCard(cardId);
-        const newEnergy = parseInt(String(athlete.currencies.energy)) + parseInt(String(card.energyReward));
-        let bonusCoins = 0;
-        if(newEnergy > RULES.ENERGY.MAX) {
-            bonusCoins = (newEnergy - RULES.ENERGY.MAX) * RULES.COINS.PER_ENERGY_CONVERSION;
-        }
+    async claimCardCurrencies(athlete: Athlete, card: Card) {
+        const reward = new Currencies(
+            card.coinsReward,
+            card.value,
+            (card.experienceReward || 0) + (athlete.perks[AbilityKey.EXPERIENCE_PER_TASK_BONUS] || 0),
+            0,
+            0,
+            0,
+            card.energyReward
+        );
 
-        athlete.currencies.coins = parseInt(String(athlete.currencies.coins), 10) + parseInt(String(card.coinsReward), 10) + bonusCoins;
-        athlete.currencies.energy = Math.min(newEnergy, RULES.ENERGY.MAX);
+        athlete.addCurrencies(reward);
         await this.athleteService.updateAthlete(athlete);
 
-        this.logger.info(`Athlete ${athlete.name} claimed ${parseInt(String(card.coinsReward), 10) + bonusCoins} coins for card ${card.title}`);
+        this.logger.info(`Athlete ${athlete.name} claimed ${reward.toString()} for card ${card.title}`);
         if(parseInt(String(card.energyReward))) {
             this.logger.error(`Athlete restored ${card.energyReward} energy for card ${card.title}`);
         }
@@ -239,19 +245,14 @@ export default class CardService {
         this.logger.info(`Athlete ${athlete.firstname} ${athlete.lastname} has activated ${card.title} for ${card.energyCost} energy and ${coinsCost} coins`);
     }
 
-    async claimCard(athleteId: string, cardId: string) {
-        const athlete = await this.athleteService.getAthlete(athleteId);
+    async claimCard(athlete: Athlete, cardId: string) {
         const completedCards = athlete.cards.completed;
         const claimedCards = athlete.cards.claimed;
         completedCards.splice((athlete?.cards.completed || []).indexOf(cardId), 1);
         claimedCards.push(cardId);
-        return await this.fireStoreService.athleteCollection.update(athleteId, {
-            cards: {
-                ...athlete.cards,
-                completed: completedCards,
-                claimed: claimedCards
-            }
-        });
+        athlete.cards.completed = completedCards;
+        athlete.cards.claimed = claimedCards;
+        return await this.athleteService.updateAthlete(athlete);
     }
 
     async deleteCards(cardIds: string[]): Promise<void> {
@@ -327,6 +328,7 @@ export default class CardService {
             energyReward: parseInt(cardPrototype.energyReward.toString(), 10),
             coinsCost: parseInt(cardPrototype.coinsCost.toString(), 10),
             coinsReward: parseInt(cardPrototype.coinsReward.toString(), 10),
+            experienceReward: parseInt(cardPrototype.coinsReward.toString(), 10),
             cardUses: {
                 usesToProgress: cardPrototype.usesToProgress,
                 progression: 0
@@ -480,12 +482,13 @@ export default class CardService {
 
 
         owner.currencies.coins = claimed ? (owner.currencies.coins || 0) - card.coinsReward : owner.currencies.coins;
+        owner.currencies.experience = claimed ? (owner.currencies.experience || 0) - card.experienceReward : owner.currencies.experience;
         owner.baseCardProgress = StaticValidationService.updateBaseCardProgressFromCard(activity, card, owner.baseWorkout, owner.baseCardProgress);
         owner.cards.claimed = owner.cards.claimed.filter(card => card !== cardId);
         owner.cards.completed = owner.cards.completed.filter(card => card !== cardId);
 
         Promise.all([
-            claimed ? await this.scoreService.updateScore(owner.id, cardId, true) : null,
+            claimed ? await this.scoreService.updateScore(owner.id, card, true) : null,
             await this.athleteService.updateAthlete(owner),
             await this.fireStoreService.detailedActivityCollection.update(
                 activityId,

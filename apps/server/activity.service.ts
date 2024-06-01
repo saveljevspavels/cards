@@ -29,7 +29,7 @@ export default class ActivityService {
                     req.body.images,
                     req.body.comments
                 )
-                // await this.tryAutoApprove(req.body.activityId) // TODO: uncomment before commit
+                await this.tryAutoApprove(req.body.activityId)
             } catch (err) {
                 console.log(err);
                 res.status(500).send(err);
@@ -196,32 +196,23 @@ export default class ActivityService {
         })
 
         await this.challengeService.evaluateChallengeProgress(activity, athlete);
+        athlete.cards.active = athlete.cards.active.filter(cardId => cardIds.indexOf(cardId) === -1);
+        athlete.cards.completed = [...athlete.cards.completed, ...cardIds];
 
-        // TODO: uncomment before commit
-        // await Promise.all([
-        //     this.fireStoreService.athleteCollection.update(
-        //         athlete.id,
-        //         {
-        //             cards: {
-        //                 ...athlete.cards,
-        //                 active: athlete.cards.active.filter(cardId => cardIds.indexOf(cardId) === -1),
-        //                 completed: [...athlete.cards.completed, ...cardIds]
-        //             }
-        //         }
-        //
-        //     ),
-        //     this.fireStoreService.detailedActivityCollection.update(
-        //         activityId.toString(),
-        //         {
-        //             gameData: {
-        //                 status: ActivityStatus.SUBMITTED,
-        //                 submittedAt: new Date().toISOString(),
-        //                 cardIds,
-        //                 cardSnapshots, // Storing card snapshots
-        //                 comments
-        //             }
-        //         })
-        // ])
+        await Promise.all([
+            this.athleteService.updateAthlete(athlete),
+            this.fireStoreService.detailedActivityCollection.update(
+                activityId.toString(),
+                {
+                    gameData: {
+                        status: ActivityStatus.SUBMITTED,
+                        submittedAt: new Date().toISOString(),
+                        cardIds,
+                        cardSnapshots, // Storing card snapshots
+                        comments
+                    }
+                })
+        ])
 
         this.logger.info(`Athlete ${athlete.firstname} ${athlete.lastname} ${athlete.id} submitted activity with ${cardIds}`)
     }

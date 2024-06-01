@@ -11,6 +11,7 @@ import Card from "../../../../../../../shared/interfaces/card.interface";
 export class CompletedTaskComponent implements OnInit {
 
   @Input() cardId: string;
+  @Input() perks: {[key: string]: number} = {};
   public card: Card;
 
   constructor(

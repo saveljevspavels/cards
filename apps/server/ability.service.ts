@@ -1,23 +1,14 @@
-import {RESPONSES} from "./response-codes";
-import fs from "fs";
 import {Express} from "express";
-import {FirestoreService} from "./firestore.service";
 import {CONST} from "../../definitions/constants";
 import {Ability, AbilityKey} from "../shared/interfaces/ability.interface";
 import AthleteService from "./athlete.service";
 import {Logger} from "winston";
 import {ABILITIES} from "../../definitions/abilities";
-import schedule from "node-schedule";
 import {RULES} from "../../definitions/rules";
 import {getRandomInt} from "./helpers/util";
 import ScoreService from "./score.service";
-import CardService from "./card.service";
 import Athlete from "../shared/classes/athlete.class";
-import CardFactory from "../shared/interfaces/card-factory.interface";
-import ActivityService from "./activity.service";
-import Game from "../cards/src/app/interfaces/game";
-import {DateService} from "../shared/utils/date.service";
-import {ProgressiveChallenge} from "../shared/interfaces/progressive-challenge.interface";
+import {Currencies} from "../shared/classes/currencies.class";
 
 export default class AbilityService {
     constructor(
@@ -50,6 +41,20 @@ export default class AbilityService {
             try {
                 const abilityKey = await this.consumeRandomAbility(athleteId);
                 res.status(200).send({abilityKey});
+            } catch (err) {
+                res.status(400).send(err);
+            }
+        });
+
+        app.post(`${CONST.API_PREFIX}/abilities/open-chest`, async (req, res) => {
+            const athleteId = res.get('athleteId');
+            if(!athleteId) {
+                res.status(400).send('Athlete Id missing');
+                return;
+            }
+            try {
+                const rewards = await this.openChest(athleteId);
+                res.status(200).send({rewards});
             } catch (err) {
                 res.status(400).send(err);
             }
@@ -197,5 +202,45 @@ export default class AbilityService {
             throw 'Ability not found';
         }
         return ability;
+    }
+
+    async openChest(athleteId: string) {
+        this.logger.info(`Athlete ${athleteId} is trying to open chest`);
+        const athlete: Athlete = await this.athleteService.getAthlete(athleteId);
+        if (athlete.currencies.chests <= 0) {
+            this.logger.info(`Athlete ${athlete.name} tried to open chest without chests`);
+            throw 'No chests available';
+        }
+        athlete.currencies.chests -= 1;
+        const rewards = this.getChestRewards();
+        athlete.addCurrencies(rewards);
+        await Promise.all([
+            this.athleteService.updateAthlete(athlete),
+            rewards.points && this.scoreService.addPoints(athleteId, rewards.points)
+        ])
+        this.logger.info(`Athlete ${athlete.name} opened chest and got ${rewards.toString()}`);
+        return rewards;
+    }
+
+    getChestRewards(): Currencies {
+        const reward = new Currencies();
+
+        // Base coin reward
+        reward.coins = 3 + getRandomInt(3); // 3-6
+
+        const roll= getRandomInt(100);
+        if(roll < 10) {
+            reward.coins += 21 + getRandomInt(3);
+        } else if(roll < 20) {
+            reward.points = 1;
+        } else if(roll < 30) {
+            reward.perks = 1;
+        } else if(roll < 65) {
+            
+            reward.random_perks = 1;
+        } else {
+            reward.special_tasks = 1;
+        }
+        return reward;
     }
 }

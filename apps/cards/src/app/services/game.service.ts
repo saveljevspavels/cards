@@ -7,6 +7,7 @@ import {HttpClient} from "@angular/common/http";
 import {AbilityKey} from "../../../../shared/interfaces/ability.interface";
 import {AngularFirestore, AngularFirestoreDocument} from "@angular/fire/compat/firestore";
 import {map} from "rxjs/operators";
+import {Currencies} from "../../../../shared/classes/currencies.class";
 
 @Injectable({
   providedIn: 'root'
@@ -39,6 +40,12 @@ export class GameService {
     getRandomAbility(): Observable<AbilityKey> {
         return this.http.post(`${environment.baseBE}/abilities/random`, {}).pipe(
             map((res: any) => res.abilityKey)
+        );
+    }
+
+    openChest(): Observable<Currencies> {
+        return this.http.post(`${environment.baseBE}/abilities/open-chest`, {}).pipe(
+            map((res: any) => res.rewards)
         );
     }
 }

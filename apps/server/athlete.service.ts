@@ -99,6 +99,7 @@ export default class AthleteService {
     }
 
     addEnergy(athlete: Athlete, value: number): void {
+        value= parseInt(String(value), 10) || 0;
         if(value === 0) {
             return;
         }

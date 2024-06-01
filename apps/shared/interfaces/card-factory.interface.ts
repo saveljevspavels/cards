@@ -19,6 +19,7 @@ export interface CardPrototype {
     energyReward: number;
     coinsCost: number;
     coinsReward: number;
+    experienceReward: number;
 }
 
 export enum Progression {

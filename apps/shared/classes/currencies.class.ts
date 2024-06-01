@@ -7,6 +7,7 @@ export class Currencies {
     random_perks: number;
     energy: number;
     fatigue: number;
+    special_tasks: number;
 
     constructor(
         coins: number = 0,
@@ -16,16 +17,18 @@ export class Currencies {
         perks: number = 0,
         random_perks: number = 0,
         energy: number = 0,
-        fatigue: number = 0
+        fatigue: number = 0,
+        special_tasks: number = 0
     ) {
-        this.coins = coins;
-        this.points = points;
-        this.experience = experience;
-        this.chests = chests;
-        this.perks = perks;
-        this.random_perks = random_perks;
-        this.energy = energy;
-        this.fatigue = fatigue;
+        this.coins = coins || 0;
+        this.points = points || 0;
+        this.experience = experience || 0;
+        this.chests = chests || 0;
+        this.perks = perks || 0;
+        this.random_perks = random_perks || 0;
+        this.energy = energy || 0;
+        this.fatigue = fatigue || 0;
+        this.special_tasks = special_tasks || 0;
     }
 
     static withCoins(coins: number): Currencies {
@@ -61,7 +64,8 @@ export class Currencies {
             perks: this.perks,
             random_perks: this.random_perks,
             energy: this.energy,
-            fatigue: this.fatigue
+            fatigue: this.fatigue,
+            special_tasks: this.special_tasks
         };
     }
 
@@ -74,7 +78,8 @@ export class Currencies {
             json['perks'],
             json['random_perks'],
             json['energy'],
-            json['fatigue']
+            json['fatigue'],
+            json['special_tasks']
         );
     }
 }

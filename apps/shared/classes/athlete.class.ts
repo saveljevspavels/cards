@@ -172,17 +172,20 @@ export default class Athlete implements JsonObjectInterface {
         }
     }
 
+    addCurrencies(currencies: Currencies) {
+        if(!currencies) return;
+        this.currencies.coins = (this.currencies.coins || 0) + currencies.coins || 0;
+        this.currencies.experience = (this.currencies.experience || 0) + currencies.experience || 0;
+        this.currencies.chests = (this.currencies.chests || 0) + currencies.chests || 0;
+        this.currencies.perks = (this.currencies.perks || 0) + currencies.perks || 0;
+        this.currencies.random_perks = (this.currencies.random_perks || 0) + currencies.random_perks || 0;
+        this.currencies.energy = (this.currencies.energy || 0) + currencies.energy || 0;
+        this.currencies.fatigue = (this.currencies.fatigue || 0) + currencies.fatigue || 0;
+    }
+
     claimLevelRewards(level: number) {
         const rewards = LEVEL_REWARDS[level];
-        if(!rewards) return;
-        this.currencies.coins = (this.currencies.coins || 0) + rewards.coins || 0;
-        this.currencies.experience = (this.currencies.experience || 0) + rewards.experience || 0;
-        this.currencies.chests = (this.currencies.chests || 0) + rewards.chests || 0;
-        this.currencies.perks = (this.currencies.perks || 0) + rewards.perks || 0;
-        this.currencies.random_perks = (this.currencies.random_perks || 0) + rewards.random_perks || 0;
-        this.currencies.energy = (this.currencies.energy || 0) + rewards.energy || 0;
-        this.currencies.fatigue = (this.currencies.fatigue || 0) + rewards.fatigue || 0;
-
+        this.addCurrencies(rewards);
         this.claimedLevelRewards.push(level);
     }
 

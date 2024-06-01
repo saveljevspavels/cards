@@ -57,4 +57,10 @@ export class InventoryComponent {
         });
     }
 
+    openChest() {
+        this.gameService.openChest().subscribe((rewards) => {
+            console.log('got rewards', rewards);
+        });
+    }
+
 }

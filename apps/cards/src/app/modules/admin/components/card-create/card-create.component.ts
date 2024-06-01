@@ -114,6 +114,7 @@ export class CardCreateComponent implements OnInit, OnChanges {
             value: ['1', [Validators.required]],
             energyCost: ['1', [Validators.required]],
             energyReward: ['0', [Validators.required]],
+            experienceReward: ['0', [Validators.required]],
             coinsCost: ['0', [Validators.required]],
             coinsReward: ['1', [Validators.required]],
         })

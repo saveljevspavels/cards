@@ -20,6 +20,6 @@
     }
   }
   &__fill {
-    transition: width, height 0.3s ease-in-out;
+    transition: width 0.3s ease-in-out, height 0.3s ease-in-out;
   }
 }

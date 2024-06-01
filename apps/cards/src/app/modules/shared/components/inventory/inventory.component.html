@@ -10,7 +10,7 @@
     </div>
     <div *ngIf="currencies.chests">
         <h4>Unclaimed chests ({{currencies.chests}})</h4>
-        <app-button type="action">Open</app-button>
+        <app-button type="action" (buttonClick)="openChest()">Open</app-button>
     </div>
 </div>
 

@@ -4,6 +4,7 @@
     ></div>
     <h5 class="m-0 mb-1 text-center">{{card?.title}}</h5>
     <app-rewards [card]="card"
+                 [perks]="perks"
                  [rewardsOnly]="true"
                  class="mb-1"></app-rewards>
     <app-button (buttonClick)="claimReward()"

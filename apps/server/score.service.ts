@@ -2,24 +2,20 @@ import {Express} from "express";
 import {FirestoreService} from "./firestore.service";
 import {Logger} from "winston";
 import Score from "../shared/interfaces/score.interface";
+import Card from "../shared/interfaces/card.interface";
 
 export default class ScoreService {
     constructor(
         private app: Express,
         private fireStoreService: FirestoreService,
-        private logger: Logger
+        private logger: Logger,
     ) {
     }
 
-    async updateScore(athleteId: string, cardId: string, deduct = false) {
+    async updateScore(athleteId: string, card: Card, deduct = false) {
         const score = (await this.fireStoreService.scoreCollection.get(athleteId.toString())) || this.createNewScore(athleteId);
         if(!score) {
             this.logger.info(`Score does not exist for athlete ${athleteId}`);
-            return;
-        }
-        const card = await this.fireStoreService.cardCollection.get(cardId);
-        if(!card) {
-            this.logger.info(`Can't update score for athlete ${athleteId}, card ${cardId} does not exist`);
             return;
         }
         const newValue: number = parseInt(String(score.value)) + parseInt(String(deduct ? (-card.value) : card.value));
