@@ -16,6 +16,10 @@
                                [value]="LEVEL_REWARDS[levelIndex].points"
                                [big]="true"
             ></app-reward-points>
+            <app-reward-energy *ngIf="LEVEL_REWARDS[levelIndex].energy"
+                               [value]="LEVEL_REWARDS[levelIndex].energy"
+                               [big]="true"
+            ></app-reward-energy>
             <app-reward-experience *ngIf="LEVEL_REWARDS[levelIndex].experience"
                                [value]="LEVEL_REWARDS[levelIndex].experience"
                                [big]="true"

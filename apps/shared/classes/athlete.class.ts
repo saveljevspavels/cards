@@ -3,6 +3,8 @@ import {RULES} from "../../../definitions/rules";
 import {LEVEL_REWARDS} from "../../../definitions/level_rewards";
 import {Currencies} from "./currencies.class";
 import {JsonObjectInterface} from "../interfaces/json-object.interface";
+import {RESPONSES} from "../../server/response-codes";
+import MathHelper from "../../server/helpers/math.helper";
 
 export default class Athlete implements JsonObjectInterface {
     name: string;
@@ -140,6 +142,22 @@ export default class Athlete implements JsonObjectInterface {
         this.currencies.fatigue = parseInt(String(this.currencies.fatigue || 0), 10) + parseInt(String(amount), 10);
     }
 
+    spendEnergy(amount: number) {
+        if(this.currencies.energy <= RULES.ENERGY.MIN) {
+            throw RESPONSES.ERROR.NOT_ENOUGH_ENERGY;
+        }
+
+        this.currencies.energy = parseInt(String(this.currencies.energy || 0), 10) - parseInt(String(amount), 10);
+    }
+
+    addEnergy(amount: number) {
+        if(this.currencies.energy >= RULES.ENERGY.MAX) {
+            throw 'Max. energy reached';
+        }
+
+        this.currencies.energy = parseInt(String(this.currencies.energy || 0), 10) + parseInt(String(amount), 10);
+    }
+
     updateBaseWorkout(baseWorkoutPatch: any) {
         const currentBaseWorkout = this.baseWorkout;
         this.baseWorkout = {
@@ -174,13 +192,13 @@ export default class Athlete implements JsonObjectInterface {
 
     addCurrencies(currencies: Currencies) {
         if(!currencies) return;
-        this.currencies.coins = (this.currencies.coins || 0) + currencies.coins || 0;
-        this.currencies.experience = (this.currencies.experience || 0) + currencies.experience || 0;
-        this.currencies.chests = (this.currencies.chests || 0) + currencies.chests || 0;
-        this.currencies.perks = (this.currencies.perks || 0) + currencies.perks || 0;
-        this.currencies.random_perks = (this.currencies.random_perks || 0) + currencies.random_perks || 0;
-        this.currencies.energy = (this.currencies.energy || 0) + currencies.energy || 0;
-        this.currencies.fatigue = (this.currencies.fatigue || 0) + currencies.fatigue || 0;
+        this.currencies.coins = MathHelper.add(this.currencies.coins, currencies.coins);
+        this.currencies.experience = MathHelper.add(this.currencies.experience, currencies.experience);
+        this.currencies.chests = MathHelper.add(this.currencies.chests, currencies.chests);
+        this.currencies.perks = MathHelper.add(this.currencies.perks, currencies.perks);
+        this.currencies.random_perks = MathHelper.add(this.currencies.random_perks, currencies.random_perks);
+        this.currencies.energy = MathHelper.add(this.currencies.energy, currencies.energy);
+        this.currencies.fatigue = MathHelper.add(this.currencies.coins, currencies.fatigue);
     }
 
     claimLevelRewards(level: number) {

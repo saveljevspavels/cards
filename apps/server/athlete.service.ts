@@ -98,29 +98,19 @@ export default class AthleteService {
         }
     }
 
-    addEnergy(athlete: Athlete, value: number): void {
-        value= parseInt(String(value), 10) || 0;
-        if(value === 0) {
+    spendEnergy(athlete: Athlete, amount: number): void {
+        if(amount === 0) {
             return;
         }
-        const excessEnergy = ((athlete.currencies.energy || 0) + value) - RULES.ENERGY.MAX;
-        const newVal = Math.min((athlete.currencies.energy || 0) + value, RULES.ENERGY.MAX)
 
-        athlete.currencies.energy = newVal;
-        athlete.currencies.coins = (athlete.currencies.coins || 0) + (excessEnergy > 0 ? excessEnergy * RULES.COINS.PER_ENERGY_CONVERSION : 0);
-
-        this.logger.info(`Athlete ${athlete.firstname} ${athlete.lastname} ${athlete.id} restored ${value} energy, now ${newVal}, and ${(excessEnergy > 0 ? excessEnergy * RULES.COINS.PER_ENERGY_CONVERSION : 0)} coins`)
-    }
-
-    spendEnergy(athlete: Athlete, amount: number): void {
-        if(athlete.currencies.energy < amount) {
-            this.logger.info(`Athlete ${athlete.name} don't have enough energy (${amount}) to spend. Has ${athlete.currencies.energy}`);
-            throw 'Not enough energy';
+        try {
+            athlete.spendEnergy(amount);
+        } catch(e) {
+            this.logger.info(`Athlete ${athlete.name} can't spend ${amount} energy due to ${e}`);
+            throw e;
         }
 
-        athlete.currencies.energy = athlete.currencies.energy - amount;
-
-        this.logger.info(`Athlete ${athlete.firstname} ${athlete.lastname} spent ${amount} energy, now ${athlete.currencies.energy - amount}`)
+        this.logger.info(`Athlete ${athlete.name} spent ${amount} energy, now ${athlete.currencies.energy}`)
     }
 
     increaseFatigue(athlete: Athlete, amount: number): void {

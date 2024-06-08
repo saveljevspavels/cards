@@ -94,7 +94,7 @@ export default class AbilityService {
     async activateAbility(athlete: Athlete, ability: Ability) {
         athlete.usedAbilities.push(ability.key);
         this.athleteService.spendCoins(athlete, ability.coinsCost);
-        this.athleteService.increaseFatigue(athlete, ability.energyCost);
+        this.athleteService.spendEnergy(athlete, ability.energyCost);
 
         switch (ability.key) {
             case AbilityKey.REDUCE_BASE_WORKOUT:
@@ -181,8 +181,15 @@ export default class AbilityService {
                 break;
         }
 
-        this.athleteService.spendCoins(athlete, -ability.coinsReward);
-        this.athleteService.addEnergy(athlete, ability.energyReward);
+        athlete.addCurrencies(new Currencies(
+            ability.coinsReward,
+            0,
+            0,
+            0,
+            0,
+            0,
+            ability.energyReward,
+        ));
 
         await Promise.all([
             ability.value && await this.scoreService.addPoints(athlete.id, ability.value),

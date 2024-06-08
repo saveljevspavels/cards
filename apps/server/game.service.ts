@@ -64,8 +64,10 @@ export default class GameService {
             const allAthletes = (await this.fireStoreService.athleteCollection.all()).map((athlete: Athlete) => Athlete.fromJSONObject(athlete));
             allAthletes.map(async (athlete: Athlete) => {
                 await this.activityService.submitAllActivities(athlete.id);
-                await this.athleteService.decreaseFatigue(athlete, RULES.FATIGUE.TIMED_RESTORE);
-                await this.claimAllRewards(athlete.id);
+                athlete.addEnergy(RULES.ENERGY.TIMED_RESTORE);
+                await this.athleteService.updateAthlete(athlete);
+                await this.
+                claimAllRewards(athlete.id);
             })
         })
     }

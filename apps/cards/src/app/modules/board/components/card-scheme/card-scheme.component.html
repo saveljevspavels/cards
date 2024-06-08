@@ -18,7 +18,7 @@
                                           (activated)="activateCard($event)"
                                           [showActivate]="true"
                                           [locked]="unlockMap.get(board.key) < levelIndex"
-                                          [canActivate]="(athlete | async)?.currencies.coins >= cardMap.get(card).coinsCost && (athlete | async)?.cards.active.length < RULES.SCHEME.MAX_ACTIVE_CARDS"
+                                          [canActivate]="(athlete | async)?.currencies.energy >= cardMap.get(card)?.energyCost && (athlete | async)?.cards.active.length < RULES.SCHEME.MAX_ACTIVE_CARDS"
                                           [card]="cardMap.get(card)"
                                           [styleClass]="'mb-2'"
                                 ></app-card>
@@ -72,7 +72,7 @@
             </p>
             <div class="mt-4 mb-2 full-width">
                 <app-button type="action" [label]="'Yes'" (buttonClick)="confirmActivate()">
-                    <div class="title ml-2 d-flex justify-content-center" *ngIf="(activationCost$ | async) > 0">-{{(activationCost$ | async)}}<app-svg [height]="20" [icon]="'coin'"></app-svg></div>
+                    <div class="title ml-2 d-flex justify-content-center" *ngIf="(activatedCard$ | async)?.energyCost">-{{(activatedCard$ | async)?.energyCost}}<app-svg [height]="20" [icon]="'fire'"></app-svg></div>
                 </app-button>
             </div>
             <div class="mb-3">

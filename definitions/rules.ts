@@ -90,7 +90,7 @@ export const RULES = {
         MIN: 0,
         MAX: 3,
         BASE: 3,
-        TIMED_RESTORE: 3
+        TIMED_RESTORE: 1
     },
     COINS: {
         BASE: 0,

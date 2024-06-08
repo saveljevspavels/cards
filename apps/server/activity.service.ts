@@ -161,28 +161,28 @@ export default class ActivityService {
     async submitActivity(activityId: number, cardIds: string[], images: UploadedImage[][], comments: string) {
         const activity = await this.getActivity(activityId);
         const athlete = await this.athleteService.getAthlete(activity.athlete.id);
-        const featuredCard = (await this.fireStoreService.gameCollection.get(CONST.GAME_ID))?.featuredCard;
 
-        if(cardIds.find(id => (athlete.cards.active.indexOf(id) === -1) && id !== featuredCard)) {
-            this.logger.info(`Athlete ${athlete.firstname} ${athlete.lastname} ${athlete.id} tried to submit unactivated card(s) ${cardIds}`)
-            throw RESPONSES.ERROR.CARD_NOT_ACTIVATED
-        }
+        // Activation requirement disabled
+        // if(cardIds.find(id => (athlete.cards.active.indexOf(id) === -1) && id !== featuredCard)) {
+        //     this.logger.info(`Athlete ${athlete.name} ${athlete.id} tried to submit unactivated card(s) ${cardIds}`)
+        //     throw RESPONSES.ERROR.CARD_NOT_ACTIVATED
+        // }
 
         if(activity.gameData.status !== ActivityStatus.NEW
             && activity.gameData.status !== ActivityStatus.REJECTED) {
-            this.logger.info(`Athlete ${athlete.firstname} ${athlete.lastname} ${athlete.id} submitted activity ${activityId} with invalid status ${activity.gameData.status}`)
+            this.logger.info(`Athlete ${athlete.name} ${athlete.id} submitted activity ${activityId} with invalid status ${activity.gameData.status}`)
             throw RESPONSES.ERROR.WRONG_ACTIVITY_STATUS
         }
 
         if(cardIds.length > RULES.MAX_CARDS_SUBMIT) {
-            this.logger.info(`Athlete ${athlete.firstname} ${athlete.lastname} ${athlete.id} submitted activity with too many cards ${cardIds}`)
+            this.logger.info(`Athlete ${athlete.name} ${athlete.id} submitted activity with too many cards ${cardIds}`)
             throw RESPONSES.ERROR.MAX_CARDS_SUBMIT
         }
 
         const cards: Card[] = cardIds.length ? await this.fireStoreService.cardCollection.whereQuery([{fieldPath: 'id', opStr: 'in', value: cardIds}]) : [];
 
         if(cardIds.length > RULES.MAX_CARDS_SUBMIT) {
-            this.logger.info(`Athlete ${athlete.firstname} ${athlete.lastname} ${athlete.id} submitted activity with too many cards ${cardIds}`)
+            this.logger.info(`Athlete ${athlete.name} ${athlete.id} submitted activity with too many cards ${cardIds}`)
             throw RESPONSES.ERROR.MAX_CARDS_SUBMIT
         }
 
@@ -198,6 +198,7 @@ export default class ActivityService {
         await this.challengeService.evaluateChallengeProgress(activity, athlete);
         athlete.cards.active = athlete.cards.active.filter(cardId => cardIds.indexOf(cardId) === -1);
         athlete.cards.completed = [...athlete.cards.completed, ...cardIds];
+        this.athleteService.spendEnergy(athlete, StaticValidationService.requiredEnergy(cards));
 
         await Promise.all([
             this.athleteService.updateAthlete(athlete),

@@ -44,7 +44,7 @@ export default class CardService {
                 return;
             }
             try {
-                await this.activateCard(athleteId, cardId);
+                await this._activateCard(athleteId, cardId);
             } catch (err) {
                 res.status(400).send(err);
             }
@@ -221,7 +221,7 @@ export default class CardService {
         }
     }
 
-    async activateCard(athleteId: string, cardId: string) {
+    async _activateCard(athleteId: string, cardId: string) {
         const card = await this.getCard(cardId);
         const athlete = await this.athleteService.getAthlete(athleteId);
 

@@ -29,7 +29,6 @@ export class CardSchemeComponent implements OnInit {
     private unlock$ = new Subject();
     private activate$ = new Subject();
     public activatedCard$ = new BehaviorSubject<Card>(NullCard);
-    public activationCost$ = this.athleteService.me.pipe(map(_ => this.athleteHelperService.getCardActivationCost()));
     @ViewChild('unlockPopup', { static: true }) unlockPopup: ElementRef;
     @ViewChild('activatePopup', { static: true }) activatePopup: ElementRef;
 
@@ -45,7 +44,6 @@ export class CardSchemeComponent implements OnInit {
                 private cardService: CardService,
                 private athleteService: AthleteService,
                 private popupService: PopupService,
-                private athleteHelperService: AthleteHelperService,
     ) { }
 
     ngOnInit(): void {

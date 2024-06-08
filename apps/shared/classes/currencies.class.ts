@@ -51,6 +51,10 @@ export class Currencies {
         return new Currencies(0, 0, 0, 0, perks);
     }
 
+    static withEnergy(energy: number): Currencies {
+        return new Currencies(0, 0, 0, 0, 0, 0, energy);
+    }
+
     toString(): string {
         return `Currencies(${Object.entries(this).filter(([key, value]) => value).map(([key, value]) => `${key}: ${value}`).join(', ')})`;
     }

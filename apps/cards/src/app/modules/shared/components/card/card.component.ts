@@ -42,7 +42,6 @@ export class CardComponent implements OnInit, OnChanges {
 
     public uploadTrigger = new Subject();
     public isAdmin$ = this.athleteService.isAdmin$;
-    public activationCost$ = this.athleteService.me.pipe(map(_ => this.athleteHelperService.getCardActivationCost()));
     public me = this.athleteService.me;
 
     imageObservable: any;
@@ -53,7 +52,6 @@ export class CardComponent implements OnInit, OnChanges {
     constructor(
         private cardService: CardService,
         private athleteService: AthleteService,
-        private athleteHelperService: AthleteHelperService,
     ) { }
 
     ngOnInit() {
