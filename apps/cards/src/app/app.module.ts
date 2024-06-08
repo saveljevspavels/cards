@@ -35,8 +35,6 @@ const firebaseConfig = FIREBASE_CONFIG;
         AppRoutingModule,
         RouterModule,
         AngularFireModule.initializeApp(firebaseConfig),
-        provideFirebaseApp(() => initializeApp(firebaseConfig)),
-        provideFirestore(() => getFirestore()),
         AngularFirestoreModule.enablePersistence(), // firestore
         AngularFireAuthModule, // auth
         AngularFireStorageModule, // storage,
@@ -62,8 +60,10 @@ const firebaseConfig = FIREBASE_CONFIG;
             deps: [AthleteService],
             multi: true
         },
-        MessageService
+        MessageService,
+        provideFirebaseApp(() => initializeApp(firebaseConfig)),
+        provideFirestore(() => getFirestore()),
     ],
     bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {}
