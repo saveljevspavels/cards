@@ -30,6 +30,7 @@ import {ActiveChallengesComponent} from "./components/active-challenges/active-c
 import {ExperienceDisplayComponent} from "./components/experience-display/experience-display.component";
 import {LevelOverviewComponent} from "./components/level-overview/level-overview.component";
 import {InventoryComponent} from "../shared/components/inventory/inventory.component";
+import {CarouselModule} from "primeng/carousel";
 
 @NgModule({
     declarations: [
@@ -66,6 +67,7 @@ import {InventoryComponent} from "../shared/components/inventory/inventory.compo
         BoardRoutingModule,
         FormsModule,
         ReactiveFormsModule,
+        CarouselModule,
         SharedModule,
         AdminModule // TODO: remove
     ]

@@ -69,6 +69,11 @@
     border: 1px solid var(--color-#{$type})!important;
 }
 
+@mixin gradient($color1, $color2) {
+    background: $color1;
+    background: linear-gradient(170deg, $color1 0%, $color2 100%);
+}
+
 body {
     font-family: 'Nunito', sans-serif;
     letter-spacing: -0.3px;
@@ -111,6 +116,11 @@ body {
 .border-secondary-1 {@include border('secondary-1')};
 .border-secondary-2 {@include border('secondary-2')};
 .border-secondary-3 {@include border('secondary-3')};
+
+.gradient-run { @include gradient(#4041c9, #1f2063); }
+.gradient-ride { @include gradient(#4041c9, #1f2063); }
+.gradient-walk { @include gradient(#7FA829, #4A6118); }
+.gradient-other { @include gradient(#F06449, #A02811); }
 
 .border-radius {
     border-radius: var(--radius);
@@ -208,6 +218,10 @@ h6 {
 
 .text-bold {
     font-weight: 700;
+}
+
+.text-thin {
+    font-weight: 300;
 }
 
 .text-small {
@@ -313,4 +327,11 @@ h6 {
 
 .mb-1-5 {
     margin-bottom: 6px;
+}
+
+.fullscreen-width {
+    display: block;
+    margin-left: calc(var(--margin) * -1);
+    margin-right: calc(var(--margin) * -1);
+    position: relative;
 }

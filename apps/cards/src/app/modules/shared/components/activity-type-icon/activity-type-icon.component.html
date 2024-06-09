@@ -1,4 +1,4 @@
-<span class="activity-type--{{type}} d-flex align-items-center">
+<span class="{{ (type && !color) ? 'activity-type--' + type : ''}} d-flex align-items-center {{ color ? 'color-' + color : ''}}">
     <app-svg [icon]="'activity_' + type"
              [height]="height"
              [width]="width"

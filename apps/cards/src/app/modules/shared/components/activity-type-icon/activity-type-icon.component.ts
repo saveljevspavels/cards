@@ -10,6 +10,7 @@ export class ActivityTypeIconComponent implements OnInit {
   @Input() type: string;
   @Input() width: number;
   @Input() height: number;
+  @Input() color: string;
 
   constructor() { }
 

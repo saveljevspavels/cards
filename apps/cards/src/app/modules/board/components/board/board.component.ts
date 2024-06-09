@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit, ViewEncapsulation} from '@angular/core';
 import {ActivityService} from "../../../../services/activity.service";
 import {BoardService} from "../../../../services/board.service";
 import {Router} from "@angular/router";

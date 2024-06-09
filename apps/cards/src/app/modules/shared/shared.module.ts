@@ -61,6 +61,8 @@ import {RewardExperienceComponent} from "./components/reward-experience/reward-e
 import {NumberTransitionComponent} from "./components/number-transition/number-transition.component";
 import {LevelComponent} from "./components/level/level.component";
 import {PopupWrapperComponent} from "./components/popup/popup-wrapper.component";
+import {ActivityCarouselComponent} from "./components/activity-carousel/activity-carousel.component";
+import {CarouselModule} from "primeng/carousel";
 
 const COMPS = [
     InputComponent,
@@ -95,7 +97,8 @@ const COMPS = [
     ChallengeBarComponent,
     RewardExperienceComponent,
     LevelComponent,
-    PopupWrapperComponent
+    PopupWrapperComponent,
+    ActivityCarouselComponent
 ]
 
 const MODULES = [
@@ -137,6 +140,7 @@ const MODULES = [
         ReactiveFormsModule,
         RouterModule,
         ...MODULES,
+        CarouselModule,
     ],
     exports: [
         ...COMPS,

@@ -1,6 +1,7 @@
 import {CardSnapshot} from "./card.interface";
 
 export interface Activity {
+    name: string;
     gameData: ActivityGameData;
     distance: number;
     elapsed_time: number;
