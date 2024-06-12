@@ -3,4 +3,5 @@ export interface MenuRouteItem {
     icon: string,
     path?: string,
     permission?: string,
+    highlightedOn?: string[]
 }

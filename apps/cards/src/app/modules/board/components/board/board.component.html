@@ -27,23 +27,7 @@
                     </app-activity-carousel>
                 </div>
 
-<!--                <div class="box background-primary-variant mb-2" *ngIf="(newActivities | async).length">-->
-<!--                    <h3 class="title text-color-on-primary">You got new activity</h3>-->
-<!--                    <div class="mt-2" *ngFor="let activity of (newActivities | async)">-->
-<!--                        <app-pending-activity [activity]="activity"-->
-<!--                        ></app-pending-activity>-->
-<!--                    </div>-->
-<!--                </div>-->
-                <div class="row mb-2">
-                    <div class="col-md-12">
-                        <app-active-challenges></app-active-challenges>
-                    </div>
-                </div>
-                <div class="row mb-2">
-                    <div class="col-md-12">
-                        <app-active-card-list></app-active-card-list>
-                    </div>
-                </div>
+                <app-card-scheme [title]="'Available Tasks'"></app-card-scheme>
             </div>
         </div>
     </div>

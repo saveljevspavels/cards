@@ -6,6 +6,10 @@ import {CardScheme} from "../../../../shared/interfaces/card-scheme.interface";
 import {environment} from "../../environments/environment";
 import {HttpClient} from "@angular/common/http";
 import {AngularFirestore, AngularFirestoreCollection, AngularFirestoreDocument} from "@angular/fire/compat/firestore";
+import {FormControl} from "@angular/forms";
+import {ValidationStatus} from "../../../../shared/services/validation.service";
+import {Activity} from "../../../../shared/interfaces/activity.interface";
+import {ValidationService} from "./validation.service";
 
 @Injectable({
   providedIn: 'root'
@@ -17,9 +21,12 @@ export class CardService {
     private cardCollection: AngularFirestoreCollection;
     private cardSchemeDocument: AngularFirestoreDocument<CardScheme>;
 
+    public selectedCards: FormControl = new FormControl<ValidatedCard[]>([]);
+
     constructor(
         private http: HttpClient,
         private db: AngularFirestore,
+        private validationService: ValidationService
         ) {
         this.cardCollection = this.db.collection(ConstService.CONST.COLLECTIONS.CARDS);
         this.cardSchemeDocument = this.db.collection(ConstService.CONST.COLLECTIONS.SCHEME).doc(ConstService.CONST.SCHEME_ID);
@@ -83,4 +90,33 @@ export class CardService {
             activityId
         })
     }
+
+    validateCard(activity: Activity | null, card: Card, selectedCards: ValidatedCard[] | null) {
+        if(!activity) {
+            return ValidationStatus.NONE;
+        }
+
+        if(selectedCards !== null && selectedCards.find(validatedCard => validatedCard.card === card)) {
+            return ValidationStatus.SELECTED
+        }
+
+        return this.validationService.validateCardGroup(
+            activity,
+            [
+                ...this.getPlainCards(this.selectedCards.value),
+                card
+            ])
+            ? ValidationStatus.PASS
+            : ValidationStatus.FAIL;
+
+    }
+
+    getPlainCards(validatedCards: ValidatedCard[]): Card[] {
+        return validatedCards.map((validatedCard: ValidatedCard) => validatedCard.card);
+    }
+}
+
+export interface ValidatedCard {
+    card: Card,
+    validationStatus: ValidationStatus
 }

@@ -14,8 +14,8 @@ export class LocalStorageService {
         return (JSON.parse(localStorage.getItem(item) || 'true'))
     }
 
-    static getValue(item: string) {
-        return localStorage.getItem(item)
+    static getValue(item: string): string {
+        return localStorage.getItem(item) || '';
     }
 
     static setValue(item: string, value: string) {

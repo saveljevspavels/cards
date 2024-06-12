@@ -1,25 +1,26 @@
 <ng-container *ngIf="boards.length">
     <div class="mb-2">
         <app-board-selection [boards]="boards"
-                             [activeBoard]="activeBoard.value"
+                             [activeBoard]="activeBoard.value?.key"
                              (boardSelected)="setActiveBoard($event)"
         ></app-board-selection>
     </div>
-    <h2 class="mb-2 mt-3">Available Tasks</h2>
+    <h2 *ngIf="title" class="mb-2 mt-3">{{title}}</h2>
     <ng-container *ngFor="let board of boards">
-        <ng-container *ngIf="board.key === activeBoard.value">
+        <div class="d-none" [ngClass]="{'d-block': activeBoard.value.key === board.key}">
             <div *ngFor="let level of board.levels; let levelIndex = index">
-                <ng-container *ngIf="level.cards.length && (levelIndex - 1) <= unlockMap.get(board.key)">
+                <ng-container *ngIf="level.cards.length && (showLocked ? (levelIndex - 1) : (levelIndex)) <= unlockMap.get(board.key)">
                     <h2 class="mb-2 mt-2" *ngIf="(levelIndex - 1) === unlockMap.get(board.key)">Locked Tasks</h2>
                     <div [ngClass]="{'border-primary border-radius p-2 mb-2': (levelIndex - 1) === unlockMap.get(board.key)}">
                         <div class="d-flex flex-column">
                             <ng-container *ngFor="let card of level.cards">
-                                <app-card *ngIf="cardMap.get(card)"
-                                          (activated)="activateCard($event)"
-                                          [showActivate]="true"
+                                <app-card *ngIf="cardMap.get(card)?.card"
+                                          (click)="cardClicked(cardMap.get(card)!)"
+                                          [validationStatus]="cardMap.get(card)?.validationStatus"
+                                          [imagesController]="uploadedImages.get(card)"
                                           [locked]="unlockMap.get(board.key) < levelIndex"
-                                          [canActivate]="(athlete | async)?.currencies.energy >= cardMap.get(card)?.energyCost && (athlete | async)?.cards.active.length < RULES.SCHEME.MAX_ACTIVE_CARDS"
-                                          [card]="cardMap.get(card)"
+                                          [canActivate]="(athlete | async)?.currencies.energy >= cardMap.get(card)?.card.energyCost && (athlete | async)?.cards.active.length < RULES.SCHEME.MAX_ACTIVE_CARDS"
+                                          [card]="cardMap.get(card)?.card"
                                           [styleClass]="'mb-2'"
                                 ></app-card>
                             </ng-container>
@@ -35,7 +36,7 @@
                         </app-button>
                     </div>
                 </ng-container>
-                <div *ngIf="level.cards.length && levelIndex === unlockMap.get(board.key) + 2">
+                <div *ngIf="showLocked && level.cards.length && levelIndex === unlockMap.get(board.key) + 2">
                     <div class="mb-2">
                         <app-card-placeholder></app-card-placeholder>
                     </div>
@@ -44,8 +45,8 @@
                     </div>
                 </div>
             </div>
-        </ng-container>
-    </ng-container>
+        </div>
+    <ng-container>
 </ng-container>
 
 <ng-template #unlockPopup>
@@ -59,24 +60,6 @@
             </div>
             <div class="mb-3">
                 <app-button (buttonClick)="cancelUnlock()" [label]="'Cancel'"></app-button>
-            </div>
-        </div>
-    </div>
-</ng-template>
-
-<ng-template #activatePopup>
-    <div class="popup box">
-        <div class="d-flex flex-column align-items-center">
-            <p class="mt-5 pt-2 mb-4 text-center">
-                Are you sure you want activate the task?
-            </p>
-            <div class="mt-4 mb-2 full-width">
-                <app-button type="action" [label]="'Yes'" (buttonClick)="confirmActivate()">
-                    <div class="title ml-2 d-flex justify-content-center" *ngIf="(activatedCard$ | async)?.energyCost">-{{(activatedCard$ | async)?.energyCost}}<app-svg [height]="20" [icon]="'fire'"></app-svg></div>
-                </app-button>
-            </div>
-            <div class="mb-3">
-                <app-button (buttonClick)="cancelActivate()" [label]="'Cancel'"></app-button>
             </div>
         </div>
     </div>

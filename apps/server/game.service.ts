@@ -64,10 +64,13 @@ export default class GameService {
             const allAthletes = (await this.fireStoreService.athleteCollection.all()).map((athlete: Athlete) => Athlete.fromJSONObject(athlete));
             allAthletes.map(async (athlete: Athlete) => {
                 await this.activityService.submitAllActivities(athlete.id);
-                athlete.addEnergy(RULES.ENERGY.TIMED_RESTORE);
+                try {
+                    athlete.addEnergy(RULES.ENERGY.TIMED_RESTORE);
+                } catch (e) {
+                    this.logger.error(`Can't restore energy for ${athlete.name}: ${e}`);
+                }
                 await this.athleteService.updateAthlete(athlete);
-                await this.
-                claimAllRewards(athlete.id);
+                await this.claimAllRewards(athlete.id);
             })
         })
     }

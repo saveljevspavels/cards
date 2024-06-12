@@ -14,7 +14,7 @@ export class MobileMenuComponent implements OnInit {
     @Output() activeTitle = new EventEmitter()
     @Input() admin = false;
 
-    routes: any = {
+    routes: {[key: string]: MenuRouteItem[]} = {
         public: [
             {
                 label: 'Activity Feed',
@@ -24,6 +24,7 @@ export class MobileMenuComponent implements OnInit {
             {
                 label: 'Dashboard',
                 path: '/board/main',
+                highlightedOn: ['/board/submit-activity'],
                 icon: 'gauge',
             },
             {
@@ -115,7 +116,7 @@ export class MobileMenuComponent implements OnInit {
                 public: [],
                 admin: [],
             }
-            Object.keys(this.routes).forEach((category: string) => {
+            Object.keys(this.routes).forEach((category: any) => {
                 this.filteredRoutes[category] = []
                 this.filteredRoutes[category] = this.routes[category].filter((route: any) => !route.permission || this.athleteService.hasPermission(route.permission))
             })
@@ -129,7 +130,7 @@ export class MobileMenuComponent implements OnInit {
 
     detectActiveItem() {
         this.activeItem = Object.values(this.filteredRoutes).reduce((acc: MenuRouteItem[], items: any) => [...acc, ...items], [])
-            .find((item: MenuRouteItem) => item.path === window.location.pathname)
+            .find((item: MenuRouteItem) => (item.path === window.location.pathname) || (item.highlightedOn && item.highlightedOn.includes(window.location.pathname)))
     }
 
     getLocationName(): string {

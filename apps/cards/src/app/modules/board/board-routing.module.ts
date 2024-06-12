@@ -16,21 +16,21 @@ import {LevelOverviewComponent} from "./components/level-overview/level-overview
 
 const routes: Routes = [
     {
+        path: 'submit-activity',
+        component: SubmittingActivityComponent
+    },
+    {
         path: '',
         component: BoardParentComponent,
         children: [
             {
                 path: '',
                 pathMatch: 'full',
-                redirectTo: 'activity-list'
+                redirectTo: 'main'
             },
             {
                 path: 'main',
                 component: BoardComponent
-            },
-            {
-                path: 'submit-activity',
-                component: SubmittingActivityComponent
             },
             {
                 path: 'board',

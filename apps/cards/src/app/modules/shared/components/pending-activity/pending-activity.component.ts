@@ -1,6 +1,8 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {StaticValidationService} from "../../../../../../../shared/services/validation.service";
 import {BoardService} from "../../../../services/board.service";
+import {Router} from "@angular/router";
+import {Activity} from "../../../../../../../shared/interfaces/activity.interface";
 
 @Component({
   selector: 'app-pending-activity',
@@ -9,13 +11,17 @@ import {BoardService} from "../../../../services/board.service";
 })
 export class PendingActivityComponent implements OnInit {
 
-  @Input() public activity: any;
+  @Input() public activity: Activity;
+  @Input() public styleClass: string;
   public activityType = '';
   public value = '';
   public active = false;
   public disabled = false;
 
-  constructor(private boardService: BoardService) { }
+  constructor(
+      private boardService: BoardService,
+      private router: Router
+  ) { }
 
   ngOnInit(): void {
     this.activityType = StaticValidationService.normalizeActivityType(this.activity);
@@ -34,5 +40,10 @@ export class PendingActivityComponent implements OnInit {
 
   submit() {
     this.boardService.activity = this.activity;
+    this.router.navigateByUrl('board/submit-activity');
+  }
+
+  back() {
+    this.router.navigateByUrl('board');
   }
 }

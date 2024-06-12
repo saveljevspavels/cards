@@ -1,5 +1,8 @@
-<div class="box p-3 d-flex justify-content-between align-items-end relative gradient-{{activityType}}">
+<div class="p-3 d-flex justify-content-between align-items-end relative gradient-{{activityType}} {{styleClass}}" [ngClass]="{'box': !active, 'row mt-n4': active}">
     <div class="d-flex flex-column justify-content-between">
+        <div class="mb-3 pointer" *ngIf="active" (click)="back()">
+            <app-svg [icon]="'arrow_back'" [styleClass]="'color-text'"></app-svg>
+        </div>
         <div class="d-flex align-items-center">
             <app-activity-type-icon [type]="activityType"
                                     [width]="48"
@@ -9,23 +12,20 @@
             </app-activity-type-icon>
         </div>
         <h2 class="mt-1 mb-1 color-background">{{activity.name}}</h2>
-        <h2 class="m-0 text-thin color-background">{{activityType === 'other' ? (value | minutes) : (value | distance)}}</h2>
+        <h2 class="m-0 mb-3 text-thin color-background">{{activityType === 'other' ? (value | minutes) : (value | distance)}}</h2>
     </div>
     <app-entity-id [id]="activity.id"></app-entity-id>
     <div class="d-flex align-items-center">
         <!--        <app-strava-link class="mr-2" [id]="activity.id"></app-strava-link>-->
 
-        <app-button *ngIf="active; else submitButton"
-                    [label]="'Cancel'"
-                    (buttonClick)="cancel()"></app-button>
-        <ng-template #submitButton>
-            <app-button [label]="'Submit'"
-                        [disabled]="disabled"
-                        (buttonClick)="submit()">
-                <div class="ml-1">
-                    <app-svg [icon]="'arrow_forward'" [styleClass]="'color-text'"></app-svg>
-                </div>
-            </app-button>
-        </ng-template>
+        <app-button *ngIf="!active"
+                    [label]="'Submit'"
+                    [disabled]="disabled"
+                    (buttonClick)="submit()">
+            <div class="ml-1">
+                <app-svg [icon]="'arrow_forward'" [styleClass]="'color-text'"></app-svg>
+            </div>
+        </app-button>
     </div>
+    <div *ngIf="active" class="fake-overlap"></div>
 </div>
