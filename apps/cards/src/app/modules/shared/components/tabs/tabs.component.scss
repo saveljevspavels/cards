@@ -1,0 +1,12 @@
+.app-tabs {
+  background-color: var(--color-background);
+  border-radius: 12px;
+  box-shadow: rgba(0, 0, 0, 0.15) 3px 4px 14px;
+
+  &__item {
+    width: 100%;
+    &--active, &:hover {
+      color: var(--color-primary);
+    }
+  }
+}

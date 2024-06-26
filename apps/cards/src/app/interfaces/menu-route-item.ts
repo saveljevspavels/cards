@@ -1,7 +1,7 @@
 export interface MenuRouteItem {
     label: string,
     icon: string,
-    path?: string,
+    path: string,
     permission?: string,
     highlightedOn?: string[]
 }

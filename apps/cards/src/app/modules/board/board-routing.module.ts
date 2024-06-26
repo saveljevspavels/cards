@@ -13,6 +13,7 @@ import {SubmittingActivityComponent} from "./components/submitting-activity/subm
 import {CardBoardComponent} from "./components/card-board/card-board.component";
 import {LeaderboardGuard} from "../../guards/leaderboard.guard";
 import {LevelOverviewComponent} from "./components/level-overview/level-overview.component";
+import {TaskOverviewComponent} from "./components/task-overview/task-overview.component";
 
 const routes: Routes = [
     {
@@ -30,19 +31,30 @@ const routes: Routes = [
             },
             {
                 path: 'main',
-                component: BoardComponent
+                component: BoardComponent,
+                children: [
+                    {
+                        path: '',
+                        pathMatch: 'full',
+                        redirectTo: 'tasks'
+                    },
+                    {
+                        path: 'tasks',
+                        component: TaskOverviewComponent
+                    },
+                    {
+                        path: 'challenges',
+                        component: LevelOverviewComponent
+                    },
+                ]
             },
             {
                 path: 'board',
-                component: CardBoardComponent
+                component: CardBoardComponent,
             },
             {
                 path: 'activity-list',
                 component: ActivityListComponent
-            },
-            {
-                path: 'level-overview',
-                component: LevelOverviewComponent
             },
             {
                 path: 'leaderboard',

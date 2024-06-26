@@ -1,0 +1,14 @@
+<div class="mb-2">
+    <app-completed-task-view>
+
+    </app-completed-task-view>
+</div>
+<div>
+    <h2 class="mb-2 mt-2">My Activities</h2>
+    <div class="fullscreen-width">
+        <app-activity-carousel [items]="(newActivities | async)">
+        </app-activity-carousel>
+    </div>
+
+    <app-card-scheme [title]="'Available Tasks'"></app-card-scheme>
+</div>

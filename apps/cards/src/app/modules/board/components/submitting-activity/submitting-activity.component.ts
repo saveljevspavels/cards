@@ -5,7 +5,7 @@ import {ActivityService} from "../../../../services/activity.service";
 import {FileService} from "../../../../services/file.service";
 import {Router} from "@angular/router";
 import {PopupService} from "../../../../services/popup.service";
-import {first, map, mergeMap} from "rxjs/operators";
+import {first, map, mergeMap, startWith} from "rxjs/operators";
 import {BehaviorSubject, combineLatest, Observable, Subject} from "rxjs";
 import {ConstService} from "../../../../services/const.service";
 import {Activity} from "../../../../../../../shared/interfaces/activity.interface";
@@ -59,7 +59,7 @@ export class SubmittingActivityComponent implements OnInit, OnDestroy {
 
         combineLatest([
             this.selectedActivity,
-            this.selectedCards.valueChanges
+            this.selectedCards.valueChanges.pipe(startWith([]))
         ]).subscribe(([activity, selectedCards]) => {
             if(!activity) {
                 return;

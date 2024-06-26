@@ -1,0 +1,12 @@
+<div class="app-tabs align-content-end justify-content-between">
+    <div class="row">
+        <div class="d-flex justify-content-center col-{{12 / tabs.length}}" *ngFor="let tab of tabs">
+            <div class="app-tabs__item pb-2 pt-2 pointer"
+                 [ngClass]="{'app-tabs__item--active': activeTab?.path === tab.path}"
+                 (click)="activateTab(tab)"
+            >
+                <p class="mb-0-5 mt-0-5 text-bold text-center">{{tab.title}}</p>
+            </div>
+        </div>
+    </div>
+</div>

@@ -31,6 +31,7 @@ import {ExperienceDisplayComponent} from "./components/experience-display/experi
 import {LevelOverviewComponent} from "./components/level-overview/level-overview.component";
 import {InventoryComponent} from "../shared/components/inventory/inventory.component";
 import {CarouselModule} from "primeng/carousel";
+import {TaskOverviewComponent} from "./components/task-overview/task-overview.component";
 
 @NgModule({
     declarations: [
@@ -60,7 +61,8 @@ import {CarouselModule} from "primeng/carousel";
         ActiveChallengesComponent,
         ExperienceDisplayComponent,
         LevelOverviewComponent,
-        InventoryComponent
+        InventoryComponent,
+        TaskOverviewComponent
     ],
     imports: [
         CommonModule,

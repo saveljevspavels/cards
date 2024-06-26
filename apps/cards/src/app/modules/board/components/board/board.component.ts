@@ -4,6 +4,7 @@ import {BoardService} from "../../../../services/board.service";
 import {Router} from "@angular/router";
 import {LocalStorageService} from "../../../../services/local-storage.service";
 import {UtilService} from "../../../../services/util.service";
+import {TabItem} from "../../../../interfaces/tab-item";
 
 @Component({
   selector: 'app-board',
@@ -12,7 +13,17 @@ import {UtilService} from "../../../../services/util.service";
 })
 export class BoardComponent implements OnInit {
 
-    public newActivities = this.activityService.newActivities;
+    public tabs: TabItem[] = [
+        {
+            title: 'Main Tasks',
+            path: '/board/main/tasks'
+        },
+        {
+            title: 'Daily Challenges',
+            path: '/board/main/challenges'
+        }
+    ]
+
     public openStates: any = {
         rules: true,
     }

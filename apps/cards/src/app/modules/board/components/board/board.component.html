@@ -15,20 +15,10 @@
                     <app-experience-display></app-experience-display>
                 </div>
             </div>
-            <div class="mb-2">
-                <app-completed-task-view>
-
-                </app-completed-task-view>
+            <div class="mb-4">
+                <app-tabs [tabs]="tabs"></app-tabs>
             </div>
-            <div>
-                <h2 class="mb-2 mt-2">My Activities</h2>
-                <div class="fullscreen-width">
-                    <app-activity-carousel [items]="(newActivities | async)">
-                    </app-activity-carousel>
-                </div>
-
-                <app-card-scheme [title]="'Available Tasks'"></app-card-scheme>
-            </div>
+            <router-outlet></router-outlet>
         </div>
     </div>
 

@@ -1,18 +1,21 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
 import {AthleteService} from "../../../../services/athlete.service";
 import {Router} from "@angular/router";
 import {startWith} from "rxjs/operators";
 import {MenuRouteItem} from "../../../../interfaces/menu-route-item";
+import {Subscription} from "rxjs";
 
 @Component({
     selector: 'app-mobile-menu',
     templateUrl: './mobile-menu.component.html',
     styleUrls: ['./mobile-menu.component.scss']
 })
-export class MobileMenuComponent implements OnInit {
+export class MobileMenuComponent implements OnInit, OnDestroy {
 
     @Output() activeTitle = new EventEmitter()
     @Input() admin = false;
+
+    public routerSubscription: Subscription;
 
     routes: {[key: string]: MenuRouteItem[]} = {
         public: [
@@ -122,7 +125,7 @@ export class MobileMenuComponent implements OnInit {
             })
         })
 
-        this.router.events.pipe(startWith(null)).subscribe((val) => {
+        this.routerSubscription = this.router.events.pipe(startWith(null)).subscribe((val) => {
             this.detectActiveItem();
             this.activeTitle.emit(this.activeItem?.label || this.getLocationName())
         });
@@ -130,13 +133,17 @@ export class MobileMenuComponent implements OnInit {
 
     detectActiveItem() {
         this.activeItem = Object.values(this.filteredRoutes).reduce((acc: MenuRouteItem[], items: any) => [...acc, ...items], [])
-            .find((item: MenuRouteItem) => (item.path === window.location.pathname) || (item.highlightedOn && item.highlightedOn.includes(window.location.pathname)))
+            .find((item: MenuRouteItem) => (window.location.pathname.indexOf(item.path) !== -1) || (item.highlightedOn && item.highlightedOn.includes(window.location.pathname)))
     }
 
     getLocationName(): string {
         let { pathname } = window.location
         const parts = pathname.split('/')
         return parts[parts.length - 1].split('-').map(part => part.charAt(0).toUpperCase() + part.slice(1)).join(' ');
+    }
+
+    ngOnDestroy() {
+        this.routerSubscription.unsubscribe();
     }
 
 }
