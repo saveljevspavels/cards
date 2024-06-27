@@ -26,5 +26,9 @@ export const LEVEL_REWARDS: Currencies[] = [
     Currencies.withExperience(1),
     Currencies.withCoins(8),
     Currencies.withCoins(8),
+    Currencies.withCoins(8),
+    Currencies.withCoins(8),
+    Currencies.withCoins(8),
+    Currencies.withCoins(8),
 ]
 

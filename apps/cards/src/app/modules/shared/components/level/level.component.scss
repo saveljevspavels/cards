@@ -1,18 +1,85 @@
 @import "./apps/cards/src/styles";
 
 .level {
-    height: 100px;
-    &--claimed {
-        .level__content {
-            opacity: 0.5;
+    position: relative;
+    &__image {
+        width: 40px;
+        height: 40px;
+        position: relative;
+        overflow: hidden;
+        background-size: cover;
+        background-position: center;
+        flex-shrink: 0;
+        border-radius: var(--radius-half);
+        img {
+            width: 40px;
+            height: 40px;
+            position: absolute;
         }
     }
-    .challenge-bar.challenge-bar--vertical{
-        height: 120px !important;
-        box-sizing: border-box;
-        margin-top: -20px;
-        border-radius: 0;
-        border-top: 0;
-        border-bottom: 0;
+    &__content {
+        height: 60px;
+        margin-top: 6px;
+    }
+    &--claimed {
+        .level {
+            &__content {
+                opacity: 0.5;
+            }
+        }
+    }
+    &--completed {
+        .level {
+            &__status {
+                &-circle {
+                    border: none;
+                    background-color: var(--color-primary);
+                }
+            }
+        }
+    }
+    &--active {
+        .level {
+            &__status {
+                &-circle {
+                    &:before {
+                        position: absolute;
+                        top: 2px;
+                        left: 2px;
+                        content: "";
+                        display: block;
+                        width: 5px;
+                        height: 5px;
+                        border-radius: 50%;
+                        background-color: var(--color-primary);
+                        margin: auto;
+                    }
+                }
+            }
+        }
+    }
+    &__status {
+        width: 11px;
+        height: 72px;
+        &-line {
+            position: absolute;
+            top: 0;
+            left: 5px;
+            width: 1px;
+            height: 100%;
+            background-color: var(--color-primary);
+        }
+        &-circle {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            transform: translateY(-50%);
+            width: 11px;
+            height: 11px;
+            border: 1px solid var(--color-primary);
+            border-radius: 50%;
+            background-color: var(--color-background);
+            margin: auto;
+        }
     }
 }

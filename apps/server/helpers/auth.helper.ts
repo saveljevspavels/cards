@@ -1,6 +1,7 @@
 import axios from "axios";
 import {CONST} from "../../../definitions/constants";
-import {STRAVA_CONFIG} from "../../../definitions/stravaConfig";
+// @ts-ignore
+import {STRAVA_CONFIG} from "../../../definitions/stravaConfig.ts";
 import jwt from "jsonwebtoken";
 
 export class AuthHelper {
