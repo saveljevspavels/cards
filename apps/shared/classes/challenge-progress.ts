@@ -28,6 +28,12 @@ export class ChallengeProgress implements IChallengeProgress, JsonObjectInterfac
         this.challengeValues[challengeId] += value;
     }
 
+    resetChallenge(challengeId: string): void {
+        if(this.challengeValues[challengeId]) {
+            this.challengeValues[challengeId] = 0;
+        }
+    }
+
     completeChallenge(challengeId: string): void {
         if(this.challengeValues[challengeId] && this.completedChallenges.indexOf(challengeId) === -1) {
             this.completedChallenges.push(challengeId);

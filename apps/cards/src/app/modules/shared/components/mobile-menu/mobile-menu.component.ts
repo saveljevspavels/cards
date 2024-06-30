@@ -90,12 +90,12 @@ export class MobileMenuComponent implements OnInit, OnDestroy {
                 path: '/admin/stats',
                 permission: 'admin-panel'
             },
-            // {
-            //     label: 'Achievement Management',
-            //     icon: 'pi pi-fw pi-star',
-            //     path: '/admin/achievement-management',
-            //     permission: 'admin-panel'
-            // },
+            {
+                label: 'Achievement Management',
+                icon: 'pi pi-fw pi-star',
+                path: '/admin/achievement-management',
+                permission: 'admin-panel'
+            },
             {
                 label: 'Logs',
                 icon: 'pi pi-fw pi-list',

@@ -25,7 +25,9 @@
             <p class="text-small mb-0">{{challenge.description}}</p>
         </div>
         <div class="d-flex {{completed ? 'justify-content-between' : 'justify-content-end'}}" *ngIf="!completed; else completedTemplate">
-            <app-reward-experience [value]="challenge.rewards.experience"></app-reward-experience>
+            <app-reward-experience *ngIf="challenge.rewards.experience" [value]="challenge.rewards.experience"></app-reward-experience>
+            <app-reward-points *ngIf="challenge.rewards.points" [value]="challenge.rewards.points"></app-reward-points>
+            <app-reward-money *ngIf="challenge.rewards.coins" [value]="challenge.rewards.coins"></app-reward-money>
         </div>
         <ng-template #completedTemplate>
             <div class="d-flex justify-content-center mt-1">
@@ -36,6 +38,18 @@
                             [small]="true">
                     <div class="text-small ml-1 d-flex justify-content-center" *ngIf="challenge.rewards.experience > 0">
                         {{challenge.rewards.experience}}
+                        <div class="pl-1">
+                            <app-svg [height]="12" [icon]="'experience'" styleClass="color-background"></app-svg>
+                        </div>
+                    </div>
+                    <div class="text-small ml-1 d-flex justify-content-center" *ngIf="challenge.rewards.points > 0">
+                        {{challenge.rewards.points}}
+                        <div class="pl-1">
+                            <app-svg [height]="12" [icon]="'experience'" styleClass="color-background"></app-svg>
+                        </div>
+                    </div>
+                    <div class="text-small ml-1 d-flex justify-content-center" *ngIf="challenge.rewards.coins > 0">
+                        {{challenge.rewards.coins}}
                         <div class="pl-1">
                             <app-svg [height]="12" [icon]="'experience'" styleClass="color-background"></app-svg>
                         </div>

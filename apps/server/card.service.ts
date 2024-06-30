@@ -333,7 +333,8 @@ export default class CardService {
                 usesToProgress: cardPrototype.usesToProgress,
                 progression: 0
             },
-            validators: cardPrototype.validators
+            validators: cardPrototype.validators,
+            tags: []
         }
         await this.fireStoreService.cardCollection.set(id, card)
 

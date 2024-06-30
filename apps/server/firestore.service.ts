@@ -33,7 +33,7 @@ export class FirestoreService {
     public handCollection: DataCollection<any>;
     public cardCollection: DataCollection<Card>;
     public cardFactoryCollection: DataCollection<CardFactory>;
-    public achievementCollection: DataCollection<any>;
+    public achievementCollection: DataCollection<ProgressiveChallenge>;
     public scoreCollection: DataCollection<Score>;
     public gameCollection: DataCollection<Game>;
     public sessionCollection: DataCollection<any>;

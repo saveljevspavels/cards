@@ -18,6 +18,7 @@ import ActivityService from "./activity.service";
 import Game from "../cards/src/app/interfaces/game";
 import {DateService} from "../shared/utils/date.service";
 import {ProgressiveChallenge} from "../shared/interfaces/progressive-challenge.interface";
+import {ChallengeService} from "./challenge.service";
 
 export default class GameService {
     constructor(
@@ -27,7 +28,8 @@ export default class GameService {
         private athleteService: AthleteService,
         private scoreService: ScoreService,
         private cardService: CardService,
-        private activityService: ActivityService
+        private activityService: ActivityService,
+        private challengeService: ChallengeService
     ) {
         app.post(`${CONST.API_PREFIX}/start-game`, async (req, res) => {
             const startDate = req.body?.startDate;
@@ -71,6 +73,7 @@ export default class GameService {
                 }
                 await this.athleteService.updateAthlete(athlete);
                 await this.claimAllRewards(athlete.id);
+                await this.challengeService.resetDailyChallenges(athlete.id);
             })
         })
     }

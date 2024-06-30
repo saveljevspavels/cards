@@ -18,6 +18,7 @@ export default interface Card {
     progression: Progression;
     validators: Validator[];
     manualValidation: boolean;
+    tags: CardTag[];
 }
 
 export interface CardSnapshot extends Card {
@@ -66,5 +67,18 @@ export const NullCard: Card = {
     factoryId: '',
     progression: Progression.NONE,
     validators: [],
-    manualValidation: false
+    manualValidation: false,
+    tags: [],
+}
+
+export enum CardTag {
+    unknown = 'unknown',
+    bird = 'bird',
+    animal = 'animal',
+    distance= 'distance',
+    run = 'run',
+    ride =  'ride',
+    walk = 'walk',
+    multitasker = 'multitasker',
+    wanderer = 'wanderer',
 }

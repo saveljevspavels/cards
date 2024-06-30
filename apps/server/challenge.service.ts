@@ -2,7 +2,11 @@ import {Express} from "express";
 import {FirestoreService} from "./firestore.service";
 import {Logger} from "winston";
 import {CONST} from "../../definitions/constants";
-import {ChallengeStatType, ProgressiveChallenge} from "../shared/interfaces/progressive-challenge.interface";
+import {
+    ChallengeStatTagMap,
+    ChallengeStatType,
+    ProgressiveChallenge
+} from "../shared/interfaces/progressive-challenge.interface";
 import Athlete from "../shared/classes/athlete.class";
 import {Activity} from "../shared/interfaces/activity.interface";
 import {ChallengeProgress} from "../shared/classes/challenge-progress";
@@ -11,6 +15,8 @@ import {RULES} from "../../definitions/rules";
 import AthleteService from "./athlete.service";
 import {LEVEL_REWARDS} from "../../definitions/level_rewards";
 import ScoreService from "./score.service";
+import {ACHIEVEMENTS} from "../../definitions/achievements";
+import {CardSnapshot, CardTag} from "../shared/interfaces/card.interface";
 
 export class ChallengeService {
     constructor(
@@ -20,9 +26,9 @@ export class ChallengeService {
         private athleteService: AthleteService,
         private scoreService: ScoreService
     ) {
-        app.post(`${CONST.API_PREFIX}/challenges/create`,async (req, res) => {
+        app.post(`${CONST.API_PREFIX}/challenges/create`, async (req, res) => {
             const token = res.get('accessToken');
-            if(!token) {
+            if (!token) {
                 return;
             }
             try {
@@ -37,10 +43,10 @@ export class ChallengeService {
         app.post(`${CONST.API_PREFIX}/challenges/claim`, async (req, res) => {
             const token = res.get('accessToken');
             const athleteId = res.get('athleteId');
-            if(!token) {
+            if (!token) {
                 return;
             }
-            if(!req.body.challengeId || !athleteId) {
+            if (!req.body.challengeId || !athleteId) {
                 res.status(400).send('Challenge Id or Athlete Id missing');
                 return;
             }
@@ -57,10 +63,10 @@ export class ChallengeService {
         app.post(`${CONST.API_PREFIX}/challenges/level/claim`, async (req, res) => {
             const token = res.get('accessToken');
             const athleteId = res.get('athleteId');
-            if(!token) {
+            if (!token) {
                 return;
             }
-            if((!req.body.levelIndex && req.body.levelIndex !== 0) || !athleteId) {
+            if ((!req.body.levelIndex && req.body.levelIndex !== 0) || !athleteId) {
                 res.status(400).send('Level Index or Athlete Id missing');
                 return;
             }
@@ -85,11 +91,11 @@ export class ChallengeService {
 
     async claimLevelReward(athleteId: string, levelIndex: number) {
         const athlete: Athlete = await this.athleteService.getAthlete(athleteId);
-        if(athlete?.level < levelIndex + 1) {
+        if (athlete?.level < levelIndex + 1) {
             this.logger.error(`Athlete ${athleteId} is not on level ${levelIndex}`);
             throw `Athlete ${athleteId} is not on level ${levelIndex} yet`;
         }
-        if(athlete?.claimedLevelRewards?.indexOf(levelIndex) > -1) {
+        if (athlete?.claimedLevelRewards?.indexOf(levelIndex) > -1) {
             this.logger.error(`Athlete ${athleteId} has already claimed level ${levelIndex}`);
             throw `Athlete ${athleteId} has already claimed level ${levelIndex}`;
         }
@@ -108,19 +114,19 @@ export class ChallengeService {
             this.fireStoreService.challengeProgressCollection.get(athleteId),
             this.athleteService.getAthlete(athleteId),
         ]);
-        if(!challenge || !athlete || !progress) {
+        if (!challenge || !athlete || !progress) {
             this.logger.error(`Challenge ${challengeId} does not exist`);
             throw `Challenge ${challengeId} does not exist`;
         }
-        if(!progress.challengeValues[challengeId]) {
+        if (!progress.challengeValues[challengeId]) {
             this.logger.error(`Challenge ${challengeId} is not in progress`);
             throw `Challenge ${challengeId} is not in progress`;
         }
-        if(progress.claimedChallenges.indexOf(challengeId) !== -1) {
+        if (progress.claimedChallenges.indexOf(challengeId) !== -1) {
             this.logger.error(`Challenge ${challengeId} is already claimed`);
             throw `Challenge ${challengeId} is already claimed`;
         }
-        if(progress.completedChallenges.indexOf(challengeId) === -1 || progress.challengeValues[challengeId] < challenge.targetValue) {
+        if (progress.completedChallenges.indexOf(challengeId) === -1 || progress.challengeValues[challengeId] < challenge.targetValue) {
             this.logger.error(`Challenge ${challengeId} is not completed yet`);
             throw `Challenge ${challengeId} is not completed yet`;
         }
@@ -141,8 +147,7 @@ export class ChallengeService {
     }
 
     async evaluateChallengeProgress(activity: Activity, athlete: Athlete) {
-        const rawProgress = await this.fireStoreService.challengeProgressCollection.get(athlete.id);
-        const progress: ChallengeProgress = rawProgress ? ChallengeProgress.fromJSONObject(rawProgress) : new ChallengeProgress(athlete.id);
+        const progress = await this.getChallengeProgress(athlete.id);
         const challenges = await this.getActiveChallenges(progress);
         challenges.forEach(challenge => {
             this.progressChallenge(activity, challenge, progress);
@@ -153,12 +158,19 @@ export class ChallengeService {
         await this.fireStoreService.challengeProgressCollection.set(athlete.id, progress);
     }
 
+    async getChallengeProgress(athleteId: string): Promise<ChallengeProgress> {
+        const rawProgress = await this.fireStoreService.challengeProgressCollection.get(athleteId);
+        return rawProgress ? ChallengeProgress.fromJSONObject(rawProgress) : new ChallengeProgress(athleteId);
+    }
+
     progressChallenge(activity: Activity, challenge: ProgressiveChallenge, progress: ChallengeProgress): ChallengeProgress {
-        if(challenge.activityType && challenge.activityType !== StaticValidationService.normalizeActivityType(activity)) {
+        if (challenge.activityType && challenge.activityType !== StaticValidationService.normalizeActivityType(activity)) {
             return progress; // Incompatible activity type for this challenge
         }
 
-        switch(challenge.stat) {
+        const cardSnapshots = activity.gameData.cardSnapshots || [];
+
+        switch (challenge.stat) {
             case ChallengeStatType.DISTANCE:
                 progress.progressChallenge(challenge.id, activity.distance);
                 break;
@@ -171,8 +183,26 @@ export class ChallengeService {
             case ChallengeStatType.ELAPSED_TIME:
                 progress.progressChallenge(challenge.id, activity.elapsed_time);
                 break;
+            case ChallengeStatType.BIRD_TASKS:
+                progress.progressChallenge(challenge.id, this.countApplicableCards(cardSnapshots, ChallengeStatType.BIRD_TASKS));
+                break;
+            case ChallengeStatType.ANIMAL_TASKS:
+                progress.progressChallenge(challenge.id, this.countApplicableCards(cardSnapshots, ChallengeStatType.ANIMAL_TASKS));
+                break;
+            case ChallengeStatType.WANDERER_TASKS:
+                progress.progressChallenge(challenge.id, this.countApplicableCards(cardSnapshots, ChallengeStatType.WANDERER_TASKS));
+                break;
+            case ChallengeStatType.DISTANCE_TASKS:
+                progress.progressChallenge(challenge.id, this.countApplicableCards(cardSnapshots, ChallengeStatType.DISTANCE_TASKS));
+                break;
+            case ChallengeStatType.MULTITASKER_TASKS:
+                progress.progressChallenge(challenge.id, this.countApplicableCards(cardSnapshots, ChallengeStatType.MULTITASKER_TASKS));
+                break;
+            case ChallengeStatType.DAILY_COMPLETED_TASKS:
+                progress.progressChallenge(challenge.id, cardSnapshots.length);
+                break;
             case ChallengeStatType.HEARTBEATS:
-                if(!activity.average_heartrate || activity.average_heartrate < 100) {
+                if (!activity.average_heartrate || activity.average_heartrate < 100) {
                     break
                 }
                 progress.progressChallenge(challenge.id, (activity.average_heartrate) * activity.elapsed_time);
@@ -184,18 +214,45 @@ export class ChallengeService {
 
     completeApplicableChallenge(challenge: ProgressiveChallenge, progress: ChallengeProgress): ChallengeProgress {
         const currentValue = progress.challengeValues[challenge.id] || 0;
-        if(currentValue >= challenge.targetValue) {
+        if (currentValue >= challenge.targetValue) {
             progress.completeChallenge(challenge.id);
         }
         return progress;
     }
 
+    async resetDailyChallenges(athleteId: string) {
+        const progress = await this.getChallengeProgress(athleteId);
+        const challenges = await this.getActiveChallenges(progress);
+
+        challenges.filter(challenge => challenge.stat.indexOf('DAILY') !== -1).forEach(
+            challenge => progress.resetChallenge(challenge.id)
+        );
+        await this.fireStoreService.challengeProgressCollection.set(athleteId, progress);
+    }
+
     async getActiveChallenges(progress: ChallengeProgress): Promise<ProgressiveChallenge[]> {
         const game = await this.fireStoreService.gameCollection.get(CONST.GAME_ID);
-        return (await this.getAllChallenges())
-            .filter(challenge => game ? game.activeChallenges.indexOf(challenge.id) !== -1 : false) // Filter out inactive challenges
+        return [
+            ...this.filterFinishedChallenges(
+                (await this.getAllChallenges())
+                    .filter(challenge => game ? game.activeChallenges.indexOf(challenge.id) !== -1 : false), // Filter out inactive challenges
+                progress
+            ).splice(0, RULES.PROGRESSIVE_CHALLENGE.MAX_ACTIVE), // Limit the number of active challenges
+            ...this.filterFinishedChallenges(ACHIEVEMENTS, progress)
+        ];
+    }
+
+    filterFinishedChallenges(challenges: ProgressiveChallenge[], progress: ChallengeProgress): ProgressiveChallenge[] {
+        return challenges
             .filter(challenge => progress ? progress.claimedChallenges.indexOf(challenge.id) === -1 : true) // Filter out claimed challenges
             .filter(challenge => progress ? progress.completedChallenges.indexOf(challenge.id) === -1 : true) // Filter out completed challenges;
-            .splice(0, RULES.PROGRESSIVE_CHALLENGE.MAX_ACTIVE); // Limit the number of active challenges
+    }
+
+    countApplicableCards(cardSnapshots: CardSnapshot[], stat: ChallengeStatType): number {
+        if (!cardSnapshots.length) {
+            return 0;
+        }
+        const tag: CardTag = ChallengeStatTagMap.get(stat) || CardTag.unknown;
+        return cardSnapshots.filter(snapshot => (snapshot.tags || []).indexOf(tag) !== -1).length;
     }
 }

@@ -195,7 +195,6 @@ export default class ActivityService {
             }
         })
 
-        await this.challengeService.evaluateChallengeProgress(activity, athlete);
         athlete.cards.active = athlete.cards.active.filter(cardId => cardIds.indexOf(cardId) === -1);
         athlete.cards.completed = [...athlete.cards.completed, ...cardIds];
         this.athleteService.spendEnergy(athlete, StaticValidationService.requiredEnergy(cards));
@@ -214,6 +213,7 @@ export default class ActivityService {
                     }
                 })
         ])
+        await this.challengeService.evaluateChallengeProgress(activity, athlete);
 
         this.logger.info(`Athlete ${athlete.firstname} ${athlete.lastname} ${athlete.id} submitted activity with ${cardIds}`)
     }

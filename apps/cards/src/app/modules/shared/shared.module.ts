@@ -64,6 +64,7 @@ import {PopupWrapperComponent} from "./components/popup/popup-wrapper.component"
 import {ActivityCarouselComponent} from "./components/activity-carousel/activity-carousel.component";
 import {CarouselModule} from "primeng/carousel";
 import {TabsComponent} from "./components/tabs/tabs.component";
+import {AchievementsComponent} from "../board/components/achievements/achievements.component";
 
 const COMPS = [
     InputComponent,
@@ -100,7 +101,8 @@ const COMPS = [
     LevelComponent,
     PopupWrapperComponent,
     ActivityCarouselComponent,
-    TabsComponent
+    TabsComponent,
+    AchievementsComponent
 ]
 
 const MODULES = [
