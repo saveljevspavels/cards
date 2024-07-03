@@ -110,7 +110,7 @@ export class ChallengeService {
 
     async claimChallenge(athleteId: string, challengeId: string) {
         const [challenge, progress, athlete]: [ProgressiveChallenge | null, ChallengeProgress | null, Athlete] = await Promise.all([
-            this.fireStoreService.challengeCollection.get(challengeId),
+            ACHIEVEMENTS.find(challenge => challenge.id === challengeId) || this.fireStoreService.challengeCollection.get(challengeId),
             this.fireStoreService.challengeProgressCollection.get(athleteId),
             this.athleteService.getAthlete(athleteId),
         ]);
@@ -133,10 +133,12 @@ export class ChallengeService {
 
         this.athleteService.addExperience(athlete, challenge.rewards.experience);
 
+
         await Promise.all([
             this.fireStoreService.challengeProgressCollection.update(athleteId, {
                 claimedChallenges: [...progress.claimedChallenges, challengeId]
             }),
+            challenge.rewards.points ? this.scoreService.addPoints(athleteId, challenge.rewards.points) : Promise.resolve(),
             this.athleteService.updateAthlete(athlete)
         ]);
         this.logger.info(`Challenge ${challengeId} claimed by ${athleteId}`);

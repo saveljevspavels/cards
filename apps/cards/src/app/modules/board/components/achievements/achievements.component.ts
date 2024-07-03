@@ -14,6 +14,7 @@ export class AchievementsComponent {
 
     public achievements: ProgressiveChallenge[] = [];
     public challengeValues: {[key: string]: number} = {};
+    public claimedChallenges: string[] = [];
 
     constructor(
         private challengeService: ChallengeService
@@ -21,6 +22,7 @@ export class AchievementsComponent {
         this.challengeService.myProgress$.subscribe((progress) => {
             this.achievements = ACHIEVEMENTS;
             this.challengeValues = progress.challengeValues || {};
+            this.claimedChallenges = progress.claimedChallenges || [];
         });
     }
 
