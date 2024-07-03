@@ -101,6 +101,7 @@ export const RULES = {
         BASE_CARD_REWARD: 1,
         BASE_UNLOCK_PRICE: 0,
         PER_LEVEL_PRICE: 5,
+        ACTIVITY_BOOST_PRICE: 1
     },
     SCHEME: {
         BOARDS_NUMBER: 3,

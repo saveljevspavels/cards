@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import {BehaviorSubject} from "rxjs";
+import {BehaviorSubject, Observable} from "rxjs";
 import {HttpClient} from "@angular/common/http";
 import {debounceTime, distinctUntilChanged, filter} from "rxjs/operators";
 import {environment} from "../../environments/environment";
@@ -88,6 +88,11 @@ export class ActivityService {
         })
     }
 
+    public boostActivity(activityId: any): Observable<any> {
+        return this.http.post(`${environment.baseBE}/activity/boost`, {
+            activityId,
+        })
+    }
     public deleteActivity(activityId: any) {
         return this.http.post(`${environment.baseBE}/delete-activity`, {
             activityId

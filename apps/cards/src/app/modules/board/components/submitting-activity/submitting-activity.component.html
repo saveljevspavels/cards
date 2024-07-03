@@ -2,7 +2,7 @@
 
 <app-content>
 
-    <app-pending-activity [activity]="selectedActivity | async"></app-pending-activity>
+    <app-pending-activity *ngIf="selectedActivity | async" [activity]="selectedActivity | async"></app-pending-activity>
 
     <div class="row mb-2">
         <div class="col-md-12">

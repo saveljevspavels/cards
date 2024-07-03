@@ -12,6 +12,7 @@ import {ConstService} from "../cards/src/app/services/const.service";
 import {UploadedImage} from "../shared/interfaces/image-upload.interface";
 import {ChallengeService} from "./challenge.service";
 import {Activity, ActivityStatus} from "../shared/interfaces/activity.interface";
+import {forkJoin} from "rxjs";
 
 export default class ActivityService {
     constructor(
@@ -42,6 +43,22 @@ export default class ActivityService {
             res.status(200).send({response: RESPONSES.SUCCESS});
         });
 
+        app.post(`${CONST.API_PREFIX}/activity/boost`, async (req, res) => {
+            const activity = await this.getActivity(req.body.activityId);
+            const athlete = await this.athleteService.getAthlete(activity.athlete.id.toString());
+            if(!athlete || !activity) {
+                res.status(400).send({response: RESPONSES.SUCCESS});
+                return;
+            }
+            try {
+                const updatedActivity = await this.boostActivity(activity, athlete);
+                res.status(200).send({activity: updatedActivity});
+            } catch (err) {
+                console.log(err);
+                res.status(400).send(err);
+            }
+        });
+
         app.post(`${CONST.API_PREFIX}/delete-activity`, async (req, res) => {
             await this.deleteActivity(req.body.activityId)
             res.status(200).send({response: RESPONSES.SUCCESS});
@@ -49,7 +66,7 @@ export default class ActivityService {
 
         app.post(`${CONST.API_PREFIX}/approve-activity`, async (req, res) => {
           const activity = await this.getActivity(req.body.activityId);
-          const athlete = await this.fireStoreService.athleteCollection.get(activity.athlete.id.toString());
+          const athlete = await this.athleteService.getAthlete(activity.athlete.id.toString());
           if(!athlete || !activity) {
               res.status(400).send({response: RESPONSES.SUCCESS});
               return;
@@ -233,6 +250,35 @@ export default class ActivityService {
                 }
             })
         this.logger.info(`Activity ${activity.type} ${activityId} was rejected for athlete ${activity.athlete.id.toString()}`)
+    }
+
+    async boostActivity(activity: Activity, athlete: Athlete): Promise<Activity> {
+        athlete.spendCoins(RULES.COINS.ACTIVITY_BOOST_PRICE);
+
+        const activityType = StaticValidationService.normalizeActivityType(activity);
+        const targetStat = StaticValidationService.baseActivityTypeMap.get(activityType);
+        if(!targetStat) {
+            this.logger.info(`Activity ${activity.id} has no target stat`)
+            throw 'Activity has no target stat';
+        }
+
+        const activityPatch = {};
+        // @ts-ignore
+        activityPatch[targetStat] = activity[targetStat] + (RULES.DEFAULT_BASE_WORKOUT[activityType][targetStat] * 0.1);
+
+        forkJoin([
+           this.athleteService.updateAthlete(athlete),
+              this.fireStoreService.detailedActivityCollection.update(
+                activity.id.toString(),
+                activityPatch
+              )
+        ]);
+
+        this.logger.info(`Activity ${activity.id} ${activityType} ${targetStat} was boosted for athlete ${athlete.name} for ${RULES.COINS.ACTIVITY_BOOST_PRICE} coins`)
+        return {
+            ...activity,
+            ...activityPatch
+        }
     }
 
     async deleteActivity(activityId: string) {
