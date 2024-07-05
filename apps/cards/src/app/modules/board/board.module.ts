@@ -32,6 +32,8 @@ import {LevelOverviewComponent} from "./components/level-overview/level-overview
 import {InventoryComponent} from "../shared/components/inventory/inventory.component";
 import {CarouselModule} from "primeng/carousel";
 import {TaskOverviewComponent} from "./components/task-overview/task-overview.component";
+import {StoreComponent} from "./components/store/store.component";
+import {StoreItemComponent} from "./components/store/store-item/store-item.component";
 
 @NgModule({
     declarations: [
@@ -62,7 +64,9 @@ import {TaskOverviewComponent} from "./components/task-overview/task-overview.co
         ExperienceDisplayComponent,
         LevelOverviewComponent,
         InventoryComponent,
-        TaskOverviewComponent
+        TaskOverviewComponent,
+        StoreComponent,
+        StoreItemComponent
     ],
     imports: [
         CommonModule,

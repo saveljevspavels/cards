@@ -14,6 +14,7 @@ import {CardBoardComponent} from "./components/card-board/card-board.component";
 import {LeaderboardGuard} from "../../guards/leaderboard.guard";
 import {LevelOverviewComponent} from "./components/level-overview/level-overview.component";
 import {TaskOverviewComponent} from "./components/task-overview/task-overview.component";
+import {StoreComponent} from "./components/store/store.component";
 
 const routes: Routes = [
     {
@@ -51,6 +52,10 @@ const routes: Routes = [
             {
                 path: 'board',
                 component: CardBoardComponent,
+            },
+            {
+                path: 'store',
+                component: StoreComponent,
             },
             {
                 path: 'activity-list',

@@ -16,6 +16,7 @@ export const CONST = {
         SCHEME: "scheme",
         CHALLENGES: "challenges",
         CHALLENGE_PROGRESS: "challenge_progress",
+        PURCHASES: "purchases",
     },
     ACTIVITY_PROPERTIES: {
         DISTANCE: "distance",
@@ -43,5 +44,7 @@ export const CONST = {
     GAME_ID: "game1",
     SCHEME_ID: "main",
     COMMENT_LENGTH: 300,
+    TIMEZONE: 'Europe/Riga',
+    TIMEZONE_OFFSET: 3,
 }
 

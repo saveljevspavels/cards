@@ -20,6 +20,7 @@ import CollectionReference = firebase.firestore.CollectionReference;
 import {ProgressiveChallenge} from "../shared/interfaces/progressive-challenge.interface";
 import {ChallengeProgress} from "../shared/classes/challenge-progress";
 import {JsonObjectInterface} from "../shared/interfaces/json-object.interface";
+import {Purchases} from "../shared/interfaces/purchase.interface";
 
 export class FirestoreService {
     logger: Logger;
@@ -40,6 +41,7 @@ export class FirestoreService {
     public schemeCollection: DataCollection<any>;
     public challengeCollection: DataCollection<ProgressiveChallenge>;
     public challengeProgressCollection: DataCollection<ChallengeProgress>;
+    public purchaseCollection: DataCollection<Purchases>;
 
     constructor(logger: Logger) {
         this.logger = logger;
@@ -69,7 +71,8 @@ export class FirestoreService {
         this.sessionCollection = new DataCollection<any>(this.db, CONST.COLLECTIONS.SESSIONS);
         this.schemeCollection = new DataCollection<any>(this.db, CONST.COLLECTIONS.SCHEME);
         this.challengeCollection = new DataCollection<any>(this.db, CONST.COLLECTIONS.CHALLENGES);
-        this.challengeProgressCollection = new DataCollection<any>(this.db, CONST.COLLECTIONS.CHALLENGE_PROGRESS);
+        this.challengeProgressCollection = new DataCollection<ChallengeProgress>(this.db, CONST.COLLECTIONS.CHALLENGE_PROGRESS);
+        this.purchaseCollection = new DataCollection<Purchases>(this.db, CONST.COLLECTIONS.PURCHASES);
     }
 
     errorHandlerWrap(methodName: string, method: any) {

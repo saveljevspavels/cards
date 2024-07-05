@@ -335,3 +335,14 @@ h6 {
     margin-right: calc(var(--margin) * -1);
     position: relative;
 }
+
+.image-logo {
+    width: 40px;
+    height: 40px;
+    position: relative;
+    overflow: hidden;
+    background-size: cover;
+    background-position: center;
+    flex-shrink: 0;
+    border-radius: var(--radius-half);
+}

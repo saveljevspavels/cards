@@ -55,6 +55,11 @@ export class Currencies {
         return new Currencies(0, 0, 0, 0, 0, 0, energy);
     }
 
+    withExperience(value: number): Currencies {
+        this.experience = value;
+        return this;
+    }
+
     toString(): string {
         return `Currencies(${Object.entries(this).filter(([key, value]) => value).map(([key, value]) => `${key}: ${value}`).join(', ')})`;
     }

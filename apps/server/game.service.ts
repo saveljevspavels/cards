@@ -59,7 +59,7 @@ export default class GameService {
         const rule = new schedule.RecurrenceRule();
         rule.hour = 0;
         rule.minute = 0;
-        rule.tz = 'Europe/Riga';
+        rule.tz = CONST.TIMEZONE;
 
         const job = schedule.scheduleJob(rule, async () => {
             this.logger.error(`It's midnight`);

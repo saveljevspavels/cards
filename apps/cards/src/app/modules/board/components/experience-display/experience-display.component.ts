@@ -21,9 +21,6 @@ export class ExperienceDisplayComponent implements OnInit {
 
     }
 
-    goToLevelOverview() {
-        this.router.navigateByUrl('board/main/level-overview');
-    }
 }
 
 

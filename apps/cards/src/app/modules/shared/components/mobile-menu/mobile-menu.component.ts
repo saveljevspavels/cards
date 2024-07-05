@@ -30,10 +30,15 @@ export class MobileMenuComponent implements OnInit, OnDestroy {
                 highlightedOn: ['/board/submit-activity'],
                 icon: 'gauge',
             },
+            // {
+            //     label: 'Task Market',
+            //     icon: 'board',
+            //     path: '/board/board'
+            // },
             {
-                label: 'Task Market',
-                icon: 'board',
-                path: '/board/board'
+                label: 'Store',
+                path: '/board/store',
+                icon: 'store',
             },
             {
                 label: 'Leaderboard',
@@ -41,11 +46,11 @@ export class MobileMenuComponent implements OnInit, OnDestroy {
                 path: '/board/leaderboard',
                 permission: 'leaderboard'
             },
-            {
-                label: 'Profile',
-                icon: 'profile',
-                path: '/board/athletes/profile'
-            },
+            // {
+            //     label: 'Profile',
+            //     icon: 'profile',
+            //     path: '/board/athletes/profile'
+            // },
             {
                 label: 'Admin',
                 icon: 'rules',
