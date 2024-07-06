@@ -49,6 +49,7 @@ export class ChallengeManagementComponent implements OnInit {
                 coins: [challengeToEdit?.rewards?.coins || 0, [Validators.required]],
                 experience: [challengeToEdit?.rewards?.experience || 0, [Validators.required]],
             }),
+            evaluateImmediate: [challengeToEdit?.evaluateImmediate || false]
         })
     }
 

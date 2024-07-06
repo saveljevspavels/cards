@@ -148,16 +148,16 @@ export class ChallengeService {
         return await this.fireStoreService.challengeCollection.all();
     }
 
-    async evaluateChallengeProgress(activity: Activity, athlete: Athlete) {
-        const progress = await this.getChallengeProgress(athlete.id);
-        const challenges = await this.getActiveChallenges(progress);
+    async evaluateChallengeProgress(activity: Activity, athleteId: string, evaluateImmediate: boolean) {
+        const progress = await this.getChallengeProgress(athleteId);
+        const challenges = (await this.getActiveChallenges(progress)).filter(challenge => challenge.evaluateImmediate === evaluateImmediate);
         challenges.forEach(challenge => {
             this.progressChallenge(activity, challenge, progress);
         });
         challenges.forEach(challenge => {
             this.completeApplicableChallenge(challenge, progress);
         });
-        await this.fireStoreService.challengeProgressCollection.set(athlete.id, progress);
+        await this.fireStoreService.challengeProgressCollection.set(athleteId, progress);
     }
 
     async getChallengeProgress(athleteId: string): Promise<ChallengeProgress> {
@@ -170,7 +170,7 @@ export class ChallengeService {
             return progress; // Incompatible activity type for this challenge
         }
 
-        const cardSnapshots = activity.gameData.cardSnapshots || [];
+        const cardSnapshots = activity?.gameData?.cardSnapshots || [];
 
         switch (challenge.stat) {
             case ChallengeStatType.DISTANCE:
@@ -201,6 +201,7 @@ export class ChallengeService {
                 progress.progressChallenge(challenge.id, this.countApplicableCards(cardSnapshots, ChallengeStatType.MULTITASKER_TASKS));
                 break;
             case ChallengeStatType.DAILY_COMPLETED_TASKS:
+            case ChallengeStatType.COMPLETED_TASKS:
                 progress.progressChallenge(challenge.id, cardSnapshots.length);
                 break;
             case ChallengeStatType.HEARTBEATS:

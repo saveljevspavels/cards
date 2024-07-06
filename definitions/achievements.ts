@@ -16,7 +16,8 @@ export const ACHIEVEMENTS: ProgressiveChallenge[] = [
 
         ],
         stat: ChallengeStatType.DAILY_COMPLETED_TASKS,
-        targetValue: 3
+        targetValue: 3,
+        evaluateImmediate: false
     },
     {
         title: "Birdman I",
@@ -33,7 +34,8 @@ export const ACHIEVEMENTS: ProgressiveChallenge[] = [
 
         ],
         stat: ChallengeStatType.BIRD_TASKS,
-        targetValue: 7
+        targetValue: 7,
+        evaluateImmediate: false
     },
     {
         title: "Birdman II",
@@ -50,7 +52,8 @@ export const ACHIEVEMENTS: ProgressiveChallenge[] = [
 
         ],
         stat: ChallengeStatType.BIRD_TASKS,
-        targetValue: 15
+        targetValue: 15,
+        evaluateImmediate: false
     },
     {
         title: "Wanderer I",
@@ -67,6 +70,7 @@ export const ACHIEVEMENTS: ProgressiveChallenge[] = [
 
         ],
         stat: ChallengeStatType.WANDERER_TASKS,
-        targetValue: 7
+        targetValue: 7,
+        evaluateImmediate: false
     }
 ] ;

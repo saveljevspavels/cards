@@ -8,11 +8,11 @@ import {StaticValidationService} from "../shared/services/validation.service";
 import Card, {CardSnapshot, NullCard} from "../shared/interfaces/card.interface";
 import Athlete from "../shared/classes/athlete.class";
 import AthleteService from "./athlete.service";
-import {ConstService} from "../cards/src/app/services/const.service";
 import {UploadedImage} from "../shared/interfaces/image-upload.interface";
 import {ChallengeService} from "./challenge.service";
 import {Activity, ActivityStatus} from "../shared/interfaces/activity.interface";
 import {forkJoin} from "rxjs";
+import axios from "axios";
 
 export default class ActivityService {
     constructor(
@@ -74,6 +74,41 @@ export default class ActivityService {
           await this.approveActivity(activity)
           res.status(200).send({response: RESPONSES.ERROR.INVALID_ATHLETE});
         });
+
+        app.post(`${CONST.API_PREFIX}/activities`, async (req, res) => {
+            const token = res.get('accessToken');
+            if(!token) {
+                return;
+            }
+            this.getAthleteActivities(token).then(activities => {
+                const requestedIds = req.body.activityIds;
+                const commandId = req.body.commandId;
+                const dateFrom = req.body.from;
+                if(requestedIds?.length) {
+                    activities = activities.filter((activity: any) => requestedIds.indexOf(activity.id) !== -1)
+                }
+                if(dateFrom) {
+                    activities = activities.filter((activity: any) => (+ new Date(activity.start_date)) > dateFrom)
+                }
+                if(commandId) {
+                    this.fireStoreService.deleteCommand(commandId)
+                }
+                activities.forEach((activity: any) => {
+                    Promise.all([
+                        this.fireStoreService.deletePendingActivity(activity.id),
+                        this.addDetailedActivity({ ...activity,
+                            gameData: {
+                                status: ActivityStatus.NEW
+                            }
+                        }),
+                        this.challengeService.evaluateChallengeProgress(activity, activity.athlete.id.toString(), true)
+                    ])
+                })
+                res.status(200).send(activities);
+            }, (err) => {
+                this.logger.error('Error trying to get detailed activities from Strava');
+            })
+        });
     }
 
     async getActivity(activityId: number | string): Promise<Activity> {
@@ -98,6 +133,7 @@ export default class ActivityService {
             this.logger.info(`All validators passed for ${activityId}`)
             await this.approveActivity(activity.id.toString());
             await this.updateBaseCard(athlete, activity, cardSnapshots);
+            await this.challengeService.evaluateChallengeProgress(activity, athlete.id, false);
         } else {
             this.logger.info(`Validator(s) failed, switching for manual approve ${activityId}`)
         }
@@ -230,7 +266,6 @@ export default class ActivityService {
                     }
                 })
         ])
-        await this.challengeService.evaluateChallengeProgress(activity, athlete);
 
         this.logger.info(`Athlete ${athlete.firstname} ${athlete.lastname} ${athlete.id} submitted activity with ${cardIds}`)
     }
@@ -281,6 +316,15 @@ export default class ActivityService {
         }
     }
 
+    async addDetailedActivity(activity: any) {
+        if (await this.fireStoreService.detailedActivityCollection.exists(activity.id.toString())) {
+            // this.logger.error(`Activity ${activity.id} already exists`); Too much spam
+        } else {
+            this.logger.info(`Activity ${activity.id} added for athlete ${activity.athlete.id}`);
+            return await this.fireStoreService.detailedActivityCollection.set(activity.id.toString(), activity)
+        }
+    }
+
     async deleteActivity(activityId: string) {
         const activity = await this.fireStoreService.detailedActivityCollection.get(activityId.toString())
         await this.fireStoreService.detailedActivityCollection.update(
@@ -294,5 +338,14 @@ export default class ActivityService {
                 }
             })
         this.logger.info(`Activity ${activityId} was deleted for athlete ${activity.athlete.id.toString()}`)
+    }
+
+    async getAthleteActivities(accessToken: string): Promise<any[]> {
+        const response = await axios.get(`${CONST.STRAVA_BASE}/api/v3/activities`, {
+            headers: {
+                Authorization: `Bearer ${accessToken}`
+            }
+        });
+        return response?.data || [];
     }
 }

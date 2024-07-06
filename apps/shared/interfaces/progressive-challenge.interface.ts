@@ -14,7 +14,8 @@ export interface ProgressiveChallenge {
         points: number;
         coins: number;
         experience: number;
-    }
+    },
+    evaluateImmediate: boolean;
 }
 
 export enum ChallengeStatType {
@@ -30,7 +31,7 @@ export enum ChallengeStatType {
     ELAPSED_TIME = "ELAPSED_TIME",
     COMPLETED_TASKS = "COMPLETED_TASKS",
     DAILY_COMPLETED_TASKS = "DAILY_COMPLETED_TASKS",
-    BASIC_TASKS = "BASIC_TASKS",
+    BASIC_TASKS = "BASIC_TASKS", // TODO: implement || remove
     HEARTBEATS = "HEARTBEATS",
     ELEVATION_GAIN = "ELEVATION_GAIN",
 }
@@ -42,4 +43,3 @@ export const ChallengeStatTagMap: Map<ChallengeStatType, CardTag> = new Map([
     [ChallengeStatType.DISTANCE_TASKS, CardTag.distance],
     [ChallengeStatType.MULTITASKER_TASKS, CardTag.multitasker],
 ]);
-

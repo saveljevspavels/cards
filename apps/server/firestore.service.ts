@@ -106,15 +106,6 @@ export class FirestoreService {
             });
     }
 
-    async addDetailedActivity(activity: any) {
-        if (await this.detailedActivityCollection.exists(activity.id.toString())) {
-            // this.logger.error(`Activity ${activity.id} already exists`); Too much spam
-        } else {
-            this.logger.info(`Activity ${activity.id} added for athlete ${activity.athlete.id}`);
-            return await this.detailedActivityCollection.set(activity.id.toString(), activity)
-        }
-    }
-
     async addCommand(athleteId: string, command: any) {
         const id = generateId();
         return this.commandCollection.set(id, {
