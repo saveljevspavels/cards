@@ -14,7 +14,7 @@ import { BoardParentComponent } from './components/board-parent/board-parent.com
 import { SubmittingActivityComponent } from './components/submitting-activity/submitting-activity.component';
 import { CardFilterComponent } from './components/card-filter/card-filter.component';
 import { GenericCounterComponent } from './components/generic-counter/generic-counter.component';
-import {EnergyLineComponent} from "./components/energy-line/energy-line.component";
+import {EnergyDisplayComponent} from "./components/energy-display/energy-display.component";
 import {CoinsDisplayComponent} from "./components/coins-display/coins-display.component";
 import {CardSchemeComponent} from "./components/card-scheme/card-scheme.component";
 import {AdminModule} from "../admin/admin.module";
@@ -34,6 +34,8 @@ import {CarouselModule} from "primeng/carousel";
 import {TaskOverviewComponent} from "./components/task-overview/task-overview.component";
 import {StoreComponent} from "./components/store/store.component";
 import {StoreItemComponent} from "./components/store/store-item/store-item.component";
+import {BoardHeaderComponent} from "./components/board-header/board-header.component";
+import {StatDisplayComponent} from "./components/stat-display/stat-display.component";
 
 @NgModule({
     declarations: [
@@ -50,7 +52,7 @@ import {StoreItemComponent} from "./components/store/store-item/store-item.compo
         CardFilterComponent,
         GenericCounterComponent,
         GenericCounterComponent,
-        EnergyLineComponent,
+        EnergyDisplayComponent,
         CardSchemeComponent,
         ActiveCardListComponent,
         BaseCardComponent,
@@ -66,7 +68,9 @@ import {StoreItemComponent} from "./components/store/store-item/store-item.compo
         InventoryComponent,
         TaskOverviewComponent,
         StoreComponent,
-        StoreItemComponent
+        StoreItemComponent,
+        BoardHeaderComponent,
+        StatDisplayComponent
     ],
     imports: [
         CommonModule,

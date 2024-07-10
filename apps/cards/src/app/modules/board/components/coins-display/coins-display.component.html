@@ -1,10 +1,6 @@
-<div class="box d-flex flex-column align-items-center full-height">
-    <div class="d-flex full-width justify-content-center mt-1 mb-2">
-        <app-svg [icon]="'piggy_bank'" [height]="32" [width]="34" [styleClass]="'color-secondary-3'"></app-svg>
-    </div>
-    <span class="full-width justify-content-center d-flex">Your coins:</span>
-    <span class="text-bold title mt-1">
-        <app-number-transition [value]="(athlete$ | async)?.currencies?.coins || 0"></app-number-transition>
-    </span>
-    <p class="text-small light m-0 text-center">Use your savings to unlock new tasks</p>
-</div>
+<app-stat-display
+        [title]="'Money:'"
+        [value]="(athlete$ | async)?.currencies?.coins || 0"
+>
+    <app-svg icon [icon]="'piggy_bank'" [height]="20" [width]="21" [styleClass]="'color-secondary-3'"></app-svg>
+</app-stat-display>

@@ -1,0 +1,23 @@
+.stat-display {
+  &__icon {
+    position: relative;
+    background-color: var(--color-background);
+    height: 32px;
+    width: 32px;
+    border-radius: 50%;
+    &--updates {
+      &:before {
+        pointer-events: none;
+        content: '';
+        width: 10px;
+        height: 10px;
+        border-radius: 5px;
+        position: absolute;
+        top: 0;
+        right: 0;
+        background-color: var(--color-secondary-2);
+        z-index: 1;
+      }
+    }
+  }
+}

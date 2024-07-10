@@ -53,7 +53,7 @@
     --margin: 16px;
 
     --menu-height: 60px;
-    --header-height: 50px;
+    --header-height: 48px;
 }
 
 @mixin color($type) {
@@ -242,6 +242,10 @@ h6 {
     text-decoration: underline;
 }
 
+.half-opacity {
+    opacity: 0.5;
+}
+
 @media (min-width: 435px) {
     .text-xs-small {
         font-size: var(--text-size-small)
@@ -345,4 +349,11 @@ h6 {
     background-position: center;
     flex-shrink: 0;
     border-radius: var(--radius-half);
+}
+
+.vertical-line {
+    background-color: var(--color-background);
+    width: 1px;
+    height: 100%;
+    margin: 0 var(--margin);
 }

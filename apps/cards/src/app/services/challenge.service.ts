@@ -17,9 +17,10 @@ export class ChallengeService {
 
     public challenges = new BehaviorSubject<ProgressiveChallenge[]>([]);
     public activeChallenges = new Observable<ProgressiveChallenge[]>;
+    public _myProgress = new BehaviorSubject<ChallengeProgress>(new ChallengeProgress(''));
     public challengeProgress = new BehaviorSubject<ProgressiveChallenge[]>([]);
     private challengeCollection: AngularFirestoreCollection<ProgressiveChallenge[]>;
-    public myProgress$: Observable<ChallengeProgress>;
+    public myProgress$: Observable<ChallengeProgress> = this._myProgress.asObservable();
 
     constructor(
         private db: AngularFirestore,
@@ -28,9 +29,13 @@ export class ChallengeService {
         private gameService: GameService
     ) {
         this.challengeCollection = this.db.collection(ConstService.CONST.COLLECTIONS.CHALLENGES);
-        this.myProgress$ = this.db.collection(ConstService.CONST.COLLECTIONS.CHALLENGE_PROGRESS,
+        this.db.collection(ConstService.CONST.COLLECTIONS.CHALLENGE_PROGRESS,
             (ref: any) => ref.where('athleteId', '==', athleteService.myId.value)
-        ).valueChanges().pipe(map((progress: any) => progress.length ? progress[0] as ChallengeProgress : new ChallengeProgress(athleteService.myId.value)));
+        ).valueChanges()
+            .pipe(map((progress: any) => progress.length ? progress[0] as ChallengeProgress : new ChallengeProgress(athleteService.myId.value)))
+            .subscribe((progress: ChallengeProgress) => {
+            this._myProgress.next(progress);
+        });
         this.challengeCollection.valueChanges().subscribe((challenges: any) => {
             this.challenges.next(challenges as ProgressiveChallenge[]);
         });

@@ -1,26 +1,15 @@
 <div class="d-flex flex-column">
-    <div class="row flex-md-nowrap flex-sm-wrap order-1">
-        <div class="offset-lg-3 col-lg-6 mb-2">
-            <div class="row mb-3">
-                <div class="col-3 pr-1">
-                    <app-energy-line></app-energy-line>
-                </div>
-                <div class="col-3 pr-1 pl-1">
-                    <app-points-display></app-points-display>
-                </div>
-                <div class="col-3 pl-1 pr-1">
-                    <app-coins-display></app-coins-display>
-                </div>
-                <div class="col-3 pl-1">
-                    <app-experience-display></app-experience-display>
-                </div>
-            </div>
-            <div class="mb-4">
+    <app-board-header></app-board-header>
+
+    <div class="row mt-n3 mb-4">
+        <div class="offset-lg-3 col-lg-6">
+            <div class="mb-3">
                 <app-tabs [tabs]="tabs"></app-tabs>
             </div>
             <router-outlet></router-outlet>
         </div>
     </div>
+
 
     <div class="row order-2 " [ngClass]="{'order-2': !openStates.rules, 'order-0 mb-2': openStates.rules}">
         <div class="offset-lg-3 col-lg-6">

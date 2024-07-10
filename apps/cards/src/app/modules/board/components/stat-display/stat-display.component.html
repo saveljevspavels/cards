@@ -1,0 +1,13 @@
+<div class="stat-display d-flex align-items-center">
+    <div class="stat-display__icon mr-3 d-flex align-items-center justify-content-center" [ngClass]="{'stat-display__icon--updates': hasUpdates}">
+        <ng-content select="[icon]"></ng-content>
+    </div>
+    <div class="color-background">
+        <div class="text-small">
+            {{title}}
+        </div>
+        <div class="text-bold">
+            <app-number-transition [value]="value"></app-number-transition><span *ngIf="limit" class="half-opacity">/ <span class="text-small">{{limit}}</span></span>
+        </div>
+    </div>
+</div>

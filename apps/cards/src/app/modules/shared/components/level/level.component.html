@@ -47,7 +47,7 @@
                 <app-svg [height]="11" [width]="11" [icon]="'checkmark'"></app-svg>
             </ng-template>
             <div class="ml-2">
-                <app-button *ngIf="(!claimed && levelIndex < currentLevel) || (progress >= LEVEL_EXPERIENCE[levelIndex] && levelIndex === currentLevel)"
+                <app-button *ngIf="(!claimed && levelIndex < currentLevel)"
                             [type]="'action'"
                             [small]="true"
                             (click)="claimReward()"

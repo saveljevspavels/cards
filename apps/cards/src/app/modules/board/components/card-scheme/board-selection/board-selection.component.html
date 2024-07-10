@@ -1,7 +1,7 @@
-<div class="d-flex justify-content-between">
+<div class="d-flex board-selection p-1 justify-content-between">
     <div *ngFor="let board of boards; let i = index;"
          (click)="select(board.key)"
-         class="board-button border-{{board.color}} d-flex justify-content-center align-items-center color-{{board.color}}"
+         class="board-button d-flex justify-content-center align-items-center color-{{board.color}}"
          [ngClass]="{'board-button--inactive': board.key !== activeBoard, 'mr-2': i < boards.length - 1}"
     >
         <div class="background-{{board.color}} board-button__background"></div>

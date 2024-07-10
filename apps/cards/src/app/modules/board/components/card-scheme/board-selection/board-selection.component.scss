@@ -1,11 +1,18 @@
+.board-selection {
+  background-color: var(--color-background);
+  border-radius: 12px;
+  box-shadow: rgba(0, 0, 0, 0.15) 3px 4px 14px;
+}
+
 .board-button {
   position: relative;
-  border-radius: 20px;
+  border-radius: 12px;
   background-color: var(--card-background);
   overflow: hidden;
-  padding: 8px 8px 8px 8px;
+  padding: 7px 8px 7px 8px;
   cursor: pointer;
-  flex-basis: 33.3%;
+  flex-grow: 2;
+  transition: flex-grow 0.15s ease-in-out;
   &__background {
     opacity: 0.1;
     position: absolute;
@@ -14,13 +21,17 @@
     top: 0;
     left: 0;
   }
+  span {
+    transition: font-size 0.15s ease-in-out;
+  }
   &--inactive {
-    border: 1px solid var(--card-background)!important;
+    flex-grow: 1;
     .board-button__background {
       background-color: var(--card-background) !important;
     }
     span {
       color: var(--color-text-light)!important;
+      font-size: 0!important;
     }
     app-svg {
       fill: var(--color-text-light) !important;

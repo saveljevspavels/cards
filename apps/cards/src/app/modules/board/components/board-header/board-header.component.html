@@ -1,0 +1,17 @@
+<div class="row flex-md-nowrap flex-sm-wrap order-1 background-primary-variant pb-4">
+    <div class="offset-lg-3 col-lg-6 mb-2 mt-3">
+        <div class="d-flex align-items-center justify-content-between mb-2">
+            <div></div>
+            <div class="pointer" (click)="openProfile()">
+                <app-svg [icon]="'profile'" [styleClass]="'color-background'"></app-svg>
+            </div>
+        </div>
+        <div class="d-flex align-items-center justify-content-between board-header">
+            <app-coins-display></app-coins-display>
+            <div class="vertical-line"></div>
+            <app-energy-display></app-energy-display>
+            <div class="vertical-line"></div>
+            <app-experience-display></app-experience-display>
+        </div>
+    </div>
+</div>

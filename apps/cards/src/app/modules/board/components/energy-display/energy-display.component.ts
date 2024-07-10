@@ -3,11 +3,11 @@ import {ConstService} from "../../../../services/const.service";
 import {AthleteService} from "../../../../services/athlete.service";
 
 @Component({
-  selector: 'app-energy-line',
-  templateUrl: './energy-line.component.html',
-  styleUrls: ['./energy-line.component.scss']
+  selector: 'app-energy-display',
+  templateUrl: './energy-display.component.html',
+  styleUrls: ['./energy-display.component.scss']
 })
-export class EnergyLineComponent implements OnInit {
+export class EnergyDisplayComponent implements OnInit {
     public RULES = ConstService.RULES;
     public athlete$ = this.athleteService.me;
 
