@@ -14,7 +14,7 @@ export class CircularProgressBarComponent implements OnChanges {
   @Input() activity: any;
   @Input() currentProgress: number;
 
-  public active: boolean;
+  public active: boolean = true;
   public progress: number;
   public totalProgress: number;
   public currentValue: number;
@@ -22,16 +22,17 @@ export class CircularProgressBarComponent implements OnChanges {
   public newValue: number;
   public totalValue: number;
   public complete: boolean;
+  public activityType: string;
 
   constructor(
       private validationService: ValidationService
   ) { }
 
   ngOnChanges(): void {
-    this.active = !this.activity || this.type === StaticValidationService.normalizeActivityType(this.activity);
-    this.baseValue = this.validationService.getBaseValue(this.type);
+    this.activityType = StaticValidationService.normalizeActivityType(this.activity);
+    this.baseValue = this.validationService.getBaseValue(this.activityType);
     this.currentValue = Math.floor((this.currentProgress * this.baseValue) / RULES.PROGRESS_PRECISION);
-    this.newValue = this.active ? parseInt(this.activity && this.activity[StaticValidationService.baseActivityTypeMap.get(this.type) || ''] || 0,  10) : 0;
+    this.newValue = this.active ? parseInt(this.activity && this.activity[StaticValidationService.baseActivityTypeMap.get(this.activityType) || ''] || 0,  10) : 0;
     this.totalValue = this.active ? this.newValue + this.currentValue : this.currentValue;
     this.progress = this.activity ? this.validationService.getBaseCardProgress(this.activity) : 0;
     this.totalProgress = this.active ? this.currentProgress + this.progress : 0;

@@ -1,15 +1,29 @@
 <h2>Basic Activity</h2>
-<div class="base-card box d-flex align-items-center" [ngClass]="{'border-primary': remainderActivity}">
-    <div *ngFor="let keyValue of (athlete$ | async)?.baseCardProgress | keyvalue">
-        <app-circular-progress-bar
-                [currentProgress]="keyValue.value"
-                [type]="keyValue.key"
-                [activity]="remainderActivity"
-                (click)="claimBaseReward(keyValue.key.toString())"
-        >
-        </app-circular-progress-bar>
+<div class="base-card box d-flex align-items-center justify-content-between" [ngClass]="{'border-primary': remainderActivity}">
+    <app-circular-progress-bar
+            [type]="'combined'"
+            [currentProgress]="(athlete$ | async)?.baseCardProgress.combined || 0"
+            [activity]="remainderActivity"
+            (click)="claimBaseReward()"
+    >
+    </app-circular-progress-bar>
+    <div class="mr-2">
+        <div class="title text-bold mb-2">
+            Basic card
+        </div>
+        <div class="d-flex">
+            <app-validator *ngFor="let validator of DISTANCE_VALIDATORS"
+                           [validator]="validator"
+                           [allValidators]="DISTANCE_VALIDATORS"
+            ></app-validator>
+            <div class="mr-2"></div>
+            <app-validator *ngFor="let validator of TIME_VALIDATORS"
+                           [validator]="validator"
+                           [allValidators]="TIME_VALIDATORS"
+            ></app-validator>
+        </div>
     </div>
     <div class="d-flex justify-content-end">
-        <app-reward-money [value]="reward"></app-reward-money>
+        <app-reward-experience [value]="reward"></app-reward-experience>
     </div>
 </div>

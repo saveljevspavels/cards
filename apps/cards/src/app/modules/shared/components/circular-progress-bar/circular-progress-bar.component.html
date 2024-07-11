@@ -2,25 +2,19 @@
     <div class="circular-progress-bar" [ngClass]="{'circular-progress-bar--inactive': !active}">
         <div class="circular-progress-bar__circle"></div>
         <div class="circular-progress-bar__circle"
-             [ngStyle]="{'background': 'radial-gradient(closest-side, var(--card-background) 75%, transparent 80%), conic-gradient(var(--color-' + type + ') ' + (currentProgress | percent) + ', rgba(0,0,0,0) 0)'}"
+             [ngStyle]="{'background': 'radial-gradient(closest-side, var(--card-background) 75%, transparent 80%), conic-gradient(var(--color-primary) ' + (currentProgress | percent) + ', rgba(0,0,0,0) 0)'}"
         ></div>
         <div class="circular-progress-bar__circle"
-             [ngStyle]="{'background': 'radial-gradient(closest-side, var(--card-background) 75%, transparent 80%), conic-gradient(var(--color-' + type + ') ' + (totalProgress | percent) + ', rgba(0,0,0,0) 0)'}"
+             [ngStyle]="{'background': 'radial-gradient(closest-side, var(--card-background) 75%, transparent 80%), conic-gradient(var(--color-primary) ' + (totalProgress | percent) + ', rgba(0,0,0,0) 0)'}"
         >
         </div>
         <div class="circular-progress-bar__value d-flex flex-column align-items-center">
-            <app-activity-type-icon [type]="type"
-                                    [width]="14"
-                                    [height]="14"></app-activity-type-icon>
-            <span class="text-small text-bold m-0 mt-0">{{(active && activity) ? ('+' + (type === "other" ? (newValue | minutes) : (newValue | distance))) : (currentProgress | percent)}}</span>
+            <span class="text-small text-bold m-0 mt-0">{{(active && activity) ? ('+' + (activityType === "other" ? (newValue | minutes) : (newValue | distance))) : (currentProgress | percent)}}</span>
         </div>
         <div  *ngIf="complete"
-              class="circular-progress-bar__circle circular-progress-bar__complete background-{{type}} d-flex flex-column align-items-center">
-            <app-svg class="color-background mt-2" height="14" width="14" viewBox="0 0 14 14" [icon]="'coin'"></app-svg>
+              class="circular-progress-bar__circle circular-progress-bar__complete background-primary d-flex flex-column align-items-center">
+            <app-svg class="color-background mt-2" height="14" width="14" viewBox="0 0 14 14" [icon]="'star'"></app-svg>
             <span class="text-bold color-background text-small mt-1">Claim</span>
         </div>
-    </div>
-    <div class="circular-progress-bar__details text-small text-light mt-1">
-        {{type === "other" ? (totalValue | minutes) : (totalValue | distance)}}/{{type === "other" ? (baseValue | minutes) : (baseValue | distance)}}
     </div>
 </div>

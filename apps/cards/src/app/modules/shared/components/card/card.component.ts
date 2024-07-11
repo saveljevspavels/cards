@@ -76,7 +76,6 @@ export class CardComponent implements OnInit, OnChanges {
 
     initCard() {
         this.checkFilter();
-        this.activityTypes = this.resolveActivityTypes(this.card.validators)
     }
 
     checkFilter() {
@@ -90,10 +89,6 @@ export class CardComponent implements OnInit, OnChanges {
             || (typeValidator?.formula.indexOf(this.filterData.filterActivity) === -1 && typeValidator?.comparator === ConstService.CONST.COMPARATORS.NOT_IN))
             &&
             (this.filterData['filterLevel_' + UtilService.getTier(this.card.value)])
-    }
-
-    resolveActivityTypes(validators: Validator[]): string {
-        return (validators?.find(validator => validator.property === ConstService.CONST.ACTIVITY_PROPERTIES.TYPE)?.formula) || '';
     }
 
     activate() {

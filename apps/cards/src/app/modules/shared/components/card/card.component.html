@@ -21,7 +21,7 @@
             <div class="card__validation">
                 <app-validator *ngFor="let validator of card.validators"
                                [validator]="validator"
-                               [activityTypes]="activityTypes"
+                               [allValidators]="card.validators"
                 ></app-validator>
             </div>
         </div>

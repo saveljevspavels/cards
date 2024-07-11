@@ -20,12 +20,14 @@ export class ValidatorComponent implements OnInit {
     public CONST = ConstService.CONST;
 
     @Input() validator: Validator;
+    @Input() allValidators: Validator[];
     @Input() manual = false;
-    @Input() activityTypes = '';
+
     public readableValidator: Observable<string>;
     public resolvedValues: Observable<any>;
 
     public typedValidator = false;
+    public activityTypes = '';
 
     public selectedActivity = this.boardService.selectedActivity$
     public activeValidator: Observable<{status: string, type: string}>;
@@ -51,6 +53,7 @@ export class ValidatorComponent implements OnInit {
     ) { }
 
     ngOnInit(): void {
+        this.activityTypes = this.resolveActivityTypes(this.allValidators.length ? this.allValidators : [this.validator]);
         this.athleteService.me.pipe(filter(me => !!me && !this.manual), take(1)).subscribe((me) => {
             this.typedValidator =
                 this.validator.property === this.CONST.ACTIVITY_PROPERTIES.DISTANCE
@@ -80,6 +83,10 @@ export class ValidatorComponent implements OnInit {
                 }
             }))
         })
+    }
+
+    resolveActivityTypes(validators: Validator[]): string {
+        return (validators?.find(validator => validator.property === ConstService.CONST.ACTIVITY_PROPERTIES.TYPE)?.formula) || '';
     }
 
     comparatorToText(): string {

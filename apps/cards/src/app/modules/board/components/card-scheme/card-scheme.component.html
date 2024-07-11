@@ -1,11 +1,11 @@
 <ng-container *ngIf="boards.length">
+    <h2 *ngIf="title" class="mb-2 mt-3">{{title}}</h2>
     <div class="mb-2">
         <app-board-selection [boards]="boards"
                              [activeBoard]="activeBoard.value?.key"
                              (boardSelected)="setActiveBoard($event)"
         ></app-board-selection>
     </div>
-    <h2 *ngIf="title" class="mb-2 mt-3">{{title}}</h2>
     <ng-container *ngFor="let board of boards">
         <div class="d-none" [ngClass]="{'d-block': activeBoard.value.key === board.key}">
             <div *ngFor="let level of board.levels; let levelIndex = index">
@@ -46,7 +46,7 @@
                 </div>
             </div>
         </div>
-    <ng-container>
+    </ng-container>
 </ng-container>
 
 <ng-template #unlockPopup>

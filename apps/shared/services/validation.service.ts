@@ -154,18 +154,16 @@ export class StaticValidationService {
 
     static updateBaseCardProgress(activity: any, baseWorkout: BaseWorkout, baseCardProgress: BaseCardProgress): BaseCardProgress {
         const progress = StaticValidationService.getBaseCardProgress(activity, baseWorkout);
-        const result = {...baseCardProgress};
-        // @ts-ignore
-        result[StaticValidationService.normalizeActivityType(activity)] = baseCardProgress[StaticValidationService.normalizeActivityType(activity)] + progress;
+        const result: BaseCardProgress = {...baseCardProgress};
+        result.combined = baseCardProgress.combined + progress; // Base card vale unified
         return result;
     }
 
     static updateBaseCardProgressFromCard(activity: any, card: CardSnapshot, baseWorkout: BaseWorkout, baseCardProgress: BaseCardProgress): BaseCardProgress {
         const activityType = StaticValidationService.normalizeActivityType(activity) || '';
         const progress = StaticValidationService.getBaseCardProgressFromCard(activityType, card, baseWorkout);
-        const result = {...baseCardProgress};
-        // @ts-ignore
-        result[activityType] = baseCardProgress[activityType] + progress;
+        const result: BaseCardProgress = {...baseCardProgress};
+        result.combined = baseCardProgress.combined + progress; // Base card vale unified
         return result;
     }
 
