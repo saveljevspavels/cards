@@ -1,20 +1,57 @@
 <div class="d-flex flex-column align-items-center">
-    <div class="circular-progress-bar" [ngClass]="{'circular-progress-bar--inactive': !active}">
-        <div class="circular-progress-bar__circle"></div>
-        <div class="circular-progress-bar__circle"
-             [ngStyle]="{'background': 'radial-gradient(closest-side, var(--card-background) 75%, transparent 80%), conic-gradient(var(--color-primary) ' + (currentProgress | percent) + ', rgba(0,0,0,0) 0)'}"
-        ></div>
-        <div class="circular-progress-bar__circle"
-             [ngStyle]="{'background': 'radial-gradient(closest-side, var(--card-background) 75%, transparent 80%), conic-gradient(var(--color-primary) ' + (totalProgress | percent) + ', rgba(0,0,0,0) 0)'}"
-        >
+    <div class="circular-progress-bar" [ngClass]="{'circular-progress-bar--active': active}">
+        <div class="circular-progress-bar__background">
+            <circle-progress
+                    [percent]="100"
+                    [radius]="35"
+                    [outerStrokeWidth]="11"
+                    [showTitle]="false"
+                    [showSubtitle]="false"
+                    [showUnits]="false"
+                    [showInnerStroke]="false"
+                    [outerStrokeColor]="'#fff'"
+                    [animation]="false"
+            ></circle-progress>
         </div>
-        <div class="circular-progress-bar__value d-flex flex-column align-items-center">
-            <span class="text-small text-bold m-0 mt-0">{{(active && activity) ? ('+' + (activityType === "other" ? (newValue | minutes) : (newValue | distance))) : (currentProgress | percent)}}</span>
+        <div class="circular-progress-bar__current">
+            <circle-progress
+                    [percent]="currentProgress / 10"
+                    [radius]="35"
+                    [outerStrokeWidth]="11"
+                    [showInnerStroke]="false"
+                    [outerStrokeColor]="monochrome ? '#fff' : '#494ADB'"
+                    [title]="activity ? '+ ' +  progress / 10 : '' + currentProgress / 10"
+                    [titleFontSize]="'12'"
+                    [titleFontWeight]="'bold'"
+                    [titleColor]="monochrome ? '#fff' : '#0F0F31'"
+                    [unitsFontSize]="'12'"
+                    [unitsFontWeight]="'bold'"
+                    [unitsColor]="monochrome ? '#fff' : '#0F0F31'"
+                    [animation]="false"
+                    [showSubtitle]="false"
+            ></circle-progress>
+        </div>
+        <div class="circular-progress-bar__total">
+            <circle-progress
+                    [percent]="totalProgress / 10"
+                    [radius]="35"
+                    [outerStrokeWidth]="11"
+                    [showTitle]="false"
+                    [showSubtitle]="false"
+                    [showUnits]="false"
+                    [showInnerStroke]="false"
+                    [outerStrokeColor]="monochrome ? '#fff' : '#494ADB'"
+                    [animation]="true"
+                    [animationDuration]="300"
+            ></circle-progress>
         </div>
         <div  *ngIf="complete"
-              class="circular-progress-bar__circle circular-progress-bar__complete background-primary d-flex flex-column align-items-center">
-            <app-svg class="color-background mt-2" height="14" width="14" viewBox="0 0 14 14" [icon]="'star'"></app-svg>
+              class="circular-progress-bar__circle circular-progress-bar__complete background-primary d-flex flex-column justify-content-center align-items-center">
+            <app-svg class="color-background" height="14" width="14" viewBox="0 0 14 14" [icon]="'star'"></app-svg>
             <span class="text-bold color-background text-small mt-1">Claim</span>
         </div>
+    </div>
+    <div class="color-background text-small text-bold d-flex align-items-center mt-2" *ngIf="activity">
+        Bonus&nbsp;<app-reward-experience [value]="1"></app-reward-experience>&nbsp;per&nbsp;{{(activityType === "other" ? (baseValue | minutes) : (baseValue | distance))}}
     </div>
 </div>

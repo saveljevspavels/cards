@@ -13,6 +13,7 @@ export class CircularProgressBarComponent implements OnChanges {
   @Input() type: string;
   @Input() activity: any;
   @Input() currentProgress: number;
+  @Input() monochrome = false;
 
   public active: boolean = true;
   public progress: number;
@@ -23,7 +24,6 @@ export class CircularProgressBarComponent implements OnChanges {
   public totalValue: number;
   public complete: boolean;
   public activityType: string;
-
   constructor(
       private validationService: ValidationService
   ) { }

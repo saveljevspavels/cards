@@ -55,6 +55,7 @@
     "fs": "^0.0.1-security",
     "http-server": "^14.0.0",
     "jsonwebtoken": "^9.0.0",
+    "ng-circle-progress": "^1.7.1",
     "node-schedule": "^2.1.0",
     "primeicons": "^4.1.0",
     "primeng": "^17.13.0",

@@ -24,7 +24,7 @@ export class PendingActivityComponent implements OnInit {
   public value = '';
   public active = false;
   public disabled = false;
-  public athlete: Observable<Athlete | null> = this.athleteService.me;
+  public athlete$: Observable<Athlete | null> = this.athleteService.me;
 
   constructor(
       private boardService: BoardService,

@@ -65,6 +65,7 @@ import {ActivityCarouselComponent} from "./components/activity-carousel/activity
 import {CarouselModule} from "primeng/carousel";
 import {TabsComponent} from "./components/tabs/tabs.component";
 import {AchievementsComponent} from "../board/components/achievements/achievements.component";
+import {NgCircleProgressModule} from "ng-circle-progress";
 
 const COMPS = [
     InputComponent,
@@ -145,6 +146,7 @@ const MODULES = [
         RouterModule,
         ...MODULES,
         CarouselModule,
+        NgCircleProgressModule.forRoot({}),
     ],
     exports: [
         ...COMPS,

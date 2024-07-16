@@ -1,7 +1,24 @@
 .circular-progress-bar {
   position: relative;
-  width: 50px;
-  height: 50px;
+  width: 102px;
+  height: 102px;
+  margin: -10px;
+
+  &__total {
+    position: absolute;
+    pointer-events: none;
+    opacity: 0.4;
+  }
+
+  &__current {
+    position: absolute;
+  }
+
+  &__background {
+    position: absolute;
+    pointer-events: none;
+    opacity: 0.3;
+  }
 
   &--inactive {
     opacity: 0.5;
@@ -9,10 +26,10 @@
 
   &__circle {
     position: absolute;
-    top: 0;
-    left: 0;
-    width: 50px;
-    height: 50px;
+    top: 10px;
+    left: 10px;
+    width: 82px;
+    height: 82px;
     border-radius: 50%;
     &:first-child {
       background-color: var(--color-background);
@@ -20,13 +37,6 @@
     &:nth-child(3) {
       opacity: 0.5;
     }
-  }
-
-  &__value {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
   }
 
   &__complete {

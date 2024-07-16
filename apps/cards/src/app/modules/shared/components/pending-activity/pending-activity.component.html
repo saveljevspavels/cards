@@ -1,23 +1,32 @@
 <div class="p-3 d-flex justify-content-between align-items-end relative gradient-{{activityType}} {{styleClass}}" [ngClass]="{'box': !active, 'row': active}">
     <div class="d-flex flex-column justify-content-between full-width">
-        <div class="d-flex justify-content-between mb-3">
-            <div class="pointer" *ngIf="active" (click)="back()">
-                <app-svg [icon]="'arrow_back'" [styleClass]="'color-text'"></app-svg>
-            </div>
-            <div class="pointer" *ngIf="active" (click)="openBoost()">
-                <app-svg [icon]="'plus_circle'" [styleClass]="'color-text'"></app-svg>
+        <div class="d-flex justify-content-between mb-3" *ngIf="active">
+            <div class="pointer" (click)="back()">
+                <app-svg [icon]="'arrow_back'" [styleClass]="'color-background'"></app-svg>
             </div>
         </div>
-        <div class="d-flex align-items-center">
-            <app-activity-type-icon [type]="activityType"
-                                    [width]="48"
-                                    [height]="48"
-                                    [color]="'background'"
-            >
-            </app-activity-type-icon>
+        <div class="d-flex justify-content-between">
+            <div>
+                <div class="d-flex align-items-center">
+                    <app-activity-type-icon [type]="activityType"
+                                            [width]="48"
+                                            [height]="48"
+                                            [color]="'background'"
+                    >
+                    </app-activity-type-icon>
+                </div>
+                <h2 class="mt-1 mb-1 color-background">{{activity.name}}</h2>
+                <div class="d-flex align-items-center mb-3">
+                    <h2 class="m-0 mr-2 text-thin color-background">{{activityType === 'other' ? (value | minutes) : (value | distance)}}</h2>
+                    <div class="pointer" *ngIf="active" (click)="openBoost()">
+                        <app-svg [icon]="'plus_circle'" [styleClass]="'color-background'"></app-svg>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <ng-content></ng-content>
+            </div>
         </div>
-        <h2 class="mt-1 mb-1 color-background">{{activity.name}}</h2>
-        <h2 class="m-0 mb-3 text-thin color-background">{{activityType === 'other' ? (value | minutes) : (value | distance)}}</h2>
     </div>
     <app-entity-id [id]="activity.id"></app-entity-id>
     <div class="d-flex align-items-center">
@@ -53,7 +62,7 @@
             <div class="mt-4 mb-2 full-width">
                 <app-button
                         label="Boost for -{{RULES.COINS.ACTIVITY_BOOST_PRICE}}"
-                        [disabled]="RULES.COINS.ACTIVITY_BOOST_PRICE > (athlete | async)?.currencies.coins"
+                        [disabled]="RULES.COINS.ACTIVITY_BOOST_PRICE > (athlete$ | async)?.currencies.coins"
                         type="action"
                         (buttonClick)="boostActivity()"
                 >

@@ -29,7 +29,7 @@ export class SubmittingActivityComponent implements OnInit, OnDestroy {
 
     private submitConfirmation = new Subject;
     public notEnoughEnergy$ = new BehaviorSubject<boolean>(false);
-    public athlete: Observable<Athlete | null> = this.athleteService.me;
+    public athlete$: Observable<Athlete | null> = this.athleteService.me;
 
     public loading = false;
     public selectedActivity = this.boardService.selectedActivity$;
@@ -164,7 +164,7 @@ export class SubmittingActivityComponent implements OnInit, OnDestroy {
     }
 
     updateEnergyCheck(selectedCards: ValidatedCard[]) {
-        this.athlete.pipe(first(), map((athlete) => athlete?.currencies.energy || 0)).subscribe((availableEnergy: number) => {
+        this.athlete$.pipe(first(), map((athlete) => athlete?.currencies.energy || 0)).subscribe((availableEnergy: number) => {
             this.notEnoughEnergy$.next(StaticValidationService.notEnoughEnergy(availableEnergy, this.cardService.getPlainCards(selectedCards)));
         });
     }

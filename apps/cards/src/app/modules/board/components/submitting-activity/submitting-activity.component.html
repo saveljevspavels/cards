@@ -2,15 +2,15 @@
 
 <app-content>
 
-    <app-pending-activity *ngIf="selectedActivity | async" [activity]="selectedActivity | async"></app-pending-activity>
-
-    <div class="row mb-2">
-        <div class="col-md-12">
-            <app-base-card [remainderActivity]="remainderActivity">
-
-            </app-base-card>
-        </div>
-    </div>
+    <app-pending-activity *ngIf="selectedActivity | async" [activity]="selectedActivity | async">
+        <app-circular-progress-bar
+                [type]="'combined'"
+                [currentProgress]="(athlete$ | async)?.baseCardProgress.combined || 0"
+                [activity]="remainderActivity"
+                [monochrome]="true"
+        >
+        </app-circular-progress-bar>
+    </app-pending-activity>
 
     <div>
         <app-card-scheme
