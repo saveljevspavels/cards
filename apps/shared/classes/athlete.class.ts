@@ -112,7 +112,6 @@ export default class Athlete implements JsonObjectInterface {
                 ride: 0,
                 walk: 0,
                 other: 0,
-                combined: 0
             },
             {},
             [],
@@ -261,7 +260,6 @@ export interface BaseWorkout {
 }
 
 export interface BaseCardProgress {
-    combined: number;
     run: number;
     ride: number;
     walk: number;

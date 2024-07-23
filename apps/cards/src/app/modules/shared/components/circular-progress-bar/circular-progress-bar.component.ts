@@ -14,6 +14,7 @@ export class CircularProgressBarComponent implements OnChanges {
   @Input() activity: any;
   @Input() currentProgress: number;
   @Input() monochrome = false;
+  @Input() small = false;
 
   public active: boolean = true;
   public progress: number;
@@ -24,6 +25,10 @@ export class CircularProgressBarComponent implements OnChanges {
   public totalValue: number;
   public complete: boolean;
   public activityType: string;
+
+  public radius: number;
+  public strokeWidth: number;
+  public strokeColor: string;
   constructor(
       private validationService: ValidationService
   ) { }
@@ -38,6 +43,30 @@ export class CircularProgressBarComponent implements OnChanges {
     this.totalProgress = this.active ? this.currentProgress + this.progress : 0;
 
     this.complete = !(this.active && this.activity) && this.currentProgress > RULES.PROGRESS_PRECISION;
+
+    this.radius = this.small ? 25 : 35;
+    this.strokeWidth = this.small ? 7 : 11;
+    if(this.monochrome) {
+        this.strokeColor = '#fff';
+    } else {
+      switch (this.type) {
+        case 'run':
+          this.strokeColor = '#494ADB';
+          break;
+        case 'walk':
+          this.strokeColor = '#7fa829';
+          break;
+        case 'ride':
+          this.strokeColor = '#fbb02e';
+          break;
+        case 'other':
+          this.strokeColor = '#f06449';
+          break;
+        default:
+          this.strokeColor = '#fff';
+
+      }
+    }
   }
 
 }

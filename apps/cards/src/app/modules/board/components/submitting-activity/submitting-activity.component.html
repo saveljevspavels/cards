@@ -4,8 +4,8 @@
 
     <app-pending-activity *ngIf="selectedActivity | async" [activity]="selectedActivity | async">
         <app-circular-progress-bar
-                [type]="'combined'"
-                [currentProgress]="(athlete$ | async)?.baseCardProgress.combined || 0"
+                [type]="activityType$ | async"
+                [currentProgress]="currentProgress$ | async"
                 [activity]="remainderActivity"
                 [monochrome]="true"
         >

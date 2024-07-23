@@ -1,13 +1,11 @@
-import {Component, Input, OnChanges, OnInit} from '@angular/core';
+import {Component, Input} from '@angular/core';
 import Athlete from "../../../../../../../shared/classes/athlete.class";
 import {AthleteService} from "../../../../services/athlete.service";
 import {Observable} from "rxjs";
-import {UtilService} from "../../../../services/util.service";
-import {StaticValidationService} from "../../../../../../../shared/services/validation.service";
-import {ValidationService} from "../../../../services/validation.service";
 import {RULES} from "../../../../../../../../definitions/rules";
 import {Validator} from "../../../../../../../shared/interfaces/card.interface";
 import {CONST} from "../../../../../../../../definitions/constants";
+import {Activity} from "../../../../../../../shared/interfaces/activity.interface";
 
 @Component({
   selector: 'app-base-card',
@@ -17,7 +15,7 @@ import {CONST} from "../../../../../../../../definitions/constants";
 export class BaseCardComponent {
   public reward: number = RULES.BASE_CARD_EXPERIENCE_REWARD;
 
-  @Input() remainderActivity: any;
+  @Input() remainderActivity: Activity;
 
   public DISTANCE_VALIDATORS: Validator[] = [
     {
@@ -50,7 +48,7 @@ export class BaseCardComponent {
       private athleteService: AthleteService
   ) { }
 
-  claimBaseReward() {
-    this.athleteService.claimBaseReward("combined").subscribe();
+  claimBaseReward(type: string) {
+    this.athleteService.claimBaseReward(type).subscribe();
   }
 }

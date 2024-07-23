@@ -4,6 +4,29 @@
   height: 102px;
   margin: -10px;
 
+  &--small {
+    width: 74px;
+    height: 74px;
+
+    .circular-progress-bar__icon {
+      top: 22px!important;
+      left: 30px!important;
+    }
+
+    .circular-progress-bar__circle {
+      top: 8px;
+      left: 8px;
+      width: 58px;
+      height: 58px;
+    }
+  }
+
+  &__icon {
+    position: absolute;
+    top: 33px;
+    left: 44px;
+  }
+
   &__total {
     position: absolute;
     pointer-events: none;
@@ -14,10 +37,16 @@
     position: absolute;
   }
 
+  &--monochrome {
+    .circular-progress-bar__background {
+      opacity: 0.3!important;
+    }
+  }
+
   &__background {
     position: absolute;
     pointer-events: none;
-    opacity: 0.3;
+    opacity: 1;
   }
 
   &--inactive {

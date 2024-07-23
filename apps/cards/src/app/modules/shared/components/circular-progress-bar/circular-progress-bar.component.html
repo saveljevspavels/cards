@@ -1,10 +1,17 @@
 <div class="d-flex flex-column align-items-center">
-    <div class="circular-progress-bar" [ngClass]="{'circular-progress-bar--active': active}">
+    <div class="circular-progress-bar" [ngClass]="{'circular-progress-bar--active': active, 'circular-progress-bar--small': small, 'circular-progress-bar--monochrome': monochrome}">
+        <div class="circular-progress-bar__icon">
+            <app-svg [icon]="'activity_' + type"
+                     [width]="14"
+                     [height]="14"
+                     [styleClass]="monochrome ? 'color-background' : 'color-' + type">
+            </app-svg>
+        </div>
         <div class="circular-progress-bar__background">
             <circle-progress
                     [percent]="100"
-                    [radius]="35"
-                    [outerStrokeWidth]="11"
+                    [radius]="radius"
+                    [outerStrokeWidth]="strokeWidth"
                     [showTitle]="false"
                     [showSubtitle]="false"
                     [showUnits]="false"
@@ -16,31 +23,29 @@
         <div class="circular-progress-bar__current">
             <circle-progress
                     [percent]="currentProgress / 10"
-                    [radius]="35"
-                    [outerStrokeWidth]="11"
+                    [radius]="radius"
+                    [outerStrokeWidth]="strokeWidth"
                     [showInnerStroke]="false"
-                    [outerStrokeColor]="monochrome ? '#fff' : '#494ADB'"
-                    [title]="activity ? '+ ' +  progress / 10 : '' + currentProgress / 10"
-                    [titleFontSize]="'12'"
-                    [titleFontWeight]="'bold'"
-                    [titleColor]="monochrome ? '#fff' : '#0F0F31'"
-                    [unitsFontSize]="'12'"
-                    [unitsFontWeight]="'bold'"
-                    [unitsColor]="monochrome ? '#fff' : '#0F0F31'"
+                    [outerStrokeColor]="strokeColor"
+                    [subtitle]="activity ? '+ ' +  progress / 10 + '%' : '' + (currentProgress / 10)  + '%'"
+                    [subtitleFontSize]="small ? '10' : '12'"
+                    [subtitleFontWeight]="'bold'"
+                    [subtitleColor]="monochrome ? '#fff' : '#0F0F31'"
+                    [showUnits]="false"
                     [animation]="false"
-                    [showSubtitle]="false"
+                    [title]="' '"
             ></circle-progress>
         </div>
         <div class="circular-progress-bar__total">
             <circle-progress
                     [percent]="totalProgress / 10"
-                    [radius]="35"
-                    [outerStrokeWidth]="11"
+                    [radius]="radius"
+                    [outerStrokeWidth]="strokeWidth"
                     [showTitle]="false"
                     [showSubtitle]="false"
                     [showUnits]="false"
                     [showInnerStroke]="false"
-                    [outerStrokeColor]="monochrome ? '#fff' : '#494ADB'"
+                    [outerStrokeColor]="strokeColor"
                     [animation]="true"
                     [animationDuration]="300"
             ></circle-progress>
@@ -51,7 +56,20 @@
             <span class="text-bold color-background text-small mt-1">Claim</span>
         </div>
     </div>
-    <div class="color-background text-small text-bold d-flex align-items-center mt-2" *ngIf="activity">
-        Bonus&nbsp;<app-reward-experience [value]="1"></app-reward-experience>&nbsp;per&nbsp;{{(activityType === "other" ? (baseValue | minutes) : (baseValue | distance))}}
+    <div class="text-small mt-2">
+        <span class="color-background d-flex align-items-center" *ngIf="activity; else baseValueTemplate">
+            Bonus&nbsp;<app-reward-experience [value]="1"></app-reward-experience>&nbsp;per <ng-container [ngTemplateOutlet]="valueTemplate" [ngTemplateOutletContext]="{value: baseValue}"/>
+        </span>
+        <ng-template #baseValueTemplate>
+            <span class="text-light">
+                <ng-container [ngTemplateOutlet]="valueTemplate" [ngTemplateOutletContext]="{value: currentValue}"/>
+                /
+                <ng-container [ngTemplateOutlet]="valueTemplate" [ngTemplateOutletContext]="{value: baseValue}"/>
+            </span>
+        </ng-template>
     </div>
 </div>
+
+<ng-template #valueTemplate let-value="value">
+    {{(activity ? activityType === "other" : type === "other") ? (value | minutes) : (value | distance)}}
+</ng-template>

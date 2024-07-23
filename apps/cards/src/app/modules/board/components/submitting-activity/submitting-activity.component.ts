@@ -5,7 +5,7 @@ import {ActivityService} from "../../../../services/activity.service";
 import {FileService} from "../../../../services/file.service";
 import {Router} from "@angular/router";
 import {PopupService} from "../../../../services/popup.service";
-import {first, map, mergeMap, startWith} from "rxjs/operators";
+import {filter, first, map, mergeMap, startWith} from "rxjs/operators";
 import {BehaviorSubject, combineLatest, Observable, Subject} from "rxjs";
 import {ConstService} from "../../../../services/const.service";
 import {Activity} from "../../../../../../../shared/interfaces/activity.interface";
@@ -38,6 +38,18 @@ export class SubmittingActivityComponent implements OnInit, OnDestroy {
     public selectedCards: FormControl = new FormControl<ValidatedCard[]>([]);
     public commentControl: FormControl = new FormControl<string>('');
     public uploadedImages: FormGroup = this.formBuilder.group({});
+
+    public activityType$ = this.selectedActivity.pipe(
+        filter((activity) => !!activity),
+        map((activity) => StaticValidationService.normalizeActivityType(activity!))
+    );
+    public currentProgress$ = combineLatest([
+        this.activityType$,
+        this.athlete$
+    ]).pipe(map(([activityType, athlete]) => {
+        // @ts-ignore
+        return athlete?.baseCardProgress[activityType] as number;
+    }));
 
     public form: FormGroup;
 
