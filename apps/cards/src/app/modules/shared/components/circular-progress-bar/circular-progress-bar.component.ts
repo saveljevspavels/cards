@@ -15,6 +15,7 @@ export class CircularProgressBarComponent implements OnChanges {
   @Input() currentProgress: number;
   @Input() monochrome = false;
   @Input() small = false;
+  @Input() reward = 0;
 
   public active: boolean = true;
   public progress: number;
@@ -30,7 +31,7 @@ export class CircularProgressBarComponent implements OnChanges {
   public strokeWidth: number;
   public strokeColor: string;
   constructor(
-      private validationService: ValidationService
+      private validationService: ValidationService,
   ) { }
 
   ngOnChanges(): void {
@@ -43,6 +44,8 @@ export class CircularProgressBarComponent implements OnChanges {
     this.totalProgress = this.active ? this.currentProgress + this.progress : 0;
 
     this.complete = !(this.active && this.activity) && this.currentProgress > RULES.PROGRESS_PRECISION;
+
+    this.reward = this.reward * Math.floor(this.totalProgress / RULES.PROGRESS_PRECISION);
 
     this.radius = this.small ? 25 : 35;
     this.strokeWidth = this.small ? 7 : 11;

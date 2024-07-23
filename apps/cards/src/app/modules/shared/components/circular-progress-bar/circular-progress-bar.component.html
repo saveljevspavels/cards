@@ -51,9 +51,12 @@
             ></circle-progress>
         </div>
         <div  *ngIf="complete"
-              class="circular-progress-bar__circle circular-progress-bar__complete background-primary d-flex flex-column justify-content-center align-items-center">
-            <app-svg class="color-background" height="14" width="14" viewBox="0 0 14 14" [icon]="'star'"></app-svg>
-            <span class="text-bold color-background text-small mt-1">Claim</span>
+              class="circular-progress-bar__circle circular-progress-bar__complete d-flex flex-column justify-content-center align-items-center text-bold color-background text-small background-{{type}}">
+            <div class="d-flex align-items-center">
+                <span class="mr-0-5 mt-0-5">{{reward}}</span>
+                <app-svg class="color-background" height="14" width="14" viewBox="0 0 14 14" [icon]="'fire'"></app-svg>
+            </div>
+            <span class="mt-1">Claim</span>
         </div>
     </div>
     <div class="text-small mt-2">

@@ -10,6 +10,7 @@
                     [type]="keyValue.key"
                     [activity]="remainderActivity"
                     [small]="true"
+                    [reward]="reward + ((athlete$ | async)?.perks['base_' + keyValue.key + '_experience_bonus'] || 0)"
                     (click)="claimBaseReward(keyValue.key.toString())"
             >
             </app-circular-progress-bar>

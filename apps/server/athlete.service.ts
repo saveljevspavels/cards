@@ -47,7 +47,7 @@ export default class AthleteService {
     async claimBaseReward(athleteId: string, type: string) {
         const athlete = await this.getAthlete(athleteId);
         // @ts-ignore
-        const reward = new Currencies.withExperience(Math.floor(parseInt(athlete.baseCardProgress[type], 10) / RULES.PROGRESS_PRECISION));
+        const reward = this.calculateBaseReward(athlete, type);
         if(!reward || reward.experience === 0) {
             return of();
         }
@@ -58,6 +58,17 @@ export default class AthleteService {
         athlete.baseCardProgress = newProgress;
         await this.updateAthlete(athlete);
         this.logger.info(`Athlete ${athlete.name} claimed ${reward} for basic ${type}`);
+    }
+
+    calculateBaseReward(athlete: Athlete, type: string): Currencies {
+        const base = RULES.BASE_CARD_EXPERIENCE_REWARD;
+        const bonus = athlete.perks[`base_${type}_experience_bonus`] || 0;
+        return Currencies.withExperience(
+            // @ts-ignore
+            Math.floor(parseInt(athlete.baseCardProgress[type], 10) / RULES.PROGRESS_PRECISION)
+            *
+            (base + bonus)
+        );
     }
 
     async saveAthlete(athlete: any) {
