@@ -46,11 +46,11 @@ export class MobileMenuComponent implements OnInit, OnDestroy {
                 path: '/board/leaderboard',
                 permission: 'leaderboard'
             },
-            {
-                label: 'Profile',
-                icon: 'profile',
-                path: '/board/athletes/profile'
-            },
+            // {
+            //     label: 'Profile',
+            //     icon: 'profile',
+            //     path: '/board/athletes/profile'
+            // },
             {
                 label: 'Admin',
                 icon: 'rules',

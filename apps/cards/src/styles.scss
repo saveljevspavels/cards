@@ -126,6 +126,10 @@ body {
     border-radius: var(--radius);
 }
 
+a {
+    text-decoration: none;
+}
+
 hr {
     border: none;
     height: 1px;
@@ -340,6 +344,19 @@ h6 {
 .mb-1-5 {
     margin-bottom: 6px;
 }
+
+.gap-1 {
+    gap: 4px;
+}
+
+.gap-2 {
+    gap: 8px;
+}
+
+.gap-3 {
+    gap: 16px;
+}
+
 
 .fullscreen-width {
     display: block;

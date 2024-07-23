@@ -179,7 +179,7 @@ export default class Athlete implements JsonObjectInterface {
     }
 
     addExperience(amount: number) {
-        this.currencies.experience = parseInt(String(this.currencies.experience || 0), 10) + parseInt(String(amount), 10);
+        this.currencies.experience = MathHelper.add(this.currencies.experience, amount);
         this.levelUp();
     }
 
@@ -192,12 +192,12 @@ export default class Athlete implements JsonObjectInterface {
 
     addCurrencies(currencies: Currencies) {
         if(!currencies) return;
+        this.addExperience(currencies.experience);
+        this.addEnergy(currencies.energy);
         this.currencies.coins = MathHelper.add(this.currencies.coins, currencies.coins);
-        this.currencies.experience = MathHelper.add(this.currencies.experience, currencies.experience);
         this.currencies.chests = MathHelper.add(this.currencies.chests, currencies.chests);
         this.currencies.perks = MathHelper.add(this.currencies.perks, currencies.perks);
         this.currencies.random_perks = MathHelper.add(this.currencies.random_perks, currencies.random_perks);
-        this.currencies.energy = MathHelper.add(this.currencies.energy, currencies.energy);
         this.currencies.fatigue = MathHelper.add(this.currencies.coins, currencies.fatigue);
     }
 

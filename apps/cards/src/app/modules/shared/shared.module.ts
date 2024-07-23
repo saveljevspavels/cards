@@ -66,6 +66,7 @@ import {CarouselModule} from "primeng/carousel";
 import {TabsComponent} from "./components/tabs/tabs.component";
 import {AchievementsComponent} from "../board/components/achievements/achievements.component";
 import {NgCircleProgressModule} from "ng-circle-progress";
+import {StravaStartActivityComponent} from "./components/strava-start-activity/strava-start-activity.component";
 
 const COMPS = [
     InputComponent,
@@ -103,7 +104,8 @@ const COMPS = [
     PopupWrapperComponent,
     ActivityCarouselComponent,
     TabsComponent,
-    AchievementsComponent
+    AchievementsComponent,
+    StravaStartActivityComponent
 ]
 
 const MODULES = [

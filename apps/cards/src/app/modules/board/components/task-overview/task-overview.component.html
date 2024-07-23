@@ -4,13 +4,17 @@
     </app-completed-task-view>
 </div>
 
-<div *ngIf="(newActivities | async).length">
-    <h2 class="mb-2 mt-2">My Activities</h2>
+<h2 class="mb-2 mt-2">My Activities</h2>
+<div *ngIf="(newActivities | async).length; else stravaStartTemplate">
     <div class="fullscreen-width">
         <app-activity-carousel [items]="(newActivities | async)">
         </app-activity-carousel>
     </div>
 </div>
+
+<ng-template #stravaStartTemplate>
+    <app-strava-start-activity></app-strava-start-activity>
+</ng-template>
 
 <app-card-scheme [title]="'My Tasks'"></app-card-scheme>
 
