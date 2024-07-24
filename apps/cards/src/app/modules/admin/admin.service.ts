@@ -7,7 +7,7 @@ import {ConstService} from "../../services/const.service";
 import CardFactory from "../../../../../shared/interfaces/card-factory.interface";
 import {CardScheme} from "../../../../../shared/interfaces/card-scheme.interface";
 import {map} from "rxjs/operators";
-import {CardSnapshot} from "../../../../../shared/interfaces/card.interface";
+import {CardSnapshot} from "../../../../../shared/classes/card.class";
 import {AngularFirestore} from "@angular/fire/compat/firestore";
 
 @Injectable()

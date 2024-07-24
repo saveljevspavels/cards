@@ -1,5 +1,5 @@
 import {Component, Input, OnInit, ViewEncapsulation} from '@angular/core';
-import {Validator} from "../../../../../../../shared/interfaces/card.interface";
+import {Validator} from "../../../../../../../shared/classes/card.class";
 import {BoardService} from "../../../../services/board.service";
 import {filter, map, take} from "rxjs/operators";
 import {AthleteService} from "../../../../services/athlete.service";

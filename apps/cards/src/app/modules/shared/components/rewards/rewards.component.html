@@ -1,19 +1,22 @@
-<div class="d-flex gap-1">
-    <app-reward-money *ngIf="card?.coinsReward && card?.coinsReward !== 0 && card?.coinsReward !== '0'"
-                      [value]="card?.coinsReward"
+<div class="d-flex gap-1" [ngClass]="{'flex-column': vertical}">
+    <app-reward-money *ngIf="rewards && rewards.coins !== 0"
+                      [value]="rewards.coins"
     >
     </app-reward-money>
     <app-reward-experience *ngIf="experienceReward"
                            [value]="experienceReward"
     >
     </app-reward-experience>
-    <app-reward-points *ngIf="card?.value"
-                       [value]="card?.value"
+    <app-reward-points *ngIf="rewards.points"
+                       [value]="rewards.points"
     >
     </app-reward-points>
+    <app-reward-energy *ngIf="rewards.energy"
+                       [value]="rewards.energy">
+    </app-reward-energy>
     <ng-container *ngIf="!rewardsOnly">
-        <app-reward-energy *ngIf="card?.energyCost && card?.energyCost !== 0 && card?.energyCost !== '0'"
-                           [value]="-card?.energyCost">
+        <app-reward-energy *ngIf="energyCost && energyCost !== 0"
+                           [value]="-energyCost">
         </app-reward-energy>
     </ng-container>
 

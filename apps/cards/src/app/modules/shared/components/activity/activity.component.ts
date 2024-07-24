@@ -15,7 +15,7 @@ import {ConstService} from "../../../../services/const.service";
 import {CONST} from "../../../../../../../../definitions/constants";
 import {StaticValidationService} from "../../../../../../../shared/services/validation.service";
 import {AthleteService} from "../../../../services/athlete.service";
-import {CardSnapshot, Report} from "../../../../../../../shared/interfaces/card.interface";
+import {CardSnapshot, Report} from "../../../../../../../shared/classes/card.class";
 import {ButtonType} from "../button/button.component";
 
 @Component({

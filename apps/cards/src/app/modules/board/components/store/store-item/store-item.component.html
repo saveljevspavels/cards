@@ -1,12 +1,20 @@
-<div class="d-flex flex-column justify-content-between align-items-center box full-height">
-    <div class="d-flex flex-column align-items-center">
-        <img class="image-logo" src="assets/images/card_placeholder_icon.png">
-        <p class="title text-bold mt-3 mb-1">{{item.name}}</p>
+<div class="store-item d-flex flex-column justify-content-between align-items-center box full-height">
+    <div class="d-flex flex-column align-items-center mt-2">
+        <div class="relative">
+            <img class="image-logo" src="assets/images/{{item.imageUrl || 'card_placeholder_icon.png'}}">
+            <div class="store-item__rewards">
+                <app-rewards [rewards]="item.rewards"
+                             [vertical]="true"
+                ></app-rewards>
+            </div>
+        </div>
+        <p class="title text-bold mt-2 mb-1">{{item.name}}</p>
     </div>
     <p class="mt-1 mb-2 text-center">{{item.description}}</p>
     <app-button [type]="'action'"
                 [disabled]="!stock || item.price > (athlete | async)?.currencies?.coins"
                 [label]="stock ? 'Buy -' + item.price : 'Out of stock'"
+                [small]="true"
                 (buttonClick)="buyItem()">
         <app-svg *ngIf="stock > 0" [icon]="'coin'" height="20"></app-svg>
     </app-button>

@@ -3,7 +3,8 @@
          [style.background-image]="'url(' + card.image + ')'"
     ></div>
     <h5 class="m-0 mb-1 text-center">{{card?.title}}</h5>
-    <app-rewards [card]="card"
+    <app-rewards [rewards]="card.rewards"
+                 [energyCost]="card.energyCost"
                  [perks]="perks"
                  [rewardsOnly]="true"
                  class="mb-1"></app-rewards>

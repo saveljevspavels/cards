@@ -5,7 +5,7 @@ import {BehaviorSubject, combineLatest, Observable, Subject} from "rxjs";
 import Athlete from "../../../../../../../shared/classes/athlete.class";
 import {BoardService} from "../../../../services/board.service";
 import {ValidationService} from "../../../../services/validation.service";
-import Card, {NullCard} from "../../../../../../../shared/interfaces/card.interface";
+import {Card} from "../../../../../../../shared/classes/card.class";
 import {StaticValidationService, ValidationStatus} from "../../../../../../../shared/services/validation.service";
 import {FormArray, FormControl} from "@angular/forms";
 import {ActivityService} from "../../../../services/activity.service";

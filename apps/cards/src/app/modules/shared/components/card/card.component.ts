@@ -1,5 +1,5 @@
 import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
-import Card, {Validator} from "../../../../../../../shared/interfaces/card.interface";
+import {Card, Validator} from "../../../../../../../shared/classes/card.class";
 import {filter, map} from "rxjs/operators";
 import {ConstService} from "../../../../services/const.service";
 import {UtilService} from "../../../../services/util.service";
@@ -88,7 +88,7 @@ export class CardComponent implements OnInit, OnChanges {
             || (typeValidator?.formula.indexOf(this.filterData.filterActivity) !== -1 && typeValidator?.comparator === ConstService.CONST.COMPARATORS.IN)
             || (typeValidator?.formula.indexOf(this.filterData.filterActivity) === -1 && typeValidator?.comparator === ConstService.CONST.COMPARATORS.NOT_IN))
             &&
-            (this.filterData['filterLevel_' + UtilService.getTier(this.card.value)])
+            (this.filterData['filterLevel_' + UtilService.getTier(this.card.rewards.points)])
     }
 
     activate() {

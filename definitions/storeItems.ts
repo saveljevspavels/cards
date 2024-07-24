@@ -7,7 +7,7 @@ export const STORE_ITEMS: StoreItem[] = [
         name: "Chest",
         description: "Chest with valuable rewards",
         price: 25,
-        imageUrl: "image",
+        imageUrl: "chest.svg",
         rewards: Currencies.withChests(1)
     },
     {
@@ -15,7 +15,7 @@ export const STORE_ITEMS: StoreItem[] = [
         name: "Energy Drink",
         description: "Energy boost to complete more tasks",
         price: 5,
-        imageUrl: "image",
+        imageUrl: "energy_drink.svg",
         rewards: Currencies.withEnergy(1)
     },
     {
@@ -23,15 +23,15 @@ export const STORE_ITEMS: StoreItem[] = [
         name: "Foam Roller",
         description: "Energy boost to complete even more tasks",
         price: 10,
-        imageUrl: "image",
-        rewards: Currencies.withChests(1).withExperience(1)
+        imageUrl: "foam_roller.svg",
+        rewards: Currencies.withEnergy(1).withExperience(1)
     },
     {
         id: "energy_3",
         name: "Defibrillator",
         description: "When you refuse to stop",
         price: 15,
-        imageUrl: "image",
-        rewards: Currencies.withChests(1).withExperience(3)
+        imageUrl: "",
+        rewards: Currencies.withEnergy(1).withExperience(3)
     }
 ]

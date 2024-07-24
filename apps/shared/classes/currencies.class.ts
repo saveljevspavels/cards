@@ -66,19 +66,20 @@ export class Currencies {
 
     toJSONObject(): any {
         return {
-            coins: this.coins,
-            points: this.points,
-            experience: this.experience,
-            chests: this.chests,
-            perks: this.perks,
-            random_perks: this.random_perks,
-            energy: this.energy,
-            fatigue: this.fatigue,
-            special_tasks: this.special_tasks
+            coins: this.coins || 0,
+            points: this.points || 0,
+            experience: this.experience || 0,
+            chests: this.chests || 0,
+            perks: this.perks || 0,
+            random_perks: this.random_perks || 0,
+            energy: this.energy || 0,
+            fatigue: this.fatigue || 0,
+            special_tasks: this.special_tasks || 0
         };
     }
 
     static fromJSONObject(json: any): Currencies {
+        if(!json) return new Currencies();
         return new Currencies(
             json['coins'],
             json['points'],
@@ -90,5 +91,9 @@ export class Currencies {
             json['fatigue'],
             json['special_tasks']
         );
+    }
+
+    isEmpty(): boolean {
+        return Object.values(this).every(value => value === 0);
     }
 }

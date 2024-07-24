@@ -8,7 +8,7 @@ import CardFactory, {
     Progression
 } from "../../../../../../../shared/interfaces/card-factory.interface";
 import {UtilService} from "../../../../services/util.service";
-import {Validator} from "../../../../../../../shared/interfaces/card.interface";
+import {Validator} from "../../../../../../../shared/classes/card.class";
 import {CompressionType} from "../../../../../../../shared/interfaces/image-upload.interface";
 
 @Component({

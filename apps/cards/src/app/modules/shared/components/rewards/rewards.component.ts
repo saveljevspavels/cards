@@ -1,6 +1,6 @@
 import {Component, Input, OnChanges} from '@angular/core';
-import Card from "../../../../../../../shared/interfaces/card.interface";
 import {AbilityKey} from "../../../../../../../shared/interfaces/ability.interface";
+import {Currencies} from "../../../../../../../shared/classes/currencies.class";
 
 @Component({
   selector: 'app-rewards',
@@ -9,17 +9,19 @@ import {AbilityKey} from "../../../../../../../shared/interfaces/ability.interfa
 })
 export class RewardsComponent implements OnChanges {
 
-  @Input() card: Card;
+  @Input() rewards: Currencies;
+  @Input() energyCost: number = 0;
   @Input() perks: {[key: string]: number} = {};
   @Input() rewardsOnly = false;
+  @Input() vertical = false;
 
   public experienceReward: number = 0;
 
   constructor() { }
 
   ngOnChanges() {
-    if(this.card || this.perks) {
-      this.experienceReward = parseInt(this.card?.experienceReward?.toString() || '0') + (this.perks[AbilityKey.EXPERIENCE_PER_TASK_BONUS.toString()] || 0);
+    if(this.rewards || this.perks) {
+      this.experienceReward = parseInt(this.rewards.experience?.toString() || '0') + (this.perks[AbilityKey.EXPERIENCE_PER_TASK_BONUS.toString()] || 0);
     }
   }
 

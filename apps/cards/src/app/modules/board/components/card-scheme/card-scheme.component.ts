@@ -2,7 +2,7 @@ import {Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild} f
 import {FormArray, FormBuilder, FormControl, FormGroup} from "@angular/forms";
 import {ConstService} from "../../../../services/const.service";
 import {BehaviorSubject, combineLatest, Subject} from "rxjs";
-import Card, {NullCard} from "../../../../../../../shared/interfaces/card.interface";
+import {Card} from "../../../../../../../shared/classes/card.class";
 import {CardScheme, CardSchemeBoard} from "../../../../../../../shared/interfaces/card-scheme.interface";
 import {CardService, ValidatedCard} from "../../../../services/card.service";
 import {AthleteService} from "../../../../services/athlete.service";

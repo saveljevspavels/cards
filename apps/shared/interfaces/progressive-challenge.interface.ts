@@ -1,5 +1,5 @@
 import {ActivityType} from "./activity.interface";
-import {CardTag} from "./card.interface";
+import {CardTag} from "../classes/card.class";
 
 export interface ProgressiveChallenge {
     id: string;

@@ -5,7 +5,7 @@ import {CONST} from "../../definitions/constants";
 import {RULES} from "../../definitions/rules";
 import {Logger} from "winston";
 import {StaticValidationService} from "../shared/services/validation.service";
-import Card, {CardSnapshot, NullCard} from "../shared/interfaces/card.interface";
+import {Card, CardSnapshot} from "../shared/classes/card.class";
 import Athlete from "../shared/classes/athlete.class";
 import AthleteService from "./athlete.service";
 import {UploadedImage} from "../shared/interfaces/image-upload.interface";
@@ -240,12 +240,14 @@ export default class ActivityService {
         }
 
         const cardSnapshots: CardSnapshot[] = cardIds.map((id, index) => {
-            return {
-                ...(cards.find(card => card.id === id) || NullCard),
-                likes: [],
-                reports: [],
-                attachedImages: images[index] || []
-            }
+            return CardSnapshot.fromJSONObject(
+                {
+                    ...(cards.find(card => card.id === id) || Card.empty()),
+                    likes: [],
+                    reports: [],
+                    attachedImages: images[index] || []
+                }
+            )
         })
 
         athlete.cards.active = athlete.cards.active.filter(cardId => cardIds.indexOf(cardId) === -1);

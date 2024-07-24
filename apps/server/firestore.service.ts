@@ -9,7 +9,7 @@ import {initializeApp} from "firebase/app";
 import 'firebase/compat/firestore';
 import {Logger} from "winston";
 import {CONST} from "../../definitions/constants";
-import Card from "../shared/interfaces/card.interface";
+import {Card} from "../shared/classes/card.class";
 import Athlete from "../shared/classes/athlete.class";
 import WhereFilterOp = firebase.firestore.WhereFilterOp;
 import Score from "../shared/interfaces/score.interface";

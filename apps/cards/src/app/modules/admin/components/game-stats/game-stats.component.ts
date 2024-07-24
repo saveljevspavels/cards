@@ -3,7 +3,7 @@ import {CONST} from "../../../../../../../../definitions/constants";
 import {ActivityService} from "../../../../services/activity.service";
 import {combineLatest} from "rxjs";
 import {AthleteService} from "../../../../services/athlete.service";
-import {CardSnapshot} from "../../../../../../../shared/interfaces/card.interface";
+import {CardSnapshot} from "../../../../../../../shared/classes/card.class";
 import {filter, first} from "rxjs/operators";
 import {StaticValidationService} from "../../../../../../../shared/services/validation.service";
 import {CardService} from "../../../../services/card.service";

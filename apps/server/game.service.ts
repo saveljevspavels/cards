@@ -3,10 +3,8 @@ import fs from "fs";
 import {Express} from "express";
 import {FirestoreService} from "./firestore.service";
 import {CONST} from "../../definitions/constants";
-import {AbilityKey} from "../shared/interfaces/ability.interface";
 import AthleteService from "./athlete.service";
 import {Logger} from "winston";
-import {ABILITIES} from "../../definitions/abilities";
 import schedule from "node-schedule";
 import {RULES} from "../../definitions/rules";
 import {getRandomInt} from "./helpers/util";
@@ -19,6 +17,8 @@ import Game from "../cards/src/app/interfaces/game";
 import {DateService} from "../shared/utils/date.service";
 import {ProgressiveChallenge} from "../shared/interfaces/progressive-challenge.interface";
 import {ChallengeService} from "./challenge.service";
+import MathHelper from "./helpers/math.helper";
+import {Card} from "../shared/classes/card.class";
 
 export default class GameService {
     constructor(
@@ -53,6 +53,33 @@ export default class GameService {
         if(RULES.PROGRESSIVE_CHALLENGE.ENABLED) {
             this.initChallengeAddition();
         }
+
+        // this.migration();
+    }
+
+    migration() {
+        console.log('running migration');
+        this.fireStoreService.cardCollection.all().then((cards) => {
+
+            cards.forEach((card: any) => {
+                if(!card.rewards) {
+                    card.rewards = {
+                        coins: MathHelper.toInt(card.coinsReward || 0),
+                        points: MathHelper.toInt(card.value || 0),
+                        experience: MathHelper.toInt(card.experienceReward || 0),
+                        energy: MathHelper.toInt(card.energyReward || 0)
+                    };
+                    delete card.coinsReward;
+                    delete card.value;
+                    delete card.experienceReward;
+                    delete card.energyReward;
+                }
+            });
+
+            cards.forEach((card: any) => {
+                this.cardService.updateCard(Card.fromJSONObject(card));
+            });
+        });
     }
 
     initEnergyRegen() {
@@ -148,7 +175,7 @@ export default class GameService {
                 {
                     title: `${newCard.title} (Time Limited)`,
                     value: 0,
-                    coinsReward: parseInt(String(newCard.coinsReward), 10) + (parseInt(String(newCard.value), 10) * RULES.COINS.FEATURED_CARD_POINT_CONVERSION),
+                    coinsReward: MathHelper.toInt(newCard.rewards.coins) + (MathHelper.toInt(newCard.rewards.points) * RULES.COINS.FEATURED_CARD_POINT_CONVERSION),
                     energyCost: 0
                 }
             ),

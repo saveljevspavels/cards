@@ -4,7 +4,7 @@ import {AdminService} from "../../admin.service";
 import {ConstService} from "../../../../services/const.service";
 import {BehaviorSubject} from "rxjs";
 import {RULES} from "../../../../../../../../definitions/rules";
-import Card from "../../../../../../../shared/interfaces/card.interface";
+import {Card} from "../../../../../../../shared/classes/card.class";
 import {CardScheme} from "../../../../../../../shared/interfaces/card-scheme.interface";
 import {CardService} from "../../../../services/card.service";
 import {ButtonType} from "../../../shared/components/button/button.component";

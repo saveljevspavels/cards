@@ -16,7 +16,7 @@ import AthleteService from "./athlete.service";
 import {LEVEL_REWARDS} from "../../definitions/level_rewards";
 import ScoreService from "./score.service";
 import {ACHIEVEMENTS} from "../../definitions/achievements";
-import {CardSnapshot, CardTag} from "../shared/interfaces/card.interface";
+import {CardSnapshot, CardTag} from "../shared/classes/card.class";
 
 export class ChallengeService {
     constructor(

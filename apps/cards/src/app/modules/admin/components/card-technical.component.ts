@@ -1,13 +1,13 @@
 import {Component, Input} from '@angular/core';
-import Card from "../../../../../../shared/interfaces/card.interface";
+import {Card} from "../../../../../../shared/classes/card.class";
 
 @Component({
     selector: 'app-card-technical',
     template: `
 <pre class="m-0">
-<b>{{card.title}} {{card.value}}p</b>
--{{card.energyCost}}e +{{card.coinsReward}}c
--{{card.coinsCost}}c +{{card.energyReward}}e
+<b>{{card.title}} {{card.rewards.points}}p</b>
+-{{card.energyCost}}e +{{card.rewards.coins}}c
+-{{card.coinsCost}}c +{{card.rewards.energy}}e
 id:{{card.id}}
 </pre>
     `,

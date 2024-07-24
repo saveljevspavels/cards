@@ -1,6 +1,6 @@
 import {RULES} from "../../../definitions/rules";
 import {CONST} from "../../../definitions/constants";
-import Card, {CardSnapshot, Validator} from "../interfaces/card.interface";
+import {Card, CardSnapshot, Validator} from "../classes/card.class";
 import {StaticAthleteHelperService} from "./athlete.helper.service";
 import {Activity} from "../interfaces/activity.interface";
 import {BaseCardProgress, BaseWorkout} from "../classes/athlete.class";

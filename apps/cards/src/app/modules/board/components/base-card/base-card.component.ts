@@ -3,7 +3,7 @@ import Athlete from "../../../../../../../shared/classes/athlete.class";
 import {AthleteService} from "../../../../services/athlete.service";
 import {Observable} from "rxjs";
 import {RULES} from "../../../../../../../../definitions/rules";
-import {Validator} from "../../../../../../../shared/interfaces/card.interface";
+import {Validator} from "../../../../../../../shared/classes/card.class";
 import {CONST} from "../../../../../../../../definitions/constants";
 import {Activity} from "../../../../../../../shared/interfaces/activity.interface";
 

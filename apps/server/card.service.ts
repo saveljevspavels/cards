@@ -1,11 +1,10 @@
-import {RESPONSES} from "./response-codes";
 import {Express} from "express";
 import {FirestoreService} from "./firestore.service";
 import {CONST} from "../../definitions/constants";
 import {generateId, getRandomInt, tierToRoman} from "./helpers/util";
 import {Logger} from "winston";
 import CardFactory, {CardPrototype, Progression} from "../shared/interfaces/card-factory.interface";
-import Card, {CardSnapshot, NullCard, Report} from "../shared/interfaces/card.interface";
+import {Card, CardSnapshot, Report} from "../shared/classes/card.class";
 import ScoreService from "./score.service";
 import {RULES} from "../../definitions/rules";
 import {StaticValidationService} from "../shared/services/validation.service";
@@ -15,6 +14,7 @@ import {StaticAthleteHelperService} from "../shared/services/athlete.helper.serv
 import Athlete from "../shared/classes/athlete.class";
 import {Currencies} from "../shared/classes/currencies.class";
 import {AbilityKey} from "../shared/interfaces/ability.interface";
+import MathHelper from "./helpers/math.helper";
 
 export default class CardService {
     constructor(
@@ -202,22 +202,15 @@ export default class CardService {
     }
 
     async claimCardCurrencies(athlete: Athlete, card: Card) {
-        const reward = new Currencies(
-            card.coinsReward,
-            card.value,
-            (card.experienceReward || 0) + (athlete.perks[AbilityKey.EXPERIENCE_PER_TASK_BONUS] || 0),
-            0,
-            0,
-            0,
-            card.energyReward
-        );
+        const reward = card.rewards;
+        reward.experience = reward.experience + (athlete.perks[AbilityKey.EXPERIENCE_PER_TASK_BONUS] || 0);
 
         athlete.addCurrencies(reward);
         await this.athleteService.updateAthlete(athlete);
 
         this.logger.info(`Athlete ${athlete.name} claimed ${reward.toString()} for card ${card.title}`);
-        if(parseInt(String(card.energyReward))) {
-            this.logger.error(`Athlete restored ${card.energyReward} energy for card ${card.title}`);
+        if(card.rewards.energy) {
+            this.logger.error(`Athlete restored ${card.rewards.energy} energy for card ${card.title}`);
         }
     }
 
@@ -266,13 +259,17 @@ export default class CardService {
     }
 
     async getCard(cardId: string): Promise<Card> {
-        const card = await this.fireStoreService.cardCollection.get(cardId);
+        const card = Card.fromJSONObject(await this.fireStoreService.cardCollection.get(cardId.toString()));
         if(!card) {
             this.logger.error(`Card ${cardId} does not exist`);
             throw 'Card does not exist';
         } else {
             return card;
         }
+    }
+
+    async updateCard(card: Card) {
+        await this.fireStoreService.cardCollection.update(card.id.toString(), card.toJSONObject());
     }
 
     async createCardFactory(cardFactory: CardFactory) {
@@ -307,35 +304,42 @@ export default class CardService {
             : factory.cards[tier]
         if(!cardPrototype) {
             this.logger.error(`Card ${factory.title} tier ${tier} not defined`)
-            return NullCard;
+            return Card.empty();
         }
         let newProgression = factory.progression;
         if ((factory.progression === Progression.CHAIN || factory.progression === Progression.TIERS) && Object.keys(factory.cards).length === tier + 1) {
             this.logger.info(`Card ${factory.title} tier ${tier} is final, switching progression to ${Progression.NONE}`)
             newProgression = Progression.NONE;
         }
-        const card: Card = {
+        const card: Card = new Card(
+            factory.title + ((factory.progression === Progression.CHAIN || factory.progression === Progression.TIERS) ? ' ' + tierToRoman(tier) : ''),
+            factory.image || '',
+            cardPrototype.tier,
             id,
-            title: factory.title + ((factory.progression === Progression.CHAIN || factory.progression === Progression.TIERS) ? ' ' + tierToRoman(tier) : ''),
-            image: factory.image || '',
-            factoryId: factory.id,
-            progression: newProgression,
-            manualValidation: factory.manualValidation,
-            value: parseInt(cardPrototype.value.toString(), 10),
-            tier: cardPrototype.tier,
-            description: cardPrototype.description,
-            energyCost: parseInt(cardPrototype.energyCost.toString(), 10),
-            energyReward: parseInt(cardPrototype.energyReward.toString(), 10),
-            coinsCost: parseInt(cardPrototype.coinsCost.toString(), 10),
-            coinsReward: parseInt(cardPrototype.coinsReward.toString(), 10),
-            experienceReward: parseInt(cardPrototype.coinsReward.toString(), 10),
-            cardUses: {
-                usesToProgress: cardPrototype.usesToProgress,
-                progression: 0
+            cardPrototype.description,
+            new Currencies(
+                MathHelper.toInt(cardPrototype.coinsReward),
+                MathHelper.toInt(cardPrototype.value),
+                MathHelper.toInt(cardPrototype.experienceReward),
+                0,
+                0,
+                0,
+                MathHelper.toInt(cardPrototype.energyReward),
+                0,
+                0
+            ),
+            MathHelper.toInt(cardPrototype.energyCost),
+            MathHelper.toInt(cardPrototype.coinsCost),
+            {
+                progression: 0,
+                usesToProgress: MathHelper.toInt(cardPrototype.usesToProgress)
             },
-            validators: cardPrototype.validators,
-            tags: []
-        }
+            factory.id,
+            newProgression,
+            cardPrototype.validators,
+            factory.manualValidation,
+            []
+        );
         await this.fireStoreService.cardCollection.set(id, card)
 
         this.logger.info(`Created ${factory.title} card ${id}, ${tier} tier`)
@@ -482,8 +486,8 @@ export default class CardService {
         const claimed = owner.cards?.claimed.find(card => card == cardId);
 
 
-        owner.currencies.coins = claimed ? (owner.currencies.coins || 0) - card.coinsReward : owner.currencies.coins;
-        owner.currencies.experience = claimed ? (owner.currencies.experience || 0) - card.experienceReward : owner.currencies.experience;
+        owner.currencies.coins = claimed ? (owner.currencies.coins || 0) - card.rewards.coins : owner.currencies.coins;
+        owner.currencies.experience = claimed ? (owner.currencies.experience || 0) - card.rewards.experience : owner.currencies.experience;
         owner.baseCardProgress = StaticValidationService.updateBaseCardProgressFromCard(activity, card, owner.baseWorkout, owner.baseCardProgress);
         owner.cards.claimed = owner.cards.claimed.filter(card => card !== cardId);
         owner.cards.completed = owner.cards.completed.filter(card => card !== cardId);

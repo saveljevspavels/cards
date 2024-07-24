@@ -2,7 +2,7 @@ import {Express} from "express";
 import {FirestoreService} from "./firestore.service";
 import {Logger} from "winston";
 import Score from "../shared/interfaces/score.interface";
-import Card from "../shared/interfaces/card.interface";
+import {Card} from "../shared/classes/card.class";
 
 export default class ScoreService {
     constructor(
@@ -18,7 +18,7 @@ export default class ScoreService {
             this.logger.info(`Score does not exist for athlete ${athleteId}`);
             return;
         }
-        const newValue: number = parseInt(String(score.value)) + parseInt(String(deduct ? (-card.value) : card.value));
+        const newValue: number = parseInt(String(score.value)) + parseInt(String(deduct ? (-card.rewards.points) : card.rewards.points));
         await this.fireStoreService.scoreCollection.set(
             athleteId.toString(),
             {
@@ -28,7 +28,7 @@ export default class ScoreService {
             }
         );
 
-        this.logger.info(`Athlete ${athleteId} ${deduct ? 'lost': 'got'} ${card.value} points, new score: ${newValue}, was ${score.value}`)
+        this.logger.info(`Athlete ${athleteId} ${deduct ? 'lost': 'got'} ${card.rewards.points} points, new score: ${newValue}, was ${score.value}`)
     }
 
     async addPoints(athleteId: string, value: number) {

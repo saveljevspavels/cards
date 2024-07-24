@@ -1,4 +1,4 @@
-import {CardSnapshot} from "./card.interface";
+import {CardSnapshot} from "../classes/card.class";
 
 export interface Activity {
     name: string;

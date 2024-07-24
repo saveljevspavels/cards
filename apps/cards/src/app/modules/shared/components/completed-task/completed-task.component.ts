@@ -1,7 +1,7 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {filter} from "rxjs/operators";
 import {CardService} from "../../../../services/card.service";
-import Card from "../../../../../../../shared/interfaces/card.interface";
+import { Card } from "../../../../../../../shared/classes/card.class";
 
 @Component({
   selector: 'app-completed-task',
