@@ -1,16 +1,6 @@
-<div>
-    <div *ngIf="currencies.perks">
-        <h4>Unclaimed perks ({{currencies.perks}})</h4>
-        <app-button type="action" (buttonClick)="openAbilitySelection()">Choose</app-button>
-    </div>
-    <div *ngIf="currencies.random_perks">
-        <h4>Unclaimed random perks ({{currencies.random_perks}})</h4>
-        <app-button type="action" (buttonClick)="getRandomAbility()">Claim</app-button>
-        {{selectedAbility.value}}
-    </div>
-    <div *ngIf="currencies.chests">
-        <h4>Unclaimed chests ({{currencies.chests}})</h4>
-        <app-button type="action" (buttonClick)="openChest()">Open</app-button>
+<div class="row">
+    <div class="col-6 mb-2" [ngClass]="{'pr-1': i % 2 === 0, 'pl-1': i % 2 !== 0}" *ngFor="let item of inventoryItems; let i = index">
+        <app-unclaimed-item [item]="item" (activate)="activateItem(item)"></app-unclaimed-item>
     </div>
 </div>
 

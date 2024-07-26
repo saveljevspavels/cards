@@ -36,6 +36,7 @@ import {StoreComponent} from "./components/store/store.component";
 import {StoreItemComponent} from "./components/store/store-item/store-item.component";
 import {BoardHeaderComponent} from "./components/board-header/board-header.component";
 import {StatDisplayComponent} from "./components/stat-display/stat-display.component";
+import {UnclaimedItemComponent} from "./components/unclaimed-item/unclaimed-item.component";
 
 @NgModule({
     declarations: [
@@ -70,7 +71,8 @@ import {StatDisplayComponent} from "./components/stat-display/stat-display.compo
         StoreComponent,
         StoreItemComponent,
         BoardHeaderComponent,
-        StatDisplayComponent
+        StatDisplayComponent,
+        UnclaimedItemComponent
     ],
     imports: [
         CommonModule,

@@ -33,5 +33,28 @@ export const STORE_ITEMS: StoreItem[] = [
         price: 15,
         imageUrl: "",
         rewards: Currencies.withEnergy(1).withExperience(3)
+    },
+    {
+        id: "perk",
+        name: "Perk",
+        description: "Special perk to help you out. You can choose whichever you like",
+        price: 30,
+        imageUrl: "",
+        rewards: Currencies.withPerks(1)
+    },
+    {
+        id: "random_perk",
+        name: "Random Perk",
+        description: "Special perk to help you out. I'm feeling lucky",
+        price: 20,
+        imageUrl: "",
+        rewards: new Currencies(0, 0, 0, 0, 0, 1)
     }
+]
+
+export const AVAILABLE_ITEMS = [
+    "chest",
+    "energy_1",
+    "energy_2",
+    "energy_3"
 ]

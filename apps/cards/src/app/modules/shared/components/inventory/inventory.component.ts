@@ -5,15 +5,21 @@ import {FormControl} from "@angular/forms";
 import {GameService} from "../../../../services/game.service";
 import {Ability, AbilityKey} from "../../../../../../../shared/interfaces/ability.interface";
 import {ABILITIES} from "../../../../../../../../definitions/abilities";
+import {STORE_ITEMS} from "../../../../../../../../definitions/storeItems";
+import {StoreItem} from "../../../../../../../shared/interfaces/store-item.interface";
 
 @Component({
     selector: 'app-inventory',
     templateUrl: './inventory.component.html',
     styleUrl: './inventory.component.scss',
 })
-export class InventoryComponent {
+export class InventoryComponent implements OnChanges {
+
+    readonly inventoryDisplayedItems = ['chest', 'perk', 'random_perk'];
 
     @Input() currencies: Currencies;
+
+    public inventoryItems: StoreItem[] = [];
 
     public activatedAbility: Ability | null;
 
@@ -25,6 +31,21 @@ export class InventoryComponent {
         private popupService: PopupService,
         private gameService: GameService
     ) {}
+
+    ngOnChanges(changes: SimpleChanges) {
+        if(changes.currencies?.currentValue) {
+            this.inventoryItems = [];
+            this.inventoryDisplayedItems.forEach((itemId) => {
+                const item = STORE_ITEMS.find(item => item.id === itemId);
+                if(item) {
+                    // @ts-ignore
+                    for(let i = 0; i < this.currencies[itemId]; i++) {
+                        this.inventoryItems.push(item);
+                    }
+                }
+            });
+        }
+    }
     openAbilitySelection() {
         this.popupService.showPopup(this.abilitySelectionPopupControl.value);
     }
@@ -57,10 +78,25 @@ export class InventoryComponent {
         });
     }
 
+    activateItem(item: StoreItem) {
+        switch (item.id) {
+            case 'chest':
+                this.openChest();
+                break;
+            case 'perk':
+                this.openAbilitySelection();
+                break;
+            case 'random_perk':
+                this.getRandomAbility();
+                break;
+        }
+    }
+
     openChest() {
         this.gameService.openChest().subscribe((rewards) => {
             console.log('got rewards', rewards);
         });
     }
 
+    protected readonly storeItems = STORE_ITEMS;
 }

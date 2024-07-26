@@ -151,7 +151,7 @@ export default class Athlete implements JsonObjectInterface {
     }
 
     addEnergy(amount: number) {
-        if(this.currencies.energy >= RULES.ENERGY.MAX) {
+        if(amount > 0 && this.currencies.energy >= RULES.ENERGY.MAX) {
             throw 'Max. energy reached';
         }
 
@@ -195,9 +195,9 @@ export default class Athlete implements JsonObjectInterface {
         this.addExperience(currencies.experience);
         this.addEnergy(currencies.energy);
         this.currencies.coins = MathHelper.add(this.currencies.coins, currencies.coins);
-        this.currencies.chests = MathHelper.add(this.currencies.chests, currencies.chests);
-        this.currencies.perks = MathHelper.add(this.currencies.perks, currencies.perks);
-        this.currencies.random_perks = MathHelper.add(this.currencies.random_perks, currencies.random_perks);
+        this.currencies.chest = MathHelper.add(this.currencies.chest, currencies.chest);
+        this.currencies.perk = MathHelper.add(this.currencies.perk, currencies.perk);
+        this.currencies.random_perk = MathHelper.add(this.currencies.random_perk, currencies.random_perk);
         this.currencies.fatigue = MathHelper.add(this.currencies.coins, currencies.fatigue);
     }
 

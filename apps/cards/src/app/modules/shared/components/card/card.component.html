@@ -7,7 +7,7 @@
         <app-count-down *ngIf="featured"></app-count-down>
     </div>
     <div class="d-flex align-items-center">
-        <div class="card__image card--tier-{{(card.value | tier)}}"
+        <div class="card__image card--tier-{{(card.rewards.points | tier)}}"
              [style.background-image]="'url(' + card.image + ')'"
         >
         </div>

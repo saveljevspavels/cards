@@ -2,33 +2,33 @@ export class Currencies {
     coins: number;
     points: number;
     experience: number;
-    chests: number;
-    perks: number;
-    random_perks: number;
+    chest: number;
+    perk: number;
+    random_perk: number;
     energy: number;
     fatigue: number;
-    special_tasks: number;
+    special_task: number;
 
     constructor(
         coins: number = 0,
         points: number = 0,
         experience: number = 0,
-        chests: number = 0,
-        perks: number = 0,
-        random_perks: number = 0,
+        chest: number = 0,
+        perk: number = 0,
+        random_perk: number = 0,
         energy: number = 0,
         fatigue: number = 0,
-        special_tasks: number = 0
+        special_task: number = 0
     ) {
         this.coins = coins || 0;
         this.points = points || 0;
         this.experience = experience || 0;
-        this.chests = chests || 0;
-        this.perks = perks || 0;
-        this.random_perks = random_perks || 0;
+        this.chest = chest || 0;
+        this.perk = perk || 0;
+        this.random_perk = random_perk || 0;
         this.energy = energy || 0;
         this.fatigue = fatigue || 0;
-        this.special_tasks = special_tasks || 0;
+        this.special_task = special_task || 0;
     }
 
     static withCoins(coins: number): Currencies {
@@ -69,12 +69,12 @@ export class Currencies {
             coins: this.coins || 0,
             points: this.points || 0,
             experience: this.experience || 0,
-            chests: this.chests || 0,
-            perks: this.perks || 0,
-            random_perks: this.random_perks || 0,
+            chest: this.chest || 0,
+            perk: this.perk || 0,
+            random_perk: this.random_perk || 0,
             energy: this.energy || 0,
             fatigue: this.fatigue || 0,
-            special_tasks: this.special_tasks || 0
+            special_task: this.special_task || 0
         };
     }
 
@@ -84,12 +84,12 @@ export class Currencies {
             json['coins'],
             json['points'],
             json['experience'],
-            json['chests'],
-            json['perks'],
-            json['random_perks'],
+            json['chest'],
+            json['perk'],
+            json['random_perk'],
             json['energy'],
             json['fatigue'],
-            json['special_tasks']
+            json['special_task']
         );
     }
 

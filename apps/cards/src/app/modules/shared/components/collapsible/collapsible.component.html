@@ -1,6 +1,6 @@
 <div class="collapsible {{styleClass}}" [ngClass]="{'collapsible--inclusive': inclusive, 'collapsible--custom-header': customHeader}">
     <div class="collapsible__header" (click)="toggle()">
-        <h3 class="collapsible__title title" *ngIf="title">{{title}}</h3>
+        <h2 class="collapsible__title" *ngIf="title">{{title}}</h2>
         <ng-content select="[headerContent]"></ng-content>
         <div class="collapsible__icon">
             <img *ngIf="!expanded" src="/assets/icons/arrow_down.svg">

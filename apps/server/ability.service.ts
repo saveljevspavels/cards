@@ -64,12 +64,12 @@ export default class AbilityService {
     async consumeRandomAbility(athleteId: string) {
         this.logger.info(`Athlete ${athleteId} is trying to consume random ability`);
         const athlete = await this.athleteService.getAthlete(athleteId);
-        if(athlete.currencies.random_perks <= 0) {
+        if(athlete.currencies.random_perk <= 0) {
             this.logger.info(`Athlete ${athlete.name} don't have random perks to activate`);
             throw 'No random perks available';
         }
         const ability = this.getAbility(this.getRandomAbilityKey());
-        athlete.currencies.random_perks -= 1;
+        athlete.currencies.random_perk -= 1;
         await this.activateAbility(athlete, ability);
         return ability.key;
     }
@@ -82,12 +82,12 @@ export default class AbilityService {
         this.logger.info(`Athlete ${athleteId} is trying to consume ability ${abilityKey}`);
         const athlete = await this.athleteService.getAthlete(athleteId);
         const ability = this.getAbility(abilityKey);
-        if(athlete.currencies.perks <= 0) {
+        if(athlete.currencies.perk <= 0) {
             this.logger.info(`Athlete ${athlete.name} tried to activate ability ${abilityKey} without perks`);
             throw 'No abilities available';
         }
 
-        athlete.currencies.perks -= 1;
+        athlete.currencies.perk -= 1;
         await this.activateAbility(athlete, ability);
     }
 
@@ -214,11 +214,11 @@ export default class AbilityService {
     async openChest(athleteId: string) {
         this.logger.info(`Athlete ${athleteId} is trying to open chest`);
         const athlete: Athlete = await this.athleteService.getAthlete(athleteId);
-        if (athlete.currencies.chests <= 0) {
+        if (athlete.currencies.chest <= 0) {
             this.logger.info(`Athlete ${athlete.name} tried to open chest without chests`);
             throw 'No chests available';
         }
-        athlete.currencies.chests -= 1;
+        athlete.currencies.chest -= 1;
         const rewards = this.getChestRewards();
         athlete.addCurrencies(rewards);
         await Promise.all([
@@ -241,12 +241,12 @@ export default class AbilityService {
         } else if(roll < 20) {
             reward.points = 1;
         } else if(roll < 30) {
-            reward.perks = 1;
+            reward.perk = 1;
         } else if(roll < 65) {
             
-            reward.random_perks = 1;
+            reward.random_perk = 1;
         } else {
-            reward.special_tasks = 1;
+            reward.special_task = 1;
         }
         return reward;
     }
