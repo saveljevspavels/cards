@@ -54,7 +54,7 @@ export default class GameService {
             this.initChallengeAddition();
         }
 
-        this.migration();
+        // this.migration();
     }
 
     migration() {
