@@ -44,7 +44,6 @@ export class MobileMenuComponent implements OnInit, OnDestroy {
                 label: 'Leaderboard',
                 icon: 'leaderboard',
                 path: '/board/leaderboard',
-                permission: 'leaderboard'
             },
             // {
             //     label: 'Profile',

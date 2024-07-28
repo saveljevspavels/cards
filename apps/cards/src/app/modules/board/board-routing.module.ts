@@ -64,7 +64,6 @@ const routes: Routes = [
             {
                 path: 'leaderboard',
                 component: LeaderboardComponent,
-                canActivate: [LeaderboardGuard]
             },
             {
                 path: 'athletes',
