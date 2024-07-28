@@ -85,12 +85,14 @@
     .p-fileupload-choose {
         height: 50px;
         width: 50px;
+        border-radius: 3px;
+        border: 1px dashed var(--color-primary);
         .p-button-label {
             flex: none;
             font-size: 0;
             &:before {
                 content: '+';
-                color: var(--color-text);
+                color: var(--color-primary);
                 position: relative;
                 font-size: 32px;
                 font-weight: 400;

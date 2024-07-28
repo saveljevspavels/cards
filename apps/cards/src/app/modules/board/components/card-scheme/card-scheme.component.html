@@ -18,6 +18,7 @@
                                           (click)="cardClicked(cardMap.get(card)!)"
                                           [validationStatus]="cardMap.get(card)?.validationStatus"
                                           [imagesController]="uploadedImages.get(card)"
+                                          [commentController]="cardComments.get(card)"
                                           [locked]="unlockMap.get(board.key) < levelIndex"
                                           [canActivate]="(athlete | async)?.currencies.energy >= cardMap.get(card)?.card.energyCost && (athlete | async)?.cards.active.length < RULES.SCHEME.MAX_ACTIVE_CARDS"
                                           [card]="cardMap.get(card)?.card"

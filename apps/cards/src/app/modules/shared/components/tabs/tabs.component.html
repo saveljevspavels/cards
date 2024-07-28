@@ -1,5 +1,5 @@
 <div class="app-tabs align-content-end justify-content-between">
-    <div class="row">
+    <div class="d-flex">
         <div class="d-flex justify-content-center col-{{12 / tabs.length}}" *ngFor="let tab of tabs">
             <div class="app-tabs__item pb-2 pt-2 pointer"
                  [ngClass]="{'app-tabs__item--active': activeTab?.path === tab.path}"

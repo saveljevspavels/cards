@@ -36,7 +36,7 @@ export class SubmittingActivityComponent implements OnInit, OnDestroy {
     public remainderActivity: Activity | null = null;
 
     public selectedCards: FormControl = new FormControl<ValidatedCard[]>([]);
-    public commentControl: FormControl = new FormControl<string>('');
+    public commentControls: FormGroup = this.formBuilder.group({});
     public uploadedImages: FormGroup = this.formBuilder.group({});
 
     public activityType$ = this.selectedActivity.pipe(
@@ -81,22 +81,6 @@ export class SubmittingActivityComponent implements OnInit, OnDestroy {
         });
     }
 
-    async submitSelectedActivity() {
-        this.loading = true;
-        const uploadedImages = await this.fileService.uploadImages(this.form.value.selectedImages)
-        this.activityService.submitActivity(
-            this.boardService.activity.id.toString(),
-            this.form.value.selectedCards,
-            [uploadedImages],
-            this.form.value.comments.slice(0, ConstService.CONST.COMMENT_LENGTH),
-        ).pipe(mergeMap(() => this.popupService.showPopup(this.submitPopup, 2500)))
-        .subscribe(() => {
-            this.loading = false;
-            this.initForm()
-            this.exitSubmitMode();
-        })
-    }
-
     exitSubmitMode() {
         this.router.navigateByUrl('board');
         this.boardService.deselectActivity();
@@ -123,7 +107,7 @@ export class SubmittingActivityComponent implements OnInit, OnDestroy {
             selectedCards: [[]],
             selectedImages: [[]],
             selectedActivity: [''],
-            comments: ['']
+            comments: [[]]
         })
     }
 
@@ -143,6 +127,8 @@ export class SubmittingActivityComponent implements OnInit, OnDestroy {
         const cardIds = this.selectedCards.value.map((validatedCard: ValidatedCard) => validatedCard.card.id);
         let images = cardIds
             .map((id: string) => this.uploadedImages.get(id)?.value);
+        let comments = cardIds
+            .map((id: string) => this.commentControls.get(id)?.value);
 
 
         this.submitConfirmation.pipe(first()).subscribe(async confirmed => {
@@ -153,16 +139,16 @@ export class SubmittingActivityComponent implements OnInit, OnDestroy {
                     this.boardService.activity.id,
                     cardIds,
                     images,
-                    this.commentControl.value.slice(0, ConstService.CONST.COMMENT_LENGTH),
+                    comments,
                 ).subscribe(_ => {
                     this.boardService.deselectActivity();
                     this.router.navigateByUrl('board');
                     this.selectedCards.setValue([]);
-                    this.commentControl.setValue('');
+                    this.commentControls.setValue({});
                     this.loading = false;
                 }, (error => {
                     this.selectedCards.setValue([]);
-                    this.commentControl.setValue('');
+                    this.commentControls.setValue({});
                     this.loading = false;
                 }))
             }

@@ -10,5 +10,11 @@
         'button--transparent': transparent,
         'button--small': small
     }">
-    <ng-container *ngIf="icon"><span class="mr-1"><app-svg [icon]="icon"></app-svg></span></ng-container><span class="title">{{label}}</span><ng-content></ng-content>
+    <ng-container *ngIf="icon">
+        <span class="mr-1">
+            <app-svg [icon]="icon" [height]="small ? 14 : null" [width]="small ? 14 : null"></app-svg>
+        </span>
+    </ng-container>
+    <span class="title">{{label}}</span>
+    <ng-content></ng-content>
 </div>

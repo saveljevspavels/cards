@@ -21,35 +21,38 @@ export class MobileMenuComponent implements OnInit, OnDestroy {
         public: [
             {
                 label: 'Activity Feed',
-                icon: 'stars',
+                icon: 'fire',
                 path: '/board/activity-list'
             },
-            {
-                label: 'Dashboard',
-                path: '/board/main',
-                highlightedOn: ['/board/submit-activity'],
-                icon: 'gauge',
-            },
+
             // {
             //     label: 'Task Market',
             //     icon: 'board',
             //     path: '/board/board'
             // },
             {
+                label: 'Leaderboard',
+                icon: 'leaderboard',
+                path: '/board/leaderboard',
+            },
+
+
+            {
+                label: 'Dashboard',
+                path: '/board/main',
+                highlightedOn: ['/board/submit-activity'],
+                icon: 'gauge',
+            },
+            {
                 label: 'Store',
                 path: '/board/store',
                 icon: 'store',
             },
             {
-                label: 'Leaderboard',
-                icon: 'leaderboard',
-                path: '/board/leaderboard',
+                label: 'Profile',
+                icon: 'profile',
+                path: '/board/athletes/profile'
             },
-            // {
-            //     label: 'Profile',
-            //     icon: 'profile',
-            //     path: '/board/athletes/profile'
-            // },
             {
                 label: 'Admin',
                 icon: 'rules',

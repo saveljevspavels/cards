@@ -13,6 +13,10 @@
   cursor: pointer;
   flex-grow: 2;
   transition: flex-grow 0.15s ease-in-out;
+  &__centering {
+    padding: 0;
+    transition: padding 0.15s ease-in-out;
+  }
   &__background {
     opacity: 0.1;
     position: absolute;

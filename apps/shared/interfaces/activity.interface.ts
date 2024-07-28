@@ -14,6 +14,7 @@ export interface Activity {
     start_date: string;
     type: ActivityType;
     total_elevation_gain: number;
+    map: any;
 }
 
 export interface ActivityGameData {

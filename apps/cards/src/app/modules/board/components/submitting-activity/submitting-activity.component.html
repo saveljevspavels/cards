@@ -16,19 +16,11 @@
         <app-card-scheme
                 [title]="'Select Task(s)'"
                 [selectedCards]="selectedCards"
-                [commentControl]="commentControl"
+                [cardComments]="commentControls"
                 [uploadedImages]="uploadedImages"
                 [showLocked]="false"
         ></app-card-scheme>
 
-        <h3 class="mt-3 mb-2">How it went?</h3>
-        <div class="mb-3">
-            <app-textarea [placeholder]="'Leave your comment here'"
-                          [rows]="3"
-                          [fc]="commentControl"
-            >
-            </app-textarea>
-        </div>
         <app-button [type]="ButtonType.ACTION"
                     [label]="(notEnoughEnergy$ | async) ? 'Not enough energy' : 'Submit'"
                     (buttonClick)="submitActivity()"

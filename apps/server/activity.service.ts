@@ -203,7 +203,7 @@ export default class ActivityService {
         ]);
         for(let i = 0; i < activities.length; i++) {
             try {
-                await this.submitActivity(activities[i].id, [], [], '');
+                await this.submitActivity(activities[i].id, [], [], []);
                 await this.tryAutoApprove(activities[i].id);
             } catch (err) {
                 this.logger.info(`Error auto submitting activity ${activities[i].id} for athlete ${athleteId}`);
@@ -211,7 +211,7 @@ export default class ActivityService {
         }
     }
 
-    async submitActivity(activityId: number, cardIds: string[], images: UploadedImage[][], comments: string) {
+    async submitActivity(activityId: number, cardIds: string[], images: UploadedImage[][], comments: string[]) {
         const activity = await this.getActivity(activityId);
         const athlete = await this.athleteService.getAthlete(activity.athlete.id);
 
@@ -243,6 +243,7 @@ export default class ActivityService {
             return CardSnapshot.fromJSONObject(
                 {
                     ...(cards.find(card => card.id === id) || Card.empty()),
+                    comment: comments[index] || '',
                     likes: [],
                     reports: [],
                     attachedImages: images[index] || []
@@ -263,8 +264,8 @@ export default class ActivityService {
                         status: ActivityStatus.SUBMITTED,
                         submittedAt: new Date().toISOString(),
                         cardIds,
-                        cardSnapshots, // Storing card snapshots
-                        comments
+                        cardSnapshots: cardSnapshots.map((snapshot: CardSnapshot) => snapshot.toJSONObject()), // Storing card snapshots
+                        comments: comments?.join(' / ') || '',
                     }
                 })
         ])

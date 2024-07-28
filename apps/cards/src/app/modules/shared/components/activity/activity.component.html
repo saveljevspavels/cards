@@ -42,9 +42,6 @@
                 </app-athlete>
             </div>
         </div>
-        <div class="mt-2" *ngIf="activity.gameData.comments && activity.gameData.comments.length !== 0">
-            <app-comment [comment]="activity.gameData?.comments"></app-comment>
-        </div>
         <div class="d-flex justify-content-between mt-2">
             <app-link *ngIf="activity.map?.summary_polyline; else mapPlaceholder" [text]="'View Map'" (click)="showMap()"></app-link>
             <ng-template #mapPlaceholder>
@@ -83,18 +80,24 @@
                      [polyline]="activity.map?.summary_polyline"
                      [activityType]="activityType"
         ></app-gallery>
+        <div class="mt-2" *ngIf="card.comment?.length !== 0">
+            <app-comment [comment]="card.comment"></app-comment>
+        </div>
         <div class="d-flex justify-content-between mt-2">
-            <app-button (click)="report(card.id)"
-                        [small]="true"
-                        [label]="(card?.reportedByMe) ? 'Reported' : 'Report'"
-                        [icon]="'flag'"
-                        [type]="(card?.reportedByMe) ? ButtonType.DANGER_FILLED: ButtonType.DANGER"></app-button>
-            <app-button (click)="card?.likedByMe || like(card)"
-                        [small]="true"
-                        [label]="card?.likes?.length || 'Like'"
-                        [icon]="'fire'"
-                        [fixedWidth]="true"
-                        [type]="card?.likedByMe ? ButtonType.DANGER_FILLED: ButtonType.DANGER"></app-button>
+            <div class="flex-shrink-1">
+                <app-button (click)="report(card.id)"
+                            [small]="true"
+                            [label]="(card?.reportedByMe) ? 'Reported' : 'Report'"
+                            [icon]="'flag'"
+                            [type]="(card?.reportedByMe) ? ButtonType.DANGER_FILLED: ButtonType.DANGER"></app-button>
+            </div>
+            <div class="flex-shrink-1">
+                <app-button (click)="card?.likedByMe || like(card)"
+                            [small]="true"
+                            [label]="card?.likes?.length || 'Like'"
+                            [icon]="'fire'"
+                            [type]="card?.likedByMe ? ButtonType.DANGER_FILLED: ButtonType.DANGER"></app-button>
+            </div>
         </div>
     </div>
 </ng-template>

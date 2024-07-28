@@ -31,8 +31,9 @@ export class CardSchemeComponent implements OnInit {
     @Input() title = '';
     @Input() showLocked = true;
     @Input() selectedCards: FormControl<ValidatedCard[] | null> = new FormControl<ValidatedCard[]>([]);
-    @Input() commentControl: FormControl<string | null> = new FormControl<string>('');
+    // @Input() commentControl: FormControl<string | null> = new FormControl<string>('');
     @Input() uploadedImages: FormGroup = this.formBuilder.group({});
+    @Input() cardComments: FormGroup = this.formBuilder.group({});
 
     private unlock$ = new Subject();
     @ViewChild('unlockPopup', { static: true }) unlockPopup: ElementRef;
@@ -80,6 +81,7 @@ export class CardSchemeComponent implements OnInit {
             this.cardMap = this.getValidatedCardMap(cards.filter(card => usedCards.indexOf(card.id) === -1));
 
             this.addFormControlsForIds(this.uploadedImages, [...this.cardMap.keys()]);
+            this.addFormControlsForIds(this.cardComments, [...this.cardMap.keys()]);
         });
     }
 

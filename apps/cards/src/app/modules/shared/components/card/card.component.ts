@@ -27,6 +27,7 @@ export class CardComponent implements OnInit, OnChanges {
     @Input() styleClass: string;
     @Input() energy: number;
     @Input() public imagesController: FormControl;
+    @Input() public commentController: FormControl;
 
     @Input() public showDescription = true;
     @Input() small: boolean = false;

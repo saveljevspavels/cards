@@ -17,6 +17,7 @@ import {StaticValidationService} from "../../../../../../../shared/services/vali
 import {AthleteService} from "../../../../services/athlete.service";
 import {CardSnapshot, Report} from "../../../../../../../shared/classes/card.class";
 import {ButtonType} from "../button/button.component";
+import {Activity} from "../../../../../../../shared/interfaces/activity.interface";
 
 @Component({
     selector: 'app-activity',
@@ -41,7 +42,7 @@ export class ActivityComponent implements OnInit, ControlValueAccessor, OnChange
 
     @ViewChild('mapViewPopup', { static: true }) mapViewPopup: ElementRef;
 
-    @Input() public activity: any;
+    @Input() public activity: Activity;
     @Input() public selection = false;
     @Input() public showImages = true;
     @Input() public showComments = false;

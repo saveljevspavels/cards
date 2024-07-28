@@ -27,13 +27,6 @@
         </div>
         <div class="card__value">
             <app-rewards [perks]="(me | async)?.perks" [rewards]="card.rewards" [rewardsOnly]="true"></app-rewards>
-            <app-button *ngIf="validationStatus.toString() === ValidationStatus.SELECTED"
-                        [small]="true"
-                        [styleClass]="'mt-1-5 full-width'"
-                        [type]="ButtonType.ACTION"
-                        (buttonClick)="addPhoto($event)"
-                        [icon]="'camera'"
-            ></app-button>
             <app-button *ngIf="showActivate && !locked"
                         [small]="true"
                         [styleClass]="'mt-1-5 full-width'"
@@ -46,13 +39,22 @@
             </app-button>
         </div>
     </div>
-    <div *ngIf="imagesController && validationStatus.toString() === ValidationStatus.SELECTED"
-         class="background mt-2 border-radius d-none"
-         [ngClass]="{'d-block': imagesController.value.length}">
+</div>
+<div class="box mt-2" *ngIf="validationStatus.toString() === ValidationStatus.SELECTED"
+     (click)="$event.stopPropagation()"
+>
+    <div class="text-medium">Add photo</div>
+    <div class="mt-1 mb-2">
         <app-image-upload
-                (click)="$event.stopPropagation()"
                 [uploadTrigger]="uploadTrigger"
                 [formControl]="imagesController"
         ></app-image-upload>
     </div>
+
+    <div class="text-medium">Add comment</div>
+    <app-textarea [placeholder]="''"
+                  [rows]="2"
+                  [fc]="commentController"
+    >
+    </app-textarea>
 </div>

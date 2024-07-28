@@ -127,7 +127,7 @@ export class CardSnapshot extends Card {
     }
 
     static fromJSONObject(json: any): CardSnapshot {
-        return new CardSnapshot(
+        const snapshot = new CardSnapshot(
             json.title,
             json.image,
             json.tier,
@@ -143,6 +143,10 @@ export class CardSnapshot extends Card {
             json.manualValidation,
             json.tags,
         );
+        snapshot.comment = json.comment;
+        snapshot.attachedImages = json.attachedImages;
+        snapshot.likes = json.likes;
+        return snapshot
     }
 }
 
