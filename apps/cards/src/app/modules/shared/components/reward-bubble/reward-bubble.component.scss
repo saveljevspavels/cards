@@ -1,8 +1,9 @@
 .reward-bubble {
-  @media (min-width: 435px) {
-    padding: 2px 4px 1px 5px;
-  }
-  padding: 2px 2px 1px 3px;
+  //@media (min-width: 435px) {
+  //  padding: 2px 4px 1px 5px;
+  //}
+  //padding: 2px 2px 1px 3px;
+  padding: 2px 4px 1px 5px;
   background-color: var(--color-background);
   border-radius: var(--radius-half);
 

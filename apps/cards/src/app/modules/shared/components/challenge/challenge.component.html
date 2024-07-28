@@ -1,61 +1,43 @@
 <div class="box challenge full-height {{completed || 'challenge--completed'}}">
     <div class="d-flex flex-column justify-content-between full-height">
-        <div>
-            <div class="d-flex justify-content-between align-items-end">
-                <div class="d-flex align-items-center mb-0-5">
-                    <app-activity-type-icon [height]="18" [type]="challenge.activityType"></app-activity-type-icon>
-                    <h5>{{challenge.title}}</h5>
-                </div>
-                <h6 [ngSwitch]="challenge.stat" class="mt-1 mb-0">
-                    <ng-container *ngSwitchCase="ChallengeStatType.DISTANCE">
-                        {{progressToShow | distance}}/{{challenge.targetValue | distance}}
-                    </ng-container>
-                    <ng-container *ngSwitchCase="ChallengeStatType.ELAPSED_TIME">
-                        {{progressToShow | minutes}}/{{challenge.targetValue | minutes}}
-                    </ng-container>
-                    <ng-container *ngSwitchCase="ChallengeStatType.MOVING_TIME">
-                        {{progressToShow | minutes}}/{{challenge.targetValue | minutes}}
-                    </ng-container>
-                    <ng-container *ngSwitchDefault>
-                        {{progressToShow}}/{{challenge.targetValue}}
-                    </ng-container>
-                </h6>
-            </div>
-            <app-challenge-bar [target]="challenge.targetValue" [activityType]="challenge.activityType" [value]="progressToShow"></app-challenge-bar>
+        <div class="mb-2">
+            <h5 class="text-center mb-2">{{challenge.title}}</h5>
+            <app-circular-progress-bar
+                    [challengeStat]="challenge.stat"
+                    [currentValue]="progressToShow"
+                    [type]="challenge.activityType"
+                    [targetValue]="challenge.targetValue"
+                    [small]="true"
+            >
+            </app-circular-progress-bar>
             <p class="text-small mb-0">{{challenge.description}}</p>
         </div>
-        <div class="d-flex {{completed ? 'justify-content-between' : 'justify-content-end'}}" *ngIf="!completed; else completedTemplate">
-            <app-reward-experience *ngIf="challenge.rewards.experience" [value]="challenge.rewards.experience"></app-reward-experience>
-            <app-reward-points *ngIf="challenge.rewards.points" [value]="challenge.rewards.points"></app-reward-points>
-            <app-reward-money *ngIf="challenge.rewards.coins" [value]="challenge.rewards.coins"></app-reward-money>
+        <div class="d-flex justify-content-center" *ngIf="!completed; else completedTemplate">
+            <app-reward-experience *ngIf="challenge.rewards.experience" [big]="true" [value]="challenge.rewards.experience"></app-reward-experience>
+            <app-reward-points *ngIf="challenge.rewards.points" [big]="true"  [value]="challenge.rewards.points"></app-reward-points>
+            <app-reward-money *ngIf="challenge.rewards.coins" [big]="true"  [value]="challenge.rewards.coins"></app-reward-money>
         </div>
         <ng-template #completedTemplate>
-            <div class="d-flex justify-content-center mt-1">
+            <div class="d-flex justify-content-center">
                 <app-button (buttonClick)="claim()"
                             type="action"
                             styleClass="full-width"
-                            label="Claim Reward"
+                            label="Claim"
                             [small]="true">
-                    <div class="text-small ml-1 d-flex justify-content-center" *ngIf="challenge.rewards.experience > 0">
-                        {{challenge.rewards.experience}}
-                        <div class="pl-1">
-                            <app-svg [height]="12" [icon]="'experience'" styleClass="color-background"></app-svg>
-                        </div>
-                    </div>
-                    <div class="text-small ml-1 d-flex justify-content-center" *ngIf="challenge.rewards.points > 0">
-                        {{challenge.rewards.points}}
-                        <div class="pl-1">
-                            <app-svg [height]="12" [icon]="'experience'" styleClass="color-background"></app-svg>
-                        </div>
-                    </div>
-                    <div class="text-small ml-1 d-flex justify-content-center" *ngIf="challenge.rewards.coins > 0">
-                        {{challenge.rewards.coins}}
-                        <div class="pl-1">
-                            <app-svg [height]="12" [icon]="'experience'" styleClass="color-background"></app-svg>
-                        </div>
-                    </div>
+                    <ng-template [ngTemplateOutlet]="svgTemplate" [ngTemplateOutletContext]="{value: challenge.rewards.experience}"></ng-template>
+                    <ng-template [ngTemplateOutlet]="svgTemplate" [ngTemplateOutletContext]="{value: challenge.rewards.points}"></ng-template>
+                    <ng-template [ngTemplateOutlet]="svgTemplate" [ngTemplateOutletContext]="{value: challenge.rewards.coins}"></ng-template>
                 </app-button>
             </div>
         </ng-template>
     </div>
 </div>
+
+<ng-template #svgTemplate let-value="value">
+    <div class="text-medium text-bold ml-1 d-flex justify-content-center" *ngIf="value > 0">
+        {{value}}
+        <app-svg [height]="14"
+                 [icon]="'fire'"
+                 styleClass="color-background"></app-svg>
+    </div>
+</ng-template>

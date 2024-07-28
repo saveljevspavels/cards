@@ -1,14 +1,13 @@
 <div class="reward-bubble d-flex align-items-center {{styleClass}}" [ngClass]="{'reward-bubble--big': big}">
-    <span class="mr-0 mr-xs-1 text-bold"
-          [ngClass]="{'text-big': big, 'text-small text-xs-medium color-background': !big}">
+    <span class="mr-0 mr-xs-1 text-bold color-background"
+          [ngClass]="{'text-medium mt-0-5 mb-0-5': big, 'text-small text-xs-medium': !big}">
         {{value > 0 ? '+' : ''}}{{value}}
     </span>
 
     <ng-container *ngIf="big; else smallIcon">
-        <app-svg height="20" width="20" [icon]="icon" [styleClass]="'color-background'"></app-svg>
+        <app-svg height="16" width="16" [icon]="icon" [styleClass]="'color-background'"></app-svg>
     </ng-container>
     <ng-template #smallIcon>
-        <app-svg class='d-block d-xs-none' height="11" width="11" [styleClass]="'color-background'" style="margin-left: 1px" [icon]="icon"></app-svg>
-        <app-svg class='d-none d-xs-block' height="14" width="14" [styleClass]="'color-background'" [icon]="icon"></app-svg>
+        <app-svg height="14" width="14" [styleClass]="'color-background'" [icon]="icon"></app-svg>
     </ng-template>
 </div>

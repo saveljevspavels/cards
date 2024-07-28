@@ -1,10 +1,10 @@
 <div class="d-flex flex-column align-items-center">
     <div class="circular-progress-bar" [ngClass]="{'circular-progress-bar--active': active, 'circular-progress-bar--small': small, 'circular-progress-bar--monochrome': monochrome}">
         <div class="circular-progress-bar__icon">
-            <app-svg [icon]="'activity_' + type"
+            <app-svg [icon]="type ? ('activity_' + type) : 'fire'"
                      [width]="14"
                      [height]="14"
-                     [styleClass]="monochrome ? 'color-background' : 'color-' + type">
+                     [styleClass]="monochrome ? 'color-background' : type ? ('color-' + type) : 'color-primary'">
             </app-svg>
         </div>
         <div class="circular-progress-bar__background">
@@ -74,5 +74,23 @@
 </div>
 
 <ng-template #valueTemplate let-value="value">
-    {{(activity ? activityType === "other" : type === "other") ? (value | minutes) : (value | distance)}}
+    <ng-container *ngIf="challengeStat">
+        <ng-container [ngSwitch]="challengeStat">
+            <ng-container *ngSwitchCase="ChallengeStatType.DISTANCE">
+                {{value | distance}}
+            </ng-container>
+            <ng-container *ngSwitchCase="ChallengeStatType.ELAPSED_TIME">
+                {{value | minutes}}
+            </ng-container>
+            <ng-container *ngSwitchCase="ChallengeStatType.MOVING_TIME">
+                {{value | minutes}}
+            </ng-container>
+            <ng-container *ngSwitchDefault>
+                {{value}}
+            </ng-container>
+        </ng-container>
+    </ng-container>
+    <ng-container *ngIf="!challengeStat">
+        {{(activity ? activityType === "other" : type === "other") ? (value | minutes) : (value | distance)}}
+    </ng-container>
 </ng-template>
