@@ -3,21 +3,15 @@
     align-items: center;
     cursor: pointer;
     &--small {
-        .athlete__text {
-            margin-left: 8px;
-        }
         .athlete__profile-picture {
-            height: 27px;
-            width: 27px;
+            height: 24px;
+            width: 24px;
         }
         .athlete__name {
             font-size: var(--text-size-small);
         }
     }
     &--medium {
-        .athlete__text {
-            margin-left: 8px;
-        }
         .athlete__profile-picture {
             height: 32px;
             width: 32px;
@@ -47,9 +41,5 @@
     }
     &__name {
         font-size: var(--text-size-big);
-        font-weight: 700;
-    }
-    &__text {
-        margin-left: 16px;
     }
 }

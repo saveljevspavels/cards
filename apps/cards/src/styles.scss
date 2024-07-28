@@ -246,8 +246,12 @@ h6 {
     text-decoration: underline;
 }
 
-.half-opacity {
+.opacity-05 {
     opacity: 0.5;
+}
+
+.opacity-0 {
+    opacity: 0;
 }
 
 @media (min-width: 435px) {

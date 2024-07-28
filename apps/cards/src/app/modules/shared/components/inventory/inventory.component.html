@@ -4,6 +4,10 @@
     </div>
 </div>
 
+<div *ngIf="!inventoryItems.length"
+     class="text-small mb-2"
+>Nothing here yet</div>
+
 
 <app-popup-wrapper
         [templateControl]="abilitySelectionPopupControl"

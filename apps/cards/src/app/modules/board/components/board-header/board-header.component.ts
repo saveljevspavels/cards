@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {Component, Input} from '@angular/core';
 import {Router} from "@angular/router";
 @Component({
   selector: 'app-board-header',
@@ -7,9 +7,14 @@ import {Router} from "@angular/router";
 })
 export class BoardHeaderComponent {
 
+  @Input() backButton = true;
+
   constructor(private router: Router) {
   }
-  openProfile() {
-    this.router.navigateByUrl('board/athletes/profile');
+  back() {
+    if(!this.backButton) {
+        return;
+    }
+    this.router.navigateByUrl('/board/main/tasks');
   }
 }
