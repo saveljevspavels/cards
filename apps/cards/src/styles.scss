@@ -118,6 +118,7 @@ body {
 .border-secondary-2 {@include border('secondary-2')};
 .border-secondary-3 {@include border('secondary-3')};
 
+.gradient-primary { @include gradient(#4041c9, #1f2063); }
 .gradient-run { @include gradient(#4041c9, #1f2063); }
 .gradient-ride { @include gradient(#4041c9, #1f2063); }
 .gradient-walk { @include gradient(#7FA829, #4A6118); }
@@ -125,6 +126,10 @@ body {
 
 .border-radius {
     border-radius: var(--radius);
+}
+
+.circle {
+    border-radius: 50%;
 }
 
 a {
@@ -368,6 +373,10 @@ h6 {
 
 .gap-2 {
     gap: 8px;
+}
+
+.gap-2-5 {
+    gap: 12px;
 }
 
 .gap-3 {

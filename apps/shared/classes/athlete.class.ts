@@ -143,7 +143,7 @@ export default class Athlete implements JsonObjectInterface {
     }
 
     spendEnergy(amount: number) {
-        if(this.currencies.energy <= RULES.ENERGY.MIN) {
+        if(this.currencies.energy <= RULES.ENERGY.MIN || this.currencies.energy < amount) {
             throw RESPONSES.ERROR.NOT_ENOUGH_ENERGY;
         }
 

@@ -15,6 +15,7 @@ import {StaticValidationService,} from "../../../../../../../shared/services/val
 import {ButtonType} from "../../../shared/components/button/button.component";
 import {AthleteService} from "../../../../services/athlete.service";
 import Athlete from "../../../../../../../shared/classes/athlete.class";
+import {Currencies} from "../../../../../../../shared/classes/currencies.class";
 
 @Component({
   selector: 'app-submitting-activity',
@@ -50,6 +51,8 @@ export class SubmittingActivityComponent implements OnInit, OnDestroy {
         // @ts-ignore
         return athlete?.baseCardProgress[activityType] as number;
     }));
+
+    public submitPrice: Currencies = new Currencies();
 
     public form: FormGroup;
 
@@ -163,7 +166,9 @@ export class SubmittingActivityComponent implements OnInit, OnDestroy {
 
     updateEnergyCheck(selectedCards: ValidatedCard[]) {
         this.athlete$.pipe(first(), map((athlete) => athlete?.currencies.energy || 0)).subscribe((availableEnergy: number) => {
-            this.notEnoughEnergy$.next(StaticValidationService.notEnoughEnergy(availableEnergy, this.cardService.getPlainCards(selectedCards)));
+            const cards = this.cardService.getPlainCards(selectedCards);
+            this.submitPrice = Currencies.withEnergy(StaticValidationService.requiredEnergy(cards) * - 1);
+            this.notEnoughEnergy$.next(StaticValidationService.notEnoughEnergy(availableEnergy, cards));
         });
     }
 

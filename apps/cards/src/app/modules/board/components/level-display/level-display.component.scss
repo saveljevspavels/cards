@@ -1,0 +1,9 @@
+.level-display {
+  width: 40px;
+  height: 40px;
+  &__number {
+    font-size: 14px;
+    line-height: 14px;
+    font-weight: bold;
+  }
+}

@@ -1,5 +1,5 @@
-<div class="row">
-    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 col-6 mb-2" *ngFor="let challenge of activeChallenges">
+<div class="row flex-column gap-2">
+    <div class="col-md-12 " *ngFor="let challenge of activeChallenges">
         <app-challenge (claimChallenge)="claimChallenge(challenge.id)"
                        [challenge]="challenge"
                        [currentProgress]="challengeValues[challenge.id] || 0"

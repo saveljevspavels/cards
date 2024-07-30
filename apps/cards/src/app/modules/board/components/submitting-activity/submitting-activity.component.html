@@ -13,19 +13,22 @@
     </app-pending-activity>
 
     <div>
-        <app-card-scheme
-                [title]="'Select Task(s)'"
-                [selectedCards]="selectedCards"
-                [cardComments]="commentControls"
-                [uploadedImages]="uploadedImages"
-                [showLocked]="false"
-        ></app-card-scheme>
+        <div class="mb-2">
+            <app-card-scheme
+                    [title]="'Select Task(s)'"
+                    [selectedCards]="selectedCards"
+                    [cardComments]="commentControls"
+                    [uploadedImages]="uploadedImages"
+                    [showLocked]="false"
+            ></app-card-scheme>
+        </div>
 
-        <app-button [type]="ButtonType.ACTION"
+        <app-rewards-button
                     [label]="(notEnoughEnergy$ | async) ? 'Not enough energy' : 'Submit'"
                     (buttonClick)="submitActivity()"
-                    [disabled]="loading"
-        ></app-button>
+                    [disabled]="loading || (notEnoughEnergy$ | async)"
+                    [rewards]="submitPrice"
+        ></app-rewards-button>
     </div>
 
 </app-content>

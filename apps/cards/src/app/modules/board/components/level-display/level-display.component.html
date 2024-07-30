@@ -1,0 +1,17 @@
+<div class="box d-flex align-items-center gap-3">
+    <div class="level-display circle gradient-primary color-background d-flex flex-column align-items-center justify-content-center">
+        <div class="level-display__number">{{level + 1}}</div>
+        <div class="text-smaller">level</div>
+    </div>
+    <div>
+        <div class="text-medium">Your points till next level:</div>
+        <div class="title text-bold d-flex">
+            <div>
+                {{progress}}
+            </div>
+            <div class="text-light">
+                /{{LEVEL_EXPERIENCE[level]}}
+            </div>
+        </div>
+    </div>
+</div>

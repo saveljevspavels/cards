@@ -1,16 +1,18 @@
-<div class="box challenge full-height {{completed || 'challenge--completed'}}">
-    <div class="d-flex flex-column justify-content-between full-height">
+<div class="box challenge d-flex gap-2-5 align-items-center full-height {{completed || 'challenge--completed'}}">
+    <div>
+        <app-circular-progress-bar
+                [challengeStat]="challenge.stat"
+                [currentValue]="progressToShow || 0"
+                [type]="challenge.activityType"
+                [targetValue]="challenge.targetValue"
+                [small]="true"
+        >
+        </app-circular-progress-bar>
+    </div>
+    <div class="d-flex flex-column justify-content-between align-items-start full-height full-width">
         <div class="mb-2">
-            <h5 class="text-center mb-2">{{challenge.title}}</h5>
-            <app-circular-progress-bar
-                    [challengeStat]="challenge.stat"
-                    [currentValue]="progressToShow || 0"
-                    [type]="challenge.activityType"
-                    [targetValue]="challenge.targetValue"
-                    [small]="true"
-            >
-            </app-circular-progress-bar>
-            <p class="text-small mb-0">{{challenge.description}}</p>
+            <h5 class="text-center mb-1">{{challenge.title}}</h5>
+            <div class="text-small text-light">{{challenge.description}}</div>
         </div>
         <div class="d-flex justify-content-center" *ngIf="!completed; else completedTemplate">
             <app-reward-experience *ngIf="challenge.rewards.experience" [value]="challenge.rewards.experience"></app-reward-experience>
@@ -18,11 +20,11 @@
             <app-reward-money *ngIf="challenge.rewards.coins" [value]="challenge.rewards.coins"></app-reward-money>
         </div>
         <ng-template #completedTemplate>
-            <div class="d-flex justify-content-center">
+            <div class="d-flex justify-content-center full-width">
                 <app-button (buttonClick)="claim()"
                             type="action"
                             styleClass="full-width"
-                            label="Claim"
+                            label="Claim reward"
                             [small]="true">
                     <ng-template [ngTemplateOutlet]="svgTemplate" [ngTemplateOutletContext]="{value: challenge.rewards.experience}"></ng-template>
                     <ng-template [ngTemplateOutlet]="svgTemplate" [ngTemplateOutletContext]="{value: challenge.rewards.points}"></ng-template>

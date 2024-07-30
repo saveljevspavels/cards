@@ -33,7 +33,7 @@ export default class ActivityService {
                 await this.tryAutoApprove(req.body.activityId)
             } catch (err) {
                 console.log(err);
-                res.status(500).send(err);
+                res.status(400).send(err);
             }
             res.status(200).send();
         });

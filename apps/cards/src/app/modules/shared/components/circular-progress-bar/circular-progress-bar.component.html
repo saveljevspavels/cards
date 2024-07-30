@@ -64,26 +64,26 @@
             Bonus&nbsp;<app-reward-experience [value]="1"></app-reward-experience>&nbsp;per <ng-container [ngTemplateOutlet]="valueTemplate" [ngTemplateOutletContext]="{value: baseValue}"/>
         </span>
         <ng-template #baseValueTemplate>
-            <span class="text-light">
-                <ng-container [ngTemplateOutlet]="valueTemplate" [ngTemplateOutletContext]="{value: currentValue}"/>
+            <span class="text-light d-flex flex-nowrap">
+                <ng-container [ngTemplateOutlet]="valueTemplate" [ngTemplateOutletContext]="{value: currentValue, showUnits: false}"/>
                 /
-                <ng-container [ngTemplateOutlet]="valueTemplate" [ngTemplateOutletContext]="{value: baseValue}"/>
+                <ng-container [ngTemplateOutlet]="valueTemplate" [ngTemplateOutletContext]="{value: baseValue, showUnits: true}"/>
             </span>
         </ng-template>
     </div>
 </div>
 
-<ng-template #valueTemplate let-value="value">
+<ng-template #valueTemplate let-value="value" let-showUnits="showUnits">
     <ng-container *ngIf="challengeStat">
         <ng-container [ngSwitch]="challengeStat">
             <ng-container *ngSwitchCase="ChallengeStatType.DISTANCE">
-                {{value | distance}}
+                {{value | distance : showUnits}}
             </ng-container>
             <ng-container *ngSwitchCase="ChallengeStatType.ELAPSED_TIME">
-                {{value | minutes}}
+                {{value | minutes : showUnits}}
             </ng-container>
             <ng-container *ngSwitchCase="ChallengeStatType.MOVING_TIME">
-                {{value | minutes}}
+                {{value | minutes : showUnits}}
             </ng-container>
             <ng-container *ngSwitchDefault>
                 {{value}}
@@ -91,6 +91,6 @@
         </ng-container>
     </ng-container>
     <ng-container *ngIf="!challengeStat">
-        {{(activity ? activityType === "other" : type === "other") ? (value | minutes) : (value | distance)}}
+        {{(activity ? activityType === "other" : type === "other") ? (value | minutes : showUnits) : (value | distance : showUnits)}}
     </ng-container>
 </ng-template>

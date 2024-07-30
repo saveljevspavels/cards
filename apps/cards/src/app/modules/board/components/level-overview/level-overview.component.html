@@ -1,8 +1,15 @@
 <h2 class="mb-2 mt-2">My Challenges</h2>
+
+<div class="mb-3">
+    <app-level-display [level]="(athlete$ | async).level"
+                       [progress]="(athlete$ | async).currencies.experience"
+    ></app-level-display>
+</div>
+
 <app-active-challenges></app-active-challenges>
 
 
-<h2 class="mb-2 mt-2">Challenge Rewards</h2>
+<h2 class="mb-2 mt-2">My Rewards</h2>
 <div class="d-flex flex-column">
     <div class="row flex-md-nowrap flex-sm-wrap order-1">
         <div class="col-12">
