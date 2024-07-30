@@ -100,6 +100,7 @@ body {
 .color-ride {@include color('ride')};
 .color-other {@include color('other')};
 .color-strava {@include color('strava')};
+.color-text {@include color('text')};
 
 .background-primary {@include background('primary')};
 .background-primary-variant {@include background('primary-variant')};
@@ -224,6 +225,10 @@ h6 {
     font-weight: 700;
 }
 
+.text-semibold {
+    font-weight: 500;
+}
+
 .text-thin {
     font-weight: 300;
 }
@@ -248,6 +253,10 @@ h6 {
     font-size: var(--text-size-medium);
     color: var(--color-text);
     text-decoration: underline;
+}
+
+.grayscale {
+    filter: grayscale(100%);
 }
 
 .opacity-05 {

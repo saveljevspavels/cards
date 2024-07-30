@@ -1,7 +1,6 @@
 <div *ngIf="!manual; else manualTemplate" class="validator">
     <div class="validator__properties" [ngClass]="{'validator__properties--typed': typedValidator}">
-        <div class="validator__property-margin" *ngIf="typedValidator"></div>
-        <span *ngFor="let value of (resolvedValues | async) | keyvalue: noSort; let first = first;">
+        <span class="d-flex align-items-center gap-1" *ngFor="let value of (resolvedValues | async) | keyvalue: noSort; let first = first;">
             <span *ngIf="typedValidator;"
                   class="validator__type text-bold validator__color--{{(activeValidator | async)?.type ? ((activeValidator | async)?.type === value.key ? (activeValidator | async)?.status : 'inactive') : ''}}"
                   [ngClass]="{'ml-1 ml-xs-2': !first}"
@@ -11,11 +10,9 @@
                                         [width]="14"
                 ></app-activity-type-icon>
 
-                <span style="padding-left: 2px" class="pl-xs-1">
-                    <span *ngIf="validator.property === CONST.ACTIVITY_PROPERTIES.DISTANCE">{{value.value | distance}}</span>
-                    <span *ngIf="validator.property === CONST.ACTIVITY_PROPERTIES.AVERAGE_SPEED">{{value.value | pace}}</span>
-                    <span *ngIf="validator.property === CONST.ACTIVITY_PROPERTIES.ELAPSED_TIME">{{value.value | time}}</span>
-                </span>
+                <span *ngIf="validator.property === CONST.ACTIVITY_PROPERTIES.DISTANCE">{{value.value | distance}}</span>
+                <span *ngIf="validator.property === CONST.ACTIVITY_PROPERTIES.AVERAGE_SPEED">{{value.value | pace}}</span>
+                <span *ngIf="validator.property === CONST.ACTIVITY_PROPERTIES.ELAPSED_TIME">{{value.value | time}}</span>
             </span>
 
             <ng-template #simpleValidator>

@@ -40,9 +40,9 @@ export class CircularProgressBarComponent implements OnChanges {
   ngOnChanges(): void {
     this.activityType = StaticValidationService.normalizeActivityType(this.activity);
     this.baseValue = this.targetValue || this.validationService.getBaseValue(this.activity ? this.activityType : this.type);
-    if(this.currentProgress) {
+    if(this.currentProgress || this.currentProgress === 0) {
       this.currentValue = Math.floor((this.currentProgress * this.baseValue) / RULES.PROGRESS_PRECISION);
-    } else if (this.currentValue) {
+    } else if (this.currentValue || this.currentValue === 0) {
         this.currentProgress = Math.floor((this.currentValue * RULES.PROGRESS_PRECISION) / this.baseValue);
     }
     this.newValue = this.active ? parseInt(this.activity && this.activity[StaticValidationService.baseActivityTypeMap.get(this.activityType) || ''] || 0,  10) : 0;

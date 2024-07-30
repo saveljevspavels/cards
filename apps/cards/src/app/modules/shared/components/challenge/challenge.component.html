@@ -4,7 +4,7 @@
             <h5 class="text-center mb-2">{{challenge.title}}</h5>
             <app-circular-progress-bar
                     [challengeStat]="challenge.stat"
-                    [currentValue]="progressToShow"
+                    [currentValue]="progressToShow || 0"
                     [type]="challenge.activityType"
                     [targetValue]="challenge.targetValue"
                     [small]="true"
@@ -13,9 +13,9 @@
             <p class="text-small mb-0">{{challenge.description}}</p>
         </div>
         <div class="d-flex justify-content-center" *ngIf="!completed; else completedTemplate">
-            <app-reward-experience *ngIf="challenge.rewards.experience" [big]="true" [value]="challenge.rewards.experience"></app-reward-experience>
-            <app-reward-points *ngIf="challenge.rewards.points" [big]="true"  [value]="challenge.rewards.points"></app-reward-points>
-            <app-reward-money *ngIf="challenge.rewards.coins" [big]="true"  [value]="challenge.rewards.coins"></app-reward-money>
+            <app-reward-experience *ngIf="challenge.rewards.experience" [value]="challenge.rewards.experience"></app-reward-experience>
+            <app-reward-points *ngIf="challenge.rewards.points" [value]="challenge.rewards.points"></app-reward-points>
+            <app-reward-money *ngIf="challenge.rewards.coins" [value]="challenge.rewards.coins"></app-reward-money>
         </div>
         <ng-template #completedTemplate>
             <div class="d-flex justify-content-center">

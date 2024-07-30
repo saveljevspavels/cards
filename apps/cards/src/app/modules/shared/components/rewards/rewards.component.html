@@ -14,6 +14,12 @@
     <app-reward-energy *ngIf="rewards.energy"
                        [value]="rewards.energy">
     </app-reward-energy>
+    <app-reward-chest *ngIf="rewards.chest"
+                       [value]="rewards.chest">
+    </app-reward-chest>
+    <app-reward-perk *ngIf="rewards.perk"
+                      [value]="rewards.perk">
+    </app-reward-perk>
     <ng-container *ngIf="!rewardsOnly">
         <app-reward-energy *ngIf="energyCost && energyCost !== 0"
                            [value]="-energyCost">

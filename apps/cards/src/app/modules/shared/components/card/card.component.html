@@ -11,22 +11,24 @@
              [style.background-image]="'url(' + card.image + ')'"
         >
         </div>
-        <div class="ml-2 pr-3 flex-grow-1">
+        <div class="ml-2 flex-grow-1">
             <h5>
                 {{card.title}}
             </h5>
-            <div class="card__description light mt-2" *ngIf="showDescription">
+            <div class="card__description light mt-2 mb-2" *ngIf="showDescription">
                 {{card.description}}
             </div>
-            <div class="card__validation">
+            <div class="d-flex align-items-center gap-1 justify-content-between flex-wrap">
                 <app-validator *ngFor="let validator of card.validators"
                                [validator]="validator"
                                [allValidators]="card.validators"
                 ></app-validator>
+                <div class="align-self-end">
+                    <app-rewards [perks]="(me | async)?.perks" [rewards]="card.rewards" [rewardsOnly]="true"></app-rewards>
+                </div>
             </div>
         </div>
         <div class="card__value">
-            <app-rewards [perks]="(me | async)?.perks" [rewards]="card.rewards" [rewardsOnly]="true"></app-rewards>
             <app-button *ngIf="showActivate && !locked"
                         [small]="true"
                         [styleClass]="'mt-1-5 full-width'"

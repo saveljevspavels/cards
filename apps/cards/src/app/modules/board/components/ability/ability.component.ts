@@ -1,4 +1,4 @@
-import {Component, ElementRef, Input, OnChanges, OnInit, SimpleChanges, ViewChild} from '@angular/core';
+import {Component, ElementRef, Input, ViewChild} from '@angular/core';
 import {Ability, AbilityKey} from "../../../../../../../shared/interfaces/ability.interface";
 import {GameService} from "../../../../services/game.service";
 import {PopupService} from "../../../../services/popup.service";

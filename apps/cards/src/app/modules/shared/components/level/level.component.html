@@ -1,60 +1,39 @@
 <div class="level d-flex" [ngClass]="{'level--completed': completed, 'level--claimed': claimed, 'level--active': levelIndex === currentLevel}">
     <div class="level__status mr-2">
         <div class="level__status-line"></div>
-        <div class="level__status-circle"></div>
-    </div>
-    <div class="ml-1 level__content box d-flex flex-grow-1 justify-content-between">
-        <div class="d-flex align-items-start flex-grow-1">
-            <div class="mr-3 level__image gradient-run color-background d-flex flex-column align-items-center justify-content-center">
-                <div class="m-0 level__number">{{levelIndex + 1}}</div>
-                <div class="text-smaller">level</div>
-            </div>
+        <div class="level__status-circle">
             <div>
-                <h4 class="mt-0 mb-1 text-bold text-medium">Level {{levelIndex + 1}}</h4>
-                <span class="text-medium text-light">
+                {{levelIndex + 1}}
+            </div>
+        </div>
+    </div>
+    <div class="ml-1 level__content box d-flex flex-grow-1 justify-content-between align-items-center">
+        <div class="d-flex align-items-start flex-grow-1">
+            <span class="text-medium text-semibold d-flex align-items-center" [ngClass]="{'text-light': levelIndex !== currentLevel}">
                 <span *ngIf="levelIndex === currentLevel">
                     {{levelIndex < currentLevel ? LEVEL_EXPERIENCE[levelIndex] : levelIndex > currentLevel ? 0 : progress}}
                     /
                 </span>
-                    {{LEVEL_EXPERIENCE[levelIndex]}} points</span>
-            </div>
+                <div class="d-flex align-items-center">
+                    <span>{{LEVEL_EXPERIENCE[levelIndex]}}</span>
+                    <div class="mb-0-5">
+                        <app-svg [styleClass]="levelIndex !== currentLevel ? 'opacity-05' : 'color-text'" [icon]="'fire'" [height]="12" [width]="14"></app-svg>
+                    </div>
+                    <span>points</span>
+                </div>
+            </span>
         </div>
         <div class="d-flex justify-content-between align-items-center">
-            <ng-container *ngIf="!claimed; else claimedTemplate">
-                <app-reward-money *ngIf="LEVEL_REWARDS[levelIndex].coins"
-                                  [value]="LEVEL_REWARDS[levelIndex].coins"
-                                  [big]="true"
-                ></app-reward-money>
-                <div *ngIf="LEVEL_REWARDS[levelIndex].chests">
-                    chest
-                </div>
-                <div *ngIf="LEVEL_REWARDS[levelIndex].perks">
-                    perk
-                </div>
-                <app-reward-points *ngIf="LEVEL_REWARDS[levelIndex].points"
-                                   [value]="LEVEL_REWARDS[levelIndex].points"
-                                   [big]="true"
-                ></app-reward-points>
-                <app-reward-energy *ngIf="LEVEL_REWARDS[levelIndex].energy"
-                                   [value]="LEVEL_REWARDS[levelIndex].energy"
-                                   [big]="true"
-                ></app-reward-energy>
-                <app-reward-experience *ngIf="LEVEL_REWARDS[levelIndex].experience"
-                                       [value]="LEVEL_REWARDS[levelIndex].experience"
-                                       [big]="true"
-                ></app-reward-experience>
-            </ng-container>
-            <ng-template #claimedTemplate>
-                <app-svg [height]="11" [width]="11" [icon]="'checkmark'"></app-svg>
-            </ng-template>
+            <div [ngClass]="{'grayscale': claimed}" *ngIf="!(!claimed && levelIndex < currentLevel)">
+                <app-rewards [rewards]="LEVEL_REWARDS[levelIndex]"></app-rewards>
+            </div>
             <div class="ml-2">
-                <app-button *ngIf="(!claimed && levelIndex < currentLevel)"
-                            [type]="'action'"
-                            [small]="true"
+                <app-rewards-button *ngIf="(!claimed && levelIndex < currentLevel)"
+                            [label]="'Claim'"
+                            [rewards]="LEVEL_REWARDS[levelIndex]"
                             (click)="claimReward()"
                 >
-                    Claim
-                </app-button>
+                </app-rewards-button>
             </div>
         </div>
     </div>

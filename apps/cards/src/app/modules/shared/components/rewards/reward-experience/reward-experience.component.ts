@@ -8,7 +8,6 @@ import {Component, Input, OnInit} from '@angular/core';
 export class RewardExperienceComponent implements OnInit {
 
   @Input() value: number
-  @Input() big = false;
 
   constructor() { }
 

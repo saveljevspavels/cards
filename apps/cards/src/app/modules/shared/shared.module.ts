@@ -39,15 +39,15 @@ import { PendingActivityComponent } from './components/pending-activity/pending-
 import { ActivityTypeIconComponent } from './components/activity-type-icon/activity-type-icon.component';
 import { CompletedTaskComponent } from './components/completed-task/completed-task.component';
 import { CompletedTaskViewComponent } from './components/completed-task-view/completed-task-view.component';
-import { RewardBubbleComponent } from './components/reward-bubble/reward-bubble.component';
-import { RewardMoneyComponent } from './components/reward-money/reward-money.component';
-import { RewardPointsComponent } from './components/reward-points/reward-points.component';
+import { RewardBubbleComponent } from './components/rewards/reward-bubble/reward-bubble.component';
+import { RewardMoneyComponent } from './components/rewards/reward-money/reward-money.component';
+import { RewardPointsComponent } from './components/rewards/reward-points/reward-points.component';
 import { RewardsComponent } from './components/rewards/rewards.component';
 import { CircularProgressBarComponent } from './components/circular-progress-bar/circular-progress-bar.component';
 import { ImageComponent } from './components/image/image.component';
 import { GalleryComponent } from './components/gallery/gallery.component';
 import { CountDownComponent } from './components/count-down/count-down.component';
-import { RewardEnergyComponent } from './components/reward-energy/reward-energy.component';
+import { RewardEnergyComponent } from './components/rewards/reward-energy/reward-energy.component';
 import {EntityIdComponent} from "../../components/entity-id/entity-id.component";
 import {CardPlaceholderComponent} from "./components/card/card-placeholder/card-placeholder.component";
 import { CommentComponent } from './components/comment/comment.component';
@@ -57,7 +57,7 @@ import { LinkComponent } from './components/link/link.component';
 import {ProgressBarComponent} from "./components/progress-bar/progress-bar.component";
 import {ChallengeComponent} from "./components/challenge/challenge.component";
 import {ChallengeBarComponent} from "./components/challenge/challenge-bar.component";
-import {RewardExperienceComponent} from "./components/reward-experience/reward-experience.component";
+import {RewardExperienceComponent} from "./components/rewards/reward-experience/reward-experience.component";
 import {NumberTransitionComponent} from "./components/number-transition/number-transition.component";
 import {LevelComponent} from "./components/level/level.component";
 import {PopupWrapperComponent} from "./components/popup/popup-wrapper.component";
@@ -67,6 +67,9 @@ import {TabsComponent} from "./components/tabs/tabs.component";
 import {AchievementsComponent} from "../board/components/achievements/achievements.component";
 import {NgCircleProgressModule} from "ng-circle-progress";
 import {StravaStartActivityComponent} from "./components/strava-start-activity/strava-start-activity.component";
+import {RewardChestComponent} from "./components/rewards/reward-chest/reward-chest.component";
+import {RewardPerkComponent} from "./components/rewards/reward-perk/reward-perk.component";
+import {RewardsButtonComponent} from "./components/rewards/rewards-button/rewards-button.component";
 
 const COMPS = [
     InputComponent,
@@ -105,7 +108,10 @@ const COMPS = [
     ActivityCarouselComponent,
     TabsComponent,
     AchievementsComponent,
-    StravaStartActivityComponent
+    StravaStartActivityComponent,
+    RewardChestComponent,
+    RewardPerkComponent,
+    RewardsButtonComponent
 ]
 
 const MODULES = [

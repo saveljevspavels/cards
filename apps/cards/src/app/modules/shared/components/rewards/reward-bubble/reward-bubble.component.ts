@@ -10,7 +10,6 @@ export class RewardBubbleComponent implements OnInit {
   @Input() value: number;
   @Input() styleClass: string;
   @Input() icon: string;
-  @Input() big = false;
 
   constructor() { }
 

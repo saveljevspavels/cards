@@ -1,0 +1,9 @@
+<div class="reward-bubble d-flex align-items-center {{styleClass}}">
+    <span class="mr-0-5 text-bold text-medium color-background">
+        {{value > 0 ? '+' : ''}}{{value}}
+    </span>
+
+    <ng-container>
+        <app-svg height="16" width="16" [icon]="icon" [styleClass]="'color-background'"></app-svg>
+    </ng-container>
+</div>
