@@ -1,5 +1,5 @@
 <div class="box challenge d-flex gap-2-5 align-items-center full-height {{completed || 'challenge--completed'}}">
-    <div>
+    <div class="challenge__progress">
         <app-circular-progress-bar
                 [challengeStat]="challenge.stat"
                 [currentValue]="progressToShow || 0"
@@ -11,7 +11,7 @@
     </div>
     <div class="d-flex flex-column justify-content-between align-items-start full-height full-width">
         <div class="mb-2">
-            <h5 class="text-center mb-1">{{challenge.title}}</h5>
+            <h5 class="mb-1">{{challenge.title}}</h5>
             <div class="text-small text-light">{{challenge.description}}</div>
         </div>
         <div class="d-flex justify-content-center" *ngIf="!completed; else completedTemplate">

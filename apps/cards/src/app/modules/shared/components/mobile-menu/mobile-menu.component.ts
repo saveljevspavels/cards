@@ -31,12 +31,10 @@ export class MobileMenuComponent implements OnInit, OnDestroy {
             //     path: '/board/board'
             // },
             {
-                label: 'Leaderboard',
-                icon: 'leaderboard',
-                path: '/board/leaderboard',
+                label: 'Store',
+                path: '/board/store',
+                icon: 'store',
             },
-
-
             {
                 label: 'Dashboard',
                 path: '/board/main',
@@ -44,9 +42,9 @@ export class MobileMenuComponent implements OnInit, OnDestroy {
                 icon: 'gauge',
             },
             {
-                label: 'Store',
-                path: '/board/store',
-                icon: 'store',
+                label: 'Leaderboard',
+                icon: 'leaderboard',
+                path: '/board/leaderboard',
             },
             {
                 label: 'Profile',
