@@ -262,6 +262,9 @@ h6 {
 
 .grayscale {
     filter: grayscale(100%);
+    .reward-bubble {
+        background-color: #aaa!important;
+    }
 }
 
 .opacity-05 {

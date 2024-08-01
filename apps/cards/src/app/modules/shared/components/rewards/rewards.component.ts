@@ -1,11 +1,12 @@
-import {Component, Input, OnChanges} from '@angular/core';
+import {Component, Input, OnChanges, ViewEncapsulation} from '@angular/core';
 import {AbilityKey} from "../../../../../../../shared/interfaces/ability.interface";
 import {Currencies} from "../../../../../../../shared/classes/currencies.class";
 
 @Component({
   selector: 'app-rewards',
   templateUrl: './rewards.component.html',
-  styleUrls: ['./rewards.component.scss']
+  styleUrls: ['./rewards.component.scss'],
+  encapsulation: ViewEncapsulation.None
 })
 export class RewardsComponent implements OnChanges {
 

@@ -21,8 +21,6 @@ export class CardService {
     private cardCollection: AngularFirestoreCollection;
     private cardSchemeDocument: AngularFirestoreDocument<CardScheme>;
 
-    public selectedCards: FormControl = new FormControl<ValidatedCard[]>([]);
-
     constructor(
         private http: HttpClient,
         private db: AngularFirestore,
@@ -91,7 +89,7 @@ export class CardService {
         })
     }
 
-    validateCard(activity: Activity | null, card: Card, selectedCards: ValidatedCard[] | null) {
+    validateCard(activity: Activity | null, card: Card, selectedCards: ValidatedCard[] | null = []) {
         if(!activity) {
             return ValidationStatus.NONE;
         }
@@ -103,7 +101,7 @@ export class CardService {
         return this.validationService.validateCardGroup(
             activity,
             [
-                ...this.getPlainCards(this.selectedCards.value),
+                ...this.getPlainCards(selectedCards || []),
                 card
             ])
             ? ValidationStatus.PASS
