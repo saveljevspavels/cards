@@ -23,9 +23,13 @@ export class InventoryComponent implements OnChanges {
 
     public activatedAbility: Ability | null;
 
+    public rewards: Currencies = new Currencies();
+
     public selectedAbility = new FormControl('');
     public abilitySelectionPopupControl = new FormControl();
     public abilityGainedPopupControl = new FormControl();
+    public loadingPopupControl = new FormControl();
+    public rewardsPopupControl = new FormControl();
 
     constructor(
         private popupService: PopupService,
@@ -92,11 +96,25 @@ export class InventoryComponent implements OnChanges {
         }
     }
 
+    setLoading() {
+        this.popupService.showPopup(this.loadingPopupControl.value);
+    }
+
+    closePopup() {
+        this.selectedAbility.setValue('');
+        this.popupService.closePopup();
+    }
+
     openChest() {
+        this.setLoading();
         this.gameService.openChest().subscribe((rewards) => {
+            this.closePopup();
+            this.rewards = rewards;
+            this.popupService.showPopup(this.rewardsPopupControl.value);
             console.log('got rewards', rewards);
         });
     }
 
     protected readonly storeItems = STORE_ITEMS;
+    protected readonly close = close;
 }

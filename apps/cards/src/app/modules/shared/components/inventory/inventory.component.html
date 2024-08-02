@@ -13,12 +13,33 @@
         [templateControl]="abilitySelectionPopupControl"
         [title]="'Available Perks'"
         [description]="'You can select any one that you like'"
-        [confirmText]="'Yes'"
+        [confirmText]="'Select'"
+        [disabled]="!selectedAbility.value"
         [cancelText]="'Cancel'"
-        [wide]="true"
+        (onCancel)="closePopup()"
         (onConfirm)="selectAbility()"
 >
     <app-abilities [selectedAbility]="selectedAbility"></app-abilities>
+</app-popup-wrapper>
+
+<app-popup-wrapper
+        [templateControl]="rewardsPopupControl"
+        [title]="'Chest opened'"
+        [confirmText]="'Claim'"
+        [showCancel]="false"
+        (onConfirm)="closePopup()"
+>
+    <div class="d-flex align-items-center flex-column">
+        <img class="image-logo" src="assets/images/chest.svg">
+        <div class="mt-2 mb-2">You got some valuable rewards!</div>
+        <app-rewards [rewards]="rewards"></app-rewards>
+    </div>
+</app-popup-wrapper>
+
+<app-popup-wrapper
+        [templateControl]="loadingPopupControl"
+        [title]="'Loading...'"
+>
 </app-popup-wrapper>
 
 <app-popup-wrapper

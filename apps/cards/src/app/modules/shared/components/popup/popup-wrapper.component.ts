@@ -14,6 +14,7 @@ export class PopupWrapperComponent implements OnInit {
     @Input() showCancel: boolean = true;
     @Input() templateControl: FormControl;
     @Input() wide: boolean = false;
+    @Input() disabled: boolean = false;
     @Output() onCancel = new EventEmitter;
     @Output() onConfirm = new EventEmitter;
 

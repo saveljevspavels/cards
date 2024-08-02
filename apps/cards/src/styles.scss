@@ -403,6 +403,10 @@ h6 {
     background-position: center;
     flex-shrink: 0;
     border-radius: var(--radius-half);
+    &--small {
+        width: 40px;
+        height: 40px;
+    }
 }
 
 .vertical-line {

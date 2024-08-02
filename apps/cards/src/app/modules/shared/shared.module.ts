@@ -70,6 +70,7 @@ import {StravaStartActivityComponent} from "./components/strava-start-activity/s
 import {RewardChestComponent} from "./components/rewards/reward-chest/reward-chest.component";
 import {RewardPerkComponent} from "./components/rewards/reward-perk/reward-perk.component";
 import {RewardsButtonComponent} from "./components/rewards/rewards-button/rewards-button.component";
+import {RewardRandomPerkComponent} from "./components/rewards/reward-random-perk/reward-random-perk.component";
 
 const COMPS = [
     InputComponent,
@@ -111,6 +112,7 @@ const COMPS = [
     StravaStartActivityComponent,
     RewardChestComponent,
     RewardPerkComponent,
+    RewardRandomPerkComponent,
     RewardsButtonComponent
 ]
 
