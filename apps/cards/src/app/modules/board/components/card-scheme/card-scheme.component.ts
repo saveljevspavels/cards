@@ -56,8 +56,14 @@ export class CardSchemeComponent implements OnInit {
     ngOnInit(): void {
         combineLatest([
             this.cardScheme.pipe(
+                filter((scheme) => !!scheme.boards.length),
                 tap((scheme: CardScheme) => {
+                    this.boards = scheme.boards;
                     if(!this.activeBoard.value && scheme.boards.length) {
+                        console.log('scheme', scheme);
+                        console.log('this.activeBoard.value', this.activeBoard.value)
+                        console.log('LocalStorageService.getValue(\'activeBoard\')', LocalStorageService.getValue('activeBoard'))
+                        console.log('this.getBoardByKey(LocalStorageService.getValue(\'activeBoard\'))', this.getBoardByKey(LocalStorageService.getValue('activeBoard')))
                         this.activeBoard.setValue(this.getBoardByKey(LocalStorageService.getValue('activeBoard')) || scheme.boards[0]);
                     }
                 })
@@ -71,7 +77,6 @@ export class CardSchemeComponent implements OnInit {
             if(!scheme?.boards.length || !athlete || !cards.length) {
                 return;
             }
-            this.boards = scheme.boards;
 
             this.unlockMap = new Map<string, number>(this.boards.map((board) => {
                 return [board.key, athlete.unlocks[board.key] || 0];

@@ -67,17 +67,21 @@ export class InventoryComponent implements OnChanges {
         if(!this.selectedAbility.value || !this.selectedAbility.value[0]) {
             return;
         }
-        this.gameService.useAbility(this.selectedAbility.value[0] || '').subscribe();
+        this.setLoading();
         const abilityKey = this.selectedAbility.value[0] as AbilityKey;
-        this.selectedAbility.setValue('');
-        setTimeout(() => {
-            this.showActivatedAbility(abilityKey);
+        this.gameService.useAbility(abilityKey || '').subscribe(() => {
+            this.selectedAbility.setValue('');
+            this.closePopup();
+            setTimeout(() => {
+                this.showActivatedAbility(abilityKey);
+            });
         });
     }
 
     getRandomAbility() {
+        this.setLoading();
         this.gameService.getRandomAbility().subscribe((abilityKey: AbilityKey) => {
-            console.log(abilityKey);
+            this.closePopup();
             this.showActivatedAbility(abilityKey);
         });
     }

@@ -113,7 +113,9 @@ export default class Athlete implements JsonObjectInterface {
                 walk: 0,
                 other: 0,
             },
-            {},
+            {
+                'special': -1
+            },
             [],
             {
                 experience_per_task_bonus: 0,
@@ -199,6 +201,9 @@ export default class Athlete implements JsonObjectInterface {
         this.currencies.perk = MathHelper.add(this.currencies.perk, currencies.perk);
         this.currencies.random_perk = MathHelper.add(this.currencies.random_perk, currencies.random_perk);
         this.currencies.fatigue = MathHelper.add(this.currencies.coins, currencies.fatigue);
+        if(currencies.special_task) {
+            this.unlocks['special'] = MathHelper.add(this.unlocks['special'] || 0, currencies.special_task);
+        }
     }
 
     claimLevelRewards(level: number) {

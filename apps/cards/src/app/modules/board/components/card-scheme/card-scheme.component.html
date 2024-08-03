@@ -3,13 +3,14 @@
     <div class="mb-2">
         <app-board-selection [boards]="boards"
                              [activeBoard]="activeBoard.value?.key"
+                             [unlockMap]="unlockMap"
                              (boardSelected)="setActiveBoard($event)"
         ></app-board-selection>
     </div>
     <ng-container *ngFor="let board of boards">
         <div class="d-none" [ngClass]="{'d-block': activeBoard.value.key === board.key}">
             <div *ngFor="let level of board.levels; let levelIndex = index">
-                <ng-container *ngIf="level.cards.length && (showLocked ? (levelIndex - 1) : (levelIndex)) <= unlockMap.get(board.key)">
+                <ng-container *ngIf="level.cards.length && ((showLocked && board.key !== 'special') ? (levelIndex - 1) : (levelIndex)) <= unlockMap.get(board.key)">
                     <h2 class="mb-2 mt-2" *ngIf="(levelIndex - 1) === unlockMap.get(board.key)">Locked Tasks</h2>
                     <div [ngClass]="{'border-primary border-radius p-2 mb-2': (levelIndex - 1) === unlockMap.get(board.key)}">
                         <div class="d-flex flex-column">
@@ -37,7 +38,7 @@
                         </app-button>
                     </div>
                 </ng-container>
-                <div *ngIf="showLocked && level.cards.length && levelIndex === unlockMap.get(board.key) + 2">
+                <div *ngIf="(showLocked && board.key !== 'special') && level.cards.length && levelIndex === unlockMap.get(board.key) + 2">
                     <div class="mb-2">
                         <app-card-placeholder></app-card-placeholder>
                     </div>

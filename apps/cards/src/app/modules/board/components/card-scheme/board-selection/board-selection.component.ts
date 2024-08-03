@@ -10,6 +10,7 @@ export class BoardSelectionComponent implements OnInit {
 
   @Input() boards: CardSchemeBoard[];
   @Input() activeBoard: string;
+  @Input() unlockMap: Map<string, number> = new Map();
 
   @Output() boardSelected = new EventEmitter;
 

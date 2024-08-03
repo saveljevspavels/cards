@@ -23,6 +23,9 @@
     <app-reward-random-perk *ngIf="rewards.random_perk"
                      [value]="rewards.random_perk">
     </app-reward-random-perk>
+    <app-reward-special-task *ngIf="rewards.special_task"
+                            [value]="rewards.special_task">
+    </app-reward-special-task>
     <ng-container *ngIf="!rewardsOnly">
         <app-reward-energy *ngIf="energyCost && energyCost !== 0"
                            [value]="-energyCost">

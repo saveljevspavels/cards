@@ -60,7 +60,7 @@ export class CardSchemeManagementComponent implements OnInit {
             for(let j = 0; j < 5; j++) {
                 (boardControl.get('levels') as FormArray).push(
                     this.formBuilder.group({
-                        cards: [cardScheme.boards[i] ? cardScheme.boards[i].levels[j].cards : []]
+                        cards: [(cardScheme.boards[i] && cardScheme.boards[i].levels && cardScheme.boards[i].levels[j]) ? cardScheme.boards[i].levels[j].cards : []]
                     })
                 )
             }

@@ -71,6 +71,7 @@ import {RewardChestComponent} from "./components/rewards/reward-chest/reward-che
 import {RewardPerkComponent} from "./components/rewards/reward-perk/reward-perk.component";
 import {RewardsButtonComponent} from "./components/rewards/rewards-button/rewards-button.component";
 import {RewardRandomPerkComponent} from "./components/rewards/reward-random-perk/reward-random-perk.component";
+import {RewardSpecialTaskComponent} from "./components/rewards/reward-special-task/reward-special-task.component";
 
 const COMPS = [
     InputComponent,
@@ -113,7 +114,8 @@ const COMPS = [
     RewardChestComponent,
     RewardPerkComponent,
     RewardRandomPerkComponent,
-    RewardsButtonComponent
+    RewardsButtonComponent,
+    RewardSpecialTaskComponent
 ]
 
 const MODULES = [

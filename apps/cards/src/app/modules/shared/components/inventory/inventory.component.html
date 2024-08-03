@@ -31,14 +31,24 @@
 >
     <div class="d-flex align-items-center flex-column">
         <img class="image-logo" src="assets/images/chest.svg">
-        <div class="mt-2 mb-2">You got some valuable rewards!</div>
+        <div class="mt-3 mb-3">You got some valuable rewards!</div>
         <app-rewards [rewards]="rewards"></app-rewards>
+        <ng-container *ngIf="rewards.random_perk || rewards.perk">
+            <div class="mt-3">You have unlocked a new Perk</div>
+            <div>Visit Profile to claim it!</div>
+        </ng-container>
+        <ng-container *ngIf="rewards.special_task">
+            <div class="mt-3">You have unlocked new Special task(s)!</div>
+            <div>Visit Main Tasks to check it out</div>
+        </ng-container>
     </div>
 </app-popup-wrapper>
 
 <app-popup-wrapper
         [templateControl]="loadingPopupControl"
-        [title]="'Loading...'"
+        [title]="'Please wait'"
+        [showCancel]="false"
+        [showConfirm]="false"
 >
 </app-popup-wrapper>
 

@@ -12,6 +12,7 @@ export class PopupWrapperComponent implements OnInit {
     @Input() confirmText: string = 'Yes';
     @Input() cancelText: string = 'Cancel';
     @Input() showCancel: boolean = true;
+    @Input() showConfirm: boolean = true;
     @Input() templateControl: FormControl;
     @Input() wide: boolean = false;
     @Input() disabled: boolean = false;

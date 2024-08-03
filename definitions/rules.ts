@@ -103,7 +103,7 @@ export const RULES = {
         ACTIVITY_BOOST_PRICE: 1
     },
     SCHEME: {
-        BOARDS_NUMBER: 3,
+        BOARDS_NUMBER: 5,
         MAX_ACTIVE_CARDS: 3
     },
     PROGRESS_PRECISION: 1000,
