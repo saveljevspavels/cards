@@ -5,6 +5,10 @@ import {Router} from "@angular/router";
 import {LocalStorageService} from "../../../../services/local-storage.service";
 import {UtilService} from "../../../../services/util.service";
 import {TabItem} from "../../../../interfaces/tab-item";
+import {ChallengeService} from "../../../../services/challenge.service";
+import {distinctUntilChanged, filter} from "rxjs/operators";
+import {FormControl} from "@angular/forms";
+import {PopupService} from "../../../../services/popup.service";
 
 @Component({
   selector: 'app-board',
@@ -28,16 +32,26 @@ export class BoardComponent implements OnInit {
         rules: true,
     }
 
-    public saveState = UtilService.saveState;
+    public updates: any = {};
+
+    public progressPopupControl = new FormControl();
 
     constructor(private activityService: ActivityService,
-                private boardService: BoardService,
+                private challengeService: ChallengeService,
+                private popupService: PopupService,
                 private router: Router) { }
 
     ngOnInit(): void {
         Object.keys(this.openStates).forEach(key => {
             this.openStates[key] = LocalStorageService.getState(key)
         })
+
+        this.challengeService.challengeUpdates$.subscribe((updates) => {
+            this.updates = updates;
+            setTimeout(() => {
+                this.popupService.showPopup(this.progressPopupControl.value);
+            });
+        });
     }
 
     openRules() {

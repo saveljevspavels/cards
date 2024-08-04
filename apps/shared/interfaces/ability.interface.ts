@@ -11,6 +11,10 @@ export interface Ability {
 }
 
 export enum AbilityKey {
+    STORE_ENERGY_DISCOUNT = 'store_energy_discount',
+    STORE_CHEST_DISCOUNT = 'store_chest_discount',
+    CARD_UNLOCK_DISCOUNT = 'card_unlock_discount',
+
     REDUCE_WALK_WORKOUT = 'reduce_walk_workout',
     REDUCE_RUN_WORKOUT = 'reduce_run_workout',
     REDUCE_RIDE_WORKOUT = 'reduce_ride_workout',

@@ -148,11 +148,11 @@ export class ChallengeService {
         return await this.fireStoreService.challengeCollection.all();
     }
 
-    async evaluateChallengeProgress(activity: Activity, athleteId: string, evaluateImmediate: boolean) {
+    async evaluateChallengeProgress(activity: Activity, athleteId: string, evaluateImmediate: boolean, baseCardCompletion: number = 0) {
         const progress = await this.getChallengeProgress(athleteId);
         const challenges = (await this.getActiveChallenges(progress)).filter(challenge => challenge.evaluateImmediate === evaluateImmediate);
         challenges.forEach(challenge => {
-            this.progressChallenge(activity, challenge, progress);
+            this.progressChallenge(activity, challenge, progress, baseCardCompletion);
         });
         challenges.forEach(challenge => {
             this.completeApplicableChallenge(challenge, progress);
@@ -165,7 +165,7 @@ export class ChallengeService {
         return rawProgress ? ChallengeProgress.fromJSONObject(rawProgress) : new ChallengeProgress(athleteId);
     }
 
-    progressChallenge(activity: Activity, challenge: ProgressiveChallenge, progress: ChallengeProgress): ChallengeProgress {
+    progressChallenge(activity: Activity, challenge: ProgressiveChallenge, progress: ChallengeProgress, baseCardCompletion: number): ChallengeProgress {
         if (challenge.activityType && challenge.activityType !== StaticValidationService.normalizeActivityType(activity)) {
             return progress; // Incompatible activity type for this challenge
         }
@@ -203,6 +203,9 @@ export class ChallengeService {
             case ChallengeStatType.DAILY_COMPLETED_TASKS:
             case ChallengeStatType.COMPLETED_TASKS:
                 progress.progressChallenge(challenge.id, cardSnapshots.length);
+                break;
+            case ChallengeStatType.BASIC_TASKS:
+                progress.progressChallenge(challenge.id, baseCardCompletion);
                 break;
             case ChallengeStatType.HEARTBEATS:
                 if (!activity.average_heartrate || activity.average_heartrate < 100) {

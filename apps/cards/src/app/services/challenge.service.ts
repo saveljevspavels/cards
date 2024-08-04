@@ -1,14 +1,16 @@
 import {Injectable} from "@angular/core";
-import {BehaviorSubject, combineLatest, Observable} from "rxjs";
+import {BehaviorSubject, combineLatest, Observable, Subject} from "rxjs";
 import {AngularFirestore, AngularFirestoreCollection} from "@angular/fire/compat/firestore";
 import {HttpClient} from "@angular/common/http";
 import {ConstService} from "./const.service";
 import {ProgressiveChallenge} from "../../../../shared/interfaces/progressive-challenge.interface";
 import {environment} from "../../environments/environment";
 import {AthleteService} from "./athlete.service";
-import {map} from "rxjs/operators";
+import {distinctUntilChanged, filter, map} from "rxjs/operators";
 import {GameService} from "./game.service";
 import {ChallengeProgress} from "../../../../shared/classes/challenge-progress";
+import {LocalStorageService} from "./local-storage.service";
+import {RULES} from "../../../../../definitions/rules";
 
 @Injectable({
     providedIn: 'root'
@@ -21,6 +23,7 @@ export class ChallengeService {
     public challengeProgress = new BehaviorSubject<ProgressiveChallenge[]>([]);
     private challengeCollection: AngularFirestoreCollection<ProgressiveChallenge[]>;
     public myProgress$: Observable<ChallengeProgress> = this._myProgress.asObservable();
+    public challengeUpdates$ = new Subject<any>();
 
     constructor(
         private db: AngularFirestore,
@@ -40,16 +43,18 @@ export class ChallengeService {
             this.challenges.next(challenges as ProgressiveChallenge[]);
         });
 
-        this.myProgress$.subscribe((progress: any) => {
-            console.log('progress', progress);
-        });
-
         this.activeChallenges = combineLatest([
             this.challenges,
-            this.gameService.gameData
-        ]).pipe(map(([challenges, game]) => {
-            return challenges.filter(challenge => game?.activeChallenges.indexOf(challenge.id) !== -1);
+            this.gameService.gameData,
+            this.myProgress$
+        ]).pipe(map(([challenges, game, progress]) => {
+            return challenges
+                .filter(challenge => game?.activeChallenges.indexOf(challenge.id) !== -1)
+                .filter(challenge => (progress?.claimedChallenges || []).indexOf(challenge.id) === -1)
+                .splice(0, RULES.PROGRESSIVE_CHALLENGE.MAX_ACTIVE)
         }))
+
+        this.watchChallengeUpdates();
     }
 
     claimLevelReward(levelIndex: number) {
@@ -68,5 +73,34 @@ export class ChallengeService {
         return this.http.post(`${environment.baseBE}/challenges/create`, {
             challenge
         });
+    }
+
+    watchChallengeUpdates() {
+        this.activeChallenges.subscribe((challenges) => {
+            const challengeValues = JSON.parse(LocalStorageService.getValue('challengeValues') || '{}');
+            const progress = this._myProgress.value;
+            const updates = this.getUpdates(challengeValues, progress.challengeValues);
+            if(Object.keys(updates).length === 0 || !challenges.find(challenge => Object.keys(updates).indexOf(challenge.id) !== -1)) {
+                return;
+            } else {
+                this.challengeUpdates$.next({
+                    previous: Object.keys(updates).reduce((acc: {[key:string]: number}, key) => {
+                        acc[key] = challengeValues[key];
+                        return acc;
+                    }, {}),
+                    current: updates
+                });
+                LocalStorageService.setValue('challengeValues', JSON.stringify(progress.challengeValues));
+            }
+        })
+    }
+
+    getUpdates(prev: {[key:string]: number}, curr: {[key:string]: number}) {
+        return Object.keys(curr).reduce((acc: {[key:string]: number}, key) => {
+            if(prev[key] !== curr[key]) {
+                acc[key] = curr[key];
+            }
+            return acc;
+        }, {});
     }
 }

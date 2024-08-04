@@ -1,7 +1,8 @@
-<div class="row flex-column gap-2">
-    <div class="col-md-12 " *ngFor="let challenge of activeChallenges">
+<div class="d-flex flex-column gap-2">
+    <div class="" *ngFor="let challenge of activeChallenges">
         <app-challenge (claimChallenge)="claimChallenge(challenge.id)"
                        [challenge]="challenge"
+                       [animated]="!!updates"
                        [currentProgress]="challengeValues[challenge.id] || 0"
         ></app-challenge>
     </div>

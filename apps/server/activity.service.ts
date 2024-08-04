@@ -6,13 +6,14 @@ import {RULES} from "../../definitions/rules";
 import {Logger} from "winston";
 import {StaticValidationService} from "../shared/services/validation.service";
 import {Card, CardSnapshot} from "../shared/classes/card.class";
-import Athlete from "../shared/classes/athlete.class";
+import Athlete, {BaseCardProgress} from "../shared/classes/athlete.class";
 import AthleteService from "./athlete.service";
 import {UploadedImage} from "../shared/interfaces/image-upload.interface";
 import {ChallengeService} from "./challenge.service";
 import {Activity, ActivityStatus} from "../shared/interfaces/activity.interface";
 import {forkJoin} from "rxjs";
 import axios from "axios";
+import MathHelper from "./helpers/math.helper";
 
 export default class ActivityService {
     constructor(
@@ -132,8 +133,15 @@ export default class ActivityService {
         if(StaticValidationService.validateCardGroup(activity, cardSnapshots, athlete.baseWorkout)) {
             this.logger.info(`All validators passed for ${activityId}`)
             await this.approveActivity(activity.id.toString());
-            await this.updateBaseCard(athlete, activity, cardSnapshots);
-            await this.challengeService.evaluateChallengeProgress(activity, athlete.id, false);
+
+            const completedBaseCardsBefore = this.getCompletedBaseCardCount(athlete.baseCardProgress);
+            const completedBaseCardsAfter = this.getCompletedBaseCardCount(await this.updateBaseCard(athlete, activity, cardSnapshots));
+            await this.challengeService.evaluateChallengeProgress(
+                activity,
+                athlete.id,
+                false,
+                Math.max(completedBaseCardsAfter - completedBaseCardsBefore, 0)
+            );
         } else {
             this.logger.info(`Validator(s) failed, switching for manual approve ${activityId}`)
         }
@@ -160,15 +168,17 @@ export default class ActivityService {
         this.logger.info(`Activity ${activity.id} was approved for athlete ${athlete.firstname} ${athlete.lastname} with cards ${activity.gameData.cardSnapshots.map((card: CardSnapshot) => card.title)}`)
     }
 
-    async updateBaseCard(athlete: Athlete, activity: Activity, cardSnapshots: CardSnapshot[]) {
+    async updateBaseCard(athlete: Athlete, activity: Activity, cardSnapshots: CardSnapshot[]): Promise<BaseCardProgress> {
         const baseWorkout = athlete.baseWorkout;
         const remainderActivity = StaticValidationService.getActivityRemainder(activity, cardSnapshots, baseWorkout);
-        return await this.fireStoreService.athleteCollection.update(
+        const updatedBaseCardProgress = StaticValidationService.updateBaseCardProgress(remainderActivity, baseWorkout, athlete.baseCardProgress);
+        await this.fireStoreService.athleteCollection.update(
             athlete.id,
             {
-                baseCardProgress: StaticValidationService.updateBaseCardProgress(remainderActivity, baseWorkout, athlete.baseCardProgress)
+                baseCardProgress: updatedBaseCardProgress
             }
         )
+        return updatedBaseCardProgress;
     }
 
     async updatePersonalBests(activity: Activity, cardIds: string[]) {
@@ -350,5 +360,9 @@ export default class ActivityService {
             }
         });
         return response?.data || [];
+    }
+
+    getCompletedBaseCardCount(baseCardProgress: BaseCardProgress): number {
+        return Object.values(baseCardProgress || {}).reduce((acc: number, value: number) => acc + Math.floor((value || 0) / RULES.PROGRESS_PRECISION), 0);
     }
 }

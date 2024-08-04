@@ -32,7 +32,8 @@
                     [subtitleFontWeight]="'bold'"
                     [subtitleColor]="monochrome ? '#fff' : '#0F0F31'"
                     [showUnits]="false"
-                    [animation]="false"
+                    [animation]="animated"
+                    [animationDuration]="500"
                     [title]="' '"
             ></circle-progress>
         </div>
@@ -47,7 +48,7 @@
                     [showInnerStroke]="false"
                     [outerStrokeColor]="strokeColor"
                     [animation]="true"
-                    [animationDuration]="300"
+                    [animationDuration]="500"
             ></circle-progress>
         </div>
         <div  *ngIf="complete"

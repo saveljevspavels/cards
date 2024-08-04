@@ -7,7 +7,6 @@ import {Router} from "@angular/router";
 import {PopupService} from "../../../../services/popup.service";
 import {filter, first, map, mergeMap, startWith} from "rxjs/operators";
 import {BehaviorSubject, combineLatest, Observable, Subject} from "rxjs";
-import {ConstService} from "../../../../services/const.service";
 import {Activity} from "../../../../../../../shared/interfaces/activity.interface";
 import {CardService, ValidatedCard} from "../../../../services/card.service";
 import {ValidationService} from "../../../../services/validation.service";

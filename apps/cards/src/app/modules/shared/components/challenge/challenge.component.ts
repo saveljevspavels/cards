@@ -13,6 +13,7 @@ export class ChallengeComponent implements OnChanges {
     public readonly ChallengeStatType = ChallengeStatType;
 
     @Input() currentProgress: number;
+    @Input() animated = false;
     @Input() challenge: ProgressiveChallenge;
     @Output() claimChallenge = new EventEmitter<void>();
     public completed: boolean;
