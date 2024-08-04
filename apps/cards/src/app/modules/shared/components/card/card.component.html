@@ -37,7 +37,7 @@
                         [disabled]="!canActivate"
                         (buttonClick)="activate()"
             >
-                <div class="text-small ml-1 d-flex justify-content-center" *ngIf="card?.energyCost > 0">-{{card?.energyCost}}<div class="pl-1"><app-svg [height]="12" [icon]="'fire'"></app-svg></div></div>
+                <div class="text-small ml-1 d-flex justify-content-center" *ngIf="card?.energyCost > 0">-{{card?.energyCost}}<div class="pl-1"><app-svg [height]="12" [icon]="'energy'"></app-svg></div></div>
             </app-button>
         </div>
     </div>

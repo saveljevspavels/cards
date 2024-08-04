@@ -1,9 +1,7 @@
-<div class="d-flex justify-content-between align-items-center box">
-    <div class="mr-2">
-        <img class="image-logo image-logo--small" [src]="'assets/images/perk.svg'">
-    </div>
+<div class="d-flex justify-content-start gap-2 align-items-center box">
+    <img class="image-logo image-logo--small" [src]="'assets/images/perk.svg'">
     <div>
-        <div class="text-small text-bold mb-2">{{ability.title}}</div>
+        <div class="text-small text-bold mb-2">{{ability.title}}{{level > 1 ? ' (' + level + ')' : ''}}</div>
         <div class="text-small text-light">{{ability.description}}</div>
     </div>
     <div>
@@ -27,7 +25,7 @@
 
 <ng-template #price>
     <div class="title ml-2 d-flex justify-content-center align-items-center">
-        {{ability.coinsCost ? '-' + ability.coinsCost : ability.energyCost ? '-' + ability.energyCost : ''}}&nbsp;<app-svg [icon]="ability.coinsCost ? 'coin' : ability.energyCost ? 'fire' : ''"></app-svg>
+        {{ability.coinsCost ? '-' + ability.coinsCost : ability.energyCost ? '-' + ability.energyCost : ''}}&nbsp;<app-svg [icon]="ability.coinsCost ? 'coin' : ability.energyCost ? 'energy' : ''"></app-svg>
     </div>
 </ng-template>
 

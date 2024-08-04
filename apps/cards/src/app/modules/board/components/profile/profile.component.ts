@@ -9,6 +9,9 @@ import {Observable} from "rxjs";
 import {ActivityService} from "../../../../services/activity.service";
 import {map} from "rxjs/operators";
 import Athlete from "../../../../../../../shared/classes/athlete.class";
+import {ConstService} from "../../../../services/const.service";
+import {CONST} from "../../../../../../../../definitions/constants";
+import {ABILITIES} from "../../../../../../../../definitions/abilities";
 
 @Component({
   selector: 'app-profile',
@@ -16,6 +19,7 @@ import Athlete from "../../../../../../../shared/classes/athlete.class";
   styleUrls: ['./profile.component.scss']
 })
 export class ProfileComponent implements OnInit {
+    public ABILITIES = ABILITIES;
 
     public athlete$: Observable<Athlete | null>;
     public athlete: Athlete | null;
