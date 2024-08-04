@@ -7,7 +7,7 @@ import {Router} from "@angular/router";
 })
 export class BoardHeaderComponent {
 
-  @Input() backButton = true;
+  @Input() backButton = false;
 
   constructor(private router: Router) {
   }

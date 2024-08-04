@@ -1,0 +1,6 @@
+<app-stat-display
+        [title]="'Points:'"
+        [value]="(athlete$ | async)?.currencies?.coins || 0"
+>
+    <app-svg icon [icon]="'cup'" [height]="18" [width]="18" [styleClass]="'color-secondary-2'"></app-svg>
+</app-stat-display>

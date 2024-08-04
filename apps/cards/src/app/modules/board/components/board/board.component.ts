@@ -9,6 +9,8 @@ import {ChallengeService} from "../../../../services/challenge.service";
 import {distinctUntilChanged, filter} from "rxjs/operators";
 import {FormControl} from "@angular/forms";
 import {PopupService} from "../../../../services/popup.service";
+import {AthleteService} from "../../../../services/athlete.service";
+import Athlete from "../../../../../../../shared/classes/athlete.class";
 
 @Component({
   selector: 'app-board',
@@ -17,28 +19,20 @@ import {PopupService} from "../../../../services/popup.service";
 })
 export class BoardComponent implements OnInit {
 
-    public tabs: TabItem[] = [
-        {
-            title: 'Main Tasks',
-            path: '/board/main/tasks'
-        },
-        {
-            title: 'Daily Challenges',
-            path: '/board/main/challenges'
-        }
-    ]
+    public tabs: TabItem[] = [];
 
     public openStates: any = {
         rules: true,
     }
 
-    public updates: any = {};
+    public challengeUpdates: any = {};
 
     public progressPopupControl = new FormControl();
 
     constructor(private activityService: ActivityService,
                 private challengeService: ChallengeService,
                 private popupService: PopupService,
+                private athleteService: AthleteService,
                 private router: Router) { }
 
     ngOnInit(): void {
@@ -47,10 +41,16 @@ export class BoardComponent implements OnInit {
         })
 
         this.challengeService.challengeUpdates$.subscribe((updates) => {
-            this.updates = updates;
+            this.challengeUpdates = updates;
             setTimeout(() => {
                 this.popupService.showPopup(this.progressPopupControl.value);
             });
+        });
+
+        this.athleteService.me.subscribe((me) => {
+            if(me) {
+                this.createTabs(me);
+            }
         });
     }
 
@@ -61,6 +61,20 @@ export class BoardComponent implements OnInit {
 
     rejectActivity(activityId: string) {
         this.activityService.rejectActivity(activityId, 'Cancelled by athlete').subscribe()
+    }
+
+    createTabs(athlete: Athlete) {
+        this.tabs = [
+            {
+                title: 'Main Tasks',
+                path: '/board/main/tasks'
+            },
+            {
+                title: 'Daily Challenges',
+                path: '/board/main/challenges',
+                hasUpdates: athlete.level > athlete.claimedLevelRewards.length
+            }
+        ]
     }
 
 }

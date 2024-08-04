@@ -1,6 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {ConstService} from "../../../../services/const.service";
-import {AthleteService} from "../../../../services/athlete.service";
+import {ConstService} from "../../../../../services/const.service";
+import {AthleteService} from "../../../../../services/athlete.service";
 
 @Component({
   selector: 'app-energy-display',
