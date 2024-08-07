@@ -42,13 +42,10 @@ export class CardComponent implements OnInit, OnChanges {
     @Output() photoClicked = new EventEmitter;
 
     public uploadTrigger = new Subject();
-    public isAdmin$ = this.athleteService.isAdmin$;
     public me = this.athleteService.me;
+    public imageName = '';
 
-    imageObservable: any;
     visible = true;
-
-    activityTypes: string;
 
     constructor(
         private cardService: CardService,
@@ -77,6 +74,10 @@ export class CardComponent implements OnInit, OnChanges {
 
     initCard() {
         this.checkFilter();
+        this.imageName = this.card.title
+            .toLowerCase()
+            .replace(/[.,!?]/g, '')
+            .replace(/\s+/g, '_');
     }
 
     checkFilter() {

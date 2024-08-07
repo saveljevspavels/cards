@@ -10,7 +10,7 @@
     "start:server:prod": "set NODE_ENV=prod&&npx ts-node apps/server/index.ts",
     "server": "export NODE_ENV=prod&&npx ts-node apps/server/index.ts",
     "restart:server": "sudo kill -9 `sudo lsof -t -i:3000` && npm run server",
-    "build": "nx build cards --base-href http://kurkudos.lv/",
+    "build": "nx build cards --base-href https://kurkudos.lv/",
     "test": "nx test",
     "lint": "nx workspace-lint && ng lint",
     "e2e": "ng e2e",

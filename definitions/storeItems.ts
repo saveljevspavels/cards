@@ -15,7 +15,7 @@ export const STORE_ITEMS: StoreItem[] = [
         name: "Energy Drink",
         description: "Energy boost to complete more tasks",
         price: 5,
-        imageUrl: "energy_drink.svg",
+        imageUrl: "energy_drink.png",
         rewards: Currencies.withEnergy(1)
     },
     {
@@ -23,7 +23,7 @@ export const STORE_ITEMS: StoreItem[] = [
         name: "Foam Roller",
         description: "Energy boost to complete even more tasks",
         price: 10,
-        imageUrl: "foam_roller.svg",
+        imageUrl: "foam_roller.png",
         rewards: Currencies.withEnergy(1).withExperience(1)
     },
     {

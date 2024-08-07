@@ -25,9 +25,7 @@
 
     <img style="max-height: 100px; max-width: 100px;" src="{{selectedCardFactory?.image}}">
 
-    <app-image-upload [multiple]="false"
-                      [formControl]="imageControl"
-    ></app-image-upload>
+    <app-input [label]="'Image file name'" [fc]="imageControl"></app-input>
 
     <app-button (buttonClick)="submit()" label="Save"></app-button>
 </div>

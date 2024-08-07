@@ -61,7 +61,7 @@ export class CardCreateComponent implements OnInit, OnChanges {
     }
 
     async submit() {
-        const image = this.imageControl.value?.length ? (await this.fileService.uploadImages(this.imageControl.value || []))[0].urls[CompressionType.REGULAR] : this.selectedCardFactory?.image;
+        const image = this.imageControl.value || this.selectedCardFactory?.image;
         const newFactory: CardFactory = {
             ...this.form.value,
             image: image ? image : null
@@ -114,9 +114,9 @@ export class CardCreateComponent implements OnInit, OnChanges {
             value: ['1', [Validators.required]],
             energyCost: ['1', [Validators.required]],
             energyReward: ['0', [Validators.required]],
-            experienceReward: ['0', [Validators.required]],
+            experienceReward: ['1', [Validators.required]],
             coinsCost: ['0', [Validators.required]],
-            coinsReward: ['1', [Validators.required]],
+            coinsReward: ['0', [Validators.required]],
         })
         this.setValidatorsToCardGroup(cardGroup, this.validatorAmount.value || 1)
         return cardGroup;

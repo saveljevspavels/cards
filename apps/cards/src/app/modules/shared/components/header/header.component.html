@@ -1,3 +1,6 @@
-<div class="header">
-    <app-menu></app-menu>
+<div class="d-flex justify-content-center align-items-center header row background-primary-variant mb-4">
+    <div *ngIf="icon">
+        <app-svg [icon]="" [styleClass]="''"></app-svg>
+    </div>
+    <div class="color-background text-bold text-big">{{title}}</div>
 </div>

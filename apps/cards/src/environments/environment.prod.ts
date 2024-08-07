@@ -2,7 +2,7 @@ import {CONST} from '../../../../definitions/constants';
 import {RULES} from '../../../../definitions/rules';
 import {STRAVA_CONFIG} from '../../../../definitions/stravaConfig';
 
-const baseUrl = 'http://kurkudos.lv';
+const baseUrl = 'https://kurkudos.lv';
 
 export const environment: any = {
     production: true,

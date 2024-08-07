@@ -20,6 +20,17 @@ export class MobileMenuComponent implements OnInit, OnDestroy {
     routes: {[key: string]: MenuRouteItem[]} = {
         public: [
             {
+                label: 'Dashboard',
+                path: '/board/main',
+                highlightedOn: ['/board/submit-activity'],
+                icon: 'gauge',
+            },
+            {
+                label: 'Store',
+                path: '/board/store',
+                icon: 'store',
+            },
+            {
                 label: 'Activity Feed',
                 icon: 'fire',
                 path: '/board/activity-list'
@@ -30,17 +41,6 @@ export class MobileMenuComponent implements OnInit, OnDestroy {
             //     icon: 'board',
             //     path: '/board/board'
             // },
-            {
-                label: 'Store',
-                path: '/board/store',
-                icon: 'store',
-            },
-            {
-                label: 'Dashboard',
-                path: '/board/main',
-                highlightedOn: ['/board/submit-activity'],
-                icon: 'gauge',
-            },
             {
                 label: 'Leaderboard',
                 icon: 'leaderboard',

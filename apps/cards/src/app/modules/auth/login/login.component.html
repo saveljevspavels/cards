@@ -1,6 +1,7 @@
-<app-page-title [title]="'Login'"></app-page-title>
+<app-header [title]="'Welcome to the'"></app-header>
 <div class="login">
-    <p class="mt-5 mb-5 title text-bold">Welcome to the</p>
-    <img src="assets/images/kurkudos_full.png">
-    <app-strava-connect-button [styleClass]="'mt-5'" (click)="login()"></app-strava-connect-button>
+    <img class="login__logo mt-4" src="assets/images/kurkudos_full.png">
+    <div class="mt-5 pt-3">KurKudos uses Strava to record physical activities</div>
+    <div class="m-2">To proceed please download & register at <a class="text-bold" href="https://strava.com">Strava</a></div>
+    <app-strava-connect-button [styleClass]="'mt-3'" (click)="login()"></app-strava-connect-button>
 </div>
