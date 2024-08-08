@@ -1,6 +1,6 @@
-<div class="d-flex justify-content-center align-items-center header row background-primary-variant mb-4">
-    <div *ngIf="icon">
-        <app-svg [icon]="" [styleClass]="''"></app-svg>
+<div class="d-flex justify-content-center align-items-center header row background-primary-variant mb-4 flex-column">
+    <div *ngIf="icon" class="mb-2">
+        <app-svg [icon]="icon" [styleClass]="'color-background'" [height]="34" [width]="34"></app-svg>
     </div>
     <div class="color-background text-bold text-big">{{title}}</div>
 </div>

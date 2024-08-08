@@ -1,6 +1,15 @@
-<app-header [title]="'Waiting Room'"></app-header>
-<div class="login d-flex full-width align-items-center justify-content-center flex-column">
-    <p class="mt-5 title text-bold">This is your first login</p>
-    <img src="assets/images/waiting_room.png">
-    <p class="mt-2 title text-bold">Please wait here for approval</p>
+<div class="waiting-room fullscreen">
+    <app-header [title]="'Waiting Room'" [icon]="'clock'"></app-header>
+    <div class="login d-flex full-width align-items-center justify-content-center flex-column">
+        <p class="mt-3 text-big text-bold">You have successfully logged in!</p>
+        <p class="mt-5 pt-4 title text-bold">As for now:</p>
+        <ul class="mt-3 text-bold text-center">
+            <li>Please check this <a class="color-primary" href="https://firebasestorage.googleapis.com/v0/b/cards-prod-1ef96.appspot.com/o/documents%2FKurkudos_Info.pdf?alt=media&token=df6e2913-18b1-4e80-89e2-9533faaeb5b9" target="_blank">PDF</a> for more information</li>
+        </ul>
+        <ul class="mt-1 mb-4 text-bold text-center">
+            <li>And join the <a class="color-primary" href="https://t.me/+pHfscsVvbuNmNDdk" target="_blank">KurKudos Telegram</a> channel</li>
+        </ul>
+        <img src="assets/images/blanket.png">
+        <p class="mt-4 text-bold">You will be redirected when game is started</p>
+    </div>
 </div>

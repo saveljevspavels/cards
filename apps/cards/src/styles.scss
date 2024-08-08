@@ -156,6 +156,10 @@ hr {
     max-height: unset!important;
 }
 
+.fullscreen {
+    height: calc(100vh - var(--menu-height));
+}
+
 .title {
     font-weight: 400;
     font-size: var(--text-size-title);
