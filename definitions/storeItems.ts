@@ -7,7 +7,7 @@ export const STORE_ITEMS: StoreItem[] = [
         name: "Chest",
         description: "Chest with valuable rewards",
         price: 25,
-        imageUrl: "chest.svg",
+        imageUrl: "chest.png",
         rewards: Currencies.withChests(1)
     },
     {

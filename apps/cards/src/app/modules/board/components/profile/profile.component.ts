@@ -24,6 +24,7 @@ export class ProfileComponent implements OnInit {
     public athleteActivities$: Observable<any>;
 
     public achievements$: Observable<(Achievement | null)[]>;
+    public hasPerks: boolean = true;
 
     @ViewChild('logoutPopup', { static: true }) logoutPopup: ElementRef;
 
@@ -43,6 +44,7 @@ export class ProfileComponent implements OnInit {
             this.athlete = athlete;
             this.athleteActivities$ = this.activityService.approvedActivities.pipe(map((activities => activities.filter((activity: any) => activity.athlete.id.toString() === athlete?.id).reverse())))
             this.achievements$ = this.achievementsService.getAchievements(athlete?.achievements || []);
+            this.hasPerks = Object.values(this.athlete?.perks!).reduce((acc, perk) => acc || perk > 0, false);
         })
     }
 

@@ -8,6 +8,7 @@ import {Router} from "@angular/router";
 export class BoardHeaderComponent {
 
   @Input() backButton = false;
+  @Input() hideCurrencies = false;
 
   constructor(private router: Router) {
   }
