@@ -25,6 +25,7 @@ export enum ChallengeStatType {
     WANDERER_TASKS = "WANDERER_TASKS",
     DISTANCE_TASKS = "DISTANCE_TASKS",
     MULTITASKER_TASKS = "MULTITASKER_TASKS",
+    PHOTOHUNTER_TASKS = "PHOTOHUNTER_TASKS",
     SUNRISE = "SUNRISE",
     SUNSET = "SUNSET",
     MOVING_TIME = "MOVING_TIME",
@@ -42,4 +43,5 @@ export const ChallengeStatTagMap: Map<ChallengeStatType, CardTag> = new Map([
     [ChallengeStatType.WANDERER_TASKS, CardTag.wanderer],
     [ChallengeStatType.DISTANCE_TASKS, CardTag.distance],
     [ChallengeStatType.MULTITASKER_TASKS, CardTag.multitasker],
+    [ChallengeStatType.PHOTOHUNTER_TASKS, CardTag.photohunter],
 ]);

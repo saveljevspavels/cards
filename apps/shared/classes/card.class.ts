@@ -4,7 +4,7 @@ import {Currencies} from "./currencies.class";
 
 export class Card {
     title: string;
-    image: string;
+    image?: string;
     tier: number;
     id: string;
     description: string;
@@ -178,4 +178,5 @@ export enum CardTag {
     walk = 'walk',
     multitasker = 'multitasker',
     wanderer = 'wanderer',
+    photohunter = 'photohunter',
 }

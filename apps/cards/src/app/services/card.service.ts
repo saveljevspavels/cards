@@ -10,13 +10,14 @@ import {FormControl} from "@angular/forms";
 import {ValidationStatus} from "../../../../shared/services/validation.service";
 import {Activity} from "../../../../shared/interfaces/activity.interface";
 import {ValidationService} from "./validation.service";
+import {CARDS} from "../../../../../definitions/cards";
 
 @Injectable({
   providedIn: 'root'
 })
 export class CardService {
 
-    public cards = new BehaviorSubject<Card[]>([]);
+    public cards = new BehaviorSubject<Card[]>(CARDS);
     public cardScheme = new BehaviorSubject<CardScheme>({boards: []});
     private cardCollection: AngularFirestoreCollection;
     private cardSchemeDocument: AngularFirestoreDocument<CardScheme>;
@@ -28,9 +29,9 @@ export class CardService {
         ) {
         this.cardCollection = this.db.collection(ConstService.CONST.COLLECTIONS.CARDS);
         this.cardSchemeDocument = this.db.collection(ConstService.CONST.COLLECTIONS.SCHEME).doc(ConstService.CONST.SCHEME_ID);
-        this.cardCollection.valueChanges().subscribe((cards: any[]) => {
-            this.cards.next(cards)
-        });
+        // this.cardCollection.valueChanges().subscribe((cards: any[]) => {
+        //     this.cards.next(cards)
+        // });
         this.cardSchemeDocument.valueChanges().subscribe((cardScheme: any) => {
             this.cardScheme.next(cardScheme)
         });

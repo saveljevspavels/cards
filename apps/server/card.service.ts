@@ -15,6 +15,7 @@ import Athlete from "../shared/classes/athlete.class";
 import {Currencies} from "../shared/classes/currencies.class";
 import {AbilityKey} from "../shared/interfaces/ability.interface";
 import MathHelper from "./helpers/math.helper";
+import {CARDS} from "../../definitions/cards";
 
 export default class CardService {
     constructor(
@@ -259,7 +260,8 @@ export default class CardService {
     }
 
     async getCard(cardId: string): Promise<Card> {
-        const card = Card.fromJSONObject(await this.fireStoreService.cardCollection.get(cardId.toString()));
+        // const card = Card.fromJSONObject(await this.fireStoreService.cardCollection.get(cardId.toString()));
+        const card = CARDS.find(card => card.id === cardId);
         if(!card) {
             this.logger.error(`Card ${cardId} does not exist`);
             throw 'Card does not exist';
