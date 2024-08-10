@@ -1214,7 +1214,7 @@ export const CARDS: Card[] = [
         "Cardio",
         "",
         0,
-        "wild",
+        "cardio",
         "Do any kind of cardio workout (besides running, walking or riding a bike)",
         Currencies.withPoints(1).withExperience(2),
         1,
