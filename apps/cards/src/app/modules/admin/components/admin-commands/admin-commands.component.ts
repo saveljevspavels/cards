@@ -28,10 +28,6 @@ export class AdminCommandsComponent implements OnInit {
         this.adminService.requestActivities(this.selectedAthletes.value || [])
     }
 
-    calculateBaseWorkout() {
-        this.adminService.calculateBaseWorkout(this.selectedAthletes.value || [])
-    }
-
     startGame() {
         this.adminService.startGame(DateService.getToday()).subscribe(() => {
             this.messageService.add({severity:'success', summary:'Fasten your seatbelts!', detail: 'The game has started'})

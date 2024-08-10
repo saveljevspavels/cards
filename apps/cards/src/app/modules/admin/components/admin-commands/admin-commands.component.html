@@ -12,7 +12,6 @@
 
   <div class="admin-commands__buttons">
     <app-button [disabled]="!selectedAthletes.value?.length" (buttonClick)="requestActivities()" label="Request Activities"></app-button>
-    <app-button styleClass="mt-3" [disabled]="!selectedAthletes.value?.length" (buttonClick)="calculateBaseWorkout()" label="Recalculate Base Workout"></app-button>
     <app-button styleClass="mt-5" type="action" [disabled]="selectedAthletes.value?.length !== (allAthletes | async).length" (buttonClick)="startGame()" label="Start Game"></app-button>
   </div>
 </div>

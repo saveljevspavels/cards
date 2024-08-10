@@ -4,7 +4,6 @@ import bodyParser from 'body-parser';
 import {FirestoreService} from "./firestore.service";
 import cors from 'cors'
 import WebhookService from "./webhook.service";
-import ClientService from "./client.service";
 import AdminService from "./admin.service";
 import ActivityService from "./activity.service";
 import CardService from "./card.service";
@@ -34,7 +33,6 @@ const webhookService = new WebhookService(app, fireStoreService);
 const adminService = new AdminService(app, fireStoreService, logger);
 const scoreService = new ScoreService(app, fireStoreService, logger);
 const athleteService = new AthleteService(app, fireStoreService, logger);
-// const clientService = new ClientService(app, fireStoreService, logger, athleteService);
 const challengeService = new ChallengeService(app, fireStoreService, logger, athleteService, scoreService);
 const storeService = new StoreService(app, fireStoreService, logger, athleteService);
 const activityService = new ActivityService(app, fireStoreService, logger, athleteService, challengeService);

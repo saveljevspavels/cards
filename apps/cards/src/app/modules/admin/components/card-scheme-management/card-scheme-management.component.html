@@ -15,8 +15,9 @@
     <app-card-technical [card]="card"></app-card-technical>
 </ng-template>
 
-<div *ngIf="form" class="d-flex justify-content-between">
-    <div *ngFor="let board of form.controls">
+<div *ngIf="form" class="d-flex flex-wrap justify-content-between">
+    <div class="col-6 mt-4" *ngFor="let board of form.controls">
+        <app-svg [icon]="board.get('icon').value" [styleClass]="'color-' + board.get('color').value"></app-svg>
         <app-input [label]="'Key'" [fc]="board.get('key')"></app-input>
         <app-input [label]="'Title'" [fc]="board.get('title')"></app-input>
         <app-input [label]="'Color'" [fc]="board.get('color')"></app-input>

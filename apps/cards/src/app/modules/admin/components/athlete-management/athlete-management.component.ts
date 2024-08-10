@@ -5,6 +5,7 @@ import {FormBuilder, FormControl, Validators} from "@angular/forms";
 import {PERMISSIONS} from "../../../../constants/permissions";
 import {ConstService} from "../../../../services/const.service";
 import {UtilService} from "../../../../services/util.service";
+import {AdminService} from "../../admin.service";
 
 @Component({
     selector: 'app-athlete-management',
@@ -30,14 +31,15 @@ export class AthleteManagementComponent implements OnInit {
 
     constructor(
         private athleteService: AthleteService,
-        private formBuilder: FormBuilder
+        private formBuilder: FormBuilder,
+        private adminService: AdminService
     ) { }
 
     ngOnInit(): void {
     }
 
     updateBaseWorkout() {
-        if(this.selectedAthletes.value?.length === 0 || this.selectedType.value !== null) return;
+        if(this.selectedAthletes.value?.length === 0 || this.selectedType.value?.length === 0) return;
 
         const baseWorkoutPatch: any = {};
         // @ts-ignore
@@ -56,5 +58,9 @@ export class AthleteManagementComponent implements OnInit {
     setPermissions() {
         if(this.selectedAthletes.value?.length === 0 || this.selectedPermissions.value?.length === 0) return;
         this.athleteService.setPermissions(this.selectedAthletes.value || [], this.selectedPermissions.value || []).subscribe()
+    }
+
+    calculateBaseWorkout() {
+        this.adminService.calculateBaseWorkout(this.selectedAthletes.value || [])
     }
 }

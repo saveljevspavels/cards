@@ -1,4 +1,5 @@
 <div class="athlete-management">
+    <div class="mt-2">Total athletes: {{(allAthletes | async)?.length}}</div>
     <app-selection-wrapper
         [formControl]="selectedAthletes"
         [template]="athleteTemplate"
@@ -9,7 +10,9 @@
                     [athlete]="dataItem"
                     [small]="true"
                 ></app-athlete>
-                Current Permissions: {{dataItem.permissions | json}}
+                <div>Permissions: {{dataItem.permissions | json}}</div>
+                <div>Run pace: {{dataItem?.baseWorkout?.run?.average_speed | pace}}</div>
+                <div>Ride pace: {{dataItem?.baseWorkout?.ride?.average_speed | pace}}</div>
             </div>
         </ng-template>
     </app-selection-wrapper>
@@ -57,4 +60,5 @@
     </app-selection-wrapper>
 
     <app-button [disabled]="!selectedAthletes.value?.length || !selectedPermissions.value?.length" (buttonClick)="setPermissions()" [label]="'Set Permissions'"></app-button>
+    <app-button styleClass="mt-3" [disabled]="!selectedAthletes.value?.length" (buttonClick)="calculateBaseWorkout()" label="Recalculate Base Workout"></app-button>
 </div>

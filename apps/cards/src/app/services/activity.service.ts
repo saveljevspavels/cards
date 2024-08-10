@@ -67,7 +67,7 @@ export class ActivityService {
     }
 
     calculateBaseWorkout(body: any) {
-        return this.http.post(`${environment.baseBE}/calculate-base-workout`, {
+        return this.http.post(`${environment.baseBE}/athlete/calculate-base-workout`, {
             ...body
         })
     }
