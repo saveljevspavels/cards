@@ -57,7 +57,7 @@ export class CardSchemeManagementComponent implements OnInit {
                 icon: [cardScheme.boards[i] ? cardScheme.boards[i].icon : ''],
                 levels: this.formBuilder.array([])
             })
-            for(let j = 0; j < 5; j++) {
+            for(let j = 0; j < 6; j++) {
                 (boardControl.get('levels') as FormArray).push(
                     this.formBuilder.group({
                         cards: [(cardScheme.boards[i] && cardScheme.boards[i].levels && cardScheme.boards[i].levels[j]) ? cardScheme.boards[i].levels[j].cards : []]

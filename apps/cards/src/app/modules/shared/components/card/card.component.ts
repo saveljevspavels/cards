@@ -76,7 +76,7 @@ export class CardComponent implements OnInit, OnChanges {
         this.checkFilter();
         this.imageName = this.card.title
             .toLowerCase()
-            .replace(/[.,!?]/g, '')
+            .replace(/[.,!?\-'()]/g, '')
             .replace(/\s+/g, '_');
     }
 

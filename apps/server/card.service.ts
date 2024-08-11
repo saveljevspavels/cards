@@ -66,10 +66,6 @@ export default class CardService {
                     res.status(400).send('Card is not completed');
                     return;
                 }
-                if(!await this.fireStoreService.cardCollection.exists(cardId)) {
-                    res.status(400).send('Card does not exist');
-                    return
-                }
 
                 await this.claimCardRewards(athleteId, cardId);
             } catch (err) {

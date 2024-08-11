@@ -26,7 +26,7 @@ export class CardTechnicalComponent implements OnInit {
     ngOnInit(): void {
         this.imageName = this.card.title
             .toLowerCase()
-            .replace(/[.,!?]/g, '')
+            .replace(/[.,!?\-'()]/g, '')
             .replace(/\s+/g, '_');
     }
 }
