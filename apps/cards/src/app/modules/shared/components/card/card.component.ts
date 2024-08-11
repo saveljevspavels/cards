@@ -43,7 +43,6 @@ export class CardComponent implements OnInit, OnChanges {
 
     public uploadTrigger = new Subject();
     public me = this.athleteService.me;
-    public imageName = '';
 
     visible = true;
 
@@ -74,10 +73,6 @@ export class CardComponent implements OnInit, OnChanges {
 
     initCard() {
         this.checkFilter();
-        this.imageName = this.card.title
-            .toLowerCase()
-            .replace(/[.,!?\-'()]/g, '')
-            .replace(/\s+/g, '_');
     }
 
     checkFilter() {

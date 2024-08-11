@@ -118,13 +118,6 @@ export default class Athlete implements JsonObjectInterface {
             },
             [],
             {
-                experience_per_task_bonus: 0,
-                see_future_challenge: 0,
-                task_queue_size_bonus: 0,
-                base_walk_experience_bonus: 0,
-                base_run_experience_bonus: 0,
-                base_ride_experience_bonus: 0,
-                base_other_experience_bonus: 0,
             }
         )
     }

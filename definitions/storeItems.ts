@@ -31,7 +31,7 @@ export const STORE_ITEMS: StoreItem[] = [
         name: "Defibrillator",
         description: "When you refuse to stop",
         price: 15,
-        imageUrl: "",
+        imageUrl: "defibrillator.png",
         rewards: Currencies.withEnergy(1).withExperience(3)
     },
     {

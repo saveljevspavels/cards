@@ -89,6 +89,13 @@ export class Card {
         };
     }
 
+    getImageSource(): string {
+        return `../../../assets/cards/${this.title
+            .toLowerCase()
+            .replace(/[.,!?\-'()]/g, '')
+            .replace(/\s+/g, '_')}.png`;
+    }
+
     static empty(): Card {
         return new Card(
             '',

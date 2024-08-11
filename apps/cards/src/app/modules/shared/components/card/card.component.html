@@ -8,7 +8,7 @@
     </div>
     <div class="d-flex align-items-center">
         <div class="card__image card--tier-{{(card.rewards.points | tier)}}"
-             [style.background-image]="'url(../../../assets/cards/' + imageName + '.png)'"
+             [style.background-image]="'url(' + card.getImageSource() + ')'"
         >
         </div>
         <div class="ml-2 flex-grow-1">

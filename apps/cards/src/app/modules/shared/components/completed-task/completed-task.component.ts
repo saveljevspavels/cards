@@ -13,7 +13,6 @@ export class CompletedTaskComponent implements OnInit {
   @Input() cardId: string;
   @Input() perks: {[key: string]: number} = {};
   public card: Card;
-  public imageName = '';
   constructor(
       private cardService: CardService
   ) { }
@@ -22,10 +21,6 @@ export class CompletedTaskComponent implements OnInit {
     if(this.cardId) {
       this.cardService.cards.pipe(filter(cards => !!cards.length)).subscribe(async _ =>{
         this.card = this.cardService.getCard(this.cardId)
-        this.imageName = this.card.title
-            .toLowerCase()
-            .replace(/[.,!?\-'()]/g, '')
-            .replace(/\s+/g, '_');
       })
     }
   }

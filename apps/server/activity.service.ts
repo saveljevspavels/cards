@@ -14,6 +14,7 @@ import {Activity, ActivityStatus} from "../shared/interfaces/activity.interface"
 import {forkJoin} from "rxjs";
 import axios from "axios";
 import MathHelper from "./helpers/math.helper";
+import {CARDS} from "../../definitions/cards";
 
 export default class ActivityService {
     constructor(
@@ -254,7 +255,7 @@ export default class ActivityService {
             throw RESPONSES.ERROR.MAX_CARDS_SUBMIT
         }
 
-        const cards: Card[] = cardIds.length ? await this.fireStoreService.cardCollection.whereQuery([{fieldPath: 'id', opStr: 'in', value: cardIds}]) : [];
+        const cards: Card[] = cardIds.length ? CARDS.filter((card => cardIds.indexOf(card.id) !== -1)) : [];
 
         if(cardIds.length > RULES.MAX_CARDS_SUBMIT) {
             this.logger.info(`Athlete ${athlete.name} ${athlete.id} submitted activity with too many cards ${cardIds}`)
