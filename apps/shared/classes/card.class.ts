@@ -186,4 +186,5 @@ export enum CardTag {
     multitasker = 'multitasker',
     wanderer = 'wanderer',
     photohunter = 'photohunter',
+    hardworker = 'hardworker',
 }

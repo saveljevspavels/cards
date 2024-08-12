@@ -1,4 +1,8 @@
 <div class="d-flex gap-1 justify-content-center" [ngClass]="{'flex-column': vertical}">
+    <app-reward-points *ngIf="rewards.points"
+                       [value]="rewards.points"
+    >
+    </app-reward-points>
     <app-reward-money *ngIf="rewards && rewards.coins !== 0"
                       [value]="rewards.coins"
     >
@@ -7,10 +11,6 @@
                            [value]="experienceReward"
     >
     </app-reward-experience>
-    <app-reward-points *ngIf="rewards.points"
-                       [value]="rewards.points"
-    >
-    </app-reward-points>
     <app-reward-energy *ngIf="rewards.energy"
                        [value]="rewards.energy">
     </app-reward-energy>

@@ -1,4 +1,4 @@
-<div class="level d-flex" [ngClass]="{'level--completed': completed, 'level--claimed': claimed, 'level--active': levelIndex === currentLevel}">
+<div class="level d-flex" [ngClass]="{'level--completed': completed, 'level--claimed': claimed, 'level--active': levelIndex === currentLevel, 'level--last': last, 'level--first': first}">
     <div class="level__status mr-2">
         <div class="level__status-line"></div>
         <div class="level__status-circle">

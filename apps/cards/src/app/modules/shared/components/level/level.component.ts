@@ -28,6 +28,8 @@ export class LevelComponent implements OnInit {
     @Input() public progress: number;
     @Input() public levelIndex: number;
     @Input() public currentLevel: number;
+    @Input() public last: boolean = false;
+    @Input() public first: boolean = false;
 
     @Output() claim = new EventEmitter;
 

@@ -30,12 +30,14 @@
     --color-danger: var(--color-red);
     --color-danger-dark: #CE3F23;
     --color-strava: #FC4C02;
+    --color-purple: #894CD8;
 
     --color-primary: var(--color-blue);
     --color-primary-variant: var(--color-blue-dark);
     --color-secondary-1: var(--color-yellow);
     --color-secondary-2: var(--color-red);
     --color-secondary-3: var(--color-green);
+    --color-secondary-4: var(--color-purple);
     --color-border: var(--color-primary);
 
     --color-run: var(--color-primary);
@@ -93,6 +95,7 @@ body {
 .color-secondary-1 {@include color('secondary-1')};
 .color-secondary-2 {@include color('secondary-2')};
 .color-secondary-3 {@include color('secondary-3')};
+.color-secondary-4 {@include color('secondary-4')};
 .color-danger {@include color('danger')};
 .color-danger-dark {@include color('danger-dark')};
 .color-run {@include color('run')};
@@ -107,6 +110,7 @@ body {
 .background-secondary-1 {@include background('secondary-1')};
 .background-secondary-2 {@include background('secondary-2')};
 .background-secondary-3 {@include background('secondary-3')};
+.background-secondary-4 {@include background('secondary-4')};
 .background-run {@include background('run')};
 .background-walk {@include background('walk')};
 .background-ride {@include background('ride')};
@@ -117,6 +121,7 @@ body {
 .border-secondary-1 {@include border('secondary-1')};
 .border-secondary-2 {@include border('secondary-2')};
 .border-secondary-3 {@include border('secondary-3')};
+.border-secondary-4 {@include border('secondary-4')};
 
 .gradient-primary { @include gradient(#4041c9, #1f2063); }
 .gradient-run { @include gradient(#4041c9, #1f2063); }

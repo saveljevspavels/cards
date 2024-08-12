@@ -96,4 +96,20 @@
             margin: auto;
         }
     }
+    &--last {
+        .level {
+            &__status-line {
+                background-color: transparent;
+                background-image: linear-gradient(to bottom, var(--color-primary) 50%, rgba(0,0,0,0) 100%);
+            }
+        }
+    }
+    &--first {
+        .level {
+            &__status-line {
+                background-color: transparent;
+                background-image: linear-gradient(to top, var(--color-primary) 50%, rgba(0,0,0,0) 100%);
+            }
+        }
+    }
 }
