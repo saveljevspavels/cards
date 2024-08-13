@@ -6,6 +6,8 @@ import AthleteService from "./athlete.service";
 import {STORE_ITEMS} from "../../definitions/storeItems";
 import {Purchases} from "../shared/interfaces/purchase.interface";
 import {StoreHelperService} from "../shared/services/store.helper.service";
+import Athlete from "../shared/classes/athlete.class";
+import {StoreItem} from "../shared/interfaces/store-item.interface";
 export class StoreService {
     constructor(
         private app: Express,
@@ -41,7 +43,7 @@ export class StoreService {
             throw new Error(`Item ${item.name} out of stock`);
         }
 
-        athlete.spendCoins(item.price);
+        athlete.spendCoins(this.getFinalPrice(item, athlete));
         athlete.addCurrencies(item.rewards);
 
         await Promise.all([
@@ -49,6 +51,13 @@ export class StoreService {
             this.addItemToPurchases(itemId, purchases, athleteId)
         ]);
         this.logger.info(`Athlete ${athleteId} bought item ${item.name}`);
+    }
+
+    getFinalPrice(item: StoreItem, athlete: Athlete) {
+        if(!item.discountBy || !item.discount) {
+            return item.price;
+        }
+        return item.price - (athlete.getPerkLevel(item.discountBy) * item.discount);
     }
 
     async getCurrentPurchases(athleteId: string): Promise<Purchases> {

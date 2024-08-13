@@ -122,38 +122,28 @@ export const RULES = {
         MAX_QUEUED: 99,
         NEW_DAILY: 2
     },
+    STORE: {
+        RESTOCK_HOURS: [0]
+    },
     FEATURED_TASK_HOURS: {
         FIRST_DAY: [4, 12, 20],
         REGULAR: [4, 12, 20]
     },
     ENABLED_ABILITIES: [
-        // AbilityKey.BUY_ENERGY_FULL,
-        // AbilityKey.BUY_ENERGY,
-        // AbilityKey.BUY_POINT,
-        // AbilityKey.BUY_3_POINTS,
-        // AbilityKey.REDUCE_BASE_WORKOUT,
-        // AbilityKey.SELL_ENERGY_FULL,
-        // AbilityKey.ENERGY_TO_COINS,
-
-        AbilityKey.REDUCE_WALK_WORKOUT,
-        AbilityKey.REDUCE_RUN_WORKOUT,
-        AbilityKey.REDUCE_RIDE_WORKOUT,
-        AbilityKey.REDUCE_OTHER_WORKOUT,
+        AbilityKey.REDUCE_BASE_WORKOUT,
         AbilityKey.EXPERIENCE_PER_TASK_BONUS,
-        // AbilityKey.SEE_FUTURE_CHALLENGE,
         AbilityKey.FLAT_EXPERIENCE_BONUS,
-        // AbilityKey.TASK_QUEUE_SIZE_BONUS,
-        AbilityKey.BASE_WALK_EXPERIENCE_BONUS,
-        AbilityKey.BASE_RUN_EXPERIENCE_BONUS,
-        AbilityKey.BASE_RIDE_EXPERIENCE_BONUS,
-        AbilityKey.BASE_OTHER_EXPERIENCE_BONUS,
+        AbilityKey.BASE_TASK_EXPERIENCE_BONUS,
         AbilityKey.CARD_UNLOCK_DISCOUNT,
         AbilityKey.STORE_ENERGY_DISCOUNT,
         AbilityKey.STORE_CHEST_DISCOUNT,
+        AbilityKey.BASIC_INCOME,
     ],
-    ABILITY_BASE_WORKOUT_REDUCTION: 0.9,
+    ABILITY_BASE_WORKOUT_REDUCTION: 0.90,
     ABILITY_EXTRA_EXPERIENCE: 1,
     BASE_CARD_EXPERIENCE_REWARD: 1,
     ABILITY_FLAT_EXPERIENCE: 25,
+    BASIC_INCOME_AMOUNT: 1,
+    UNLOCK_DISCOUNT_AMOUNT: 1,
     STARTING_CARD: ''
 }

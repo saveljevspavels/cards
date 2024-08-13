@@ -14,6 +14,7 @@ export enum AbilityKey {
     STORE_ENERGY_DISCOUNT = 'store_energy_discount',
     STORE_CHEST_DISCOUNT = 'store_chest_discount',
     CARD_UNLOCK_DISCOUNT = 'card_unlock_discount',
+    BASIC_INCOME = 'basic_income',
 
     REDUCE_WALK_WORKOUT = 'reduce_walk_workout',
     REDUCE_RUN_WORKOUT = 'reduce_run_workout',
@@ -23,6 +24,7 @@ export enum AbilityKey {
     SEE_FUTURE_CHALLENGE = 'see_future_challenge',
     FLAT_EXPERIENCE_BONUS = 'flat_experience_bonus',
     TASK_QUEUE_SIZE_BONUS = 'task_queue_size_bonus',
+    BASE_TASK_EXPERIENCE_BONUS = 'base_task_experience_bonus',
     BASE_WALK_EXPERIENCE_BONUS = 'base_walk_experience_bonus',
     BASE_RUN_EXPERIENCE_BONUS = 'base_run_experience_bonus',
     BASE_RIDE_EXPERIENCE_BONUS = 'base_ride_experience_bonus',

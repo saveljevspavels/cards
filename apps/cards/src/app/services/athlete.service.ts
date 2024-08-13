@@ -31,6 +31,7 @@ export class AthleteService {
             this.myId,
             this.athleteCollection.valueChanges()
         ]).subscribe(([myId, athletes]: any) => {
+            athletes = athletes.map((athlete: Athlete) => Athlete.fromJSONObject(athlete));
             this.athletes.next(athletes as Athlete[]);
             const currentAthlete = athletes.find((athlete: Athlete) => athlete.id === myId) || null;
             if(JSON.stringify(this.me.value) !== JSON.stringify(currentAthlete)) {

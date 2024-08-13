@@ -1,18 +1,19 @@
-import {Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
-import {FormArray, FormBuilder, FormControl, FormGroup} from "@angular/forms";
+import {Component, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
+import {FormBuilder, FormControl, FormGroup} from "@angular/forms";
 import {ConstService} from "../../../../services/const.service";
 import {BehaviorSubject, combineLatest, Subject} from "rxjs";
 import {Card} from "../../../../../../../shared/classes/card.class";
 import {CardScheme, CardSchemeBoard} from "../../../../../../../shared/interfaces/card-scheme.interface";
 import {CardService, ValidatedCard} from "../../../../services/card.service";
 import {AthleteService} from "../../../../services/athlete.service";
-import {distinctUntilChanged, filter, first, map, startWith, tap} from "rxjs/operators";
+import {distinctUntilChanged, filter, first, startWith, tap} from "rxjs/operators";
 import {PopupService} from "../../../../services/popup.service";
 import {LocalStorageService} from "../../../../services/local-storage.service";
-import {Activity} from "../../../../../../../shared/interfaces/activity.interface";
 import {BoardService} from "../../../../services/board.service";
 import {ValidationService} from "../../../../services/validation.service";
 import {ValidationStatus} from "../../../../../../../shared/services/validation.service";
+import {RULES} from "../../../../../../../../definitions/rules";
+import {AbilityKey} from "../../../../../../../shared/interfaces/ability.interface";
 
 @Component({
   selector: 'app-card-scheme',
@@ -31,7 +32,6 @@ export class CardSchemeComponent implements OnInit {
     @Input() title = '';
     @Input() showLocked = true;
     @Input() selectedCards: FormControl<ValidatedCard[] | null> = new FormControl<ValidatedCard[]>([]);
-    // @Input() commentControl: FormControl<string | null> = new FormControl<string>('');
     @Input() uploadedImages: FormGroup = this.formBuilder.group({});
     @Input() cardComments: FormGroup = this.formBuilder.group({});
 
@@ -60,10 +60,6 @@ export class CardSchemeComponent implements OnInit {
                 tap((scheme: CardScheme) => {
                     this.boards = scheme.boards;
                     if(!this.activeBoard.value && scheme.boards.length) {
-                        console.log('scheme', scheme);
-                        console.log('this.activeBoard.value', this.activeBoard.value)
-                        console.log('LocalStorageService.getValue(\'activeBoard\')', LocalStorageService.getValue('activeBoard'))
-                        console.log('this.getBoardByKey(LocalStorageService.getValue(\'activeBoard\'))', this.getBoardByKey(LocalStorageService.getValue('activeBoard')))
                         this.activeBoard.setValue(this.getBoardByKey(LocalStorageService.getValue('activeBoard')) || scheme.boards[0]);
                     }
                 })
@@ -139,6 +135,15 @@ export class CardSchemeComponent implements OnInit {
             });
         })
         this.popupService.showPopup(this.unlockPopup);
+    }
+
+    getUnlockPrice(levelIndex: number): number {
+        return Math.max(
+            (RULES.COINS.BASE_UNLOCK_PRICE +
+            (RULES.COINS.PER_LEVEL_PRICE * levelIndex)) -
+            (this.athlete.value!.getPerkLevel(AbilityKey.CARD_UNLOCK_DISCOUNT) || 0) * RULES.UNLOCK_DISCOUNT_AMOUNT,
+            0
+        );
     }
 
     confirmUnlock() {

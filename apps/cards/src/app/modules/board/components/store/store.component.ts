@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {AVAILABLE_ITEMS, STORE_ITEMS} from "../../../../../../../../definitions/storeItems";
 import {StoreService} from "../../../../services/store.service";
 import {StoreHelperService} from "../../../../../../../shared/services/store.helper.service";
+import {RULES} from "../../../../../../../../definitions/rules";
 
 @Component({
   selector: 'app-store',
@@ -10,6 +11,7 @@ import {StoreHelperService} from "../../../../../../../shared/services/store.hel
 })
 export class StoreComponent implements OnInit {
 
+  public restockHours = RULES.STORE.RESTOCK_HOURS;
   public storeItems = STORE_ITEMS.filter((item) => AVAILABLE_ITEMS.indexOf(item.id) !== -1);
   public availabilityMap: Map<string, number> = new Map<string, number>();
 

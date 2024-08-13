@@ -115,7 +115,8 @@ const COMPS = [
     RewardPerkComponent,
     RewardRandomPerkComponent,
     RewardsButtonComponent,
-    RewardSpecialTaskComponent
+    RewardSpecialTaskComponent,
+    CountDownComponent
 ]
 
 const MODULES = [
@@ -142,7 +143,6 @@ const MODULES = [
         CircularProgressBarComponent,
         ImageComponent,
         GalleryComponent,
-        CountDownComponent,
         RewardEnergyComponent,
         CardPlaceholderComponent,
         CommentComponent,
@@ -176,6 +176,7 @@ const MODULES = [
         ImageComponent,
         StravaPoweredComponent,
         NumberTransitionComponent,
+        StravaLinkComponent,
     ],
 })
 export class SharedModule { }

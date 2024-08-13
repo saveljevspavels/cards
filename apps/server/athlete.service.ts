@@ -7,6 +7,7 @@ import Athlete, {AthletePatch} from "../shared/classes/athlete.class";
 import {Logger} from "winston";
 import {of} from "rxjs";
 import {Currencies} from "../shared/classes/currencies.class";
+import {AbilityKey} from "../shared/interfaces/ability.interface";
 
 export default class AthleteService {
     constructor(
@@ -62,12 +63,13 @@ export default class AthleteService {
 
     calculateBaseReward(athlete: Athlete, type: string): Currencies {
         const base = RULES.BASE_CARD_EXPERIENCE_REWARD;
-        const bonus = athlete.perks[`base_${type}_experience_bonus`] || 0;
+        const bonus = athlete.perks[AbilityKey.BASE_TASK_EXPERIENCE_BONUS] || 0;
+        const typeBonus = athlete.perks[`base_${type}_experience_bonus`] || 0;
         return Currencies.withExperience(
             // @ts-ignore
             Math.floor(parseInt(athlete.baseCardProgress[type], 10) / RULES.PROGRESS_PRECISION)
             *
-            (base + bonus)
+            (base + bonus + typeBonus)
         );
     }
 
@@ -156,6 +158,15 @@ export default class AthleteService {
             throw 'Not enough coins';
         }
         this.logger.info(`Athlete ${athlete.name} spent ${amount} coins, now ${athlete.currencies.coins - amount}`)
+    }
+
+    triggerPerks(athlete: Athlete) {
+        const basicIncome = athlete.getPerkLevel(AbilityKey.BASIC_INCOME);
+        if(basicIncome) {
+            const amount = basicIncome * RULES.BASIC_INCOME_AMOUNT;
+            athlete.addCurrencies(Currencies.withCoins(amount));
+            this.logger.info(`Athlete ${athlete.name} gained ${amount} coins from ${AbilityKey.BASIC_INCOME}, now ${athlete.currencies.coins}`)
+        }
     }
 
 

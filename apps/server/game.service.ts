@@ -98,6 +98,7 @@ export default class GameService {
                 } catch (e) {
                     this.logger.error(`Can't restore energy for ${athlete.name}: ${e}`);
                 }
+                this.athleteService.triggerPerks(athlete);
                 await this.athleteService.updateAthlete(athlete);
                 await this.claimAllRewards(athlete.id);
                 await this.challengeService.resetDailyChallenges(athlete.id);

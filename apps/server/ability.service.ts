@@ -153,31 +153,13 @@ export default class AbilityService {
                     }
                 );
                 break;
-            case AbilityKey.BASE_WALK_EXPERIENCE_BONUS:
-                athlete.addPerk(AbilityKey.BASE_WALK_EXPERIENCE_BONUS);
-                break;
-            case AbilityKey.BASE_RUN_EXPERIENCE_BONUS:
-                athlete.addPerk(AbilityKey.BASE_RUN_EXPERIENCE_BONUS);
-                break;
-            case AbilityKey.BASE_RIDE_EXPERIENCE_BONUS:
-                athlete.addPerk(AbilityKey.BASE_RIDE_EXPERIENCE_BONUS);
-                break;
-            case AbilityKey.BASE_OTHER_EXPERIENCE_BONUS:
-                athlete.addPerk(AbilityKey.BASE_OTHER_EXPERIENCE_BONUS);
-                break;
-            case AbilityKey.EXPERIENCE_PER_TASK_BONUS:
-                athlete.addPerk(AbilityKey.EXPERIENCE_PER_TASK_BONUS);
-                break;
-            case AbilityKey.SEE_FUTURE_CHALLENGE:
-                athlete.addPerk(AbilityKey.SEE_FUTURE_CHALLENGE);
-                break;
-            case AbilityKey.TASK_QUEUE_SIZE_BONUS:
-                athlete.addPerk(AbilityKey.TASK_QUEUE_SIZE_BONUS);
-                break;
             case AbilityKey.FLAT_EXPERIENCE_BONUS:
                 this.athleteService.addExperience(athlete, RULES.ABILITY_FLAT_EXPERIENCE);
                 break;
             case AbilityKey.RESET_CARD:
+                break;
+            default:
+                athlete.addPerk(ability.key);
                 break;
         }
 

@@ -225,6 +225,10 @@ export default class Athlete implements JsonObjectInterface {
             perks: this.perks,
         }
     }
+
+    getPerkLevel(perk: AbilityKey): number {
+        return this.perks[perk] || 0;
+    }
 }
 
 

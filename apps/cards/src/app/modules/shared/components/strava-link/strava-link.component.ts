@@ -8,6 +8,8 @@ import {Component, Input, OnInit} from '@angular/core';
 export class StravaLinkComponent implements OnInit {
 
   @Input() activityId: string;
+  @Input() athleteId: string;
+  @Input() padded: boolean = false;
 
   constructor() { }
 

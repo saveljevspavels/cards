@@ -6,6 +6,7 @@ import {RULES} from "../../../../../../../../definitions/rules";
 import {Validator} from "../../../../../../../shared/classes/card.class";
 import {CONST} from "../../../../../../../../definitions/constants";
 import {Activity} from "../../../../../../../shared/interfaces/activity.interface";
+import {AbilityKey} from "../../../../../../../shared/interfaces/ability.interface";
 
 @Component({
   selector: 'app-base-card',
@@ -13,34 +14,10 @@ import {Activity} from "../../../../../../../shared/interfaces/activity.interfac
   styleUrls: ['./base-card.component.scss']
 })
 export class BaseCardComponent {
+  protected readonly AbilityKey = AbilityKey;
   public reward: number = RULES.BASE_CARD_EXPERIENCE_REWARD;
 
   @Input() remainderActivity: Activity;
-
-  public DISTANCE_VALIDATORS: Validator[] = [
-    {
-      property: CONST.ACTIVITY_PROPERTIES.DISTANCE,
-      comparator: CONST.COMPARATORS.GREATER,
-      formula: CONST.ACTIVITY_PROPERTIES.DISTANCE
-    },
-    {
-      property: CONST.ACTIVITY_PROPERTIES.TYPE,
-      comparator: CONST.COMPARATORS.IN,
-      formula: 'run,walk,ride'
-    }
-  ];
-  public TIME_VALIDATORS: Validator[] = [
-    {
-      property: CONST.ACTIVITY_PROPERTIES.ELAPSED_TIME,
-      comparator: CONST.COMPARATORS.GREATER,
-      formula: CONST.ACTIVITY_PROPERTIES.ELAPSED_TIME
-    },
-    {
-      property: CONST.ACTIVITY_PROPERTIES.TYPE,
-      comparator: CONST.COMPARATORS.IN,
-      formula: 'other'
-    }
-  ];
 
   public athlete$: Observable<Athlete | null> = this.athleteService.me;
 

@@ -1,5 +1,10 @@
 <app-board-header></app-board-header>
-<h2 class="mb-2 mt-4">Store</h2>
+<div class="d-flex justify-content-between align-items-end flex-wrap mb-2 mt-4">
+    <h2 class="m-0">Store</h2>
+    <div class="mb-0-5">
+        <app-count-down [label]="'Restock in:'" [targetHours]="restockHours"></app-count-down>
+    </div>
+</div>
 <div class="row">
     <div class="col-6 mb-2" [ngClass]="{'pr-1': i % 2 === 0, 'pl-1': i % 2 !== 0}" *ngFor="let item of storeItems; let i = index">
         <app-store-item [item]="item"

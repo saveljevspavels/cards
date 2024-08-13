@@ -14,7 +14,6 @@
   flex-grow: 2;
   transition: flex-grow 0.15s ease-in-out;
   &__centering {
-    padding: 0;
     transition: padding 0.15s ease-in-out;
   }
   &__background {
@@ -30,8 +29,13 @@
   }
   &--inactive {
     flex-grow: 1;
-    .board-button__background {
-      background-color: var(--card-background) !important;
+    .board-button {
+      &__background {
+        background-color: var(--card-background) !important;
+      }
+      &__centering {
+        padding: 0!important;
+      }
     }
     span {
       color: var(--color-text-light)!important;

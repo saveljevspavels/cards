@@ -29,8 +29,8 @@
                         </div>
                         <app-button
                                 *ngIf="unlockMap.get(board.key) === levelIndex - 1"
-                                label="Unlock for -{{(RULES.COINS.BASE_UNLOCK_PRICE + (RULES.COINS.PER_LEVEL_PRICE * levelIndex))}}"
-                                [disabled]="(RULES.COINS.BASE_UNLOCK_PRICE + (RULES.COINS.PER_LEVEL_PRICE * levelIndex)) > (athlete | async)?.currencies.coins"
+                                label="Unlock for -{{getUnlockPrice(levelIndex)}}"
+                                [disabled]="getUnlockPrice(levelIndex) > (athlete | async)?.currencies.coins"
                                 (buttonClick)="unlockLevel(board.key)"
                                 type="action"
                         >

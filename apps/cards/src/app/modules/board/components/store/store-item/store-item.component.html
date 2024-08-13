@@ -12,8 +12,8 @@
     </div>
     <p class="mt-1 mb-2 text-center">{{item.description}}</p>
     <app-button [type]="'action'"
-                [disabled]="!stock || item.price > (athlete | async)?.currencies?.coins"
-                [label]="stock ? 'Buy -' + item.price : 'Out of stock'"
+                [disabled]="!stock || finalPrice > (athlete | async)?.currencies?.coins"
+                [label]="stock ? 'Buy -' + finalPrice : 'Out of stock'"
                 [small]="true"
                 (buttonClick)="buyItem()">
         <app-svg *ngIf="stock > 0" [icon]="'coin'" height="16"></app-svg>

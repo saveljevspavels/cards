@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import {Component, OnInit, OnDestroy, Input} from '@angular/core';
 import {Subscription, interval, timer} from 'rxjs';
 import {RULES} from "../../../../../../../../definitions/rules";
 import {GameService} from "../../../../services/game.service";
@@ -10,6 +10,9 @@ import {DateService} from "../../../../../../../shared/utils/date.service";
   styleUrls: ['./count-down.component.scss']
 })
 export class CountDownComponent implements OnInit, OnDestroy {
+
+  @Input() label = 'Time left:';
+  @Input() targetHours = [];
 
   private subscription: Subscription;
 
@@ -42,8 +45,7 @@ export class CountDownComponent implements OnInit, OnDestroy {
     this.targetTime = new Date();
     this.targetTime.setSeconds(0)
     this.targetTime.setMinutes(0)
-    const targetHours = startDate === DateService.getToday() ? RULES.FEATURED_TASK_HOURS.FIRST_DAY : RULES.FEATURED_TASK_HOURS.REGULAR
-    this.targetTime.setHours(targetHours.find(hour => hour > this.targetTime.getHours()) || targetHours[0] + 24)
+    this.targetTime.setHours(this.targetHours.find(hour => hour > this.targetTime.getHours()) || this.targetHours[0] + 24)
   }
 
   ngOnDestroy() {

@@ -2,7 +2,12 @@
     <app-athlete [size]="'big'"
                  [athlete]="athlete"
                  [styleClass]="'color-background'"
-    ></app-athlete>
+    >
+        <app-strava-link
+                [athleteId]="athlete?.id"
+                [padded]="true"
+        ></app-strava-link>
+    </app-athlete>
 </app-board-header>
 
 <div class="mt-3">
