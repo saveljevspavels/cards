@@ -10,6 +10,9 @@
 <app-select [label]="'Stat'" [fc]="form.get('stat')" [options]="ChallengeStatType | keyvalue"></app-select>
 <app-checkbox [label]="'Immediate Evaluation'" [fc]="form.get('evaluateImmediate')"></app-checkbox>
 
+<app-input [label]="'Color'" [fc]="form.get('color')"></app-input>
+<app-input [label]="'Icon'" [fc]="form.get('icon')"></app-input>
+
 <app-button (buttonClick)="submit()" styleClass="mt-4" [type]="ButtonType.ACTION" label="Save"></app-button>
 
 <h4>Existing Challenges</h4>

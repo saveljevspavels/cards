@@ -16,6 +16,7 @@ import {Currencies} from "../shared/classes/currencies.class";
 import {AbilityKey} from "../shared/interfaces/ability.interface";
 import MathHelper from "./helpers/math.helper";
 import {CARDS} from "../../definitions/cards";
+import {ChallengeService} from "./challenge.service";
 
 export default class CardService {
     constructor(
@@ -24,7 +25,8 @@ export default class CardService {
         private logger: Logger,
         private scoreService: ScoreService,
         private athleteService: AthleteService,
-        private activityService: ActivityService
+        private activityService: ActivityService,
+        private challengeService: ChallengeService
     ) {
 
         app.post(`${CONST.API_PREFIX}/create-card-factory`, async(req, res) => {
@@ -82,6 +84,7 @@ export default class CardService {
                 return;
             }
             await this.unlockBoardLevel(athleteId, boardKey);
+            await this.challengeService.progressCardUnlockChallenge(athleteId);
             res.status(200).send();
         });
 

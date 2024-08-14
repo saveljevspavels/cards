@@ -1,4 +1,4 @@
-import {Component, Input, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
+import {Component, Input, OnChanges, OnInit, Output, SimpleChanges, ViewEncapsulation} from '@angular/core';
 import {ValidationService} from "../../../../services/validation.service";
 import {StaticValidationService} from "../../../../../../../shared/services/validation.service";
 import {RULES} from "../../../../../../../../definitions/rules";
@@ -7,11 +7,14 @@ import {ChallengeStatType} from "../../../../../../../shared/interfaces/progress
 @Component({
   selector: 'app-circular-progress-bar',
   templateUrl: './circular-progress-bar.component.html',
-  styleUrls: ['./circular-progress-bar.component.scss']
+  styleUrls: ['./circular-progress-bar.component.scss'],
+  encapsulation: ViewEncapsulation.None
 })
 export class CircularProgressBarComponent implements OnChanges {
 
   @Input() type: string;
+  @Input() color: string;
+  @Input() icon: string;
   @Input() activity: any;
   @Input() animated = false;
   @Input() currentProgress: number;
@@ -58,9 +61,9 @@ export class CircularProgressBarComponent implements OnChanges {
     this.radius = this.small ? 25 : 35;
     this.strokeWidth = this.small ? 7 : 11;
     if(this.monochrome) {
-        this.strokeColor = '#fff';
+      this.strokeColor = '#fff';
     } else {
-      switch (this.type) {
+      switch (this.color || this.type) {
         case 'run':
           this.strokeColor = '#494ADB';
           break;

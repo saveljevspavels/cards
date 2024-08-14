@@ -1,6 +1,8 @@
 <div class="box challenge d-flex gap-2-5 align-items-center full-height {{completed || 'challenge--completed'}}">
     <div class="challenge__progress">
         <app-circular-progress-bar
+                [icon]="challenge.icon"
+                [color]="challenge.color"
                 [challengeStat]="challenge.stat"
                 [currentValue]="progressToShow || 0"
                 [type]="challenge.activityType"

@@ -17,13 +17,3 @@
         </div>
     </div>
 </div>
-
-<app-popup-wrapper
-        [templateControl]="progressPopupControl"
-        [title]="'Challenge progress'"
-        [description]="'You have progressed in some of your challenges'"
-        [confirmText]="'Nice'"
-        [showCancel]="false"
->
-    <app-active-challenges [updates]="challengeUpdates"></app-active-challenges>
-</app-popup-wrapper>

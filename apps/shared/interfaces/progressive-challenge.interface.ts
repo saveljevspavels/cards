@@ -10,6 +10,8 @@ export interface ProgressiveChallenge {
     title: string;
     description: string;
     notes: string[];
+    icon?: string;
+    color?: string;
     rewards: {
         points: number;
         coins: number;
@@ -20,10 +22,7 @@ export interface ProgressiveChallenge {
 
 export enum ChallengeStatType {
     DISTANCE = "DISTANCE",
-    BIRD_TASKS = "BIRD_TASKS",
-    ANIMAL_TASKS = "ANIMAL_TASKS",
     WANDERER_TASKS = "WANDERER_TASKS",
-    DISTANCE_TASKS = "DISTANCE_TASKS",
     MULTITASKER_TASKS = "MULTITASKER_TASKS",
     PHOTOHUNTER_TASKS = "PHOTOHUNTER_TASKS",
     HARDWORKER_TASKS = "HARDWORKER_TASKS",
@@ -34,13 +33,13 @@ export enum ChallengeStatType {
     BASIC_TASKS = "BASIC_TASKS",
     HEARTBEATS = "HEARTBEATS",
     ELEVATION_GAIN = "ELEVATION_GAIN",
+    STORE_SPENT_COINS = "STORE_SPENT_COINS",
+    ACTIVITY_COUNT = "ACTIVITY_COUNT",
+    CARD_UNLOCK = "CARD_UNLOCK",
 }
 
 export const ChallengeStatTagMap: Map<ChallengeStatType, CardTag> = new Map([
-    [ChallengeStatType.BIRD_TASKS, CardTag.bird],
-    [ChallengeStatType.ANIMAL_TASKS, CardTag.animal],
     [ChallengeStatType.WANDERER_TASKS, CardTag.wanderer],
-    [ChallengeStatType.DISTANCE_TASKS, CardTag.distance],
     [ChallengeStatType.MULTITASKER_TASKS, CardTag.multitasker],
     [ChallengeStatType.PHOTOHUNTER_TASKS, CardTag.photohunter],
     [ChallengeStatType.HARDWORKER_TASKS, CardTag.hardworker],

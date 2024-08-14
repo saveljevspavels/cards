@@ -54,32 +54,11 @@ export default class GameService {
             this.initChallengeAddition();
         }
 
-        // this.migration();
+        this.migration();
     }
 
-    migration() {
-        console.log('running migration');
-        this.fireStoreService.cardCollection.all().then((cards) => {
-
-            cards.forEach((card: any) => {
-                if(!card.rewards) {
-                    card.rewards = {
-                        coins: MathHelper.toInt(card.coinsReward || 0),
-                        points: MathHelper.toInt(card.value || 0),
-                        experience: MathHelper.toInt(card.experienceReward || 0),
-                        energy: MathHelper.toInt(card.energyReward || 0)
-                    };
-                    delete card.coinsReward;
-                    delete card.value;
-                    delete card.experienceReward;
-                    delete card.energyReward;
-                }
-            });
-
-            cards.forEach((card: any) => {
-                this.cardService.updateCard(Card.fromJSONObject(card));
-            });
-        });
+    async migration() {
+        // console.log('running migration');
     }
 
     initEnergyRegen() {

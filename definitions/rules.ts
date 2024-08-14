@@ -120,7 +120,8 @@ export const RULES = {
         },
         MAX_ACTIVE: 6,
         MAX_QUEUED: 99,
-        NEW_DAILY: 2
+        NEW_DAILY: 2,
+        MIN_ACTIVITY_TIME: 900
     },
     STORE: {
         RESTOCK_HOURS: [0]

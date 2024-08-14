@@ -8,12 +8,14 @@ import {Purchases} from "../shared/interfaces/purchase.interface";
 import {StoreHelperService} from "../shared/services/store.helper.service";
 import Athlete from "../shared/classes/athlete.class";
 import {StoreItem} from "../shared/interfaces/store-item.interface";
+import {ChallengeService} from "./challenge.service";
 export class StoreService {
     constructor(
         private app: Express,
         private firebaseService: FirestoreService,
         private logger: Logger,
         private athleteService: AthleteService,
+        private challengeService: ChallengeService
     ) {
         app.post(`${CONST.API_PREFIX}/store/buy`, async (req, res) => {
             const itemId = req.body?.itemId;
@@ -23,7 +25,8 @@ export class StoreService {
                 return;
             }
             try {
-                await this.buyItem(itemId, athleteId);
+                const price = await this.buyItem(itemId, athleteId);
+                await this.challengeService.progressCoinChallenge(athleteId, price);
                 res.status(200).send({});
             } catch (err) {
                 this.logger.error(`Error buying item ${err}`);
@@ -32,7 +35,7 @@ export class StoreService {
         });
     }
 
-    async buyItem(itemId: string, athleteId: string) {
+    async buyItem(itemId: string, athleteId: string): Promise<number> {
         const athlete = await this.athleteService.getAthlete(athleteId);
         const item = STORE_ITEMS.find((item) => item.id === itemId);
         if(!item) {
@@ -43,14 +46,16 @@ export class StoreService {
             throw new Error(`Item ${item.name} out of stock`);
         }
 
-        athlete.spendCoins(this.getFinalPrice(item, athlete));
+        const finalPrice = this.getFinalPrice(item, athlete);
+        athlete.spendCoins(finalPrice);
         athlete.addCurrencies(item.rewards);
 
         await Promise.all([
             this.athleteService.updateAthlete(athlete),
             this.addItemToPurchases(itemId, purchases, athleteId)
         ]);
-        this.logger.info(`Athlete ${athleteId} bought item ${item.name}`);
+        this.logger.info(`Athlete ${athleteId} bought item ${item.name} for ${finalPrice} coins`);
+        return finalPrice;
     }
 
     getFinalPrice(item: StoreItem, athlete: Athlete) {

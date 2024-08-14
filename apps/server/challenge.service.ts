@@ -160,6 +160,38 @@ export class ChallengeService {
         await this.fireStoreService.challengeProgressCollection.set(athleteId, progress);
     }
 
+    async progressCoinChallenge(athleteId: string, coins: number) {
+        const progress = await this.getChallengeProgress(athleteId);
+        const challenges = (await this.getActiveChallenges(progress))
+            .filter(challenge => challenge.stat === ChallengeStatType.STORE_SPENT_COINS);
+        if(!challenges.length) {
+            return;
+        }
+        challenges.forEach(challenge => {
+            progress.progressChallenge(challenge.id, coins);
+        });
+        challenges.forEach(challenge => {
+            this.completeApplicableChallenge(challenge, progress);
+        });
+        await this.fireStoreService.challengeProgressCollection.set(athleteId, progress);
+    }
+
+    async progressCardUnlockChallenge(athleteId: string) {
+        const progress = await this.getChallengeProgress(athleteId);
+        const challenges = (await this.getActiveChallenges(progress))
+            .filter(challenge => challenge.stat === ChallengeStatType.CARD_UNLOCK);
+        if(!challenges.length) {
+            return;
+        }
+        challenges.forEach(challenge => {
+            progress.progressChallenge(challenge.id, 1);
+        });
+        challenges.forEach(challenge => {
+            this.completeApplicableChallenge(challenge, progress);
+        });
+        await this.fireStoreService.challengeProgressCollection.set(athleteId, progress);
+    }
+
     async getChallengeProgress(athleteId: string): Promise<ChallengeProgress> {
         const rawProgress = await this.fireStoreService.challengeProgressCollection.get(athleteId);
         return rawProgress ? ChallengeProgress.fromJSONObject(rawProgress) : new ChallengeProgress(athleteId);
@@ -185,20 +217,17 @@ export class ChallengeService {
             case ChallengeStatType.ELAPSED_TIME:
                 progress.progressChallenge(challenge.id, activity.elapsed_time);
                 break;
-            case ChallengeStatType.BIRD_TASKS:
-                progress.progressChallenge(challenge.id, this.countApplicableCards(cardSnapshots, ChallengeStatType.BIRD_TASKS));
-                break;
-            case ChallengeStatType.ANIMAL_TASKS:
-                progress.progressChallenge(challenge.id, this.countApplicableCards(cardSnapshots, ChallengeStatType.ANIMAL_TASKS));
-                break;
             case ChallengeStatType.WANDERER_TASKS:
                 progress.progressChallenge(challenge.id, this.countApplicableCards(cardSnapshots, ChallengeStatType.WANDERER_TASKS));
                 break;
-            case ChallengeStatType.DISTANCE_TASKS:
-                progress.progressChallenge(challenge.id, this.countApplicableCards(cardSnapshots, ChallengeStatType.DISTANCE_TASKS));
+            case ChallengeStatType.PHOTOHUNTER_TASKS:
+                progress.progressChallenge(challenge.id, this.countApplicableCards(cardSnapshots, ChallengeStatType.PHOTOHUNTER_TASKS));
                 break;
             case ChallengeStatType.MULTITASKER_TASKS:
                 progress.progressChallenge(challenge.id, this.countApplicableCards(cardSnapshots, ChallengeStatType.MULTITASKER_TASKS));
+                break;
+            case ChallengeStatType.HARDWORKER_TASKS:
+                progress.progressChallenge(challenge.id, this.countApplicableCards(cardSnapshots, ChallengeStatType.HARDWORKER_TASKS));
                 break;
             case ChallengeStatType.DAILY_COMPLETED_TASKS:
             case ChallengeStatType.COMPLETED_TASKS:
@@ -207,11 +236,14 @@ export class ChallengeService {
             case ChallengeStatType.BASIC_TASKS:
                 progress.progressChallenge(challenge.id, baseCardCompletion);
                 break;
-            case ChallengeStatType.HEARTBEATS:
-                if (!activity.average_heartrate || activity.average_heartrate < 100) {
-                    break
+            case ChallengeStatType.ACTIVITY_COUNT:
+                if(activity.elapsed_time >= RULES.PROGRESSIVE_CHALLENGE.MIN_ACTIVITY_TIME) {
+                    progress.progressChallenge(challenge.id, 1);
                 }
-                progress.progressChallenge(challenge.id, (activity.average_heartrate) * activity.elapsed_time);
+                break;
+            case ChallengeStatType.HEARTBEATS:
+                const avgHeartRate = activity.average_heartrate || 60;
+                progress.progressChallenge(challenge.id, Math.floor((avgHeartRate) * (activity.elapsed_time / 60)));
                 break;
         }
 
@@ -244,7 +276,7 @@ export class ChallengeService {
                     .filter(challenge => game ? game.activeChallenges.indexOf(challenge.id) !== -1 : false), // Filter out inactive challenges
                 progress
             ).splice(0, RULES.PROGRESSIVE_CHALLENGE.MAX_ACTIVE), // Limit the number of active challenges
-            ...this.filterFinishedChallenges(ACHIEVEMENTS, progress)
+            // ...this.filterFinishedChallenges(ACHIEVEMENTS, progress)
         ];
     }
 

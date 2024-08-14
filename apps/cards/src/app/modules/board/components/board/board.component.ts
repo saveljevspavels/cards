@@ -25,13 +25,7 @@ export class BoardComponent implements OnInit {
         rules: true,
     }
 
-    public challengeUpdates: any = {};
-
-    public progressPopupControl = new FormControl();
-
     constructor(private activityService: ActivityService,
-                private challengeService: ChallengeService,
-                private popupService: PopupService,
                 private athleteService: AthleteService,
                 private router: Router) { }
 
@@ -39,13 +33,6 @@ export class BoardComponent implements OnInit {
         Object.keys(this.openStates).forEach(key => {
             this.openStates[key] = LocalStorageService.getState(key)
         })
-
-        this.challengeService.challengeUpdates$.subscribe((updates) => {
-            this.challengeUpdates = updates;
-            setTimeout(() => {
-                this.popupService.showPopup(this.progressPopupControl.value);
-            });
-        });
 
         this.athleteService.me.subscribe((me) => {
             if(me) {

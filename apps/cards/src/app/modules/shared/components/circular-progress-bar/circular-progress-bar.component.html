@@ -1,10 +1,10 @@
 <div class="d-flex flex-column align-items-center">
     <div class="circular-progress-bar" [ngClass]="{'circular-progress-bar--active': active, 'circular-progress-bar--small': small, 'circular-progress-bar--monochrome': monochrome}">
         <div class="circular-progress-bar__icon">
-            <app-svg [icon]="type ? ('activity_' + type) : 'fire'"
+            <app-svg [icon]="icon ? icon : type ? ('activity_' + type) : 'fire'"
                      [width]="14"
                      [height]="14"
-                     [styleClass]="monochrome ? 'color-background' : type ? ('color-' + type) : 'color-primary'">
+                     [styleClass]="color ? ('color-' + color) : monochrome ? 'color-background' : type ? ('color-' + type) : 'color-primary'">
             </app-svg>
         </div>
         <div class="circular-progress-bar__background">
