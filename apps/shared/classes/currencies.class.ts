@@ -60,6 +60,11 @@ export class Currencies {
         return this;
     }
 
+    withCoins(value: number): Currencies {
+        this.coins = value;
+        return this;
+    }
+
     toString(): string {
         return `Currencies(${Object.entries(this).filter(([key, value]) => value).map(([key, value]) => `${key}: ${value}`).join(', ')})`;
     }
