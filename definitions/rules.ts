@@ -103,7 +103,7 @@ export const RULES = {
         MAX: 999,
         PER_ENERGY_CONVERSION: 3,
         FEATURED_CARD_POINT_CONVERSION: 2,
-        BASE_UNLOCK_PRICE: 0,
+        BASE_UNLOCK_PRICE: 5,
         PER_LEVEL_PRICE: 5,
         ACTIVITY_BOOST_PRICE: 1
     },

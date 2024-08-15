@@ -176,8 +176,7 @@ export default class CardService {
         const currentMoney = athlete.currencies.coins || 0;
         const currentLevel = athlete.unlocks[boardKey] || 0;
         const nextLevel = currentLevel + 1;
-        const price = Math.max(RULES.COINS.BASE_UNLOCK_PRICE +
-            (nextLevel * RULES.COINS.PER_LEVEL_PRICE) -
+        const price = Math.max(RULES.COINS.BASE_UNLOCK_PRICE -
             athlete.getPerkLevel(AbilityKey.CARD_UNLOCK_DISCOUNT) * RULES.UNLOCK_DISCOUNT_AMOUNT, 0)
         if(currentMoney < price) {
             this.logger.error(`Athlete ${athlete.firstname} ${athlete.lastname} does not have ${price} (has ${currentMoney}) money to unlock ${boardKey} ${currentLevel + 1}`);

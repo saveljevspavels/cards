@@ -92,8 +92,7 @@ const routes: Routes = [
   ],
   exports: [RouterModule],
   providers: [
-    ActivityService,
-    ScoreService
+
   ]
 })
 export class BoardRoutingModule { }

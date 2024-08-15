@@ -139,8 +139,7 @@ export class CardSchemeComponent implements OnInit {
 
     getUnlockPrice(levelIndex: number): number {
         return Math.max(
-            (RULES.COINS.BASE_UNLOCK_PRICE +
-            (RULES.COINS.PER_LEVEL_PRICE * levelIndex)) -
+            RULES.COINS.BASE_UNLOCK_PRICE -
             (this.athlete.value!.getPerkLevel(AbilityKey.CARD_UNLOCK_DISCOUNT) || 0) * RULES.UNLOCK_DISCOUNT_AMOUNT,
             0
         );

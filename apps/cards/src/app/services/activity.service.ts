@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import {BehaviorSubject, Observable} from "rxjs";
 import {HttpClient} from "@angular/common/http";
-import {debounceTime, distinctUntilChanged, filter} from "rxjs/operators";
+import {debounceTime, distinctUntilChanged, filter, take} from "rxjs/operators";
 import {environment} from "../../environments/environment";
 import {AthleteService} from "./athlete.service";
 import {ConstService} from "./const.service";

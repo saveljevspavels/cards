@@ -5,7 +5,9 @@ import Score from "../../../../shared/interfaces/score.interface";
 import {AthleteService} from "./athlete.service";
 import {AngularFirestore, AngularFirestoreCollection} from "@angular/fire/compat/firestore";
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class ScoreService {
 
   public scores = new BehaviorSubject<any>([]);
