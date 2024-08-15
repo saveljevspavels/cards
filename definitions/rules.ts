@@ -12,8 +12,8 @@ export const RULES = {
             time_10k: 5400
         },
         ride: {
-            distance: 8000,
-            average_speed: 5,
+            distance: 7000,
+            average_speed: 5, // TODO: discuss
             time_10k: 2400,
             time_40k: 10800
         },

@@ -15,9 +15,11 @@ export class AuthInterceptor {
         }
         const decodedJwt = decodeJwt(jwt);
         const expired: boolean = AuthHelper.tokenExpired(decodedJwt.expiresAt || 0);
-        if(expired) {
+        const update = AuthHelper.tokenRequest(
+            AuthHelper.getRefreshConfig(decodedJwt.refreshToken));
+        if(expired && update) {
             jwt = AuthHelper.createJwt(
-                await AuthInterceptor.refreshToken(decodedJwt.refreshToken),
+                update,
                 decodedJwt.athleteId
             );
             res.set('Refreshed-Jwt', jwt);

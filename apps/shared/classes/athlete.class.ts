@@ -101,7 +101,7 @@ export default class Athlete implements JsonObjectInterface {
             [],
             0,
             [],
-            new Currencies(0, 0, 0, 0, 0, 0, 0),
+            new Currencies(0, 0, 0, 0, 0, 0, 3),
             {
                 active: [],
                 completed: [],

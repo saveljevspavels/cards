@@ -47,7 +47,7 @@ export class CircularProgressBarComponent implements OnChanges {
     if(!isNaN(changes.currentProgress?.currentValue)) {
       this.currentValue = Math.floor((this.currentProgress * this.baseValue) / RULES.PROGRESS_PRECISION);
     } else if (!isNaN(changes.currentValue?.currentValue)) {
-        this.currentProgress = Math.floor((this.currentValue * RULES.PROGRESS_PRECISION) / this.baseValue);
+      this.currentProgress = Math.floor((this.currentValue * RULES.PROGRESS_PRECISION) / this.baseValue);
     }
     this.newValue = this.active ? parseInt(this.activity && this.activity[StaticValidationService.baseActivityTypeMap.get(this.activityType) || ''] || 0,  10) : 0;
     this.totalValue = this.active ? this.newValue + this.currentValue : this.currentValue;
