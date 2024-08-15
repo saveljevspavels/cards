@@ -20,7 +20,7 @@ export default class AuthService {
         });
 
         this.app.post(`${CONST.API_PREFIX}/auth/token`, async (req, res) => {
-            const data = req.body.data;
+            const data = req.body;
             let jwt = '';
             if(data) {
                 jwt = AuthHelper.createJwt(data, data.athlete.id.toString());

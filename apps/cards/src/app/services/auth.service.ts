@@ -20,12 +20,10 @@ export class AuthService {
               private athleteService: AthleteService) {
   }
 
-  getJwt(code: string): Observable<string> {
+  getJwt(payload: any): Observable<string> {
       return this.httpClient.post(
           `${environment.baseBE}/auth/token`,
-          {
-              code
-          }
+          payload
       ).pipe(
           map((res: any)  => {
               return (res as {jwt: string}).jwt;
@@ -45,7 +43,7 @@ export class AuthService {
                 'grant_type': 'authorization_code'
             }
         }
-      ).pipe(mergeMap((res: any) => this.getJwt(res.data)))
+      ).pipe(mergeMap((res: any) => this.getJwt(res)))
   }
 
   decodeId() {

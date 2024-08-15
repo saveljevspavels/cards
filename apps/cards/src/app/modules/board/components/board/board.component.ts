@@ -1,17 +1,10 @@
-import {Component, OnInit, ViewEncapsulation} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {ActivityService} from "../../../../services/activity.service";
-import {BoardService} from "../../../../services/board.service";
 import {Router} from "@angular/router";
 import {LocalStorageService} from "../../../../services/local-storage.service";
-import {UtilService} from "../../../../services/util.service";
 import {TabItem} from "../../../../interfaces/tab-item";
-import {ChallengeService} from "../../../../services/challenge.service";
-import {distinctUntilChanged, filter} from "rxjs/operators";
-import {FormControl} from "@angular/forms";
-import {PopupService} from "../../../../services/popup.service";
 import {AthleteService} from "../../../../services/athlete.service";
 import Athlete from "../../../../../../../shared/classes/athlete.class";
-import {HttpClient} from "@angular/common/http";
 
 @Component({
   selector: 'app-board',
@@ -28,7 +21,6 @@ export class BoardComponent implements OnInit {
 
     constructor(private activityService: ActivityService,
                 private athleteService: AthleteService,
-                private httpClient: HttpClient,
                 private router: Router) { }
 
     ngOnInit(): void {
@@ -65,11 +57,4 @@ export class BoardComponent implements OnInit {
             }
         ]
     }
-
-    click() {
-        this.httpClient.post("https://www.strava.com/oauth/token?client_id=67588&client_secret=3b2916d89d45b435231feb5d0b437c53752bc37c&refresh_token=8782378994e60ac1fe6543ad67100884a85a26a6&grant_type=refresh_token", {}).subscribe((res) => {
-            console.log(res);
-        });
-    }
-
 }
