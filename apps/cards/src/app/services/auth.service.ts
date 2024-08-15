@@ -1,12 +1,14 @@
 import { Injectable } from '@angular/core';
 import {HttpClient} from "@angular/common/http";
-import {map} from "rxjs/operators";
+import {map, mergeMap} from "rxjs/operators";
 import {Router} from "@angular/router";
 import {environment} from "../../environments/environment";
 import {LocalStorageService} from "./local-storage.service";
 import {Observable} from "rxjs";
 import {decodeJwt} from "../../../../shared/utils/decodeJwt";
 import {AthleteService} from "./athlete.service";
+import {CONST} from "../../../../../definitions/constants";
+import {STRAVA_CONFIG} from "../../../../../definitions/stravaConfig";
 
 @Injectable({
   providedIn: 'root'
@@ -29,6 +31,21 @@ export class AuthService {
               return (res as {jwt: string}).jwt;
           })
       )
+  }
+
+  getJwtToken(code: string) {
+      return this.httpClient.post(
+        `${CONST.STRAVA_BASE}/oauth/token`,
+        null,
+        {
+            params: {
+                'client_id': STRAVA_CONFIG.STRAVA_CLIENT_ID,
+                'client_secret': STRAVA_CONFIG.STRAVA_CLIENT_SECRET,
+                'code': code,
+                'grant_type': 'authorization_code'
+            }
+        }
+      ).pipe(mergeMap((res: any) => this.getJwt(res.data)))
   }
 
   decodeId() {

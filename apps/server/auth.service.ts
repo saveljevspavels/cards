@@ -20,13 +20,11 @@ export default class AuthService {
         });
 
         this.app.post(`${CONST.API_PREFIX}/auth/token`, async (req, res) => {
-            const response: any = await AuthHelper.tokenRequest(
-                AuthHelper.getTokenConfig(req.body.code as string)
-            ).catch(err => console.log('err', err))
+            const data = req.body.data;
             let jwt = '';
-            if(response?.data) {
-                jwt = AuthHelper.createJwt(response, response.data.athlete.id.toString());
-                await this.athleteService.saveAthlete(response.data.athlete);
+            if(data) {
+                jwt = AuthHelper.createJwt(data, data.athlete.id.toString());
+                await this.athleteService.saveAthlete(data.athlete);
             }
 
             res.status(200).send({

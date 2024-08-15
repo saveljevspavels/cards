@@ -20,11 +20,11 @@ export class AuthHelper {
         }
     }
 
-    static createJwt(response: any, athleteId: string): string {
+    static createJwt(data: any, athleteId: string): string {
         return jwt.sign({
-            expiresAt: response.data.expires_at,
-            accessToken: response.data.access_token,
-            refreshToken: response.data.refresh_token,
+            expiresAt: data.expires_at,
+            accessToken: data.access_token,
+            refreshToken: data.refresh_token,
             athleteId
         }, 'secret');
     }

@@ -20,7 +20,7 @@ export class AuthReturnComponent implements OnInit {
   ngOnInit(): void {
     this.responseParams = this.route.snapshot.queryParams;
     if(this.responseParams?.code && this.responseParams.scope === REQUIRED_PERMISSIONS) {
-      this.authService.getJwt(this.responseParams.code).subscribe(res => {
+      this.authService.getJwtToken(this.responseParams.code).subscribe(res => {
         LocalStorageService.jwt = res;
         this.router.navigateByUrl('board/main');
       })
