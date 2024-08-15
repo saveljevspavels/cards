@@ -21,6 +21,10 @@ export class AuthService {
   }
 
   getJwt(payload: any): Observable<string> {
+      payload = {
+          ...payload,
+          athleteId: this.athleteService.myId
+      }
       return this.httpClient.post(
           `${environment.baseBE}/auth/token`,
           payload

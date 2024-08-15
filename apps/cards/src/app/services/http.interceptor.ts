@@ -36,8 +36,8 @@ export class HttpMainInterceptor implements HttpInterceptor {
         }
 
         return iif(
-            () => expired && decodedJwt.refreshToken && (request.url.indexOf('kurkudos.lv') !== -1 || request.url.indexOf('3000') !== -1) && request.url.indexOf('auth') === -1,
-            this.authService.updateJwtToken(decodedJwt.refreshToken).pipe(
+            () => expired && decodedJwt?.refreshToken && (request.url.indexOf('kurkudos.lv') !== -1 || request.url.indexOf('3000') !== -1) && request.url.indexOf('auth') === -1,
+            this.authService.updateJwtToken(decodedJwt?.refreshToken).pipe(
                 tap((jwt: string) => {
                     LocalStorageService.jwt = jwt;
                     request = request.clone({

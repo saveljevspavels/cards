@@ -23,8 +23,10 @@ export default class AuthService {
             const data = req.body;
             let jwt = '';
             if(data) {
-                jwt = AuthHelper.createJwt(data, data.athlete.id.toString());
-                await this.athleteService.saveAthlete(data.athlete);
+                jwt = AuthHelper.createJwt(data, data.athlete?.id?.toString() || data.athleteId);
+                if(data.athlete) {
+                    await this.athleteService.saveAthlete(data.athlete);
+                }
             }
 
             res.status(200).send({
