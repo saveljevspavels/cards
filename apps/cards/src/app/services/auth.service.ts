@@ -46,6 +46,21 @@ export class AuthService {
       ).pipe(mergeMap((res: any) => this.getJwt(res)))
   }
 
+    updateJwtToken(refreshToken: string) {
+        return this.httpClient.post(
+            `${CONST.STRAVA_BASE}/oauth/token`,
+            null,
+            {
+                params: {
+                    'client_id': STRAVA_CONFIG.STRAVA_CLIENT_ID,
+                    'client_secret': STRAVA_CONFIG.STRAVA_CLIENT_SECRET,
+                    'refresh_token': refreshToken,
+                    'grant_type': 'refresh_token'
+                }
+            }
+        ).pipe(mergeMap((res: any) => this.getJwt(res)))
+    }
+
   decodeId() {
       this.athleteService.myId.next(decodeJwt(LocalStorageService.jwt).athleteId);
   }

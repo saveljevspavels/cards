@@ -24,11 +24,11 @@ export class ActivityReviewComponent implements OnInit {
                 private pushNotificationsService: PushNotificationsService) { }
 
     ngOnInit() {
-        this.swPush.requestSubscription({
-            serverPublicKey: this.VAPID_PUBLIC_KEY
-        })
-            .then(sub => this.pushNotificationsService.submitActivity(sub).subscribe())
-            .catch(err => console.error("Could not subscribe to notifications", err));
+        // this.swPush.requestSubscription({
+        //     serverPublicKey: this.VAPID_PUBLIC_KEY
+        // })
+        //     .then(sub => this.pushNotificationsService.submitActivity(sub).subscribe())
+        //     .catch(err => console.error("Could not subscribe to notifications", err));
 
     }
 

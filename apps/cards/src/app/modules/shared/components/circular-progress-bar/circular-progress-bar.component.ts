@@ -63,7 +63,14 @@ export class CircularProgressBarComponent implements OnChanges {
     if(this.monochrome) {
       this.strokeColor = '#fff';
     } else {
-      switch (this.color || this.type) {
+      const param = this.color || this.type;
+      switch (param) {
+        case 'secondary-4':
+          this.strokeColor = '#894CD8';
+          break;
+        case 'light-blue':
+          this.strokeColor = '#AEEBFF';
+          break;
         case 'run':
           this.strokeColor = '#494ADB';
           break;

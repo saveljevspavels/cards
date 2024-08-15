@@ -4,6 +4,30 @@ import {Progression} from "../apps/shared/interfaces/card-factory.interface";
 
 export const CARDS: Card[] = [
     new Card(
+        "Getting Started",
+        "",
+        0,
+        "start",
+        "Welcome! You can start Kurkudos with this task. Record an 1km activity",
+        Currencies.withPoints(1).withExperience(2),
+        1,
+        0,
+        {progression: 0,usesToProgress: 0,},
+        'null',
+        Progression.NONE,
+        [{
+            comparator: "greater",
+            formula: "1000",
+            property: "distance",
+        }, {
+            comparator: "in",
+            formula: "run,walk,ride",
+            property: "type",
+        }],
+        false,
+        [CardTag.wanderer]
+    ),
+    new Card(
         "Forrest Gump",
         "",
         0,

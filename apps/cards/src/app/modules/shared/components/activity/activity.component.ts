@@ -18,6 +18,7 @@ import {AthleteService} from "../../../../services/athlete.service";
 import {CardSnapshot, Report} from "../../../../../../../shared/classes/card.class";
 import {ButtonType} from "../button/button.component";
 import {Activity} from "../../../../../../../shared/interfaces/activity.interface";
+import Athlete from "../../../../../../../shared/classes/athlete.class";
 
 @Component({
     selector: 'app-activity',
@@ -73,6 +74,10 @@ export class ActivityComponent implements OnInit, ControlValueAccessor, OnChange
     ngOnChanges(changes: SimpleChanges) {
         if(changes.activity) {
             this.activityType = StaticValidationService.normalizeActivityType(this.activity);
+            if(!this.activity.gameData) {
+                return;
+            }
+            this.activity.gameData.cardSnapshots = this.activity.gameData?.cardSnapshots.map((cardSnapshot: CardSnapshot) => CardSnapshot.fromJSONObject(cardSnapshot));
             this.activity.gameData?.cardSnapshots.forEach((cardSnapshot: CardSnapshot) => {
                 cardSnapshot.likedByMe = (cardSnapshot?.likes && cardSnapshot?.likes?.indexOf(this.myId) !== -1);
                 cardSnapshot.reportedByMe = !!cardSnapshot?.reports?.length && !!cardSnapshot?.reports?.find((report: Report) => report.createdBy === this.myId);

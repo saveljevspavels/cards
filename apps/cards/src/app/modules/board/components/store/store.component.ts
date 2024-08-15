@@ -3,6 +3,9 @@ import {AVAILABLE_ITEMS, STORE_ITEMS} from "../../../../../../../../definitions/
 import {StoreService} from "../../../../services/store.service";
 import {StoreHelperService} from "../../../../../../../shared/services/store.helper.service";
 import {RULES} from "../../../../../../../../definitions/rules";
+import {FormControl} from "@angular/forms";
+import {StoreItem} from "../../../../../../../shared/interfaces/store-item.interface";
+import {PopupService} from "../../../../services/popup.service";
 
 @Component({
   selector: 'app-store',
@@ -15,7 +18,10 @@ export class StoreComponent implements OnInit {
   public storeItems = STORE_ITEMS.filter((item) => AVAILABLE_ITEMS.indexOf(item.id) !== -1);
   public availabilityMap: Map<string, number> = new Map<string, number>();
 
-  constructor(private storeService: StoreService) { }
+  public chestPopupControl = new FormControl();
+
+  constructor(private storeService: StoreService,
+              private popupService: PopupService) { }
 
   ngOnInit(): void {
     this.storeService.myPurchases$.subscribe((purchases) => {
@@ -25,9 +31,12 @@ export class StoreComponent implements OnInit {
     });
   }
 
-  buyItem(itemId: string) {
-    this.storeService.buyItem(itemId).subscribe(() => {
+  buyItem(item: StoreItem) {
+    this.storeService.buyItem(item.id).subscribe(() => {
         console.log('Item bought');
+        if(item.id === 'chest') {
+          this.popupService.showPopup(this.chestPopupControl.value);
+        }
     });
   }
 

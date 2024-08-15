@@ -43,8 +43,8 @@ export class ChallengeManagementComponent implements OnInit {
             activityType: [challengeToEdit?.activityType || null],
             description: [challengeToEdit?.description || '', [Validators.required]],
             notes: [challengeToEdit?.notes || ['']],
-            icon: [challengeToEdit?.icon || ['']],
-            color: [challengeToEdit?.color || ['']],
+            icon: challengeToEdit?.icon || '',
+            color: challengeToEdit?.color || '',
             stat: [challengeToEdit?.stat || ChallengeStatType.DISTANCE, [Validators.required]],
             rewards: this.formBuilder.group({
                 points: [challengeToEdit?.rewards?.points || 0, [Validators.required]],
