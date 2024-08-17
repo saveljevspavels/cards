@@ -2248,7 +2248,7 @@ export const CARDS: Card[] = [
         0,
         "autograph",
         "During your activity draw your initials on a map with a GPS tracking line",
-        Currencies.withPoints(1).withExperience(12),
+        Currencies.withPoints(1).withExperience(15),
         1,
         0,
         {progression: 0,usesToProgress: 0},
@@ -2272,7 +2272,7 @@ export const CARDS: Card[] = [
         0,
         "creeper",
         "During your activity ask a stranger (that is doing the same activity as you, e.g. running) to take a selfie with you. Both of you must show a thumbs up",
-        Currencies.withPoints(1).withExperience(15),
+        Currencies.withPoints(1).withExperience(12),
         1,
         0,
         {progression: 0,usesToProgress: 0},
@@ -2291,7 +2291,7 @@ export const CARDS: Card[] = [
         []
     ),
     new Card(
-        "Avengers",
+        "Team Up",
         "",
         0,
         "avengers",
