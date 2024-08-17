@@ -9,8 +9,8 @@
         ></app-activity>
         <div *ngFor="let card of activity.gameData.cardSnapshots">
             <div *ngFor="let report of card.reports">
-                <app-button type="danger" (buttonClick)="rejectCard(card.id, activity.id)" [disabled]="!rejectionComment.value" label="Reject {{card.title}}"></app-button>
-                <app-button (buttonClick)="resolveReport(card.id, activity.id, report.id)" [disabled]="!rejectionComment.value" label="Resolve {{card.title}}"></app-button>
+                <app-button type="danger" (buttonClick)="rejectCard(card.id, activity.id.toString())" [disabled]="!rejectionComment.value" label="Reject {{card.title}}"></app-button>
+                <app-button (buttonClick)="resolveReport(card.id, activity.id.toString(), report.id)" [disabled]="!rejectionComment.value" label="Resolve {{card.title}}"></app-button>
             </div>
         </div>
     </div>

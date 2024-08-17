@@ -215,14 +215,14 @@ export default class AbilityService {
         const reward = new Currencies();
 
         // Base coin reward
-        reward.coins = 3 + getRandomInt(3); // 3-6
+        reward.coins = 3 + getRandomInt(3); // 3-5
 
         const roll= getRandomInt(100);
         if(roll < 10) {
-            reward.coins += 21 + getRandomInt(3);
+            reward.coins += 16 + getRandomInt(4);
         } else if(roll < 20) {
             reward.points = 1;
-        } else if(roll < 30) {
+        } else if(roll < 40) {
             reward.perk = 1;
         } else if(roll < 65) {
             

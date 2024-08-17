@@ -77,7 +77,6 @@ export class ActivityComponent implements OnInit, ControlValueAccessor, OnChange
             if(!this.activity.gameData) {
                 return;
             }
-            this.activity.gameData.cardSnapshots = this.activity.gameData?.cardSnapshots.map((cardSnapshot: CardSnapshot) => CardSnapshot.fromJSONObject(cardSnapshot));
             this.activity.gameData?.cardSnapshots.forEach((cardSnapshot: CardSnapshot) => {
                 cardSnapshot.likedByMe = (cardSnapshot?.likes && cardSnapshot?.likes?.indexOf(this.myId) !== -1);
                 cardSnapshot.reportedByMe = !!cardSnapshot?.reports?.length && !!cardSnapshot?.reports?.find((report: Report) => report.createdBy === this.myId);

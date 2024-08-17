@@ -2217,4 +2217,101 @@ export const CARDS: Card[] = [
         false,
         [CardTag.hardworker]
     ),
+
+    new Card(
+        "Environmentally Friendly",
+        "",
+        0,
+        "bottle",
+        "During your activity drop some bottles on deposit station",
+        Currencies.withPoints(1).withExperience(12),
+        1,
+        0,
+        {progression: 0,usesToProgress: 0},
+        'null',
+        Progression.NONE,
+        [{
+            comparator: "greater",
+            formula: "distance",
+            property: "distance",
+        }, {
+            comparator: "in",
+            formula: "run,ride,walk",
+            property: "type",
+        }],
+        false,
+        []
+    ),
+    new Card(
+        "Autograph",
+        "",
+        0,
+        "autograph",
+        "During your activity draw your initials on a map with a GPS tracking line",
+        Currencies.withPoints(1).withExperience(12),
+        1,
+        0,
+        {progression: 0,usesToProgress: 0},
+        'null',
+        Progression.NONE,
+        [{
+            comparator: "greater",
+            formula: "distance",
+            property: "distance",
+        }, {
+            comparator: "in",
+            formula: "run,ride,walk",
+            property: "type",
+        }],
+        false,
+        []
+    ),
+    new Card(
+        "Creeper",
+        "",
+        0,
+        "creeper",
+        "During your activity ask a stranger (that is doing the same activity as you, e.g. running) to take a selfie with you. Both of you must show a thumbs up",
+        Currencies.withPoints(1).withExperience(15),
+        1,
+        0,
+        {progression: 0,usesToProgress: 0},
+        'null',
+        Progression.NONE,
+        [{
+            comparator: "greater",
+            formula: "distance",
+            property: "distance",
+        }, {
+            comparator: "in",
+            formula: "run,ride,walk",
+            property: "type",
+        }],
+        false,
+        []
+    ),
+    new Card(
+        "Avengers",
+        "",
+        0,
+        "avengers",
+        "Record an activity together with at least 3 other people that are also participating in Kurkudos",
+        Currencies.withPoints(1).withExperience(15),
+        1,
+        0,
+        {progression: 0,usesToProgress: 0},
+        'null',
+        Progression.NONE,
+        [{
+            comparator: "greater",
+            formula: "distance",
+            property: "distance",
+        }, {
+            comparator: "in",
+            formula: "run,ride,walk",
+            property: "type",
+        }],
+        false,
+        []
+    ),
 ];

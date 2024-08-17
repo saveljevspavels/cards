@@ -67,20 +67,21 @@ export default class GameService {
         rule.minute = 0;
         rule.tz = CONST.TIMEZONE;
 
-        const job = schedule.scheduleJob(rule, async () => {
+        const job = schedule.scheduleJob(rule, async () => { // TODO big issue with lots of .updateAthlete() calls
             this.logger.error(`It's midnight`);
             const allAthletes = (await this.fireStoreService.athleteCollection.all()).map((athlete: Athlete) => Athlete.fromJSONObject(athlete));
             allAthletes.map(async (athlete: Athlete) => {
                 await this.activityService.submitAllActivities(athlete.id);
+                const updatedAthlete = await this.athleteService.getAthlete(athlete.id); // Updated instance after submit
                 try {
-                    athlete.addEnergy(RULES.ENERGY.TIMED_RESTORE);
+                    updatedAthlete.addEnergy(RULES.ENERGY.TIMED_RESTORE);
                 } catch (e) {
-                    this.logger.error(`Can't restore energy for ${athlete.name}: ${e}`);
+                    this.logger.error(`Can't restore energy for ${updatedAthlete.logName}: ${e}`);
                 }
-                this.athleteService.triggerPerks(athlete);
-                await this.athleteService.updateAthlete(athlete);
-                await this.claimAllRewards(athlete.id);
-                await this.challengeService.resetDailyChallenges(athlete.id);
+                this.athleteService.triggerPerks(updatedAthlete);
+                await this.athleteService.updateAthlete(updatedAthlete);
+                await this.claimAllRewards(updatedAthlete.id);
+                // await this.challengeService.resetDailyChallenges(updatedAthlete.id); // Not used this time
             })
         })
     }

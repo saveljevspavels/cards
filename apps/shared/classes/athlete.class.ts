@@ -122,6 +122,10 @@ export default class Athlete implements JsonObjectInterface {
         )
     }
 
+    get logName(): string {
+        return `${this.name} (${this.id})`;
+    }
+
     spendCoins(amount: number) {
         if(this.currencies.coins < amount) {
             throw 'Not enough coins';

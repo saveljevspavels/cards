@@ -130,6 +130,7 @@ export class CardSnapshot extends Card {
             comment: this.comment,
             attachedImages: this.attachedImages,
             likes: this.likes,
+            reports: this.reports,
         };
     }
 
@@ -153,6 +154,7 @@ export class CardSnapshot extends Card {
         snapshot.comment = json.comment;
         snapshot.attachedImages = json.attachedImages;
         snapshot.likes = json.likes;
+        snapshot.reports = json.reports;
         return snapshot
     }
 }

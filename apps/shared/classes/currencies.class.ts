@@ -65,6 +65,11 @@ export class Currencies {
         return this;
     }
 
+    withEnergy(value: number): Currencies {
+        this.energy = value;
+        return this;
+    }
+
     toString(): string {
         return `Currencies(${Object.entries(this).filter(([key, value]) => value).map(([key, value]) => `${key}: ${value}`).join(', ')})`;
     }

@@ -9,11 +9,12 @@ import {CardScheme} from "../../../../../shared/interfaces/card-scheme.interface
 import {map} from "rxjs/operators";
 import {CardSnapshot} from "../../../../../shared/classes/card.class";
 import {AngularFirestore} from "@angular/fire/compat/firestore";
+import {Activity} from "../../../../../shared/interfaces/activity.interface";
 
 @Injectable()
 export class AdminService {
 
-    public reportedActivities = new BehaviorSubject<any>([])
+    public reportedActivities = new BehaviorSubject<Activity[]>([])
     public cardFactories = new BehaviorSubject<any>([])
 
     constructor(private http: HttpClient,
@@ -24,7 +25,17 @@ export class AdminService {
             )
         ).valueChanges()
             .pipe(
-                map((activities: any[]) => activities.filter(activity =>
+                map((activities: any[]) => {
+                    return activities.map(activity => {
+                        activity.gameData.cardSnapshots = activity.gameData.cardSnapshots.map((card: any) => {
+                            return CardSnapshot.fromJSONObject(card)
+                        })
+                        console.log('activity', activity)
+                        return activity
+
+                    })
+                }),
+                map((activities: Activity[]) => activities.filter(activity =>
                     activity.gameData.cardSnapshots.find((card: CardSnapshot) =>
                         (card.reports?.length ? card.reports : [])?.find(report => !report.resolved)
                     )
@@ -32,6 +43,7 @@ export class AdminService {
             )
             )
             .subscribe((activities: any) => {
+                console.log('activities', activities)
             this.reportedActivities.next(activities)
         });
 
