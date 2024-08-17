@@ -82,7 +82,7 @@ export default class ActivityService {
             if(!token) {
                 return;
             }
-            this.getAthleteActivities(token).then(activities => {
+            this.getAthleteActivities(token).then(async activities => {
                 const requestedIds = req.body.activityIds;
                 const commandId = req.body.commandId;
                 const dateFrom = req.body.from;
@@ -93,19 +93,19 @@ export default class ActivityService {
                     activities = activities.filter((activity: any) => (+ new Date(activity.start_date)) > dateFrom)
                 }
                 if(commandId) {
-                    this.fireStoreService.deleteCommand(commandId)
+                    await this.fireStoreService.deleteCommand(commandId)
                 }
-                activities.forEach((activity: any) => {
-                    Promise.all([
-                        this.fireStoreService.deletePendingActivity(activity.id),
-                        this.addDetailedActivity({ ...activity,
+                for (let i = 0; i < activities.length; i++) {
+                    await Promise.all([
+                        this.fireStoreService.deletePendingActivity(activities[i].id),
+                        this.addDetailedActivity({ ...activities[i],
                             gameData: {
                                 status: ActivityStatus.NEW
                             }
                         }),
-                        this.challengeService.evaluateChallengeProgress(activity, activity.athlete.id.toString(), true)
+                        this.challengeService.evaluateChallengeProgress(activities[i], activities[i].athlete.id.toString(), true)
                     ])
-                })
+                }
                 res.status(200).send(activities);
             }, (err) => {
                 this.logger.error('Error trying to get detailed activities from Strava');

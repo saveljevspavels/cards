@@ -217,7 +217,7 @@ export default class AbilityService {
         // Base coin reward
         reward.coins = 3 + getRandomInt(3); // 3-5
 
-        const roll= getRandomInt(100);
+        const roll= getRandomInt(101);
         if(roll < 10) {
             reward.coins += 16 + getRandomInt(4);
         } else if(roll < 20) {

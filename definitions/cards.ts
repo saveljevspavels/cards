@@ -1873,7 +1873,13 @@ export const CARDS: Card[] = [
             comparator: "greater",
             formula: "average_speed * 1.05",
             property: "average_speed",
-        }, {
+        },
+        {
+            comparator: "greater",
+            formula: "distance",
+            property: "distance",
+        },
+        {
             comparator: "in",
             formula: "run,ride",
             property: "type",
@@ -1897,7 +1903,13 @@ export const CARDS: Card[] = [
             comparator: "greater",
             formula: "average_speed * 1.1",
             property: "average_speed",
-        }, {
+        },
+        {
+            comparator: "greater",
+            formula: "distance",
+            property: "distance",
+        },
+        {
             comparator: "in",
             formula: "run,ride",
             property: "type",
@@ -1921,7 +1933,13 @@ export const CARDS: Card[] = [
             comparator: "greater",
             formula: "average_speed * 1.15",
             property: "average_speed",
-        }, {
+        },
+        {
+            comparator: "greater",
+            formula: "distance",
+            property: "distance",
+        },
+        {
             comparator: "in",
             formula: "run,ride",
             property: "type",
@@ -1945,7 +1963,13 @@ export const CARDS: Card[] = [
             comparator: "greater",
             formula: "average_speed * 1.2",
             property: "average_speed",
-        }, {
+        },
+        {
+            comparator: "greater",
+            formula: "distance",
+            property: "distance",
+        },
+        {
             comparator: "in",
             formula: "run,ride",
             property: "type",
@@ -1969,7 +1993,13 @@ export const CARDS: Card[] = [
             comparator: "greater",
             formula: "average_speed * 1.25",
             property: "average_speed",
-        }, {
+        },
+        {
+            comparator: "greater",
+            formula: "distance",
+            property: "distance",
+        },
+        {
             comparator: "in",
             formula: "run,ride",
             property: "type",
