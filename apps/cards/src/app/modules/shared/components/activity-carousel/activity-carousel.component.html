@@ -1,0 +1,14 @@
+<div [ngClass]="{'mb-3': items.length <= 1}">
+    <p-carousel
+            [value]="items"
+            [numVisible]="1"
+            [numScroll]="1"
+            [circular]="false"
+            [showIndicators]="items.length > 1"
+            [showNavigators]="items.length > 1"
+    >
+        <ng-template let-activity pTemplate="item">
+            <app-pending-activity [activity]="activity" [styleClass]="items.length > 1 ? 'pl-5 pr-5': ''"></app-pending-activity>
+        </ng-template>
+    </p-carousel>
+</div>

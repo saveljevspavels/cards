@@ -1,0 +1,41 @@
+.p-carousel-item {
+  margin: 0 var(--margin);
+  flex-basis: calc(100% - var(--margin) * 2)!important;
+}
+
+.p-carousel-container {
+  position: relative;
+  & > button {
+    color: var(--color-background);
+    z-index: 1;
+    position: absolute;
+    &:last-child {
+      right: var(--margin);
+    }
+    &:first-child {
+      left: var(--margin);
+    }
+  }
+}
+
+.p-component {
+  font-family: 'Nunito', sans-serif!important;
+}
+
+.p-carousel-indicators {
+  li {
+    button {
+      background-color: var(--color-blue-light);
+      border-radius: 50%;
+      width: 11px;
+      height: 11px;
+    }
+    &.p-highlight {
+      button {
+        background-color: var(--color-primary);
+      }
+    }
+    padding: 0 5px;
+    margin: 2px;
+  }
+}

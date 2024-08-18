@@ -11,6 +11,7 @@ import {MessageService} from "primeng/api";
 import {CONST} from "../../../../../../../../definitions/constants";
 import {generateId} from "../../../../../../../server/helpers/util";
 import {ButtonType} from "../../../shared/components/button/button.component";
+import {GameService} from "../../../../services/game.service";
 
 @Component({
     selector: 'app-challenge-management',
@@ -25,8 +26,10 @@ export class ChallengeManagementComponent implements OnInit {
     public ACTIVITY_TYPES = CONST.ACTIVITY_TYPES;
     readonly ButtonType = ButtonType;
     public challenges$ = this.challengeService.challenges;
+    public gameData$ = this.gameService.gameData.asObservable();
 
     constructor(private formBuilder: FormBuilder,
+                private gameService: GameService,
                 private challengeService: ChallengeService,
                 private messageService: MessageService,
                 private fileService: FileService) { }

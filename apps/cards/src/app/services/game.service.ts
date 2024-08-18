@@ -15,13 +15,14 @@ import {Currencies} from "../../../../shared/classes/currencies.class";
 export class GameService {
 
     public gameData = new BehaviorSubject<Game | null>(null);
-    private gameDocument: AngularFirestoreDocument<Game>;
 
     constructor(private db: AngularFirestore,
                 private http: HttpClient) {
-        this.gameDocument = this.db.collection(ConstService.CONST.COLLECTIONS.GAME).doc(ConstService.CONST.GAME_ID);
-        this.gameDocument.valueChanges().subscribe((game: any) => {
-            this.gameData.next(game)
+        this.db.collection(ConstService.CONST.COLLECTIONS.GAME,
+            (ref: any) => ref.where('id', '==', ConstService.CONST.GAME_ID)).valueChanges().subscribe((games: any) => {
+            if(games.length === 1) {
+                this.gameData.next(games[0])
+            }
         });
     }
 

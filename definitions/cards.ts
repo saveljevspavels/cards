@@ -56,7 +56,7 @@ export const CARDS: Card[] = [
         "",
         0,
         "checkpoint_ae",
-        "Do an activity in a city starting with any of the letters from A to G. Take a selfie at city's iconic sight",
+        "Do an activity in a city starting with any of the letters from A to E. Take a selfie at city's iconic sight",
         Currencies.withPoints(1).withExperience(2),
         1,
         0,

@@ -1,5 +1,7 @@
-<app-page-title [title]="title"></app-page-title>
-<app-mobile-menu (activeTitle)="setTitle($event)" [admin]="true"></app-mobile-menu>
+<div class="selectable">
+    <app-page-title [title]="title"></app-page-title>
+    <app-mobile-menu (activeTitle)="setTitle($event)" [admin]="true"></app-mobile-menu>
 
 
-<router-outlet></router-outlet>
+    <router-outlet></router-outlet>
+</div>

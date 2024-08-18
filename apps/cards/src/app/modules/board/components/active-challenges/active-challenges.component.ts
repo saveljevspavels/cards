@@ -2,8 +2,6 @@ import {Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core'
 import {ChallengeService} from "../../../../services/challenge.service";
 import {combineLatest} from "rxjs";
 import {ProgressiveChallenge} from "../../../../../../../shared/interfaces/progressive-challenge.interface";
-import {RULES} from "../../../../../../../../definitions/rules";
-import {ChallengeProgress} from "../../../../../../../shared/classes/challenge-progress";
 
 @Component({
     selector: 'app-active-challenges',

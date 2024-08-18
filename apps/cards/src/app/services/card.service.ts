@@ -20,7 +20,6 @@ export class CardService {
     public cards = new BehaviorSubject<Card[]>(CARDS);
     public cardScheme = new BehaviorSubject<CardScheme>({boards: []});
     // private cardCollection: AngularFirestoreCollection;
-    private cardSchemeDocument: AngularFirestoreDocument<CardScheme>;
 
     constructor(
         private http: HttpClient,
@@ -28,13 +27,16 @@ export class CardService {
         private validationService: ValidationService
         ) {
         // this.cardCollection = this.db.collection(ConstService.CONST.COLLECTIONS.CARDS);
-        this.cardSchemeDocument = this.db.collection(ConstService.CONST.COLLECTIONS.SCHEME).doc(ConstService.CONST.SCHEME_ID);
+        this.db.collection(ConstService.CONST.COLLECTIONS.SCHEME,
+            (ref: any) => ref.where('id', '==', ConstService.CONST.SCHEME_ID)).valueChanges().subscribe((cardSchemes: any) => {
+            if(cardSchemes.length === 1) {
+                this.cardScheme.next(cardSchemes[0])
+            }
+        });
         // this.cardCollection.valueChanges().subscribe((cards: any[]) => {
         //     this.cards.next(cards)
         // });
-        this.cardSchemeDocument.valueChanges().subscribe((cardScheme: any) => {
-            this.cardScheme.next(cardScheme)
-        });
+
     }
 
     getCard(cardId: string): Card {

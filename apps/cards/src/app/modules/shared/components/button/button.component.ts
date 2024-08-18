@@ -35,6 +35,7 @@ export class ButtonComponent implements OnInit {
 }
 
 export enum ButtonType {
+    REGULAR = 'regular',
     DANGER = 'danger',
     DANGER_FILLED = 'danger-filled',
     DANGER_FILLED_DARK = 'danger-filled-dark',

@@ -432,3 +432,7 @@ h6 {
 .justify-content-evenly {
     justify-content: space-evenly;
 }
+
+.selectable {
+    user-select: text!important;
+}

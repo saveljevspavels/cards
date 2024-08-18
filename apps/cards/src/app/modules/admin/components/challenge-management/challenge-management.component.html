@@ -22,7 +22,7 @@
         <div class="d-flex flex-column">
             <app-challenge [challenge]="challenge" [currentProgress]="0"></app-challenge>
             <div class="mt-1">
-                <app-button small="true" type="action" (buttonClick)="initForm(challenge)">Edit</app-button>
+                <app-button small="true" [type]="(gameData$ | async)?.activeChallenges.indexOf(challenge.id) === -1 ? ButtonType.ACTION: ButtonType.REGULAR" (buttonClick)="initForm(challenge)">Edit</app-button>
             </div>
         </div>
     </div>

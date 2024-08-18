@@ -18,7 +18,7 @@ export const ABILITIES: Ability[] =
         image: 'assets/perks/task_master.svg',
         title: 'Task Master',
         key: AbilityKey.EXPERIENCE_PER_TASK_BONUS,
-        description: 'Each completed task gives 1 extra experience point per perk level',
+        description: 'Each completed task gives 1 extra token point per perk level',
         value: 0,
         energyCost: 0,
         energyReward: 0,
