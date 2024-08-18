@@ -179,7 +179,7 @@ export default class CardService {
         const price = Math.max(RULES.COINS.BASE_UNLOCK_PRICE -
             athlete.getPerkLevel(AbilityKey.CARD_UNLOCK_DISCOUNT) * RULES.UNLOCK_DISCOUNT_AMOUNT, 0)
         if(currentMoney < price) {
-            this.logger.error(`Athlete ${athlete.firstname} ${athlete.lastname} does not have ${price} (has ${currentMoney}) money to unlock ${boardKey} ${currentLevel + 1}`);
+            this.logger.error(`Athlete ${athlete.logName} does not have ${price} (has ${currentMoney}) money to unlock ${boardKey} ${currentLevel + 1}`);
             return;
         }
         const newUnlocks = {...athlete.unlocks};
@@ -189,7 +189,7 @@ export default class CardService {
         athlete.unlocks = newUnlocks;
         await this.athleteService.updateAthlete(athlete);
 
-        this.logger.error(`Athlete ${athlete.firstname} ${athlete.lastname} unlocked ${boardKey} ${nextLevel} for ${price} coins (had ${currentMoney}, now has ${currentMoney - price})`);
+        this.logger.error(`Athlete ${athlete.logName} unlocked ${boardKey} ${nextLevel} for ${price} coins (had ${currentMoney}, now has ${currentMoney - price})`);
     }
 
     async claimCardRewards(athleteId: string, cardId: string) {
@@ -209,9 +209,9 @@ export default class CardService {
         athlete.addCurrencies(reward);
         await this.athleteService.updateAthlete(athlete);
 
-        this.logger.info(`Athlete ${athlete.name} claimed ${reward.toString()} for card ${card.title}`);
+        this.logger.info(`Athlete ${athlete.logName} claimed ${reward.toString()} for card ${card.title}`);
         if(card.rewards.energy) {
-            this.logger.error(`Athlete restored ${card.rewards.energy} energy for card ${card.title}`);
+            this.logger.error(`Athlete ${athlete.logName} restored ${card.rewards.energy} energy for card ${card.title}`);
         }
     }
 
@@ -220,11 +220,11 @@ export default class CardService {
         const athlete = await this.athleteService.getAthlete(athleteId);
 
         if(StaticValidationService.notEnoughCoins(athlete.currencies.coins, athlete.currencies.fatigue)) {
-            this.logger.info(`Athlete ${athlete.firstname} ${athlete.lastname} don't have enough coins to activate card ${card.title}`);
+            this.logger.info(`Athlete ${athlete.logName} don't have enough coins to activate card ${card.title}`);
             throw 'Not enough coins';
         }
         if(athlete.cards.active.length + 1 > RULES.SCHEME.MAX_ACTIVE_CARDS) {
-            this.logger.info(`Athlete ${athlete.firstname} ${athlete.lastname} has too much activated cards`);
+            this.logger.info(`Athlete ${athlete.logName} has too much activated cards`);
             throw 'Too much active cards';
         }
 
@@ -236,7 +236,7 @@ export default class CardService {
             this.athleteService.increaseFatigue(athlete, card.energyCost),
             this.athleteService.updateAthlete(athlete)
         ])
-        this.logger.info(`Athlete ${athlete.firstname} ${athlete.lastname} has activated ${card.title} for ${card.energyCost} energy and ${coinsCost} coins`);
+        this.logger.info(`Athlete ${athlete.logName} has activated ${card.title} for ${card.energyCost} energy and ${coinsCost} coins`);
     }
 
     async claimCard(athlete: Athlete, cardId: string) {

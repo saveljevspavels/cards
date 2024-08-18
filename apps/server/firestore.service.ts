@@ -194,7 +194,7 @@ export class FirestoreService {
                 {
                     achievements: [...(athlete.achievements || []), achievementId]
                 })
-            this.logger.info(`Athlete ${athlete.firstname} ${athlete.lastname} got new achievement ${achievementId}`)
+            this.logger.info(`Athlete ${athlete.logName} got new achievement ${achievementId}`)
             return true;
         } else {
             this.logger.info(`Athlete ${athleteId} doesn't exist`)

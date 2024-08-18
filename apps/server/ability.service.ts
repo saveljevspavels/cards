@@ -65,7 +65,7 @@ export default class AbilityService {
         this.logger.info(`Athlete ${athleteId} is trying to consume random ability`);
         const athlete = await this.athleteService.getAthlete(athleteId);
         if(athlete.currencies.random_perk <= 0) {
-            this.logger.info(`Athlete ${athlete.name} don't have random perks to activate`);
+            this.logger.info(`Athlete ${athlete.logName} don't have random perks to activate`);
             throw 'No random perks available';
         }
         const ability = this.getAbility(this.getRandomAbilityKey());
@@ -79,11 +79,11 @@ export default class AbilityService {
     }
 
     async consumeAbility(athleteId: string, abilityKey: AbilityKey) {
-        this.logger.info(`Athlete ${athleteId} is trying to consume ability ${abilityKey}`);
         const athlete = await this.athleteService.getAthlete(athleteId);
+        this.logger.info(`Athlete ${athlete.logName} is trying to consume ability ${abilityKey}`);
         const ability = this.getAbility(abilityKey);
         if(athlete.currencies.perk <= 0) {
-            this.logger.info(`Athlete ${athlete.name} tried to activate ability ${abilityKey} without perks`);
+            this.logger.info(`Athlete ${athlete.logName} tried to activate ability ${abilityKey} without perks`);
             throw 'No abilities available';
         }
 
@@ -112,6 +112,7 @@ export default class AbilityService {
                         }
                     }
                 )
+                athlete.addPerk(ability.key);
                 break;
             case AbilityKey.REDUCE_WALK_WORKOUT:
                 this.athleteService.updateBaseWorkout(
@@ -177,7 +178,7 @@ export default class AbilityService {
             ability.value && await this.scoreService.addPoints(athlete.id, ability.value),
             this.athleteService.updateAthlete(athlete)
         ]);
-        this.logger.info(`Athlete ${athlete.name} activated ability ${ability.key}`);
+        this.logger.info(`Athlete ${athlete.logName} activated ability ${ability.key}`);
     }
 
     reduceBaseWorkout(distance: number): number {
@@ -197,7 +198,7 @@ export default class AbilityService {
         this.logger.info(`Athlete ${athleteId} is trying to open chest`);
         const athlete: Athlete = await this.athleteService.getAthlete(athleteId);
         if (athlete.currencies.chest <= 0) {
-            this.logger.info(`Athlete ${athlete.name} tried to open chest without chests`);
+            this.logger.info(`Athlete ${athlete.logName} tried to open chest without chests`);
             throw 'No chests available';
         }
         athlete.currencies.chest -= 1;
@@ -207,7 +208,7 @@ export default class AbilityService {
             this.athleteService.updateAthlete(athlete),
             rewards.points && this.scoreService.addPoints(athleteId, rewards.points)
         ])
-        this.logger.info(`Athlete ${athlete.name} opened chest and got ${rewards.toString()}`);
+        this.logger.info(`Athlete ${athlete.logName} opened chest and got ${rewards.toString()}`);
         return rewards;
     }
 

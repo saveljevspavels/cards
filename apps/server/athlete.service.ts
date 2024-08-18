@@ -58,7 +58,7 @@ export default class AthleteService {
         athlete.addCurrencies(reward);
         athlete.baseCardProgress = newProgress;
         await this.updateAthlete(athlete);
-        this.logger.info(`Athlete ${athlete.name} claimed ${reward} for basic ${type}`);
+        this.logger.info(`Athlete ${athlete.logName} claimed ${reward} for basic ${type}`);
     }
 
     calculateBaseReward(athlete: Athlete, type: string): Currencies {
@@ -77,10 +77,10 @@ export default class AthleteService {
         const athleteExists = await this.fireStoreService.athleteCollection.exists(athlete.id.toString())
         if(!athleteExists) {
             await this.fireStoreService.athleteCollection.set(athlete.id.toString(), this.createAthlete(athlete))
-            this.logger.info(`Athlete ${athlete.firstname} ${athlete.lastname} ${athlete.id} saved`)
+            this.logger.info(`Athlete ${athlete.logName} saved`)
         } else {
             await this.fireStoreService.athleteCollection.update(athlete.id.toString(), this.createAthletePatch(athlete))
-            this.logger.info(`Athlete ${athlete.firstname} ${athlete.lastname} ${athlete.id} logged in & updated`)
+            this.logger.info(`Athlete ${athlete.logName} logged in & updated`)
         }
     }
 
@@ -119,11 +119,11 @@ export default class AthleteService {
         try {
             athlete.spendEnergy(amount);
         } catch(e) {
-            this.logger.info(`Athlete ${athlete.name} can't spend ${amount} energy due to ${e}`);
+            this.logger.info(`Athlete ${athlete.logName} can't spend ${amount} energy due to ${e}`);
             throw e;
         }
 
-        this.logger.info(`Athlete ${athlete.name} spent ${amount} energy, now ${athlete.currencies.energy}`)
+        this.logger.info(`Athlete ${athlete.logName} spent ${amount} energy, now ${athlete.currencies.energy}`)
     }
 
     increaseFatigue(athlete: Athlete, amount: number): void {
@@ -133,18 +133,18 @@ export default class AthleteService {
         try {
             athlete.increaseFatigue(amount);
         } catch (e) {
-            this.logger.info(`Athlete ${athlete.name} can't increase fatigue by ${amount} due to ${e}`);
+            this.logger.info(`Athlete ${athlete.logName} can't increase fatigue by ${amount} due to ${e}`);
             throw e;
         }
 
-        this.logger.info(`Athlete ${athlete.name} fatigue increased by ${amount}, now ${athlete.currencies.fatigue}`)
+        this.logger.info(`Athlete ${athlete.logName} fatigue increased by ${amount}, now ${athlete.currencies.fatigue}`)
     }
 
     async decreaseFatigue(athlete: Athlete, amount: number): Promise<void> {
         const newFatigue = Math.max(athlete.currencies.energy - amount, RULES.FATIGUE.MIN)
         athlete.currencies.fatigue = newFatigue;
         await this.updateAthlete(athlete);
-        this.logger.info(`Athlete ${athlete.firstname} ${athlete.lastname} fatigue lowered by ${amount}, now ${newFatigue}`)
+        this.logger.info(`Athlete ${athlete.logName} fatigue lowered by ${amount}, now ${newFatigue}`)
     }
 
     spendCoins(athlete: Athlete, amount: number) {
@@ -154,10 +154,10 @@ export default class AthleteService {
         try {
             athlete.spendCoins(amount);
         } catch (e) {
-            this.logger.info(`Athlete ${athlete.name} don't have enough coins (${amount}) to spend. Has ${athlete.currencies.coins}`);
+            this.logger.info(`Athlete ${athlete.logName} don't have enough coins (${amount}) to spend. Has ${athlete.currencies.coins}`);
             throw 'Not enough coins';
         }
-        this.logger.info(`Athlete ${athlete.name} spent ${amount} coins, now ${athlete.currencies.coins - amount}`)
+        this.logger.info(`Athlete ${athlete.logName} spent ${amount} coins, now ${athlete.currencies.coins - amount}`)
     }
 
     triggerPerks(athlete: Athlete) {
@@ -165,7 +165,7 @@ export default class AthleteService {
         if(basicIncome) {
             const amount = basicIncome * RULES.BASIC_INCOME_AMOUNT;
             athlete.addCurrencies(Currencies.withCoins(amount));
-            this.logger.info(`Athlete ${athlete.name} gained ${amount} coins from ${AbilityKey.BASIC_INCOME}, now ${athlete.currencies.coins}`)
+            this.logger.info(`Athlete ${athlete.logName} gained ${amount} coins from ${AbilityKey.BASIC_INCOME}, now ${athlete.currencies.coins}`)
         }
     }
 
@@ -180,7 +180,7 @@ export default class AthleteService {
 
     updateBaseWorkout(athlete: Athlete, baseWorkoutPatch: any): void {
         athlete.updateBaseWorkout(baseWorkoutPatch);
-        this.logger.info(`Base workout updated for ${athlete.name} ${athlete.id} with ${JSON.stringify(baseWorkoutPatch)}`)
+        this.logger.info(`Base workout updated for ${athlete.logName} with ${JSON.stringify(baseWorkoutPatch)}`)
     }
 
     addExperience(athlete: Athlete, experience: number): void {
@@ -190,7 +190,7 @@ export default class AthleteService {
         const levelBefore = athlete.level;
         athlete.addExperience(experience);
         if(athlete.level > levelBefore) {
-            this.logger.info(`Athlete ${athlete.name} got ${experience} experience, leveled up to ${athlete.level}`)
+            this.logger.info(`Athlete ${athlete.logName} got ${experience} experience, leveled up to ${athlete.level}`)
         }
     }
 }

@@ -93,11 +93,11 @@ export class ChallengeService {
         const athlete: Athlete = await this.athleteService.getAthlete(athleteId);
         if (athlete?.level < levelIndex + 1) {
             this.logger.error(`Athlete ${athleteId} is not on level ${levelIndex}`);
-            throw `Athlete ${athleteId} is not on level ${levelIndex} yet`;
+            throw `Athlete ${athlete.logName} is not on level ${levelIndex} yet`;
         }
         if (athlete?.claimedLevelRewards?.indexOf(levelIndex) > -1) {
             this.logger.error(`Athlete ${athleteId} has already claimed level ${levelIndex}`);
-            throw `Athlete ${athleteId} has already claimed level ${levelIndex}`;
+            throw `Athlete ${athlete.logName} has already claimed level ${levelIndex}`;
         }
 
         athlete.claimLevelRewards(levelIndex);
@@ -105,7 +105,7 @@ export class ChallengeService {
             LEVEL_REWARDS[levelIndex].points ? this.scoreService.addPoints(athleteId, LEVEL_REWARDS[levelIndex].points) : Promise.resolve(),
             this.athleteService.updateAthlete(athlete)
         ]);
-        this.logger.info(`Level ${levelIndex + 1} rewards ${LEVEL_REWARDS[levelIndex]} claimed by ${athlete.name}`);
+        this.logger.info(`Level ${levelIndex + 1} rewards ${LEVEL_REWARDS[levelIndex]} claimed by ${athlete.logName}`);
     }
 
     async claimChallenge(athleteId: string, challengeId: string) {
@@ -141,7 +141,7 @@ export class ChallengeService {
             challenge.rewards.points ? this.scoreService.addPoints(athleteId, challenge.rewards.points) : Promise.resolve(),
             this.athleteService.updateAthlete(athlete)
         ]);
-        this.logger.info(`Challenge ${challengeId} claimed by ${athleteId}`);
+        this.logger.info(`Challenge ${challenge.title} ${challengeId} claimed by ${athlete.logName}`);
     }
 
     async getAllChallenges(): Promise<ProgressiveChallenge[]> {

@@ -136,15 +136,15 @@ export default class ActivityService {
     }
 
     async tryAutoApprove(activityId: number): Promise<void> {
-        this.logger.info(`Attempting auto approve for activity ${activityId}`)
         const activity = await this.getActivity(activityId);
-
         const cardSnapshots: CardSnapshot[] = activity.gameData.cardSnapshots;
 
         const athlete = await this.athleteService.getAthlete(activity.athlete.id);
 
+        this.logger.info(`Attempting auto approve for activity ${activityId} for ${athlete.logName}`)
+
         if(StaticValidationService.validateCardGroup(activity, cardSnapshots, athlete.baseWorkout)) {
-            this.logger.info(`All validators passed for ${activityId}`)
+            this.logger.info(`All validators passed for ${activityId} for ${athlete.logName}`)
             await this.approveActivity(activity.id.toString());
 
             const completedBaseCardsBefore = this.getCompletedBaseCardCount(athlete.baseCardProgress);
@@ -165,7 +165,7 @@ export default class ActivityService {
         const athlete = await this.athleteService.getAthlete(activity.athlete.id);
 
         if(activity.gameData.status === ActivityStatus.APPROVED) {
-            this.logger.error(`Activity ${activity.id} was already approved for athlete ${activity.athlete.id.toString()}`)
+            this.logger.error(`Activity ${activity.id} was already approved for athlete ${athlete.logName}`)
             return;
         }
 
@@ -178,7 +178,7 @@ export default class ActivityService {
             }
         })
 
-        this.logger.info(`Activity ${activity.id} was approved for athlete ${athlete.firstname} ${athlete.lastname} with cards ${activity.gameData.cardSnapshots.map((card: CardSnapshot) => card.title)}`)
+        this.logger.info(`Activity ${activity.id} was approved for athlete ${athlete.logName} with cards ${activity.gameData.cardSnapshots.map((card: CardSnapshot) => card.title)}`)
     }
 
     async updateBaseCard(athlete: Athlete, activity: Activity, cardSnapshots: CardSnapshot[]): Promise<BaseCardProgress> {
@@ -246,19 +246,19 @@ export default class ActivityService {
 
         if(activity.gameData.status !== ActivityStatus.NEW
             && activity.gameData.status !== ActivityStatus.REJECTED) {
-            this.logger.info(`Athlete ${athlete.name} ${athlete.id} submitted activity ${activityId} with invalid status ${activity.gameData.status}`)
+            this.logger.info(`Athlete ${athlete.logName} submitted activity ${activityId} with invalid status ${activity.gameData.status}`)
             throw RESPONSES.ERROR.WRONG_ACTIVITY_STATUS
         }
 
         if(cardIds.length > RULES.MAX_CARDS_SUBMIT) {
-            this.logger.info(`Athlete ${athlete.name} ${athlete.id} submitted activity with too many cards ${cardIds}`)
+            this.logger.info(`Athlete ${athlete.logName} submitted activity with too many cards ${cardIds}`)
             throw RESPONSES.ERROR.MAX_CARDS_SUBMIT
         }
 
         const cards: Card[] = cardIds.length ? CARDS.filter((card => cardIds.indexOf(card.id) !== -1)) : [];
 
         if(cardIds.length > RULES.MAX_CARDS_SUBMIT) {
-            this.logger.info(`Athlete ${athlete.name} ${athlete.id} submitted activity with too many cards ${cardIds}`)
+            this.logger.info(`Athlete ${athlete.logName} submitted activity with too many cards ${cardIds}`)
             throw RESPONSES.ERROR.MAX_CARDS_SUBMIT
         }
 
@@ -293,7 +293,7 @@ export default class ActivityService {
                 })
         ])
 
-        this.logger.info(`Athlete ${athlete.firstname} ${athlete.lastname} ${athlete.id} submitted activity with ${cardIds}`)
+        this.logger.info(`Athlete ${athlete.logName} submitted activity with ${cardIds}`)
     }
 
     async rejectActivity(activityId: string, comments: string) {
@@ -335,7 +335,7 @@ export default class ActivityService {
               )
         ]);
 
-        this.logger.info(`Activity ${activity.id} ${activityType} ${targetStat} was boosted for athlete ${athlete.name} for ${RULES.COINS.ACTIVITY_BOOST_PRICE} coins`)
+        this.logger.info(`Activity ${activity.id} ${activityType} ${targetStat} was boosted for athlete ${athlete.logName} for ${RULES.COINS.ACTIVITY_BOOST_PRICE} coins`)
         return {
             ...activity,
             ...activityPatch
