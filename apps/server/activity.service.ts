@@ -86,10 +86,12 @@ export default class ActivityService {
                 const requestedIds = req.body.activityIds;
                 const commandId = req.body.commandId;
                 const dateFrom = req.body.from;
-                if(await this.fireStoreService.commandCollection.exists(commandId)) {
-                    await this.fireStoreService.deleteCommand(commandId)
-                } else {
-                    return;
+                if(commandId) {
+                    if(await this.fireStoreService.commandCollection.exists(commandId)) {
+                        await this.fireStoreService.deleteCommand(commandId)
+                    } else {
+                        return;
+                    }
                 }
                 if(requestedIds?.length) {
                     activities = activities.filter((activity: any) => requestedIds.indexOf(activity.id) !== -1)
