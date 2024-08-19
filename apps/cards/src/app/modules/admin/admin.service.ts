@@ -30,7 +30,6 @@ export class AdminService {
                         activity.gameData.cardSnapshots = activity.gameData.cardSnapshots.map((card: any) => {
                             return CardSnapshot.fromJSONObject(card)
                         })
-                        console.log('activity', activity)
                         return activity
 
                     })
@@ -43,7 +42,6 @@ export class AdminService {
             )
             )
             .subscribe((activities: any) => {
-                console.log('activities', activities)
             this.reportedActivities.next(activities)
         });
 

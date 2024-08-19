@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import {BehaviorSubject, Observable} from "rxjs";
 import {HttpClient} from "@angular/common/http";
-import {debounceTime, distinctUntilChanged, filter, take} from "rxjs/operators";
+import {debounceTime, distinctUntilChanged, filter, map, take} from "rxjs/operators";
 import {environment} from "../../environments/environment";
 import {AthleteService} from "./athlete.service";
 import {ConstService} from "./const.service";
@@ -9,6 +9,7 @@ import Athlete from "../../../../shared/classes/athlete.class";
 import {AngularFirestore} from "@angular/fire/compat/firestore";
 import {UploadedImage} from "../../../../shared/interfaces/image-upload.interface";
 import {ActivityStatus} from "../../../../shared/interfaces/activity.interface";
+import {CardSnapshot} from "../../../../shared/classes/card.class";
 
 @Injectable({
     providedIn: 'root'
@@ -47,7 +48,15 @@ export class ActivityService {
         db.collection(
             ConstService.CONST.COLLECTIONS.DETAILED_ACTIVITIES,
             (ref: any) => ref.where('gameData.status', '==', ActivityStatus.APPROVED)
-        ).valueChanges().subscribe((activities: any) => {
+        ).valueChanges().pipe(
+            map((activities: any[]) => {
+                return activities.map(activity => {
+                    activity.gameData.cardSnapshots = activity.gameData.cardSnapshots.map((card: any) => {
+                        return CardSnapshot.fromJSONObject(card)
+                    })
+                    return activity
+                })
+            })).subscribe((activities: any) => {
             this.approvedActivities.next(activities)
         });
 

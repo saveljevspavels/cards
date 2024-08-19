@@ -1,38 +1,50 @@
 import {inject, Injectable} from "@angular/core";
-import {distinctUntilChanged, filter, flatMap} from "rxjs/operators";
+import {distinctUntilChanged, filter, first, flatMap, map, mergeMap, pairwise, startWith, tap} from "rxjs/operators";
 import {COMMANDS} from "../constants/commands";
 import {ActivityService} from "./activity.service";
 import {GameService} from "./game.service";
-import {combineLatest, Observable} from "rxjs";
+import {combineLatest, forkJoin, Observable} from "rxjs";
 import {AthleteService} from "./athlete.service";
 import {ConstService} from "./const.service";
-import {collection, collectionData, Firestore, query, where} from "@angular/fire/firestore";
+import {AngularFirestore} from "@angular/fire/compat/firestore";
 
 @Injectable({
     providedIn: 'root'
 })
 export class CommandsService {
-    firestore: Firestore = inject(Firestore);
 
     constructor(private activityService: ActivityService,
                 private athleteService: AthleteService,
-                private gameService: GameService
+                private gameService: GameService,
+                private db: AngularFirestore,
                 ) {
     }
 
     init() {
-        const commandsCollection = collection(this.firestore, ConstService.CONST.COLLECTIONS.COMMANDS);
-        this.athleteService.myId.pipe(
-            distinctUntilChanged(),
-            filter(id => !!id),
-            flatMap((id) =>
-                combineLatest([
-                    (collectionData(query(commandsCollection, where('athleteId', '==', id))) as Observable<any>).pipe(distinctUntilChanged()),
-                    this.gameService.gameData.asObservable()
-                ])
+        forkJoin([
+            this.athleteService.myId.pipe(
+                filter(id => !!id),
+                first(),
+            ),
+            this.gameService.gameData.asObservable().pipe(
+                filter(game => !!game),
+                first()
             )
-        )
-        .subscribe(([commands, game]: any) => {
+        ]).pipe(
+            tap(([id, game]: any) => console.log('ID', id, game)),
+            mergeMap(([id, game]: any) => this.db.collection(
+                ConstService.CONST.COLLECTIONS.COMMANDS,
+                (ref: any) => ref.where('athleteId', '==', id)
+            ).valueChanges()
+                    .pipe(
+                        startWith(null),
+                        pairwise(),
+                        filter(([prev, next]) => {
+                            return !!next && !!next.length && (!prev || prev.toString() !== next.toString());
+                        }),
+                        map((commands: any) => [commands[1], game]),
+                    ),
+        )).subscribe(([commands, game]: any) => {
             commands.forEach((command: any) => {
                 switch(command.type) {
                     case COMMANDS.REQUEST_ACTIVITIES:
