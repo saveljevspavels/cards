@@ -7,7 +7,8 @@ export interface Ability {
     energyCost: number;
     energyReward: number;
     coinsCost: number;
-    coinsReward: number
+    coinsReward: number;
+    maxLevel: number;
 }
 
 export enum AbilityKey {

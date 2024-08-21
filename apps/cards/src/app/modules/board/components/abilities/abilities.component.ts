@@ -28,7 +28,7 @@ export class AbilitiesComponent implements OnInit {
         this.athlete = athlete;
         this.abilities = ABILITIES
             .filter((ability: Ability) => RULES.ENABLED_ABILITIES.indexOf(ability.key) !== -1)
-            // .filter((ability: Ability) => athlete.usedAbilities.indexOf(ability.key) === -1); // Not filtering out used abilities for now
+            .filter((ability: Ability) => !athlete.perks[ability.key] || !ability.maxLevel || athlete.perks[ability.key] < ability.maxLevel); // Not filtering out used abilities for now
       }
     })
   }

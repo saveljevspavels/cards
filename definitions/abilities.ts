@@ -13,6 +13,7 @@ export const ABILITIES: Ability[] =
         energyReward: 0,
         coinsCost: 0,
         coinsReward: 0,
+        maxLevel: 2
     },
     {
         image: 'assets/perks/task_master.svg',
@@ -24,6 +25,7 @@ export const ABILITIES: Ability[] =
         energyReward: 0,
         coinsCost: 0,
         coinsReward: 0,
+        maxLevel: 2
     },
     {
         image: 'assets/perks/perpetuum_mobile.svg',
@@ -35,6 +37,7 @@ export const ABILITIES: Ability[] =
         energyReward: 0,
         coinsCost: 0,
         coinsReward: 0,
+        maxLevel: 2
     },
     {
         image: 'assets/perks/breakthrough.svg',
@@ -46,6 +49,7 @@ export const ABILITIES: Ability[] =
         energyReward: 0,
         coinsCost: 0,
         coinsReward: 0,
+        maxLevel: 2
     },
     {
         image: 'assets/perks/lock_&_stock.svg',
@@ -57,6 +61,7 @@ export const ABILITIES: Ability[] =
         energyReward: 0,
         coinsCost: 0,
         coinsReward: 0,
+        maxLevel: 2
     },
     {
         image: 'assets/perks/basic_income.svg',
@@ -68,6 +73,7 @@ export const ABILITIES: Ability[] =
         energyReward: 0,
         coinsCost: 0,
         coinsReward: 0,
+        maxLevel: 2
     },
     {
         image: 'assets/perks/based.svg',
@@ -79,6 +85,7 @@ export const ABILITIES: Ability[] =
         energyReward: 0,
         coinsCost: 0,
         coinsReward: 0,
+        maxLevel: 2
     },
     {
         image: 'assets/perks/breakthrough.svg',
@@ -90,5 +97,6 @@ export const ABILITIES: Ability[] =
         energyReward: 0,
         coinsCost: 0,
         coinsReward: 0,
+        maxLevel: 0
     },
 ]

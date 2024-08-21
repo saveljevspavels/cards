@@ -68,14 +68,18 @@ export default class AbilityService {
             this.logger.info(`Athlete ${athlete.logName} don't have random perks to activate`);
             throw 'No random perks available';
         }
-        const ability = this.getAbility(this.getRandomAbilityKey());
+        const ability = this.getAbility(this.getRandomAbilityKey(athlete));
         athlete.currencies.random_perk -= 1;
         await this.activateAbility(athlete, ability);
         return ability.key;
     }
 
-    getRandomAbilityKey(): AbilityKey {
-        return RULES.ENABLED_ABILITIES[getRandomInt(RULES.ENABLED_ABILITIES.length)];
+    getRandomAbilityKey(athlete: Athlete): AbilityKey {
+        const availableAbilities = RULES.ENABLED_ABILITIES.filter(abilityKey => {
+            const ability =  this.getAbility(abilityKey);
+            return !ability.maxLevel || !athlete.perks[abilityKey] || athlete.perks[abilityKey] < ability.maxLevel
+        });
+        return availableAbilities[getRandomInt(availableAbilities.length)];
     }
 
     async consumeAbility(athleteId: string, abilityKey: AbilityKey) {
@@ -84,7 +88,11 @@ export default class AbilityService {
         const ability = this.getAbility(abilityKey);
         if(athlete.currencies.perk <= 0) {
             this.logger.info(`Athlete ${athlete.logName} tried to activate ability ${abilityKey} without perks`);
-            throw 'No abilities available';
+            throw 'No perks available';
+        }
+        if(ability.maxLevel && athlete.perks[abilityKey] >= ability.maxLevel) {
+            this.logger.info(`Athlete ${athlete.logName} tried to activate ability ${abilityKey}. Is at max level (${athlete.perks[abilityKey]})`);
+            throw 'Perk at maximum level';
         }
 
         athlete.currencies.perk -= 1;

@@ -15,7 +15,7 @@
         <div class="col-12">
             <div class="d-flex flex-column">
                 <ng-container *ngFor="let reward of LEVEL_REWARDS; let i = index">
-                    <ng-container *ngIf="i >= (athlete$ | async).level - 3 && i <= (athlete$ | async).level + 5">
+                    <ng-container *ngIf="((i >= (athlete$ | async).level - 3 || (athlete$ | async).claimedLevelRewards.indexOf(i) === -1) && i <= (athlete$ | async).level + 5)">
                         <app-level
                                 [levelIndex]="i"
                                 [completed]="(athlete$ | async).level > i"

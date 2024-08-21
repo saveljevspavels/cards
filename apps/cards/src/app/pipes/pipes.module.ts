@@ -11,6 +11,7 @@ import {ActivityTypePipe} from "./activity-type.pipe";
 import {PercentPipe} from "./percent.pipe";
 import {MinutesPipe} from "./minutes.pipe";
 import {ActivityPropPipe} from "./activity-prop.pipe";
+import {RomanPipe} from "./roman.pipe";
 
 const PIPES = [
 	ModifierPipe,
@@ -23,7 +24,8 @@ const PIPES = [
     ActivityTypePipe,
     PercentPipe,
     MinutesPipe,
-    ActivityPropPipe
+    ActivityPropPipe,
+    RomanPipe
 ]
 
 @NgModule({

@@ -11,6 +11,7 @@
             <ng-template #abilityTemplate let-dataItem="dataItem">
                 <app-ability
                         [ability]="dataItem"
+                        [level]="dataItem.maxLevel ? (athlete.perks[dataItem.key] || 0) + 1 : 0"
                 ></app-ability>
             </ng-template>
         </app-selection-wrapper>

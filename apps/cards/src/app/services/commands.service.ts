@@ -31,7 +31,6 @@ export class CommandsService {
                 first()
             )
         ]).pipe(
-            tap(([id, game]: any) => console.log('ID', id, game)),
             mergeMap(([id, game]: any) => this.db.collection(
                 ConstService.CONST.COLLECTIONS.COMMANDS,
                 (ref: any) => ref.where('athleteId', '==', id)

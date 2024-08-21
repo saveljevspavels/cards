@@ -1,4 +1,5 @@
-<div class="box challenge d-flex gap-2-5 align-items-center full-height {{completed || 'challenge--completed'}}">
+<div class="box challenge d-flex gap-2-5 align-items-center full-height relative {{completed || 'challenge--completed'}}">
+    <app-entity-id [id]="challenge.id"></app-entity-id>
     <div class="challenge__progress">
         <app-circular-progress-bar
                 [icon]="challenge.icon"

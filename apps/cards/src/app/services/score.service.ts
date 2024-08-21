@@ -4,6 +4,7 @@ import {ConstService} from "./const.service";
 import Score from "../../../../shared/interfaces/score.interface";
 import {AthleteService} from "./athlete.service";
 import {AngularFirestore, AngularFirestoreCollection} from "@angular/fire/compat/firestore";
+import Athlete from "../../../../shared/classes/athlete.class";
 
 @Injectable({
     providedIn: 'root'
@@ -22,11 +23,18 @@ export class ScoreService {
     });
     combineLatest([
       this.athleteService.myId,
-      this.scoreCollection.valueChanges()
-    ]).subscribe(([myId, scores]: any) => {
-      if(!myId || !scores.length) {
+      this.scoreCollection.valueChanges(),
+      this.athleteService.athletes.asObservable()
+    ]).subscribe(([myId, scores, athletes]: any) => {
+      if(!myId || !scores.length || !athletes.length) {
         return;
       }
+
+      scores = scores.map((score: Score) => {
+          score.level = athletes.find((athlete: Athlete) => athlete.id.toString() === score.athleteId).level;
+          return score;
+      });
+
       this.scores.next(this.sortScores(scores as Score[]));
       this.myScore.next(scores.find((score: Score) => score.athleteId === myId) || null)
     });
@@ -34,7 +42,7 @@ export class ScoreService {
 
   sortScores(scores: Score[]): Score[] {
     return scores.sort((a: Score, b: Score) =>
-        b.value - a.value || b.cardsPlayed - a.cardsPlayed
+        b.value - a.value || ((a.level && b.level) ? (b.level - a.level) : 0)
     )
   }
 }

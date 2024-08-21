@@ -6,7 +6,7 @@
         <app-athlete [athleteId]="score.athleteId"></app-athlete>
     </div>
     <div class="score-item__cards-played">
-        {{score.cardsPlayed}}
+        {{score.level || 0}}
     </div>
     <div class="score-item__points ml-3">
         {{score.value}}

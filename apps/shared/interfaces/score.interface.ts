@@ -3,4 +3,5 @@ export default interface Score {
     athleteId: string;
     cardsPlayed: number;
     value: number;
+    level?: number;
 }
