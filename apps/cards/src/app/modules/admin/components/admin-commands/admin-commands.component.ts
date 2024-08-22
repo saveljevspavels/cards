@@ -5,6 +5,7 @@ import {BehaviorSubject} from "rxjs";
 import {AthleteService} from "../../../../services/athlete.service";
 import {MessageService} from "primeng/api";
 import {DateService} from "../../../../../../../shared/utils/date.service";
+import Athlete from "../../../../../../../shared/classes/athlete.class";
 
 @Component({
   selector: 'app-admin-commands',
@@ -13,7 +14,8 @@ import {DateService} from "../../../../../../../shared/utils/date.service";
 })
 export class AdminCommandsComponent implements OnInit {
 
-    public selectedAthletes = new FormControl([]);
+    public selectedAthletes = new FormControl<string[]>([]);
+    public pendingActivityId = new FormControl<string>('');
     public allAthletes: BehaviorSubject<any> = this.athleteService.athletes;
 
     constructor(private adminService: AdminService,
@@ -26,6 +28,15 @@ export class AdminCommandsComponent implements OnInit {
 
     requestActivities() {
         this.adminService.requestActivities(this.selectedAthletes.value || [])
+    }
+
+    addPendingActivity() {
+        if(this.selectedAthletes.value?.length === 1 && this.pendingActivityId.value) {
+            this.adminService.addPendingActivity(this.selectedAthletes.value[0], this.pendingActivityId.value).subscribe(() => {
+                this.selectedAthletes.setValue([]);
+                this.pendingActivityId.setValue('');
+            });
+        }
     }
 
     startGame() {

@@ -2344,4 +2344,101 @@ export const CARDS: Card[] = [
         false,
         []
     ),
+    new Card(
+        "Legendary",
+        "",
+        0,
+        "local_legend",
+        "Get a Local Legend status during you activity on any of the Strava segments",
+        Currencies.withPoints(1).withExperience(15),
+        1,
+        0,
+        {progression: 0,usesToProgress: 0},
+        'null',
+        Progression.NONE,
+        [{
+            comparator: "greater",
+            formula: "distance",
+            property: "distance",
+        }, {
+            comparator: "in",
+            formula: "run,ride",
+            property: "type",
+        }],
+        false,
+        []
+    ),
+    new Card(
+        "Early Halloween",
+        "",
+        0,
+        "halloween",
+        "Do an activity in a costume, be creative!",
+        Currencies.withPoints(1).withExperience(12),
+        1,
+        0,
+        {progression: 0,usesToProgress: 0},
+        'null',
+        Progression.NONE,
+        [{
+            comparator: "greater",
+            formula: "distance",
+            property: "distance",
+        }, {
+            comparator: "in",
+            formula: "run,ride,walk",
+            property: "type",
+        }],
+        false,
+        []
+    ),
+    new Card(
+        "Closet Cleaner",
+        "",
+        0,
+        "donate_clothes",
+        "Donate some clothes to a charity during your activity",
+        Currencies.withPoints(1).withExperience(15),
+        1,
+        0,
+        {progression: 0,usesToProgress: 0},
+        'null',
+        Progression.NONE,
+        [{
+            comparator: "greater",
+            formula: "distance",
+            property: "distance",
+        }, {
+            comparator: "in",
+            formula: "run,ride,walk",
+            property: "type",
+        }],
+        false,
+        []
+    ),
+    new Card(
+        "Speedster",
+        "",
+        0,
+        "speed_pr",
+        "During your activity set a new personal record on any of the Strava segments",
+        Currencies.withPoints(1).withExperience(12),
+        1,
+        0,
+        {progression: 0,usesToProgress: 0},
+        'null',
+        Progression.NONE,
+        [{
+            comparator: "greater",
+            formula: "distance",
+            property: "distance",
+        }, {
+            comparator: "in",
+            formula: "run,ride",
+            property: "type",
+        }],
+        false,
+        []
+    ),
+
 ];

@@ -44,11 +44,11 @@ export class ActivityListComponent implements OnInit {
             const now = new Date().valueOf();
             activities.forEach((activity: any) => {
                 const submittedAt = new Date(activity.gameData.submittedAt).valueOf();
-                if((now - submittedAt) < 600000) { // 10min
+                if((now - submittedAt) < 900000) { // 15min
                     this.approvedActivities.recent.push(activity);
                 } else if ((now - submittedAt) < 3600000) { // 1h
                     this.approvedActivities.lastHour.push(activity)
-                } else if ((now - submittedAt) < 28800000000) { // 8h
+                } else if ((now - submittedAt) < 86400000) { // 24h
                     this.approvedActivities.previously.push(activity);
                 }
             })

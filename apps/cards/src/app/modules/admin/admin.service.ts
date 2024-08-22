@@ -101,4 +101,11 @@ export class AdminService {
     public saveSchema(scheme: CardScheme) {
         return this.http.post(`${environment.baseBE}/admin/save-schema`, scheme)
     }
+
+    public addPendingActivity(athleteId: string, activityId: string) {
+        return this.http.post(`${environment.baseBE}/activities/add-pending`, {
+            owner_id: parseInt(athleteId, 10),
+            object_id: parseInt(activityId, 10),
+        })
+    }
 }

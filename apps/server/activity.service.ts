@@ -17,6 +17,10 @@ import MathHelper from "./helpers/math.helper";
 import {CARDS} from "../../definitions/cards";
 
 export default class ActivityService {
+
+    private usedCommands: string[] = [];
+    private requestedActivityIds: string[] = [];
+
     constructor(
         private app: Express,
         private fireStoreService: FirestoreService,
@@ -66,6 +70,11 @@ export default class ActivityService {
             res.status(200).send({response: RESPONSES.SUCCESS});
         });
 
+        app.post(`${CONST.API_PREFIX}/activities/add-pending`, async (req, res) => {
+            await this.fireStoreService.addPendingActivity(req.body);
+            res.status(200).send({response: RESPONSES.SUCCESS});
+        });
+
         app.post(`${CONST.API_PREFIX}/approve-activity`, async (req, res) => {
           const activity = await this.getActivity(req.body.activityId);
           const athlete = await this.athleteService.getAthlete(activity.athlete.id.toString());
@@ -82,19 +91,35 @@ export default class ActivityService {
             if(!token) {
                 return;
             }
-            this.getAthleteActivities(token).then(async activities => {
-                const requestedIds = req.body.activityIds;
-                const commandId = req.body.commandId;
-                const dateFrom = req.body.from;
-                if(commandId) {
-                    if(await this.fireStoreService.commandCollection.exists(commandId)) {
-                        await this.fireStoreService.deleteCommand(commandId)
-                    } else {
-                        return;
-                    }
+            const requestedIds: string[] = req.body.activityIds?.map((id: number) => id.toString());
+            const dateFrom: number = req.body.from;
+            const commandId: string = req.body.commandId;
+            let newRequestedIds: string[] = [];
+            if(commandId) {
+                if(this.usedCommands.indexOf(commandId) === -1) {
+                    this.usedCommands.push(commandId);
+                    await this.fireStoreService.deleteCommand(commandId)
+                } else {
+                    res.status(200).send([]);
+                    return;
                 }
-                if(requestedIds?.length) {
-                    activities = activities.filter((activity: any) => requestedIds.indexOf(activity.id) !== -1)
+            }
+            if(requestedIds) {
+                newRequestedIds = requestedIds.filter((id: string) => this.requestedActivityIds.indexOf(id) === -1);
+                if(newRequestedIds.length) {
+                    this.requestedActivityIds = this.requestedActivityIds.concat(newRequestedIds);
+                } else {
+                    for (let i = 0; i < requestedIds.length; i++) {
+                        await this.fireStoreService.deletePendingActivity(requestedIds[i]);
+                    }
+                    res.status(200).send([]);
+                    return;
+                }
+            }
+
+            this.getAthleteActivities(token).then(async activities => {
+                if(newRequestedIds?.length) {
+                    activities = activities.filter((activity: any) => newRequestedIds.indexOf(activity.id.toString()) !== -1)
                 }
                 if(dateFrom) {
                     activities = activities.filter((activity: any) => (+ new Date(activity.start_date)) > dateFrom)
