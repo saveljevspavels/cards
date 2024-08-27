@@ -21,6 +21,7 @@ export class CircularProgressBarComponent implements OnChanges {
   @Input() currentValue: number;
   @Input() monochrome = false;
   @Input() small = false;
+  @Input() showDescription = true;
   @Input() reward = 0;
   @Input() targetValue = 0;
   @Input() challengeStat: ChallengeStatType;

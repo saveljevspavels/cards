@@ -33,43 +33,68 @@
 
 </app-content>
 
-<ng-template #submitPopup>
-    <div class="popup box">
-        <div class="d-flex flex-column align-items-center submit-popup">
-            <img src="../../../../../assets/images/muscle_sticker.png" class="mt-4">
-            <p class="title mt-5 pt-2 mb-4 text-center">
-                Your activity was submitted successfully!
-            </p>
-        </div>
-    </div>
-</ng-template>
 
-<ng-template #submitConfirmPopup>
-    <div class="popup box">
-        <div class="d-flex flex-column align-items-center mt-5">
-            <app-svg icon="camera" styleClass="color-primary"></app-svg>
-            <p class="mt-3 mb-4 text-center">
-                Photos are missing on some of the selected tasks. Please attach a photo for each task
-            </p>
-            <div class="mt-4 mb-2 full-width">
-                <app-button (buttonClick)="cancelSubmit()" [label]="'Ok'"></app-button>
-            </div>
-        </div>
-    </div>
-</ng-template>
+<app-popup-wrapper
+        [templateControl]="submitSuccessControl"
+        [title]="'Your activity was submitted successfully!'"
+        [showConfirm]="false"
+        [showCancel]="false"
+>
+    <img src="../../../../../assets/images/muscle_sticker.png" class="mt-4">
+</app-popup-wrapper>
 
-<ng-template #deletePopup>
-    <div class="popup box">
-        <div class="d-flex flex-column align-items-center">
-            <p class="mt-5 pt-2 mb-4 text-center">
-                Are you sure you want to delete the activity?
-            </p>
-            <div class="mt-4 mb-2 full-width">
-                <app-button type="danger-filled" [label]="'Delete'" (buttonClick)="deleteActivity()"></app-button>
+<app-popup-wrapper
+        [templateControl]="missingPhotosControl"
+        [showConfirm]="false"
+        [cancelText]="'Ok'"
+        (onCancel)="cancelSubmit()"
+>
+    <app-svg icon="camera" styleClass="color-primary"></app-svg>
+    <p class="mt-3 mb-4 text-center">
+        Photos are missing on some of the selected tasks. Please attach a photo for each task
+    </p>
+</app-popup-wrapper>
+
+<app-popup-wrapper
+        [templateControl]="submitConfirmControl"
+        [title]="'Ready to submit?'"
+        [confirmText]="'Confirm'"
+        [cancelText]="'Cancel'"
+        (onCancel)="cancelSubmit()"
+        (onConfirm)="confirmSubmit()"
+>
+    <p class="mt-3 mb-3 full-width">
+        <ng-container *ngIf="selectedCards.value.length === 0; else hasCards">
+            <div class="mb-3 text-bold text-center ">No tasks selected</div>
+            <div class="mb-3 text-center">Submitting as a Basic Task</div>
+            <app-circular-progress-bar
+                    [type]="activityType$ | async"
+                    [currentProgress]="currentProgress$ | async"
+                    [activity]="remainderActivity"
+                    [showDescription]="false"
+            >
+            </app-circular-progress-bar>
+        </ng-container>
+        <ng-template #hasCards>
+            <div class="text-center">
+                Submitting <span class="text-bold">{{selectedCards.value.length}}</span> task(s):
             </div>
-            <div class="mb-3">
-                <app-button (buttonClick)="cancelDelete()" [label]="'Cancel'"></app-button>
+            <div class="d-flex flex-column gap-2 mt-3">
+                <app-card *ngFor="let card of selectedCards.value"
+                          [card]="card.card"
+                          [showTags]="false"></app-card>
             </div>
-        </div>
-    </div>
-</ng-template>
+        </ng-template>
+    </p>
+</app-popup-wrapper>
+
+
+<app-popup-wrapper
+        [templateControl]="activityDeleteControl"
+        [title]="'Are you sure you want to delete the activity?'"
+        [confirmText]="'Delete'"
+        [cancelText]="'Cancel'"
+        (onConfirm)="deleteActivity()"
+        (onCancel)="cancelDelete()"
+>
+</app-popup-wrapper>

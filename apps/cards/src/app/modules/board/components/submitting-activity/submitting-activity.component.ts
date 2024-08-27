@@ -23,9 +23,10 @@ import {Currencies} from "../../../../../../../shared/classes/currencies.class";
 })
 export class SubmittingActivityComponent implements OnInit, OnDestroy {
 
-    @ViewChild('submitPopup', { static: true }) submitPopup: ElementRef;
-    @ViewChild('deletePopup', { static: true }) deletePopup: ElementRef;
-    @ViewChild('submitConfirmPopup', { static: true }) submitConfirmPopup: ElementRef;
+    public activityDeleteControl = new FormControl();
+    public missingPhotosControl = new FormControl();
+    public submitConfirmControl = new FormControl();
+    public submitSuccessControl = new FormControl();
 
     private submitConfirmation = new Subject;
     public notEnoughEnergy$ = new BehaviorSubject<boolean>(false);
@@ -89,7 +90,7 @@ export class SubmittingActivityComponent implements OnInit, OnDestroy {
     }
 
     openDeletePopup() {
-        this.popupService.showPopup(this.deletePopup)
+        this.popupService.showPopup(this.activityDeleteControl.value)
     }
 
     cancelDelete() {
@@ -157,9 +158,9 @@ export class SubmittingActivityComponent implements OnInit, OnDestroy {
         })
 
         if(images.find((imageSet: string[]) => !imageSet.length)) {
-            this.popupService.showPopup(this.submitConfirmPopup);
+            this.popupService.showPopup(this.missingPhotosControl.value);
         } else {
-            this.confirmSubmit();
+            this.popupService.showPopup(this.submitConfirmControl.value);
         }
     }
 
