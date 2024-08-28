@@ -21,7 +21,7 @@
       <input *ngIf="selectionEnabled && !selfSelectable"
              type="checkbox"
              [formControl]="innerForm.get(dataItem[idKey]?.toString() || dataItem)">
-      <div (click)="selectItem(dataItem)">
+      <div class="full-width" (click)="selectItem(dataItem)">
         <ng-template
             [ngTemplateOutlet]="template"
             [ngTemplateOutletContext]="{ dataItem: dataItem }"

@@ -1,5 +1,5 @@
 'use strict';
-import express, {Express} from 'express';
+import express, {Express, NextFunction, Request, Response} from 'express';
 import bodyParser from 'body-parser';
 import {FirestoreService} from "./firestore.service";
 import cors from 'cors'
@@ -25,8 +25,13 @@ const app: Express = express().use(
     AuthInterceptor.interceptRequest,
     cors({
         exposedHeaders: 'Refreshed-Jwt'
-    })
+    }),
 );
+process.on('uncaughtException', (err) => {
+    logger.error('Unhandled error caught:', err);
+    logger.error(err.stack);
+});
+
 const logger: Logger = LoggerService.init(app);
 const fireStoreService = new FirestoreService(logger);
 const webhookService = new WebhookService(app, fireStoreService);

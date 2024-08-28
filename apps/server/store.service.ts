@@ -54,7 +54,7 @@ export class StoreService {
             this.athleteService.updateAthlete(athlete),
             this.addItemToPurchases(itemId, purchases, athleteId)
         ]);
-        this.logger.info(`Athlete ${athleteId} bought item ${item.name} for ${finalPrice} coins`);
+        this.logger.info(`Athlete ${athlete.logName} bought item ${item.name} for ${finalPrice} coins`);
         return finalPrice;
     }
 

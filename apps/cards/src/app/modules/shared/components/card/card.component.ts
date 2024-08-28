@@ -1,6 +1,6 @@
 import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
-import {Card, Validator} from "../../../../../../../shared/classes/card.class";
-import {filter, map} from "rxjs/operators";
+import {Card} from "../../../../../../../shared/classes/card.class";
+import {filter} from "rxjs/operators";
 import {ConstService} from "../../../../services/const.service";
 import {UtilService} from "../../../../services/util.service";
 import {CardService} from "../../../../services/card.service";
@@ -8,7 +8,6 @@ import {ValidationStatus} from "../../../../../../../shared/services/validation.
 import {FormControl} from "@angular/forms";
 import {Subject} from "rxjs";
 import {AthleteService} from "../../../../services/athlete.service";
-import {AthleteHelperService} from "../../../../services/athlete.helper.service";
 import {ButtonType} from "../button/button.component";
 
 @Component({

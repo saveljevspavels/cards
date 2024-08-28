@@ -62,8 +62,8 @@ export default class AbilityService {
     }
 
     async consumeRandomAbility(athleteId: string) {
-        this.logger.info(`Athlete ${athleteId} is trying to consume random ability`);
         const athlete = await this.athleteService.getAthlete(athleteId);
+        this.logger.info(`Athlete ${athlete.logName} is trying to consume random ability`);
         if(athlete.currencies.random_perk <= 0) {
             this.logger.info(`Athlete ${athlete.logName} don't have random perks to activate`);
             throw 'No random perks available';
@@ -203,8 +203,8 @@ export default class AbilityService {
     }
 
     async openChest(athleteId: string) {
-        this.logger.info(`Athlete ${athleteId} is trying to open chest`);
         const athlete: Athlete = await this.athleteService.getAthlete(athleteId);
+        this.logger.info(`Athlete ${athlete.logName} is trying to open chest`);
         if (athlete.currencies.chest <= 0) {
             this.logger.info(`Athlete ${athlete.logName} tried to open chest without chests`);
             throw 'No chests available';
