@@ -97,7 +97,7 @@ export default class Athlete implements JsonObjectInterface {
             profile,
             `${firstName} ${lastName}`,
             RULES.DEFAULT_BASE_WORKOUT,
-            ["default"],
+            [],
             [],
             0,
             [],

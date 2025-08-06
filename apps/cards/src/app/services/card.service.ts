@@ -1,16 +1,15 @@
 import { Injectable } from '@angular/core';
 import {BehaviorSubject} from "rxjs";
-import {ConstService} from "./const.service";
 import {Card} from "../../../../shared/classes/card.class";
 import {CardScheme} from "../../../../shared/interfaces/card-scheme.interface";
 import {environment} from "../../environments/environment";
 import {HttpClient} from "@angular/common/http";
-import {AngularFirestore, AngularFirestoreCollection, AngularFirestoreDocument} from "@angular/fire/compat/firestore";
-import {FormControl} from "@angular/forms";
+import {AngularFirestore, } from "@angular/fire/compat/firestore";
 import {ValidationStatus} from "../../../../shared/services/validation.service";
 import {Activity} from "../../../../shared/interfaces/activity.interface";
 import {ValidationService} from "./validation.service";
 import {CARDS} from "../../../../../definitions/cards";
+import { SCHEME } from '../../../../../definitions/scheme';
 
 @Injectable({
   providedIn: 'root'
@@ -18,7 +17,7 @@ import {CARDS} from "../../../../../definitions/cards";
 export class CardService {
 
     public cards = new BehaviorSubject<Card[]>(CARDS);
-    public cardScheme = new BehaviorSubject<CardScheme>({boards: []});
+    public cardScheme = new BehaviorSubject<CardScheme>(SCHEME);
     // private cardCollection: AngularFirestoreCollection;
 
     constructor(
@@ -26,13 +25,17 @@ export class CardService {
         private db: AngularFirestore,
         private validationService: ValidationService
         ) {
+
+        // Remote scheme
+        // this.db.collection(ConstService.CONST.COLLECTIONS.SCHEME,
+        //     (ref: any) => ref.where('id', '==', ConstService.CONST.SCHEME_ID)).valueChanges().subscribe((cardSchemes: any) => {
+        //     if(cardSchemes.length === 1) {
+        //         this.cardScheme.next(cardSchemes[0])
+        //     }
+        // });
+
+        // Remote cards
         // this.cardCollection = this.db.collection(ConstService.CONST.COLLECTIONS.CARDS);
-        this.db.collection(ConstService.CONST.COLLECTIONS.SCHEME,
-            (ref: any) => ref.where('id', '==', ConstService.CONST.SCHEME_ID)).valueChanges().subscribe((cardSchemes: any) => {
-            if(cardSchemes.length === 1) {
-                this.cardScheme.next(cardSchemes[0])
-            }
-        });
         // this.cardCollection.valueChanges().subscribe((cards: any[]) => {
         //     this.cards.next(cards)
         // });

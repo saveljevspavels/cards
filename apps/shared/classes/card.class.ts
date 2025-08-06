@@ -90,7 +90,7 @@ export class Card {
     }
 
     getImageSource(): string {
-        return `../../../assets/cards/${this.title
+        return `../../../assets/cards/${(!!this.image ? this.image : this.title)
             .toLowerCase()
             .replace(/[.,!?\-'()]/g, '')
             .replace(/\s+/g, '_')}.png`;

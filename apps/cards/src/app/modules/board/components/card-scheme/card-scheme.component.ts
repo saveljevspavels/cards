@@ -58,7 +58,6 @@ export class CardSchemeComponent implements OnInit {
             this.cardScheme.pipe(
                 filter((scheme) => !!scheme.boards.length),
                 tap((scheme: CardScheme) => {
-                    console.log('scheme', scheme);
                     this.boards = scheme.boards;
                     if(!this.activeBoard.value && scheme.boards.length) {
                         this.activeBoard.setValue(this.getBoardByKey(LocalStorageService.getValue('activeBoard')) || scheme.boards[0]);

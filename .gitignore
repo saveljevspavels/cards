@@ -19,7 +19,7 @@
 /definitions/firebaseConfig.ts
 /definitions/firebaseConfig.prod.ts
 /definitions/sampleUser.ts
-/definitions/stravaConfig.json
+/definitions/stravaConfig.ts
 
 # IDEs and editors
 /.idea
