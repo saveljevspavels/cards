@@ -6,7 +6,7 @@ import {ConstService} from "./const.service";
 import {ProgressiveChallenge} from "../../../../shared/interfaces/progressive-challenge.interface";
 import {environment} from "../../environments/environment";
 import {AthleteService} from "./athlete.service";
-import {distinctUntilChanged, filter, map} from "rxjs/operators";
+import { distinctUntilChanged, filter, map, tap } from 'rxjs/operators';
 import {GameService} from "./game.service";
 import {ChallengeProgress} from "../../../../shared/classes/challenge-progress";
 import {LocalStorageService} from "./local-storage.service";
@@ -23,6 +23,7 @@ export class ChallengeService {
     public challengeProgress = new BehaviorSubject<ProgressiveChallenge[]>([]);
     private challengeCollection: AngularFirestoreCollection<ProgressiveChallenge[]>;
     public myProgress$: Observable<ChallengeProgress> = this._myProgress.asObservable();
+    public hasRewards = new BehaviorSubject<boolean>(false);
     public challengeUpdates$ = new Subject<any>();
 
     constructor(
@@ -46,8 +47,13 @@ export class ChallengeService {
         this.activeChallenges = combineLatest([
             this.challenges,
             this.gameService.gameData,
-            this.myProgress$
-        ]).pipe(map(([challenges, game, progress]) => {
+            this.myProgress$,
+            this.athleteService.me
+        ]).pipe(tap(([challenges, game, progress, me]) => {
+            if(me) {
+                this.hasRewards.next(me.level > me.claimedLevelRewards.length || progress.completedChallenges.length > progress.claimedChallenges.length)
+            }
+        }), map(([challenges, game, progress, me]) => {
             return challenges
                 .filter(challenge => game?.activeChallenges.indexOf(challenge.id) !== -1)
                 .filter(challenge => (progress?.claimedChallenges || []).indexOf(challenge.id) === -1)
@@ -63,7 +69,7 @@ export class ChallengeService {
         })
     }
 
-    claimChallenge(challengeId: String) {
+    claimChallenge(challengeId: string) {
         return this.http.post(`${environment.baseBE}/challenges/claim`, {
             challengeId
         })

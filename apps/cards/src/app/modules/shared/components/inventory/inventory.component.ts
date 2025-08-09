@@ -7,19 +7,17 @@ import {Ability, AbilityKey} from "../../../../../../../shared/interfaces/abilit
 import {ABILITIES} from "../../../../../../../../definitions/abilities";
 import {STORE_ITEMS} from "../../../../../../../../definitions/storeItems";
 import {StoreItem} from "../../../../../../../shared/interfaces/store-item.interface";
+import { CONST } from '../../../../../../../../definitions/constants';
+import { AthleteService } from '../../../../services/athlete.service';
 
 @Component({
     selector: 'app-inventory',
     templateUrl: './inventory.component.html',
     styleUrl: './inventory.component.scss',
 })
-export class InventoryComponent implements OnChanges {
+export class InventoryComponent {
 
-    readonly inventoryDisplayedItems = ['chest', 'perk', 'random_perk'];
-
-    @Input() currencies: Currencies;
-
-    public inventoryItems: StoreItem[] = [];
+    public inventoryItems = this.athleteService.inventoryItems;
 
     public activatedAbility: Ability | null;
 
@@ -33,23 +31,10 @@ export class InventoryComponent implements OnChanges {
 
     constructor(
         private popupService: PopupService,
-        private gameService: GameService
+        private gameService: GameService,
+        private athleteService: AthleteService,
     ) {}
 
-    ngOnChanges(changes: SimpleChanges) {
-        if(changes.currencies?.currentValue) {
-            this.inventoryItems = [];
-            this.inventoryDisplayedItems.forEach((itemId) => {
-                const item = STORE_ITEMS.find(item => item.id === itemId);
-                if(item) {
-                    // @ts-ignore
-                    for(let i = 0; i < this.currencies[itemId]; i++) {
-                        this.inventoryItems.push(item);
-                    }
-                }
-            });
-        }
-    }
     openAbilitySelection() {
         this.popupService.showPopup(this.abilitySelectionPopupControl.value);
     }

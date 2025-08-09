@@ -26,6 +26,20 @@
                 fill: var(--color-blue);
             }
         }
+        &--updates {
+            &:before {
+                pointer-events: none;
+                content: '';
+                width: 10px;
+                height: 10px;
+                border-radius: 5px;
+                position: absolute;
+                top: 12px;
+                right: 8px;
+                background-color: var(--color-secondary-2);
+                z-index: 1;
+            }
+        }
     }
     &__indicator {
         pointer-events: none;

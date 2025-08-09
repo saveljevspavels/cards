@@ -26,7 +26,7 @@ export class AchievementsComponent {
         });
     }
 
-    claimChallenge(challengeId: String): void {
+    claimChallenge(challengeId: string): void {
         this.challengeService.claimChallenge(challengeId).subscribe(() => {});
     }
 }

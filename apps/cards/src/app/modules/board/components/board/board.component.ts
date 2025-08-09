@@ -4,7 +4,7 @@ import {Router} from "@angular/router";
 import {LocalStorageService} from "../../../../services/local-storage.service";
 import {TabItem} from "../../../../interfaces/tab-item";
 import {AthleteService} from "../../../../services/athlete.service";
-import Athlete from "../../../../../../../shared/classes/athlete.class";
+import { ChallengeService } from '../../../../services/challenge.service';
 
 @Component({
   selector: 'app-board',
@@ -21,6 +21,7 @@ export class BoardComponent implements OnInit {
 
     constructor(private activityService: ActivityService,
                 private athleteService: AthleteService,
+                private challengeService: ChallengeService,
                 private router: Router) { }
 
     ngOnInit(): void {
@@ -28,10 +29,8 @@ export class BoardComponent implements OnInit {
             this.openStates[key] = LocalStorageService.getState(key)
         })
 
-        this.athleteService.me.subscribe((me) => {
-            if(me) {
-                this.createTabs(me);
-            }
+        this.challengeService.hasRewards.subscribe((hasRewards) => {
+            this.createTabs(hasRewards);
         });
     }
 
@@ -44,7 +43,7 @@ export class BoardComponent implements OnInit {
         this.activityService.rejectActivity(activityId, 'Cancelled by athlete').subscribe()
     }
 
-    createTabs(athlete: Athlete) {
+    createTabs(hasRewards: boolean) {
         this.tabs = [
             {
                 title: 'Main Tasks',
@@ -53,7 +52,7 @@ export class BoardComponent implements OnInit {
             {
                 title: 'Daily Challenges',
                 path: '/board/main/challenges',
-                hasUpdates: athlete.level > athlete.claimedLevelRewards.length
+                hasUpdates: hasRewards,
             }
         ]
     }

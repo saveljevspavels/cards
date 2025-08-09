@@ -8,6 +8,9 @@ import Athlete from "../../../../shared/classes/athlete.class";
 import {PERMISSIONS} from "../constants/permissions";
 import {Router} from "@angular/router";
 import {AngularFirestore, AngularFirestoreCollection} from "@angular/fire/compat/firestore";
+import { StoreItem } from '../../../../shared/interfaces/store-item.interface';
+import { CONST } from '../../../../../definitions/constants';
+import { STORE_ITEMS } from '../../../../../definitions/storeItems';
 
 @Injectable({
     providedIn: 'root'
@@ -20,6 +23,7 @@ export class AthleteService {
     public static permissions = new BehaviorSubject<string[] | null>(null);
     public isAdmin$ = AthleteService.permissions.pipe((map((permissions) => permissions?.indexOf(PERMISSIONS.ADMIN) !== -1)));
     private athleteCollection: AngularFirestoreCollection;
+    public inventoryItems = new BehaviorSubject<StoreItem[]>([]);
 
     constructor(
         private db: AngularFirestore,
@@ -36,6 +40,18 @@ export class AthleteService {
             const currentAthlete = athletes.find((athlete: Athlete) => athlete.id === myId) || null;
             if(JSON.stringify(this.me.value) !== JSON.stringify(currentAthlete)) {
                 this.me.next(currentAthlete);
+
+                const inventoryItems: StoreItem[] = [];
+                CONST.INVENTORY_DISPLAYED_ITEMS.forEach((itemId) => {
+                    const item = STORE_ITEMS.find(item => item.id === itemId);
+                    if(item) {
+                        // @ts-ignore
+                        for(let i = 0; i < currentAthlete.currencies[itemId]; i++) {
+                            inventoryItems.push(item);
+                        }
+                    }
+                });
+                this.inventoryItems.next(inventoryItems);
             }
             AthleteService.permissions.next(this.me.value?.permissions || [])
         });

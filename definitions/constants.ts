@@ -46,5 +46,6 @@ export const CONST = {
     COMMENT_LENGTH: 300,
     TIMEZONE: 'Europe/Riga',
     TIMEZONE_OFFSET: 3,
+    INVENTORY_DISPLAYED_ITEMS: ['chest', 'perk', 'random_perk'],
 }
 

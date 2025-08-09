@@ -4,6 +4,7 @@ import {Router} from "@angular/router";
 import {startWith} from "rxjs/operators";
 import {MenuRouteItem} from "../../../../interfaces/menu-route-item";
 import {Subscription} from "rxjs";
+import { ChallengeService } from '../../../../services/challenge.service';
 
 @Component({
     selector: 'app-mobile-menu',
@@ -110,11 +111,15 @@ export class MobileMenuComponent implements OnInit, OnDestroy {
         ]
     }
 
+    public inventoryItems = this.athleteService.inventoryItems;
+    public hasRewards = this.challengeService.hasRewards;
+
     activeItem: any;
 
     public filteredRoutes: any = {};
 
     constructor(private athleteService: AthleteService,
+                private challengeService: ChallengeService,
                 private router: Router) {
     }
 
