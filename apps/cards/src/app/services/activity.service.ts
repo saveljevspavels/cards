@@ -108,7 +108,8 @@ export class ActivityService {
     public deleteActivityComment(activityId: string, cardId: string, commentId: string): Observable<any> {
         return this.http.post(`${environment.baseBE}/activity/comment/delete`, {
             activityId,
-            commentId
+            commentId,
+            cardId
         })
     }
 

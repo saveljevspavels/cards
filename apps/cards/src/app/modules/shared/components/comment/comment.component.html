@@ -1,6 +1,15 @@
 <div class="d-flex full-width flex-column justify-content-start align-content-start">
-    <div *ngIf="(comment && comment.authorId) || authorId" class="mb-1">
+    <div *ngIf="(comment && comment.authorId) || authorId" class="mb-1 d-flex align-items-end justify-content-between">
         <app-athlete [athleteId]="authorId || comment.authorId" [size]="'small'"></app-athlete>
+        <span class="text-small" *ngIf="comment || timestamp">{{(timestamp || comment.timestamp) | date : 'EEE HH:mm' }}</span>
+        <app-svg *ngIf="(isAdmin$ | async) && comment"
+                 [icon]="'trash'"
+                 [styleClass]="'color-danger'"
+                 [height]="16"
+                 class="ml-2"
+                 (click)="delete()"
+        >
+        </app-svg>
     </div>
     <div class="comment py-1 px-2">
         {{comment ? comment.content : text }}

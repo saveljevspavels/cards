@@ -4,7 +4,6 @@ import {
     EventEmitter,
     forwardRef,
     Input, OnChanges,
-    OnInit,
     Output, SimpleChanges,
     ViewChild,
     ViewEncapsulation
@@ -106,6 +105,7 @@ export class ActivityComponent implements ControlValueAccessor, OnChanges {
 
     closeComments() {
         this.popupService.closePopup();
+        this.activityComment.setValue('');
         this.selectedCard = null;
     }
 
@@ -113,9 +113,15 @@ export class ActivityComponent implements ControlValueAccessor, OnChanges {
         if (this.activityComment.value && this.selectedCard) {
             this.activityService.commentActivity(this.activity.id.toString(), this.selectedCard.id, this.activityComment.value).subscribe(() => {
                 this.closeComments();
-                this.activityComment.setValue('');
             });
         }
+    }
+
+    deleteComment(cardSnapshot: CardSnapshot, commentId: string) {
+        this.activityService.deleteActivityComment(this.activity.id.toString(), cardSnapshot.id, commentId).subscribe(() => {
+            console.log(`Comment ${commentId} deleted from card ${cardSnapshot.id}`);
+            this.closeComments();
+        });
     }
 
     like(cardSnapshot: CardSnapshot) {
