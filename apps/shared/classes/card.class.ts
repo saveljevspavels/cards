@@ -117,7 +117,8 @@ export class Card {
 }
 
 export class CardSnapshot extends Card {
-    comment?: string;
+    authorNote?: string;
+    comments?: CardComment[];
     attachedImages?: UploadedImage[];
     likes?: string[];
     likedByMe?: boolean; // FE use only
@@ -127,7 +128,8 @@ export class CardSnapshot extends Card {
     toJSONObject(): any {
         return {
             ...super.toJSONObject(),
-            comment: this.comment,
+            authorNote: this.authorNote,
+            comments: this.comments ?? [],
             attachedImages: this.attachedImages,
             likes: this.likes,
             reports: this.reports,
@@ -151,12 +153,21 @@ export class CardSnapshot extends Card {
             json.manualValidation,
             json.tags,
         );
-        snapshot.comment = json.comment;
+        snapshot.comments = json.comments;
+        snapshot.authorNote = json.authorNote;
         snapshot.attachedImages = json.attachedImages;
         snapshot.likes = json.likes;
         snapshot.reports = json.reports;
         return snapshot
     }
+}
+
+export interface CardComment {
+    id: string;
+    authorId: string;
+    authorName: string;
+    content: string;
+    timestamp: string;
 }
 
 export interface CardUses {

@@ -74,8 +74,8 @@
                      [polyline]="activity.map?.summary_polyline"
                      [activityType]="activityType"
         ></app-gallery>
-        <div class="mt-2" *ngIf="card.comment?.length !== 0">
-            <app-comment [comment]="card.comment"></app-comment>
+        <div class="mt-2" *ngIf="card.authorNote?.length !== 0">
+            <app-comment [text]="card.authorNote"></app-comment>
         </div>
         <div class="d-flex justify-content-between mt-2">
             <div class="flex-shrink-1">
@@ -85,12 +85,48 @@
                             [icon]="'flag'"
                             [type]="(card?.reportedByMe) ? ButtonType.DANGER_FILLED: ButtonType.DANGER"></app-button>
             </div>
+            <div>
+                <app-button (click)="openComments(card)"
+                            [small]="true"
+                            [label]="(card.comments.length || '').toString()"
+                            [icon]="'comment'"
+                            [type]="(card?.reportedByMe) ? ButtonType.DANGER_FILLED: ButtonType.DANGER"></app-button>
+            </div>
             <div class="flex-shrink-1">
                 <app-button (click)="card?.likedByMe || like(card)"
                             [small]="true"
-                            [label]="card?.likes?.length || 'Like'"
+                            [label]="(card?.likes?.length || 'Like').toString()"
                             [icon]="'fire'"
                             [type]="card?.likedByMe ? ButtonType.DANGER_FILLED: ButtonType.DANGER"></app-button>
+            </div>
+        </div>
+    </div>
+</ng-template>
+
+<ng-template #commentsPopup>
+    <div class="popup box">
+        <div class="full-width p-3 d-flex flex-column align-items-center">
+            <p class="mt-2 pt-2 mb-4 d-flex align-items-center">
+                Comments for&nbsp;<span class="text-bold">"{{selectedCard.title}}"</span>
+            </p>
+            <div *ngIf="selectedCard.authorNote" class="mb-2 full-width">
+                <app-comment [authorId]="activity.athlete.id.toString()" [text]="selectedCard?.authorNote"></app-comment>
+            </div>
+            <div *ngFor="let comment of selectedCard?.comments" class="mb-2 full-width">
+                <app-comment [comment]="comment"></app-comment>
+            </div>
+
+            <div class="mt-3 full-width">
+                <app-textarea [fc]="activityComment" [label]="'Leave your comment here'" [rows]="3"></app-textarea>
+            </div>
+            <div class="mt-4 mb-2 full-width">
+                <app-button type="action"
+                            [label]="'Submit'"
+                            (buttonClick)="addComment()"
+                ></app-button>
+            </div>
+            <div class="mb-3">
+                <app-button (buttonClick)="closeComments()" [label]="'Cancel'"></app-button>
             </div>
         </div>
     </div>

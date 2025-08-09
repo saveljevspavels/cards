@@ -11,7 +11,7 @@
         'button--small': small
     }">
     <ng-container *ngIf="icon">
-        <span class="mr-1">
+        <span class="{{label ? 'mr-1' : ''}}">
             <app-svg [icon]="icon"></app-svg>
         </span>
     </ng-container>

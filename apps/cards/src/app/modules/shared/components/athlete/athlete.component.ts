@@ -24,6 +24,8 @@ export class AthleteComponent implements OnInit {
 
   @Input() styleClass: string = '';
 
+  @Input() hideImage = false;
+
   constructor(private athleteService: AthleteService) { }
 
   ngOnInit(): void {

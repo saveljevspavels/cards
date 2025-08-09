@@ -1,4 +1,5 @@
 import {CardSnapshot} from "../classes/card.class";
+import Athlete from '../classes/athlete.class';
 
 export interface Activity {
     name: string;
@@ -20,7 +21,6 @@ export interface Activity {
 export interface ActivityGameData {
     cardIds: string[];
     cardSnapshots: CardSnapshot[];
-    comments: string;
     status: ActivityStatus;
     submittedAt: string;
 }

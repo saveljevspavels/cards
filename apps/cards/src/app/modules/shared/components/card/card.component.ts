@@ -1,4 +1,12 @@
-import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
+import {
+    Component,
+    EventEmitter,
+    Input,
+    OnChanges,
+    OnInit,
+    Output,
+    SimpleChanges,
+} from '@angular/core';
 import {Card} from "../../../../../../../shared/classes/card.class";
 import {filter} from "rxjs/operators";
 import {ConstService} from "../../../../services/const.service";

@@ -1,4 +1,4 @@
-import {Component, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
+import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import {PopupService} from "../../../../services/popup.service";
 import {CompressionType, UploadedImage} from "../../../../../../../shared/interfaces/image-upload.interface";
 

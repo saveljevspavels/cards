@@ -1,20 +1,23 @@
-import {RESPONSES} from "./response-codes";
-import {Express} from "express";
-import {FirestoreService} from "./firestore.service";
-import {CONST} from "../../definitions/constants";
-import {RULES} from "../../definitions/rules";
-import {Logger} from "winston";
-import {StaticValidationService} from "../shared/services/validation.service";
-import {Card, CardSnapshot} from "../shared/classes/card.class";
-import Athlete, {BaseCardProgress} from "../shared/classes/athlete.class";
-import AthleteService from "./athlete.service";
-import {UploadedImage} from "../shared/interfaces/image-upload.interface";
-import {ChallengeService} from "./challenge.service";
-import {Activity, ActivityStatus} from "../shared/interfaces/activity.interface";
-import {forkJoin} from "rxjs";
-import axios from "axios";
-import MathHelper from "./helpers/math.helper";
-import {CARDS} from "../../definitions/cards";
+import { RESPONSES } from './response-codes';
+import { Express } from 'express';
+import { FirestoreService } from './firestore.service';
+import { CONST } from '../../definitions/constants';
+import { RULES } from '../../definitions/rules';
+import { Logger } from 'winston';
+import { StaticValidationService } from '../shared/services/validation.service';
+import { Card, CardComment, CardSnapshot } from '../shared/classes/card.class';
+import Athlete, { BaseCardProgress } from '../shared/classes/athlete.class';
+import AthleteService from './athlete.service';
+import { UploadedImage } from '../shared/interfaces/image-upload.interface';
+import { ChallengeService } from './challenge.service';
+import {
+    Activity,
+    ActivityStatus,
+} from '../shared/interfaces/activity.interface';
+import { forkJoin } from 'rxjs';
+import axios from 'axios';
+import { CARDS } from '../../definitions/cards';
+import { generateId } from './helpers/util';
 
 export default class ActivityService {
 
@@ -72,6 +75,35 @@ export default class ActivityService {
 
         app.post(`${CONST.API_PREFIX}/activities/add-pending`, async (req, res) => {
             await this.fireStoreService.addPendingActivity(req.body);
+            res.status(200).send({response: RESPONSES.SUCCESS});
+        });
+
+        app.post(`${CONST.API_PREFIX}/activity/comment`, async (req, res) => {
+            const activity = await this.getActivity(req.body.activityId);
+            const athleteId = res.get('athleteId');
+            const cardId = req.body.cardId;
+            const comment = req.body.comment;
+            if(!athleteId || !activity) {
+                res.status(400).send({response: RESPONSES.SUCCESS});
+                return;
+            }
+
+            await this.commentActivity(req.body.activityId, cardId, athleteId, comment);
+
+            res.status(200).send({response: RESPONSES.SUCCESS});
+        });
+
+        app.post(`${CONST.API_PREFIX}/activity/comment/delete`, async (req, res) => {
+            const activity = await this.getActivity(req.body.activityId);
+            const commentId = req.body.commentId.toString();
+            const cardId = req.body.cardId;
+            if(!commentId || !activity) {
+                res.status(400).send({response: RESPONSES.SUCCESS});
+                return;
+            }
+
+            await this.deleteActivityComment(req.body.activityId, cardId, commentId);
+
             res.status(200).send({response: RESPONSES.SUCCESS});
         });
 
@@ -210,6 +242,65 @@ export default class ActivityService {
         this.logger.info(`Activity ${activity.id} was approved for athlete ${athlete.logName} with cards ${activity.gameData.cardSnapshots.map((card: CardSnapshot) => card.title)}`)
     }
 
+    async commentActivity(activityId: any, cardId: string, athleteId:string, content: string) {
+        const activity = await this.getActivity(activityId);
+        const athlete = await this.athleteService.getAthlete(activity.athlete.id);
+
+        const snapshots = activity.gameData.cardSnapshots;
+        const snapshot = snapshots.find(snapshot => snapshot.id === cardId);
+        if(!snapshot) {
+            this.logger.info(`Card ${cardId} not found in activity ${activity.id}, while athlete ${athlete.logName} tried to comment`);
+            return;
+        }
+        const comment: CardComment = {
+            id: generateId(),
+            authorId: athleteId,
+            authorName: athlete.name,
+            content,
+            timestamp: new Date().toISOString()
+        }
+        if(snapshot.comments) {
+            snapshot.comments.push(comment);
+        } else {
+            snapshot.comments = [comment];
+        }
+
+        await this.fireStoreService.detailedActivityCollection.update(
+            activity.id.toString(),
+            {
+                gameData: {
+                    ...activity.gameData,
+                    cardSnapshots: snapshots
+                }
+            })
+
+        this.logger.info(`Activity ${activity.id} was commented by athlete ${athlete.logName} with comment "${comment.content}"`);
+    }
+
+    async deleteActivityComment(activityId: string, cardId: string, commentId: string) {
+        const activity = await this.getActivity(activityId);
+
+        const snapshots = activity.gameData.cardSnapshots;
+        const snapshot = snapshots.find(snapshot => snapshot.id === cardId);
+        if(!snapshot) {
+            this.logger.info(`Card ${cardId} not found in activity ${activity.id}`);
+            return;
+        }
+
+        snapshot.comments = snapshot.comments?.filter(comment => comment.id !== commentId) || [];
+        await this.fireStoreService.detailedActivityCollection.update(
+            activityId,
+            {
+                gameData: {
+                    ...activity.gameData,
+                    cardSnapshots: snapshots
+                }
+            }
+        )
+
+        this.logger.info(`Activity ${activity.id} comment ${commentId} was deleted`);
+    }
+
     async updateBaseCard(athlete: Athlete, activity: Activity, cardSnapshots: CardSnapshot[]): Promise<BaseCardProgress> {
         const baseWorkout = athlete.baseWorkout;
         const remainderActivity = StaticValidationService.getActivityRemainder(activity, cardSnapshots, baseWorkout);
@@ -263,7 +354,7 @@ export default class ActivityService {
         }
     }
 
-    async submitActivity(activityId: number, cardIds: string[], images: UploadedImage[][], comments: string[]) {
+    async submitActivity(activityId: number, cardIds: string[], images: UploadedImage[][], authorNotes: string[]) {
         const activity = await this.getActivity(activityId);
         const athlete = await this.athleteService.getAthlete(activity.athlete.id);
 
@@ -295,7 +386,7 @@ export default class ActivityService {
             return CardSnapshot.fromJSONObject(
                 {
                     ...(cards.find(card => card.id === id) || Card.empty()),
-                    comment: comments[index] || '',
+                    authorNote: authorNotes[index] || '',
                     likes: [],
                     reports: [],
                     attachedImages: images[index] || []
@@ -307,6 +398,12 @@ export default class ActivityService {
         athlete.cards.completed = [...athlete.cards.completed, ...cardIds];
         this.athleteService.spendEnergy(athlete, StaticValidationService.requiredEnergy(cards));
 
+        this.logger.info({
+            status: ActivityStatus.SUBMITTED,
+            submittedAt: new Date().toISOString(),
+            cardIds,
+            cardSnapshots: cardSnapshots.map((snapshot: CardSnapshot) => snapshot.toJSONObject()), // Storing card snapshots
+        });
         await Promise.all([
             this.athleteService.updateAthlete(athlete),
             this.fireStoreService.detailedActivityCollection.update(
@@ -317,7 +414,6 @@ export default class ActivityService {
                         submittedAt: new Date().toISOString(),
                         cardIds,
                         cardSnapshots: cardSnapshots.map((snapshot: CardSnapshot) => snapshot.toJSONObject()), // Storing card snapshots
-                        comments: comments?.join(' / ') || '',
                     }
                 })
         ])
@@ -325,7 +421,7 @@ export default class ActivityService {
         this.logger.info(`Athlete ${athlete.logName} submitted activity with ${cardIds}`)
     }
 
-    async rejectActivity(activityId: string, comments: string) {
+    async rejectActivity(activityId: string, rejectReason: string) {
         const activity = await this.fireStoreService.detailedActivityCollection.get(activityId.toString())
         await this.fireStoreService.detailedActivityCollection.update(
             activityId.toString(),
@@ -335,7 +431,7 @@ export default class ActivityService {
                     cardSnapshots: [],
                     cardIds: [],
                     images: [],
-                    comments,
+                    rejectReason,
                     status: ActivityStatus.NEW,
                 }
             })

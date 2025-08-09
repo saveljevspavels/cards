@@ -5,3 +5,9 @@
         text-align: center;
     }
 }
+
+.floating-button {
+    position: fixed;
+    bottom: calc(var(--menu-height) + var(--margin));
+    width: calc(100vw - (2 * var(--margin)));
+}

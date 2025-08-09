@@ -1,5 +1,5 @@
 <div class="athlete athlete--{{size}} {{styleClass}} gap-2" *ngIf="athlete">
-    <img routerLink="/board/athletes/{{athlete.id}}/profile" src="{{athlete.profile}}" class="athlete__profile-picture">
+    <img *ngIf="!hideImage" routerLink="/board/athletes/{{athlete.id}}/profile" src="{{athlete.profile}}" class="athlete__profile-picture">
     <div class="athlete__text" [ngClass]="{'d-flex align-items-center gap-2': size === 'big'}">
         <div class="athlete__name"
              routerLink="/board/athletes/{{athlete.id}}/profile"

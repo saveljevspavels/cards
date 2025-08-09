@@ -18,7 +18,7 @@ import {AthleteService} from "../../../../services/athlete.service";
 import {CardSnapshot, Report} from "../../../../../../../shared/classes/card.class";
 import {ButtonType} from "../button/button.component";
 import {Activity} from "../../../../../../../shared/interfaces/activity.interface";
-import Athlete from "../../../../../../../shared/classes/athlete.class";
+import { ActivityService } from '../../../../services/activity.service';
 
 @Component({
     selector: 'app-activity',
@@ -31,16 +31,17 @@ import Athlete from "../../../../../../../shared/classes/athlete.class";
     }],
     encapsulation: ViewEncapsulation.None
 })
-export class ActivityComponent implements OnInit, ControlValueAccessor, OnChanges {
+export class ActivityComponent implements ControlValueAccessor, OnChanges {
     public CONST = ConstService.CONST;
     public myId = this.athleteService.myId.value;
     readonly ButtonType = ButtonType;
 
-    public selectedCards = new FormControl([])
+    public selectedCard : CardSnapshot | null;
     public imageObservables: any;
     public activityType = '';
     public validationService = StaticValidationService;
 
+    @ViewChild('commentsPopup', { static: true }) commentsPopup: ElementRef;
     @ViewChild('mapViewPopup', { static: true }) mapViewPopup: ElementRef;
 
     @Input() public activity: Activity;
@@ -53,6 +54,8 @@ export class ActivityComponent implements OnInit, ControlValueAccessor, OnChange
     @Output() public reported = new EventEmitter;
     @Output() public liked = new EventEmitter;
 
+    public activityComment = new FormControl('');
+
     public activityVerbMap = new Map<string, string>([
         [CONST.ACTIVITY_TYPES.OTHER, 'exercised for'],
         [CONST.ACTIVITY_TYPES.RUN, 'ran'],
@@ -62,14 +65,9 @@ export class ActivityComponent implements OnInit, ControlValueAccessor, OnChange
 
     constructor(
         private athleteService: AthleteService,
-        private popupService: PopupService
+        private popupService: PopupService,
+        private activityService: ActivityService
     ) { }
-
-    ngOnInit() {
-        this.selectedCards.valueChanges.subscribe((value) => {
-            this._onChange(value)
-        })
-    }
 
     ngOnChanges(changes: SimpleChanges) {
         if(changes.activity) {
@@ -99,6 +97,25 @@ export class ActivityComponent implements OnInit, ControlValueAccessor, OnChange
 
     report(cardId: string) {
         this.reported.emit(cardId);
+    }
+
+    openComments(card: CardSnapshot) {
+        this.popupService.showPopup(this.commentsPopup);
+        this.selectedCard = card;
+    }
+
+    closeComments() {
+        this.popupService.closePopup();
+        this.selectedCard = null;
+    }
+
+    addComment() {
+        if (this.activityComment.value && this.selectedCard) {
+            this.activityService.commentActivity(this.activity.id.toString(), this.selectedCard.id, this.activityComment.value).subscribe(() => {
+                this.closeComments();
+                this.activityComment.setValue('');
+            });
+        }
     }
 
     like(cardSnapshot: CardSnapshot) {

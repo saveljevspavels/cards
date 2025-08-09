@@ -97,6 +97,21 @@ export class ActivityService {
         })
     }
 
+    public commentActivity(activityId: string, cardId: string, comment: string): Observable<any> {
+        return this.http.post(`${environment.baseBE}/activity/comment`, {
+            activityId,
+            comment,
+            cardId
+        })
+    }
+
+    public deleteActivityComment(activityId: string, cardId: string, commentId: string): Observable<any> {
+        return this.http.post(`${environment.baseBE}/activity/comment/delete`, {
+            activityId,
+            commentId
+        })
+    }
+
     public boostActivity(activityId: any): Observable<any> {
         return this.http.post(`${environment.baseBE}/activity/boost`, {
             activityId,

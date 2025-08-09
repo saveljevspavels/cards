@@ -1,4 +1,4 @@
-<div class="swiper">
+<div class="swiper" (touchstart)="swipe($event, 'start')" (touchend)="swipe($event, 'end')">
     <div class="swiper__header">
         <div class="swiper__close">
             <app-svg styleClass="pointer" icon="close" (click)="close()"></app-svg>

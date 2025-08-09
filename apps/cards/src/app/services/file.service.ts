@@ -68,7 +68,7 @@ export class FileService {
             case CompressionType.THUMBNAIL:
                 options = {
                     maxSizeMB: 0.1,
-                    maxWidthOrHeight: 200,
+                    maxWidthOrHeight: 300,
                     useWebWorker: true,
                 };
                 break;
