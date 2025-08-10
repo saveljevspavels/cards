@@ -27,6 +27,8 @@ export class TextareaComponent implements OnInit {
     @Input()
     public label: string;
 
+    @Input() sendMode = false;
+
     constructor() { }
 
     ngOnInit(): void {

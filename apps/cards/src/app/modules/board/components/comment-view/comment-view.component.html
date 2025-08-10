@@ -21,13 +21,17 @@
                              (deleteComment)="deleteComment(card, $event)"
                 ></app-comment>
             </div>
+            <div *ngIf="!card?.comments.length" class="text-light text-center">
+                <p class="mb-2">No Comments yet.</p>
+                <p class="mt-2">Yours could be the first!</p>
+            </div>
 
         </div>
         <div class="comment-input d-flex gap-1 p-2 full-width align-items-start">
             <app-athlete [athlete]="me | async"
                          [showName]="false"></app-athlete>
             <div class="flex-grow-1">
-                <app-textarea [fc]="activityComment" [rows]="3"></app-textarea>
+                <app-textarea [fc]="activityComment" [rows]="3" (keydown)="onKeyDown($event)"></app-textarea>
             </div>
             <app-svg [icon]="'submit'" [styleClass]="activityComment.value ? 'color-primary' : 'color-disabled'" [height]="32" [width]="32" (click)="addComment()"></app-svg>
         </div>

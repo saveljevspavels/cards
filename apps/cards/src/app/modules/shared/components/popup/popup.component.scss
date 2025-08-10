@@ -31,7 +31,8 @@
         overflow-x: hidden;
         display: block;
         width: 100vw;
-        height: 100vh;
+        height: 100vh; /* fallback for old browsers */
+        height: 100dvh; /* use dynamic unit if supported */
         max-width: none;
         max-height: none;
         background-color: var(--color-background);

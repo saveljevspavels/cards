@@ -26,6 +26,7 @@ export class CommentViewComponent implements OnInit, OnDestroy {
 
     ngOnInit() {
         window.addEventListener('popstate', this.popStateHandler);
+        history.pushState({ overlay: true }, '', location.href);
     }
 
     addComment() {
@@ -55,10 +56,15 @@ export class CommentViewComponent implements OnInit, OnDestroy {
         this.closeComments.emit();
     }
 
-    private popStateHandler = (event: PopStateEvent) => {
-        console.log('Back swipe or browser back pressed on SpecialPageComponent');
+    onKeyDown(event: KeyboardEvent) {
+        if (event.key === 'Enter' && !event.shiftKey) {
+            event.preventDefault(); // prevent newline
+            this.addComment();
+        }
+    }
 
-        history.pushState(null, '', window.location.href);
+    private popStateHandler = (event: PopStateEvent) => {
+        event.preventDefault();
         this.close();
     };
     ngOnDestroy() {

@@ -3,5 +3,12 @@
         <label class="light text-medium">{{label}}</label>
         <br>
     </ng-container>
-    <textarea [rows]="rows" [formControl]="fc" maxlength="{{maxLength}}" [placeholder]="placeholder"></textarea>
+    <textarea
+        [rows]="rows"
+        [formControl]="fc"
+        maxlength="{{maxLength}}"
+        [placeholder]="placeholder"
+        enterkeyhint="send"
+        inputmode="text"
+    ></textarea>
 </div>
