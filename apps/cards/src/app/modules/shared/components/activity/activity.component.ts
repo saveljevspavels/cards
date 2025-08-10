@@ -53,8 +53,6 @@ export class ActivityComponent implements ControlValueAccessor, OnChanges {
     @Output() public reported = new EventEmitter;
     @Output() public liked = new EventEmitter;
 
-    public activityComment = new FormControl('');
-
     public activityVerbMap = new Map<string, string>([
         [CONST.ACTIVITY_TYPES.OTHER, 'exercised for'],
         [CONST.ACTIVITY_TYPES.RUN, 'ran'],
@@ -105,30 +103,12 @@ export class ActivityComponent implements ControlValueAccessor, OnChanges {
 
     closeComments() {
         this.popupService.closePopup();
-        this.activityComment.setValue('');
         this.selectedCard = null;
-    }
-
-    addComment() {
-        if (this.activityComment.value && this.selectedCard) {
-            this.activityService.commentActivity(this.activity.id.toString(), this.selectedCard.id, this.activityComment.value).subscribe(() => {
-                this.closeComments();
-            });
-        }
-    }
-
-    deleteComment(cardSnapshot: CardSnapshot, commentId: string) {
-        this.activityService.deleteActivityComment(this.activity.id.toString(), cardSnapshot.id, commentId).subscribe(() => {
-            console.log(`Comment ${commentId} deleted from card ${cardSnapshot.id}`);
-            this.closeComments();
-        });
     }
 
     like(cardSnapshot: CardSnapshot) {
         this.liked.emit(cardSnapshot.id);
-        cardSnapshot.likedByMe = true;
     }
-
     showMap() {
         this.popupService.showPopup(this.mapViewPopup);
     }

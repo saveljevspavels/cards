@@ -25,6 +25,7 @@ export class AthleteComponent implements OnInit {
   @Input() styleClass: string = '';
 
   @Input() hideImage = false;
+  @Input() showName = true;
 
   constructor(private athleteService: AthleteService) { }
 

@@ -1,6 +1,11 @@
 .comment {
   background-color: var(--color-background);
-  font-size: var(--text-size-small);
   border-radius: var(--radius);
   width: 100%;
+}
+
+.comment-separator {
+    border-bottom: 1px solid rgba(230, 230, 230, 1);;
+    padding-bottom: 4px;
+    margin-bottom: 4px;
 }

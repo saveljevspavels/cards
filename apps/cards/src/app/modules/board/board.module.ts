@@ -38,6 +38,7 @@ import {BoardHeaderComponent} from "./components/board-header/board-header.compo
 import {StatDisplayComponent} from "./components/stat-display/stat-display.component";
 import {UnclaimedItemComponent} from "./components/unclaimed-item/unclaimed-item.component";
 import {LevelDisplayComponent} from "./components/level-display/level-display.component";
+import { CommentViewComponent } from './components/comment-view/comment-view.component';
 
 @NgModule({
     declarations: [

@@ -89,6 +89,7 @@ export class CardService {
     }
 
     likeCard(cardId: string, activityId: string) {
+        console.log('cardID', cardId, 'activityId', activityId);
         return this.http.post(`${environment.baseBE}/cards/like`, {
             cardId,
             activityId

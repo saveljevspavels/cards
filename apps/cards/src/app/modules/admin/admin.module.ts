@@ -41,7 +41,7 @@ import {ChallengeManagementComponent} from "./components/challenge-management/ch
         AdminParentComponent,
         AchievementManagementComponent,
         GameStatsComponent,
-        ChallengeManagementComponent
+        ChallengeManagementComponent,
     ],
     imports: [
         CommonModule,
@@ -54,16 +54,18 @@ import {ChallengeManagementComponent} from "./components/challenge-management/ch
         FormsModule,
         CommonModule,
         ReactiveFormsModule,
-        ReactiveFormsModule
+        ReactiveFormsModule,
     ],
-    exports: [
-        CardTechnicalComponent
-    ],
+    exports: [CardTechnicalComponent, CardSchemeManagementComponent],
     providers: [
-        {provide: HTTP_INTERCEPTORS, useClass: HttpMainInterceptor, multi: true},
         {
-            provide: AdminService
-        }
-    ]
+            provide: HTTP_INTERCEPTORS,
+            useClass: HttpMainInterceptor,
+            multi: true,
+        },
+        {
+            provide: AdminService,
+        },
+    ],
 })
-export class AdminModule { }
+export class AdminModule {}

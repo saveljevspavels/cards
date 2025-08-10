@@ -72,6 +72,8 @@ import {RewardPerkComponent} from "./components/rewards/reward-perk/reward-perk.
 import {RewardsButtonComponent} from "./components/rewards/rewards-button/rewards-button.component";
 import {RewardRandomPerkComponent} from "./components/rewards/reward-random-perk/reward-random-perk.component";
 import {RewardSpecialTaskComponent} from "./components/rewards/reward-special-task/reward-special-task.component";
+import { CommentViewComponent } from '../board/components/comment-view/comment-view.component';
+import { CardSnapshotComponent } from './components/card-snapshot/card-snapshot.component';
 
 const COMPS = [
     InputComponent,
@@ -116,7 +118,9 @@ const COMPS = [
     RewardRandomPerkComponent,
     RewardsButtonComponent,
     RewardSpecialTaskComponent,
-    CountDownComponent
+    CountDownComponent,
+    CommentViewComponent,
+    CardSnapshotComponent,
 ]
 
 const MODULES = [
@@ -179,4 +183,4 @@ const MODULES = [
         StravaLinkComponent,
     ],
 })
-export class SharedModule { }
+export class SharedModule {}

@@ -1,5 +1,8 @@
 <div class="d-flex justify-content-center align-items-center header row background-primary-variant mb-4 flex-column">
-    <div *ngIf="icon" class="mb-2">
+    <div *ngIf="icon" class="mb-2 d-flex justify-content-center align-content-start full-width relative">
+        <div *ngIf="backButton" (click)="backButtonClicked.emit()" class="header__back-button">
+            <app-svg  [icon]="'arrow_back'" [styleClass]="'color-background'"></app-svg>
+        </div>
         <app-svg [icon]="icon" [styleClass]="'color-background'" [height]="34" [width]="34"></app-svg>
     </div>
     <div class="color-background text-bold text-big">{{title}}</div>

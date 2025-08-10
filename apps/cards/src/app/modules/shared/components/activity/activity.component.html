@@ -1,4 +1,4 @@
-<div class="activity">
+<div class="activity" id="activity-{{activity.id}}">
     <ng-container *ngIf="collapsible">
         <ng-container [ngTemplateOutlet]="collapsibleActivityTemplate" [ngTemplateOutletContext]="{activity: activity}"></ng-container>
     </ng-container>
@@ -57,83 +57,22 @@
 
 <ng-template #contentTemplate>
     <div *ngFor="let card of activity.gameData?.cardSnapshots; trackBy: cardTrackBy" class="box p-2 mb-2">
-        <div class="d-flex align-items-center justify-content-between"
-             [ngClass]="{'mb-2': card.attachedImages?.length || activity.map?.summary_polyline}"
+        <app-card-snapshot [card]="card"
+                           [activity]="activity"
+                           [activityType]="activityType"
+                           [showReports]="showReports"
+                           (liked)="like($event)"
+                           (reported)="report($event)"
+                           (openComments)="openComments($event)"
         >
-            <div class="d-flex align-items-center">
-                <app-athlete *ngIf="activity?.athlete" [athleteId]="activity?.athlete.id"></app-athlete>
-                &nbsp;
-                <span class="text-medium">completed <span class="text-bold">"{{card.title}}"</span></span>
-            </div>
-            <app-image [src]="!!card.getImageSource ? card.getImageSource() : ''" [small]="true"></app-image>
-        </div>
-        <ng-container *ngIf="showReports">
-            <p class="color-other" *ngFor="let report of card.reports">{{report.comment}} by {{report.createdBy}}</p>
-        </ng-container>
-        <app-gallery [images]="card.attachedImages"
-                     [polyline]="activity.map?.summary_polyline"
-                     [activityType]="activityType"
-        ></app-gallery>
-        <div class="mt-2" *ngIf="card.authorNote?.length !== 0">
-            <app-comment [text]="card.authorNote"></app-comment>
-        </div>
-        <div class="d-flex justify-content-between mt-2">
-            <div class="flex-shrink-1">
-                <app-button (click)="report(card.id)"
-                            [small]="true"
-                            [label]="(card?.reportedByMe) ? 'Reported' : 'Report'"
-                            [icon]="'flag'"
-                            [type]="(card?.reportedByMe) ? ButtonType.DANGER_FILLED: ButtonType.DANGER"></app-button>
-            </div>
-            <div>
-                <app-button (click)="openComments(card)"
-                            [small]="true"
-                            [label]="(card.comments.length || '').toString()"
-                            [icon]="'comment'"
-                            [type]="(card?.reportedByMe) ? ButtonType.DANGER_FILLED: ButtonType.DANGER"></app-button>
-            </div>
-            <div class="flex-shrink-1">
-                <app-button (click)="card?.likedByMe || like(card)"
-                            [small]="true"
-                            [label]="(card?.likes?.length || 'Like').toString()"
-                            [icon]="'fire'"
-                            [type]="card?.likedByMe ? ButtonType.DANGER_FILLED: ButtonType.DANGER"></app-button>
-            </div>
-        </div>
+
+        </app-card-snapshot>
     </div>
 </ng-template>
 
 <ng-template #commentsPopup>
-    <div class="popup box">
-        <div class="full-width p-3 d-flex flex-column align-items-center">
-            <p class="mt-2 pt-2 mb-4 d-flex align-items-center">
-                Comments for&nbsp;<span class="text-bold">"{{selectedCard.title}}"</span>
-            </p>
-            <div *ngIf="selectedCard.authorNote" class="mb-2 full-width">
-                <app-comment [authorId]="activity.athlete.id.toString()"
-                             [text]="selectedCard?.authorNote"
-                             [timestamp]="activity.gameData.submittedAt"
-                ></app-comment>
-            </div>
-            <div *ngFor="let comment of selectedCard?.comments" class="mb-2 full-width">
-                <app-comment [comment]="comment"
-                             (deleteComment)="deleteComment(selectedCard, $event)"
-                ></app-comment>
-            </div>
-
-            <div class="mt-3 full-width">
-                <app-textarea [fc]="activityComment" [label]="'Leave your comment here'" [rows]="3"></app-textarea>
-            </div>
-            <div class="mt-4 mb-2 full-width">
-                <app-button type="action"
-                            [label]="'Submit'"
-                            [disabled]="!activityComment.value"
-                            (buttonClick)="addComment()"
-                ></app-button>
-            </div>
-            <div class="mb-3">
-                <app-button (buttonClick)="closeComments()" [label]="'Cancel'"></app-button>
-            </div>
-        </div>
-    </div>
+    <app-comment-view [activity]="activity"
+                      [card]="selectedCard"
+                      (closeComments)="closeComments()"
+    ></app-comment-view>
 </ng-template>

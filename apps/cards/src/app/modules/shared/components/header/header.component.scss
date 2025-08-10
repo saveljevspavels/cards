@@ -1,3 +1,9 @@
 .header {
-  height: 120px;
+    height: 120px;
+    &__back-button {
+        position: absolute;
+        left: var(--margin);
+        margin-top: calc(var(--margin) * -1);
+        padding: var(--margin);
+    }
 }

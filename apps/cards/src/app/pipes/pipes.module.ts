@@ -12,6 +12,7 @@ import {PercentPipe} from "./percent.pipe";
 import {MinutesPipe} from "./minutes.pipe";
 import {ActivityPropPipe} from "./activity-prop.pipe";
 import {RomanPipe} from "./roman.pipe";
+import { TimeAgoPipe } from './time-ago.pipe';
 
 const PIPES = [
 	ModifierPipe,
@@ -25,7 +26,8 @@ const PIPES = [
     PercentPipe,
     MinutesPipe,
     ActivityPropPipe,
-    RomanPipe
+    RomanPipe,
+    TimeAgoPipe
 ]
 
 @NgModule({

@@ -1,0 +1,10 @@
+.comment-view {
+    &__content {
+        min-height: calc(100vh - 120px - 24px);
+    }
+}
+
+.comment-input{
+    background: var(--acticity-background);
+    width: 100%;
+}

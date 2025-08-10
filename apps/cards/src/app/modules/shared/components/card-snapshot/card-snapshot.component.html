@@ -1,0 +1,45 @@
+<div class="card-snapshot">
+    <div class="d-flex align-items-center justify-content-between"
+         [ngClass]="{'mb-2': card.attachedImages?.length || activity.map?.summary_polyline}"
+    >
+        <div class="d-flex align-items-center">
+            <app-athlete *ngIf="activity?.athlete" [athleteId]="activity?.athlete.id"></app-athlete>
+            &nbsp;
+            <span class="text-medium">completed <span class="text-bold">"{{card.title}}"</span></span>
+        </div>
+        <app-image [src]="!!card.getImageSource ? card.getImageSource() : ''" [small]="true"></app-image>
+    </div>
+    <ng-container *ngIf="showReports">
+        <p class="color-other" *ngFor="let report of card.reports">{{report.comment}} by {{report.createdBy}}</p>
+    </ng-container>
+    <app-gallery *ngIf="showGallery"
+                 [images]="card.attachedImages"
+                 [polyline]="activity.map?.summary_polyline"
+                 [activityType]="activityType"
+    ></app-gallery>
+    <div class="mt-2" *ngIf="card.authorNote?.length !== 0">
+        <app-comment [text]="card.authorNote"></app-comment>
+    </div>
+    <div class="d-flex justify-content-between mt-2" *ngIf="showActions">
+        <div class="flex-shrink-1">
+            <app-button (click)="report(card.id)"
+                        [small]="true"
+                        [label]="(card?.reportedByMe) ? 'Reported' : 'Report'"
+                        [icon]="'flag'"
+                        [type]="(card?.reportedByMe) ? ButtonType.DANGER_FILLED: ButtonType.DANGER"></app-button>
+        </div>
+        <div class="d-flex gap-3">
+            <app-button (click)="openComments.emit(card)"
+                        [small]="true"
+                        [label]="(card.comments?.length || '').toString()"
+                        [icon]="'comment'"
+                        [type]="ButtonType.DANGER"></app-button>
+
+            <app-button (click)="card?.likedByMe || like(card)"
+                        [small]="true"
+                        [label]="(card?.likes?.length || 'Like').toString()"
+                        [icon]="'fire'"
+                        [type]="card?.likedByMe ? ButtonType.DANGER_FILLED: ButtonType.DANGER"></app-button>
+        </div>
+    </div>
+</div>
