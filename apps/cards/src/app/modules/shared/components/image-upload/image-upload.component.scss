@@ -46,10 +46,13 @@
                 padding: 0;
                 button {
                     border-radius: var(--radius-half);
-                    width: 16px;
-                    height: 16px;
+                    width: 18px;
+                    height: 18px;
                     display: block;
                     background: white;
+                    path {
+                        fill: var(--color-danger);
+                    }
                 }
             }
             &>img {
