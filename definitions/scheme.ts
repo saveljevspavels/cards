@@ -15,49 +15,58 @@ export const SCHEME = {
                 {
                     "cards": [
                         "start",
-                        "other_coast",
-                        "baywatch",
+                        "full_moon",
+                        "checkpoint_ko",
+                        "pond",
+                        "castle",
+                    ]
+                },
+                {
+                    "cards": [
+                        "checkpoint_fj",
+                        "rain",
                         "work",
                         "forest"
                     ]
                 },
                 {
                     "cards": [
-                        "sunset",
-                        "pond",
-                        "rain",
-                        "checkpoint_ae"
-                    ]
-                },
-                {
-                    "cards": [
                         "sunrise",
                         "swamp",
-                        "train",
-                        "checkpoint_fj"
+                        "3_parks",
+                        "namesake_city"
                     ]
                 },
                 {
                     "cards": [
-                        "one_direction",
-                        "so_interesting",
+                        "baywatch",
                         "hill",
-                        "checkpoint_ko"
+                        "checkpoint_ae",
+                        "sunset"
                     ]
                 },
                 {
                     "cards": [
-                        "night",
-                        "checkpoint_pt",
-                        "castle",
-                        "fish"
+                        "two_cities",
+                        "burning_man",
+                        "island",
+                        "namesake_village"
                     ]
                 },
                 {
                     "cards": [
+                        "train",
                         "checkpoint_uz",
-                        "park",
-                        "island"
+                        "lake",
+                        "night_walk",
+                    ]
+                },
+                {
+                    "cards": [
+                        "park_100",
+                        "other_coast",
+                        "checkpoint_pt",
+                        "favorite_place",
                     ]
                 }
             ],
@@ -135,49 +144,58 @@ export const SCHEME = {
             "levels": [
                 {
                     "cards": [
-                        "cardio",
                         "game",
-                        "free_weights",
-                        "rolling"
+                        "rolling",
+                        "cardio",
+                        "fitness"
                     ]
                 },
                 {
                     "cards": [
                         "yoga",
-                        "ground_board",
-                        "bodyweight",
-                        "rackets_indoor"
+                        "warmup",
+                        "rackets",
+                        "ground_boards"
+                    ]
+                },
+                {
+                    "cards": [
+                        "climber",
+                        "aquaman",
+                        "rowing",
+                        "ball_game"
                     ]
                 },
                 {
                     "cards": [
                         "motor",
-                        "rowing",
                         "team_game",
-                        "group_workout"
+                        "cardio_indoor",
+                        "free_weights"
                     ]
                 },
                 {
                     "cards": [
-                        "hike",
-                        "climber",
-                        "competitor",
-                        "aquaman"
-                    ]
-                },
-                {
-                    "cards": [
-                        "rackets_outdoor",
                         "water_boards",
-                        "dance",
-                        "indoor_bike"
+                        "group_workout",
+                        "competitor",
+                        "fitness_outdoor"
                     ]
                 },
                 {
                     "cards": [
                         "martial_arts",
                         "obstacle",
-                        "treadmill"
+                        "physiotherapy",
+                        "pedaling",
+                    ]
+                },
+                {
+                    "cards": [
+                        "dance",
+                        "roller_blades",
+                        "bodyweight",
+                        "cooldown",
                     ]
                 }
             ],
