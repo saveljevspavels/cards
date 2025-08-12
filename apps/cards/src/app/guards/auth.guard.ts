@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
 import {ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot, UrlTree} from '@angular/router';
-import {Observable, of} from 'rxjs';
+import { Observable} from 'rxjs';
 import {AuthService} from "../services/auth.service";
 import {LocalStorageService} from "../services/local-storage.service";
 import {AthleteService} from "../services/athlete.service";
-import {filter, first, map} from "rxjs/operators";
+import { debounceTime, first, flatMap, map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -22,6 +22,7 @@ export class AuthGuard implements CanActivate {
     if(LocalStorageService.jwt) {
       this.authService.decodeId();
       return this.athleteService.me.pipe(
+          debounceTime(500), // Wait till Athlete is saved & returned from DB
           first(),
           map(me => {
         if(me) {

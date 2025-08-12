@@ -5,6 +5,8 @@ import {Currencies} from "./currencies.class";
 import {JsonObjectInterface} from "../interfaces/json-object.interface";
 import {RESPONSES} from "../../server/response-codes";
 import MathHelper from "../../server/helpers/math.helper";
+import { SCHEME, BOARD_KEY } from '../../../definitions/scheme';
+import { getRandomInt } from '../../server/helpers/util';
 
 export default class Athlete implements JsonObjectInterface {
     name: string;
@@ -24,7 +26,7 @@ export default class Athlete implements JsonObjectInterface {
         claimed: string[]
     };
     baseCardProgress: BaseCardProgress;
-    unlocks: {[key: string]: number};
+    unlocks: {[K in BOARD_KEY]: number[]};
     usedAbilities: AbilityKey[];
     perks: {[key: string]: number} = {};
 
@@ -46,7 +48,7 @@ export default class Athlete implements JsonObjectInterface {
             claimed: string[]
         },
         baseCardProgress: BaseCardProgress,
-        unlocks: {[key: string]: number},
+        unlocks: {[K in BOARD_KEY]: number[]},
         usedAbilities: AbilityKey[],
         perks: {[key: string]: number} = {}
     ) {
@@ -114,7 +116,11 @@ export default class Athlete implements JsonObjectInterface {
                 other: 0,
             },
             {
-                'special': -1
+                [BOARD_KEY.JACK]: [0],
+                [BOARD_KEY.WANDERER]: [0],
+                [BOARD_KEY.PHOTO]: [0],
+                [BOARD_KEY.SPORT]: [0],
+                [BOARD_KEY.SPECIAL]: []
             },
             [],
             {
@@ -199,7 +205,21 @@ export default class Athlete implements JsonObjectInterface {
         this.currencies.random_perk = MathHelper.add(this.currencies.random_perk, currencies.random_perk);
         this.currencies.fatigue = MathHelper.add(this.currencies.coins, currencies.fatigue);
         if(currencies.special_task) {
-            this.unlocks['special'] = MathHelper.add(this.unlocks['special'] || 0, currencies.special_task);
+            const levelAmount = SCHEME.boards.find(board => board.key === BOARD_KEY.SPECIAL)?.levels.length || 0;
+            const lockedLevels = [];
+            for(let i = 0; i < levelAmount; i++) {
+                if(!this.unlocks[BOARD_KEY.SPECIAL].includes(i)) {
+                    lockedLevels.push(i);
+                }
+            }
+            for(let i = 0; i < currencies.special_task; i++) {
+                if(lockedLevels.length === 0) {
+                    break;
+                }
+                const randomLockedLevel = getRandomInt(lockedLevels.length);
+                this.unlocks[BOARD_KEY.SPECIAL].push(lockedLevels[randomLockedLevel]);
+                lockedLevels.splice(randomLockedLevel, 1);
+            }
         }
     }
 

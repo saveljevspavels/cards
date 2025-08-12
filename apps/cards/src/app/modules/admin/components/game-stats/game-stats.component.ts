@@ -11,6 +11,7 @@ import {AdminService} from "../../admin.service";
 import Athlete from "../../../../../../../shared/classes/athlete.class";
 import {Ability, AbilityKey} from "../../../../../../../shared/interfaces/ability.interface";
 import {ABILITIES} from "../../../../../../../../definitions/abilities";
+import { BOARD_KEY } from '../../../../../../../../definitions/scheme';
 
 @Component({
   selector: 'app-game-stats',
@@ -79,9 +80,9 @@ export class GameStatsComponent implements OnInit {
         )
         .subscribe(([activities, athletes, cardScheme, cardFactories]) => {
       console.log('activities', activities)
-      const wandererCards = cardScheme.boards.find(scheme => scheme.key === 'wanderer')?.levels.reduce((acc: string[], level) => {return [...acc, ...level.cards]}, [])
-      const photohunterCards = cardScheme.boards.find(scheme => scheme.key === 'photo')?.levels.reduce((acc: string[], level) => {return [...acc, ...level.cards]}, [])
-      const multitaskerCards = cardScheme.boards.find(scheme => scheme.key === 'jack')?.levels.reduce((acc: string[], level) => {return [...acc, ...level.cards]}, [])
+      const wandererCards = cardScheme.boards.find(scheme => scheme.key === BOARD_KEY.WANDERER)?.levels.reduce((acc: string[], level) => {return [...acc, ...level.cards]}, [])
+      const photohunterCards = cardScheme.boards.find(scheme => scheme.key === BOARD_KEY.PHOTO)?.levels.reduce((acc: string[], level) => {return [...acc, ...level.cards]}, [])
+      const multitaskerCards = cardScheme.boards.find(scheme => scheme.key === BOARD_KEY.JACK)?.levels.reduce((acc: string[], level) => {return [...acc, ...level.cards]}, [])
       const allCards = [
           ...(wandererCards || []),
           ...(photohunterCards || []),
@@ -226,15 +227,7 @@ export class GameStatsComponent implements OnInit {
         return {
           name: athlete.name,
           value: (athlete?.currencies.coins || 0)
-              + Object.values(athlete.unlocks).reduce((acc: number, value: number) => {
-            switch (value) {
-              case 1: return acc + 5;
-              case 2: return acc + 15;
-              case 3: return acc + 30;
-              case 4: return acc + 50;
-              default: return acc;
-            }
-          }, 0)
+                  // TODO: unlock prices?
           + athlete.usedAbilities.reduce((acc: number, abilityKey: AbilityKey) => acc + (ABILITIES.find(ability => ability.key === abilityKey)?.coinsCost || 0), 0)
           + athlete.cards.claimed.reduce((acc: number, cardId: string) => acc + ((allCards.indexOf(cardId) !== -1) ? 1 : 0), 0)
         }

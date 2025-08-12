@@ -10,9 +10,9 @@
     <ng-container *ngFor="let board of boards">
         <div class="d-none" [ngClass]="{'d-block': activeBoard.value.key === board.key}">
             <div *ngFor="let level of board.levels; let levelIndex = index">
-                <ng-container *ngIf="level.cards.length && ((showLocked && board.key !== 'special') ? (levelIndex - 1) : (levelIndex)) <= unlockMap.get(board.key)">
-                    <h2 class="mb-2 mt-2" *ngIf="(levelIndex - 1) === unlockMap.get(board.key)">Locked Tasks</h2>
-                    <div [ngClass]="{'border-primary border-radius p-2 mb-2': (levelIndex - 1) === unlockMap.get(board.key)}">
+                <ng-container *ngIf="level.cards.length && (unlockMap.get(board.key)?.indexOf(levelIndex) !== -1 || (showLocked && board.key !== BOARD_KEY.SPECIAL && unlockMap.get(board.key)?.indexOf(levelIndex - 1) !== -1)) ">
+                    <h2 class="mb-2 mt-2" *ngIf="board.key !== BOARD_KEY.SPECIAL && levelIndex === unlockMap.get(board.key)?.length">Locked Tasks</h2>
+                    <div [ngClass]="{'border-primary border-radius p-2 mb-2': board.key !== BOARD_KEY.SPECIAL && levelIndex === unlockMap.get(board.key)?.length}">
                         <div class="d-flex flex-column">
                             <ng-container *ngFor="let card of level.cards">
                                 <app-card *ngIf="cardMap.get(card)?.card"
@@ -20,7 +20,7 @@
                                           [validationStatus]="cardMap.get(card)?.validationStatus"
                                           [imagesController]="uploadedImages.get(card)"
                                           [commentController]="cardComments.get(card)"
-                                          [locked]="unlockMap.get(board.key) < levelIndex"
+                                          [locked]="unlockMap.get(board.key)?.indexOf(levelIndex) === -1"
                                           [canActivate]="(athlete | async)?.currencies.energy >= cardMap.get(card)?.card.energyCost && (athlete | async)?.cards.active.length < RULES.SCHEME.MAX_ACTIVE_CARDS"
                                           [card]="cardMap.get(card)?.card"
                                           [styleClass]="'mb-2'"
@@ -28,7 +28,7 @@
                             </ng-container>
                         </div>
                         <app-button
-                                *ngIf="unlockMap.get(board.key) === levelIndex - 1"
+                                *ngIf="unlockMap.get(board.key)?.indexOf(levelIndex) === -1"
                                 label="Unlock for -{{getUnlockPrice(levelIndex)}}"
                                 [disabled]="getUnlockPrice(levelIndex) > (athlete | async)?.currencies.coins"
                                 (buttonClick)="unlockLevel(board.key)"
@@ -38,7 +38,7 @@
                         </app-button>
                     </div>
                 </ng-container>
-                <div *ngIf="(showLocked && board.key !== 'special') && level.cards.length && levelIndex === unlockMap.get(board.key) + 2">
+                <div *ngIf="(showLocked && board.key !== BOARD_KEY.SPECIAL) && level.cards.length && levelIndex === unlockMap.get(board.key)?.length + 1">
                     <div class="mb-2">
                         <app-card-placeholder></app-card-placeholder>
                     </div>

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import {BehaviorSubject, combineLatest, Observable} from "rxjs";
-import {filter, map, pairwise} from "rxjs/operators";
+import { BehaviorSubject, combineLatest, Observable, skip } from 'rxjs';
+import { distinctUntilChanged, filter, map, pairwise } from 'rxjs/operators';
 import {HttpClient} from "@angular/common/http";
 import {environment} from "../../environments/environment";
 import {ConstService} from "./const.service";
@@ -33,7 +33,7 @@ export class AthleteService {
         this.athleteCollection = this.db.collection(ConstService.CONST.COLLECTIONS.ATHLETES);
         combineLatest([
             this.myId,
-            this.athleteCollection.valueChanges()
+            this.athleteCollection.valueChanges().pipe(skip(1))
         ]).subscribe(([myId, athletes]: any) => {
             athletes = athletes.map((athlete: Athlete) => Athlete.fromJSONObject(athlete));
             this.athletes.next(athletes as Athlete[]);

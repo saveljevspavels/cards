@@ -17,6 +17,7 @@ import {AbilityKey} from "../shared/interfaces/ability.interface";
 import MathHelper from "./helpers/math.helper";
 import {CARDS} from "../../definitions/cards";
 import {ChallengeService} from "./challenge.service";
+import { BOARD_KEY } from '../../definitions/scheme';
 
 export default class CardService {
     constructor(
@@ -170,20 +171,20 @@ export default class CardService {
         });
     }
 
-    async unlockBoardLevel(athleteId: string, boardKey: string) {
+    async unlockBoardLevel(athleteId: string, boardKey: BOARD_KEY) {
         const athlete = await this.athleteService.getAthlete(athleteId);
 
         const currentMoney = athlete.currencies.coins || 0;
-        const currentLevel = athlete.unlocks[boardKey] || 0;
-        const nextLevel = currentLevel + 1;
+        const currentLevels = athlete.unlocks[boardKey] || [];
+        const nextLevel = currentLevels.length;
         const price = Math.max(RULES.COINS.BASE_UNLOCK_PRICE -
             athlete.getPerkLevel(AbilityKey.CARD_UNLOCK_DISCOUNT) * RULES.UNLOCK_DISCOUNT_AMOUNT, 0)
         if(currentMoney < price) {
-            this.logger.error(`Athlete ${athlete.logName} does not have ${price} (has ${currentMoney}) money to unlock ${boardKey} ${currentLevel + 1}`);
+            this.logger.error(`Athlete ${athlete.logName} does not have ${price} (has ${currentMoney}) money to unlock ${boardKey} ${currentLevels.length}`);
             return;
         }
         const newUnlocks = {...athlete.unlocks};
-        newUnlocks[boardKey] = nextLevel;
+        newUnlocks[boardKey] = [...currentLevels, nextLevel];
 
         athlete.currencies.coins = currentMoney - price;
         athlete.unlocks = newUnlocks;

@@ -1,3 +1,11 @@
+export enum BOARD_KEY {
+    WANDERER = 'wanderer',
+    PHOTO = 'photo',
+    JACK = 'jack',
+    SPORT = 'sport',
+    SPECIAL = 'special'
+}
+
 export const SCHEME = {
     "id": "main",
     "boards": [
@@ -55,7 +63,7 @@ export const SCHEME = {
             ],
             "color": "primary",
             "icon": "geotag",
-            "key": "wanderer"
+            "key": BOARD_KEY.WANDERER
         },
         {
             "levels": [
@@ -118,11 +126,11 @@ export const SCHEME = {
             ],
             "icon": "camera",
             "color": "secondary-3",
-            "key": "photo",
+            "key": BOARD_KEY.PHOTO,
             "title": "Photohunter"
         },
         {
-            "key": "jack",
+            "key": BOARD_KEY.JACK,
             "icon": "fitness",
             "levels": [
                 {
@@ -178,7 +186,7 @@ export const SCHEME = {
         },
         {
             "title": "Hardworker",
-            "key": "sport",
+            "key": BOARD_KEY.SPORT,
             "levels": [
                 {
                     "cards": [
@@ -228,34 +236,18 @@ export const SCHEME = {
         },
         {
             "levels": [
-                {
-                    "cards": [
-                        "bottle",
-                        "creeper"
-                    ]
-                },
-                {
-                    "cards": [
-                        "autograph",
-                        "avengers"
-                    ]
-                },
-                {
-                    "cards": [
-                        "local_legend",
-                        "donate_clothes"
-                    ]
-                },
-                {
-                    "cards": [
-                        "halloween",
-                        "speed_pr"
-                    ]
-                }
+                { "cards": ["bottle",]},
+                { "cards": ["creeper",]},
+                { "cards": ["autograph",]},
+                { "cards": ["avengers",]},
+                { "cards": ["local_legend",]},
+                { "cards": ["donate_clothes",]},
+                { "cards": ["halloween",]},
+                { "cards": ["speed_pr",]},
             ],
             "title": "Special",
             "icon": "star",
-            "key": "special",
+            "key": BOARD_KEY.SPECIAL,
             "color": "secondary-1"
         }
     ]

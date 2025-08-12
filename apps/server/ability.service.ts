@@ -234,7 +234,7 @@ export default class AbilityService {
         } else if(roll < 40) {
             reward.perk = 1;
         } else if(roll < 65) {
-            
+
             reward.random_perk = 1;
         } else {
             reward.special_task = 1;

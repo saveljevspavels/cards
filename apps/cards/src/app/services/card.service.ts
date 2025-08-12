@@ -9,7 +9,7 @@ import {ValidationStatus} from "../../../../shared/services/validation.service";
 import {Activity} from "../../../../shared/interfaces/activity.interface";
 import {ValidationService} from "./validation.service";
 import {CARDS} from "../../../../../definitions/cards";
-import { SCHEME } from '../../../../../definitions/scheme';
+import { BOARD_KEY, SCHEME } from '../../../../../definitions/scheme';
 
 @Injectable({
   providedIn: 'root'
@@ -58,7 +58,7 @@ export class CardService {
         })
     }
 
-    unlockLevel(boardKey: string) {
+    unlockLevel(boardKey: BOARD_KEY) {
         return this.http.post(`${environment.baseBE}/cards/unlock-level`, {
             boardKey,
         })

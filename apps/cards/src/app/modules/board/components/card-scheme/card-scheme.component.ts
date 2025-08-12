@@ -14,6 +14,7 @@ import {ValidationService} from "../../../../services/validation.service";
 import {ValidationStatus} from "../../../../../../../shared/services/validation.service";
 import {RULES} from "../../../../../../../../definitions/rules";
 import {AbilityKey} from "../../../../../../../shared/interfaces/ability.interface";
+import { BOARD_KEY } from '../../../../../../../../definitions/scheme';
 
 @Component({
   selector: 'app-card-scheme',
@@ -21,8 +22,9 @@ import {AbilityKey} from "../../../../../../../shared/interfaces/ability.interfa
   styleUrls: ['./card-scheme.component.scss']
 })
 export class CardSchemeComponent implements OnInit {
-    public CONST = ConstService.CONST
-    public RULES = ConstService.RULES
+    public CONST = ConstService.CONST;
+    public RULES = ConstService.RULES;
+    public BOARD_KEY = BOARD_KEY;
     public allCards: BehaviorSubject<Card[]> = this.cardService.cards;
     public cardScheme: BehaviorSubject<CardScheme> = this.cardService.cardScheme;
     public athlete = this.athleteService.me;
@@ -43,7 +45,7 @@ export class CardSchemeComponent implements OnInit {
     public activeBoard = this.formBuilder.control<CardSchemeBoard | null>(null);
 
     public cardMap: Map<string, ValidatedCard> = new Map([]);
-    public unlockMap: Map<string, number>;
+    public unlockMap: Map<string, number[]>;
 
     constructor(private formBuilder: FormBuilder,
                 private cardService: CardService,
@@ -74,8 +76,8 @@ export class CardSchemeComponent implements OnInit {
                 return;
             }
 
-            this.unlockMap = new Map<string, number>(this.boards.map((board) => {
-                return [board.key, athlete.unlocks[board.key] || 0];
+            this.unlockMap = new Map<string, number[]>(this.boards.map((board) => {
+                return [board.key, athlete.unlocks[board.key] || []];
             }))
             const usedCards = Object.values(athlete.cards).reduce((acc, cards) => [...cards, ...acc], []);
 
@@ -123,7 +125,7 @@ export class CardSchemeComponent implements OnInit {
         LocalStorageService.setValue('activeBoard', boardKey);
     }
 
-    unlockLevel(boardKey: string) {
+    unlockLevel(boardKey: BOARD_KEY) {
         this.unlock$.pipe(
             first(),
             filter((resolution) => !!resolution)

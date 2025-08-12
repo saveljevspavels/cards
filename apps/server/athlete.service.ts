@@ -75,12 +75,19 @@ export default class AthleteService {
 
     async saveAthlete(athlete: any) {
         const athleteExists = await this.fireStoreService.athleteCollection.exists(athlete.id.toString())
+        let athleteInstance: Athlete;
+        try {
+            athleteInstance = this.createAthlete(athlete);
+        } catch (e) {
+            this.logger.error(`Error checking athlete existence: ${e}`);
+            throw 'Error checking athlete existence';
+        }
         if(!athleteExists) {
-            await this.fireStoreService.athleteCollection.set(athlete.id.toString(), this.createAthlete(athlete))
-            this.logger.info(`Athlete ${athlete.logName} saved`)
+            await this.fireStoreService.athleteCollection.set(athlete.id.toString(), athleteInstance)
+            this.logger.info(`Athlete ${athleteInstance.logName} saved`)
         } else {
-            await this.fireStoreService.athleteCollection.update(athlete.id.toString(), this.createAthletePatch(athlete))
-            this.logger.info(`Athlete ${athlete.logName} logged in & updated`)
+            await this.fireStoreService.athleteCollection.update(athleteInstance.id.toString(), this.createAthletePatch(athleteInstance))
+            this.logger.info(`Athlete ${athleteInstance.logName} logged in & updated`)
         }
     }
 

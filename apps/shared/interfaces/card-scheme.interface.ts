@@ -1,10 +1,12 @@
+import { BOARD_KEY } from '../../../definitions/scheme';
+
 export interface CardScheme {
     boards: CardSchemeBoard[]
 }
 
 export interface CardSchemeBoard {
     title: string;
-    key: string;
+    key: BOARD_KEY;
     color: string;
     icon: string;
     levels: CardSchemeLevel[];

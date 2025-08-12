@@ -1,6 +1,6 @@
 <div class="d-flex board-selection p-1 justify-content-between gap-2">
     <ng-container *ngFor="let board of boards; let i = index;">
-        <div *ngIf="unlockMap.get(board.key) === undefined || unlockMap.get(board.key) >= 0"
+        <div *ngIf="unlockMap.get(board.key)?.length > 0"
              (click)="select(board.key)"
              class="board-button d-flex justify-content-center align-items-center color-{{board.color}}"
              [ngClass]="{'board-button--inactive': board.key !== activeBoard}"
