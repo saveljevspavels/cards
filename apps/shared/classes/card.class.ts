@@ -200,4 +200,5 @@ export enum CardTag {
     wanderer = 'wanderer',
     photohunter = 'photohunter',
     hardworker = 'hardworker',
+    special = 'special',
 }
