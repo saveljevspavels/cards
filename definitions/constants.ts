@@ -26,7 +26,8 @@ export const CONST = {
         ELAPSED_TIME: "elapsed_time",
         START_DATE: "start_date",
         ATHLETE_COUNT: "athlete_count",
-        ACHIEVEMENT_COUNT: "achievement_count"
+        ACHIEVEMENT_COUNT: "achievement_count",
+        ELEVATION_GAIN: "total_elevation_gain", // TODO : add visuals on cards
     },
     ACTIVITY_TYPES: {
         RUN: "run",

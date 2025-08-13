@@ -208,44 +208,66 @@ export const SCHEME = {
             "levels": [
                 {
                     "cards": [
-                        "workout_1",
-                        "workout_2",
-                        "workout_3"
+                        "speed_1",
+                        "elevation_1",
+                        "group_run_ride",
+                        "trail_run_ride",
                     ]
                 },
                 {
                     "cards": [
-                        "fast_1",
+                        "speed_2",
                         "machine_1",
-                        "machine_2"
+                        "swim_1",
+                        "race",
                     ]
                 },
                 {
                     "cards": [
-                        "fast_2",
+                        "machine_2",
+                        "speed_3",
+                        "elevation_2",
+                        "group_run_ride_2",
+                    ]
+                },
+                {
+                    "cards": [
                         "machine_3",
-                        "machine_4"
+                        "speed_4",
+                        "swim_2",
+                        "highway"
                     ]
                 },
                 {
                     "cards": [
-                        "fast_3",
+                        "machine_4",
+                        "speed_distance_1",
+                        "elevation_3",
+                        "group_run_ride_3",
+                    ]
+                },
+                {
+                    "cards": [
                         "machine_5",
-                        "machine_6"
+                        "speed_5",
+                        "swim_3",
+                        "combo_meal"
                     ]
                 },
                 {
                     "cards": [
-                        "fast_4",
+                        "machine_6",
+                        "speed_6",
+                        "elevation_4",
+                        "speed_distance_2"
+                    ]
+                },
+                {
+                    "cards": [
                         "machine_7",
-                        "machine_8"
-                    ]
-                },
-                {
-                    "cards": [
-                        "fast_5",
+                        "machine_8",
                         "machine_9",
-                        "machine_10"
+                        "machine_10",
                     ]
                 }
             ],
