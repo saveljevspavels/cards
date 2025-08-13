@@ -92,6 +92,10 @@ body {
     -webkit-tap-highlight-color: transparent;
 }
 
+.nomargin {
+    margin: 0;
+}
+
 .color-background {@include color('background')};
 .color-primary {@include color('primary')};
 .color-disabled {@include color('disabled')};
@@ -167,7 +171,7 @@ hr {
 }
 
 .fullscreen {
-    height: calc(100vh - var(--menu-height));
+    height: calc(100dvh);
 }
 
 .title {

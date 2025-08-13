@@ -47,7 +47,7 @@ export const SCHEME = {
                 },
                 {
                     "cards": [
-                        "two_cities",
+                        "2_cities",
                         "burning_man",
                         "island",
                         "namesake_village"
@@ -58,7 +58,7 @@ export const SCHEME = {
                         "train",
                         "checkpoint_uz",
                         "lake",
-                        "night_walk",
+                        "night",
                     ]
                 },
                 {

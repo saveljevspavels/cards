@@ -817,7 +817,7 @@ export const CARDS: Card[] = [
         'Fish Patrol',
         '',
         0,
-        'fish',
+        'lake',
         'Do an activity doing a full loop around a lake',
         Currencies.withPoints(1).withExperience(3),
         1,

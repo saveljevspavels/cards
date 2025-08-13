@@ -1,17 +1,21 @@
-import {Component, OnInit, ViewEncapsulation} from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 
 @Component({
     selector: 'app-waiting-room',
     templateUrl: './waiting-room.component.html',
     styleUrls: ['./waiting-room.component.scss'],
-    encapsulation: ViewEncapsulation.None
+    encapsulation: ViewEncapsulation.None,
 })
-export class WaitingRoomComponent implements OnInit {
+export class WaitingRoomComponent implements OnInit, OnDestroy {
+    constructor() {}
 
-  constructor() { }
+    ngOnInit(): void {
+        document.body.classList.add('nomargin');
+    }
 
-  ngOnInit(): void {}
-
+    ngOnDestroy() {
+        document.body.classList.remove('nomargin');
+    }
 }
 
 
