@@ -74,6 +74,7 @@ import {RewardRandomPerkComponent} from "./components/rewards/reward-random-perk
 import {RewardSpecialTaskComponent} from "./components/rewards/reward-special-task/reward-special-task.component";
 import { CommentViewComponent } from '../board/components/comment-view/comment-view.component';
 import { CardSnapshotComponent } from './components/card-snapshot/card-snapshot.component';
+import { LogoutButtonComponent } from './components/logout-button/logout-button.component';
 
 const COMPS = [
     InputComponent,
@@ -121,6 +122,7 @@ const COMPS = [
     CountDownComponent,
     CommentViewComponent,
     CardSnapshotComponent,
+    LogoutButtonComponent
 ]
 
 const MODULES = [

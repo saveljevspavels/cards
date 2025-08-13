@@ -26,14 +26,10 @@ export class ProfileComponent implements OnInit {
     public achievements$: Observable<(Achievement | null)[]>;
     public hasPerks: boolean = true;
 
-    @ViewChild('logoutPopup', { static: true }) logoutPopup: ElementRef;
-
     constructor(private athleteService: AthleteService,
-                private authService: AuthService,
                 private activityService: ActivityService,
                 private achievementsService: AchievementService,
-                private route: ActivatedRoute,
-                private popupService: PopupService) {
+                private route: ActivatedRoute) {
     }
 
     ngOnInit(): void {
@@ -46,19 +42,6 @@ export class ProfileComponent implements OnInit {
             this.achievements$ = this.achievementsService.getAchievements(athlete?.achievements || []);
             this.hasPerks = Object.values(this.athlete?.perks!).reduce((acc, perk) => acc || perk > 0, false);
         })
-    }
-
-    openLogoutPopup() {
-        this.popupService.showPopup(this.logoutPopup);
-    }
-
-    cancelLogout() {
-        this.popupService.closePopup();
-    }
-
-    logout() {
-        this.authService.logout()
-        this.popupService.closePopup();
     }
 
 }
