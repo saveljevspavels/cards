@@ -2967,7 +2967,7 @@ export const CARDS: Card[] = [
             },
             {
                 comparator: 'in',
-                formula: 'run,walk,ride',
+                formula: 'run,ride',
                 property: 'type',
             },
         ],

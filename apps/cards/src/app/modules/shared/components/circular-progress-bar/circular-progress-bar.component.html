@@ -62,7 +62,7 @@
     </div>
     <div class="text-small mt-2" *ngIf="showDescription">
         <span class="color-background d-flex align-items-center" *ngIf="activity; else baseValueTemplate">
-            Bonus&nbsp;<app-reward-experience [value]="1"></app-reward-experience>&nbsp;per <ng-container [ngTemplateOutlet]="valueTemplate" [ngTemplateOutletContext]="{value: baseValue}"/>
+            Bonus&nbsp;<app-reward-experience [value]="RULES.BASE_CARD_EXPERIENCE_REWARD"></app-reward-experience>&nbsp;per <ng-container [ngTemplateOutlet]="valueTemplate" [ngTemplateOutletContext]="{value: baseValue}"/>
         </span>
         <ng-template #baseValueTemplate>
             <span class="text-light d-flex flex-nowrap">

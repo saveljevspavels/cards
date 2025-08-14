@@ -92,4 +92,5 @@ export class CircularProgressBarComponent implements OnChanges {
   }
 
   protected readonly ChallengeStatType = ChallengeStatType;
+  protected readonly RULES = RULES;
 }

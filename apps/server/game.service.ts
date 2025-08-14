@@ -124,8 +124,8 @@ export default class GameService {
 
     initChallengeAddition() {
         const rule = new schedule.RecurrenceRule();
-        rule.hour = [0, 6, 15, 17, 18];
-        rule.minute = [44, 45, 46, 47];
+        rule.hour = RULES.PROGRESSIVE_CHALLENGE.HOURS.REGULAR;
+        rule.minute = 0;
         rule.tz = 'Europe/Riga';
 
         const job = schedule.scheduleJob(rule, async () => {
