@@ -3,7 +3,7 @@
     color: var(--color-run)!important;
     fill: var(--color-run)!important;
   }
-  &--walk {
+  &--walk, &--elevation {
     color: var(--color-walk)!important;
     fill: var(--color-walk)!important;
   }

@@ -225,19 +225,31 @@ export default class AbilityService {
 
         // Base coin reward
         reward.coins = 3 + getRandomInt(3); // 3-5
+        reward.special_task = getRandomInt(2);
 
         const roll= getRandomInt(101);
-        if(roll < 10) {
+        if(roll < 5) {
+            reward.energy = 1;
+            reward.special_task = 1;
+            reward.coins--;
+        } if(roll < 10) {
             reward.coins += 16 + getRandomInt(4);
         } else if(roll < 20) {
-            reward.points = 1;
-        } else if(roll < 40) {
-            reward.perk = 1;
-        } else if(roll < 65) {
-
+            reward.coins += 12 + getRandomInt(4);
+        } else if(roll < 25) {
             reward.random_perk = 1;
-        } else {
             reward.special_task = 1;
+            reward.coins--;
+        } else if(roll < 40) {
+            reward.random_perk = 1;
+        } else if(roll < 50) {
+            reward.special_task = 4;
+            reward.coins--;
+        } else if(roll < 80) {
+            reward.special_task = 3;
+        } else {
+            reward.special_task = 2;
+            reward.coins += 1 + getRandomInt(3);
         }
         return reward;
     }

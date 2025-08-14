@@ -29,7 +29,7 @@ export const STORE_ITEMS: StoreItem[] = [
         description: "Energy boost to complete even more tasks",
         price: 10,
         imageUrl: "foam_roller.png",
-        rewards: Currencies.withEnergy(1).withExperience(1)
+        rewards: Currencies.withEnergy(1).withExperience(3)
     },
     {
         id: "energy_3",
@@ -37,7 +37,7 @@ export const STORE_ITEMS: StoreItem[] = [
         description: "When you refuse to stop",
         price: 13,
         imageUrl: "defibrillator.png",
-        rewards: Currencies.withEnergy(1).withExperience(3)
+        rewards: Currencies.withEnergy(1).withExperience(10)
     },
     {
         id: "perk",

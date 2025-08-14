@@ -53,6 +53,9 @@ export class ValidatorComponent implements OnInit {
     ) { }
 
     ngOnInit(): void {
+        if(this.validator.property === 'total_elevation_gain') {
+            console.log('validator', this.validator)
+        }
         this.activityTypes = this.resolveActivityTypes(this.allValidators.length ? this.allValidators : [this.validator]);
         this.athleteService.me.pipe(filter(me => !!me && !this.manual), take(1)).subscribe((me) => {
             this.typedValidator =
@@ -72,6 +75,10 @@ export class ValidatorComponent implements OnInit {
                     return acc;
                 }, {})
             ))
+
+            if(this.validator.property === 'total_elevation_gain') {
+                this.resolvedValues.subscribe((resolvedValues => console.log('resolvedValues', resolvedValues)))
+            }
             this.activeValidator = this.selectedActivity.pipe(map((activity: any) => {
                 return {
                     status: !activity

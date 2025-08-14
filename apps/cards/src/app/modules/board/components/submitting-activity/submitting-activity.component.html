@@ -12,26 +12,23 @@
         </app-circular-progress-bar>
     </app-pending-activity>
 
-    <div class="relative">
-        <div class="mb-5">
+    <div>
+        <div class="mb-2">
             <app-card-scheme
-                    [title]="'Select Task(s)'"
-                    [selectedCards]="selectedCards"
-                    [cardComments]="commentControls"
-                    [uploadedImages]="uploadedImages"
-                    [showLocked]="false"
+                [title]="'Select Task(s)'"
+                [selectedCards]="selectedCards"
+                [cardComments]="commentControls"
+                [uploadedImages]="uploadedImages"
+                [showLocked]="false"
             ></app-card-scheme>
         </div>
 
-        <div class="floating-button">
-            <app-rewards-button
-                [label]="(notEnoughEnergy$ | async) ? 'Not enough energy' : 'Submit'"
-                (buttonClick)="submitActivity()"
-                [disabled]="loading || (notEnoughEnergy$ | async)"
-                [rewards]="submitPrice"
-            ></app-rewards-button>
-        </div>
-
+        <app-rewards-button
+            [label]="(notEnoughEnergy$ | async) ? 'Not enough energy' : 'Submit'"
+            (buttonClick)="submitActivity()"
+            [disabled]="loading || (notEnoughEnergy$ | async)"
+            [rewards]="submitPrice"
+        ></app-rewards-button>
     </div>
 
 </app-content>

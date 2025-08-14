@@ -24,7 +24,7 @@ export const LEVEL_REWARDS: Currencies[] = [
     Currencies.withCoins(3),
     Currencies.withCoins(5),
     Currencies.withCoins(4).withEnergy(1),
-    new Currencies(4, 0, 0, 0, 0, 1), // random perk
+    Currencies.withPerks(1).withCoins(4), // perk
     Currencies.withCoins(3),
     Currencies.withCoins(5).withEnergy(1),
     Currencies.withCoins(4),

@@ -16,6 +16,8 @@
                 [label]="stock ? 'Buy -' + finalPrice : 'Out of stock'"
                 [small]="true"
                 (buttonClick)="buyItem()">
-        <app-svg *ngIf="stock > 0" [icon]="'coin'" height="16"></app-svg>
+        <div class="ml-0-5">
+            <app-svg *ngIf="stock > 0" [icon]="'coin'" height="16"></app-svg>
+        </div>
     </app-button>
 </div>
