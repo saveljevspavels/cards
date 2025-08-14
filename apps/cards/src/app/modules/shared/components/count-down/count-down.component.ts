@@ -13,6 +13,7 @@ export class CountDownComponent implements OnInit, OnDestroy {
 
   @Input() label = 'Time left:';
   @Input() targetHours = [];
+  @Input() noTemplate = false;
 
   private subscription: Subscription;
 

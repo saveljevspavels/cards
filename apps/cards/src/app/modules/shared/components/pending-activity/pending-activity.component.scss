@@ -10,3 +10,12 @@
   border-top-left-radius: var(--margin);
   border-top-right-radius: var(--margin);
 }
+
+.expiration-timer {
+    padding: 4px 5px 4px 5px;
+    color: var(--color-background);
+    border-radius: var(--radius);
+    &--danger {
+        background-color: var(--color-danger);
+    }
+}
