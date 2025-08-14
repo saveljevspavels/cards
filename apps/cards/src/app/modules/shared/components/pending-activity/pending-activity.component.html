@@ -15,11 +15,11 @@
                                             [color]="'background'"
                     >
                     </app-activity-type-icon>
-                        <div class="expiration-timer text-bold text-medium" [ngClass]="{'expiration-timer--danger' : expiryDanger}">
-                            Exp:
-                            <app-count-down *ngIf="expiryDanger" [noTemplate]="true" [targetHours]="[9]"></app-count-down>
-                            <span *ngIf="!expiryDanger">{{expiryAt | date : 'HH:mm'}}</span>
-                    </div>
+<!--                        <div class="expiration-timer text-bold text-medium" [ngClass]="{'expiration-timer&#45;&#45;danger' : expiryDanger}">-->
+<!--                            Exp:-->
+<!--                            <app-count-down *ngIf="expiryDanger" [noTemplate]="true" [targetHours]="[9]"></app-count-down>-->
+<!--                            <span *ngIf="!expiryDanger">{{expiryAt | date : 'HH:mm'}}</span>-->
+<!--                    </div>-->
                 </div>
                 <div class="d-flex justify-content-between align-items-center">
                     <div class="d-flex flex-column flex-grow-1">
