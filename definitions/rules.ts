@@ -116,11 +116,11 @@ export const RULES = {
         ENABLED: true,
         HOURS: {
             FIRST_DAY: [0],
-            REGULAR: [0]
+            REGULAR: [0, 12]
         },
         MAX_ACTIVE: 6,
         MAX_QUEUED: 99,
-        NEW_DAILY: 2,
+        NEW_DAILY: 1,
         MIN_ACTIVITY_TIME: 900
     },
     STORE: {
@@ -147,5 +147,6 @@ export const RULES = {
     ABILITY_FLAT_EXPERIENCE: 60,
     BASIC_INCOME_AMOUNT: 1,
     UNLOCK_DISCOUNT_AMOUNT: 1,
-    STARTING_CARD: ''
+    STARTING_CARD: '',
+    ACTIVITY_STALE_TIME_HOURS: 15,
 }

@@ -11,5 +11,7 @@ export class TaskOverviewComponent {
     public newActivities = this.activityService.newActivities;
     constructor(
         private activityService: ActivityService,
-    ) { }
+    ) {
+        this.newActivities.subscribe(activities => console.log('activities', activities))
+    }
 }

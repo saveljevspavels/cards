@@ -46,6 +46,7 @@ export default class GameService {
             }
         });
 
+        this.staleActivityCleanup();
         this.initEnergyRegen();
         if(RULES.FEATURED_CARD_ENABLED) {
             this.initFeaturedCardChange();
@@ -61,6 +62,21 @@ export default class GameService {
         // console.log('running migration');
     }
 
+    staleActivityCleanup() {
+        const rule = new schedule.RecurrenceRule();
+        rule.hour = [0, 6, 12, 18];
+        rule.minute = 0;
+        rule.tz = CONST.TIMEZONE;
+
+        const job = schedule.scheduleJob(rule, async () => {
+            this.logger.info(`Submitting stale activities`);
+            const allAthletes = (await this.fireStoreService.athleteCollection.all()).map((athlete: Athlete) => Athlete.fromJSONObject(athlete));
+            allAthletes.map(async (athlete: Athlete) => {
+                await this.activityService.submitAllActivities(athlete.id);
+            })
+        })
+    }
+
     initEnergyRegen() {
         const rule = new schedule.RecurrenceRule();
         rule.hour = 0;
@@ -71,7 +87,6 @@ export default class GameService {
             this.logger.error(`It's midnight`);
             const allAthletes = (await this.fireStoreService.athleteCollection.all()).map((athlete: Athlete) => Athlete.fromJSONObject(athlete));
             allAthletes.map(async (athlete: Athlete) => {
-                await this.activityService.submitAllActivities(athlete.id);
                 const updatedAthlete = await this.athleteService.getAthlete(athlete.id); // Updated instance after submit
                 try {
                     updatedAthlete.addEnergy(RULES.ENERGY.TIMED_RESTORE);
@@ -103,8 +118,8 @@ export default class GameService {
 
     initChallengeAddition() {
         const rule = new schedule.RecurrenceRule();
-        rule.hour = RULES.PROGRESSIVE_CHALLENGE.HOURS.REGULAR;
-        rule.minute = 0;
+        rule.hour = [0, 6, 15, 17, 18];
+        rule.minute = [44, 45, 46, 47];
         rule.tz = 'Europe/Riga';
 
         const job = schedule.scheduleJob(rule, async () => {
