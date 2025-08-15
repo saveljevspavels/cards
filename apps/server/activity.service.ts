@@ -403,12 +403,6 @@ export default class ActivityService {
         athlete.cards.completed = [...athlete.cards.completed, ...cardIds];
         this.athleteService.spendEnergy(athlete, StaticValidationService.requiredEnergy(cards));
 
-        this.logger.info({
-            status: ActivityStatus.SUBMITTED,
-            submittedAt: new Date().toISOString(),
-            cardIds,
-            cardSnapshots: cardSnapshots.map((snapshot: CardSnapshot) => snapshot.toJSONObject()), // Storing card snapshots
-        });
         await Promise.all([
             this.athleteService.updateAthlete(athlete),
             this.fireStoreService.detailedActivityCollection.update(

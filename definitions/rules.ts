@@ -116,7 +116,7 @@ export const RULES = {
         ENABLED: true,
         HOURS: {
             FIRST_DAY: [0],
-            REGULAR: [0, 12]
+            REGULAR: [6, 18]
         },
         MAX_ACTIVE: 6,
         MAX_QUEUED: 99,
