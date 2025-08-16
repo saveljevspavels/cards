@@ -236,6 +236,7 @@ export default class AbilityService {
             reward.coins += 16 + getRandomInt(4);
         } else if(roll < 20) {
             reward.coins += 12 + getRandomInt(4);
+            reward.special_task = 1;
         } else if(roll < 25) {
             reward.random_perk = 1;
             reward.special_task = 1;
