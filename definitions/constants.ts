@@ -49,4 +49,3 @@ export const CONST = {
     TIMEZONE_OFFSET: 3,
     INVENTORY_DISPLAYED_ITEMS: ['chest', 'perk', 'random_perk'],
 }
-

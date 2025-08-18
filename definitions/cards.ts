@@ -4055,7 +4055,7 @@ export const CARDS: Card[] = [
             },
             {
                 comparator: 'in',
-                formula: 'run,walk,ride',
+                formula: 'other',
                 property: 'type',
             },
         ],
@@ -4202,7 +4202,7 @@ export const CARDS: Card[] = [
         'dance',
         0,
         'real_dance',
-        'Go for a dance, visit party, rave, concert, club, etc.',
+        'Go for a dance - visit an active party, rave, concert, club, etc. Self made home parties does not count, go big.',
         Currencies.withPoints(1).withExperience(21),
         1,
         0,

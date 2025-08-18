@@ -73,7 +73,7 @@ export class StaticValidationService {
         const baseValue = validator.property === CONST.ACTIVITY_PROPERTIES.START_DATE
             ? this.getTimeInSeconds(activity[validator.property])
             : activity[validator.property];
-        return typeof baseValue === "number" ? Math.ceil((baseValue * activityHealth) / RULES.PROGRESS_PRECISION) : baseValue;
+        return baseValue;
     }
 
     static validateRule(activity: any, validator: Validator, baseWorkout: BaseWorkout): boolean {
