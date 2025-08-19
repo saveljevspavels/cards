@@ -18,6 +18,8 @@ import {CardSnapshot, Report} from "../../../../../../../shared/classes/card.cla
 import {ButtonType} from "../button/button.component";
 import {Activity} from "../../../../../../../shared/interfaces/activity.interface";
 import { ActivityService } from '../../../../services/activity.service';
+import { FileService } from '../../../../services/file.service';
+import { MessageService } from 'primeng/api';
 
 @Component({
     selector: 'app-card-snapshot',
@@ -39,7 +41,14 @@ export class CardSnapshotComponent {
     @Output() public liked = new EventEmitter();
     @Output() public openComments = new EventEmitter();
 
-    constructor() {}
+    @ViewChild('addImagesPopup', { static: true }) addImagesPopup: ElementRef;
+
+    public imagesController = new FormControl([]);
+
+    constructor(private popupService: PopupService,
+                private fileService: FileService,
+                private messageService: MessageService,
+                private activityService: ActivityService) {}
 
     like(cardSnapshot: CardSnapshot) {
         this.liked.emit(cardSnapshot);
@@ -48,5 +57,36 @@ export class CardSnapshotComponent {
 
     report(cardId: string) {
         this.reported.emit(cardId);
+    }
+
+    async addImages()  {
+        if(!this.imagesController.value || this.imagesController.value.length === 0) {
+            return;
+        }
+        let groupedImages;
+        try {
+            groupedImages = await this.fileService.uploadImages(this.imagesController.value);
+        } catch (err: any) {
+            this.messageService.add({severity:'error', summary:'Error', detail: err.toString()})
+            console.error('Error uploading images:', err);
+            return;
+        }
+        this.activityService.addCardPhotos(this.activity.id.toString(), this.card.id, groupedImages).subscribe({
+            next: () => {
+                this.imagesController.setValue([]);
+                this.closeAddImagesPopup();
+            },
+            error: (err) => {
+                console.error('Error adding images:', err);
+            }
+        });
+    }
+
+    openAddImagesPopup() {
+        this.popupService.showPopup(this.addImagesPopup);
+    }
+
+    closeAddImagesPopup() {
+        this.popupService.closePopup();
     }
 }

@@ -47,6 +47,20 @@ export default class ActivityService {
             res.status(200).send();
         });
 
+        app.post(`${CONST.API_PREFIX}/activity/add-photos`, async (req, res) => {
+            try {
+                await this.activityAddPhotos(
+                    req.body.activityId,
+                    req.body.cardId,
+                    req.body.images
+                )
+            } catch (err) {
+                console.log(err);
+                res.status(400).send(err);
+            }
+            res.status(200).send();
+        });
+
         app.post(`${CONST.API_PREFIX}/reject-activity`, async (req, res) => {
             await this.rejectActivity(req.body.activityId, req.body.comments)
             res.status(200).send({response: RESPONSES.SUCCESS});
@@ -440,6 +454,39 @@ export default class ActivityService {
                 }
             })
         this.logger.info(`Activity ${activity.type} ${activityId} was rejected for athlete ${activity.athlete.id.toString()}`)
+    }
+
+    async activityAddPhotos(activityId: string, cardId: string, images: UploadedImage[]) {
+        const activity = await this.getActivity(activityId);
+        const athlete = await this.athleteService.getAthlete(activity.athlete.id);
+
+        if(activity.gameData.status !== ActivityStatus.APPROVED) {
+            this.logger.info(`Activity ${activityId} is not in SUBMITTED status, can't add photos`);
+            throw RESPONSES.ERROR.WRONG_ACTIVITY_STATUS;
+        }
+
+        const snapshots = activity.gameData.cardSnapshots;
+        const snapshot = snapshots.find(snapshot => snapshot.id === cardId);
+        if(!snapshot) {
+            this.logger.info(`Card ${cardId} not found in activity ${activity.id}, while athlete ${athlete.logName} tried to add photos`);
+            return;
+        }
+
+        if(!snapshot.attachedImages) {
+            snapshot.attachedImages = [];
+        }
+        snapshot.attachedImages.push(...images);
+
+        await this.fireStoreService.detailedActivityCollection.update(
+            activity.id.toString(),
+            {
+                gameData: {
+                    ...activity.gameData,
+                    cardSnapshots: snapshots
+                }
+            })
+
+        this.logger.info(`Activity ${activity.id} was updated with new photos by athlete ${athlete.logName}`);
     }
 
     async boostActivity(activity: Activity, athlete: Athlete): Promise<Activity> {

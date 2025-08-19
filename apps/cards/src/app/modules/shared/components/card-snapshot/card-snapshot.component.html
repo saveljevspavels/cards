@@ -29,6 +29,12 @@
                         [type]="(card?.reportedByMe) ? ButtonType.DANGER_FILLED: ButtonType.DANGER"></app-button>
         </div>
         <div class="d-flex gap-2">
+            <app-button (click)="openAddImagesPopup()"
+                        *ngIf="!card.attachedImages?.length"
+                        [small]="true"
+                        [icon]="'add_photo'"
+                        [type]="ButtonType.DANGER"></app-button>
+
             <app-button (click)="openComments.emit(card)"
                         [small]="true"
                         [label]="(card.comments?.length || '').toString()"
@@ -43,3 +49,28 @@
         </div>
     </div>
 </div>
+
+<ng-template #addImagesPopup>
+    <div class="popup box">
+        <div class="d-flex flex-column align-items-center full-width">
+            <p class="mt-5 pt-2 mb-4 text-center">
+                Photos are missing?
+            </p>
+            <div class="mt-4 mb-2 full-width">
+                <app-image-upload
+                    [formControl]="imagesController"
+                ></app-image-upload>
+            </div>
+            <div class="mb-3 mt-3 full-width">
+                <app-button (buttonClick)="addImages()"
+                            [type]="ButtonType.ACTION"
+                            [label]="'Add'"></app-button>
+            </div>
+            <div class="mb-3">
+                <app-button (buttonClick)="closeAddImagesPopup()"
+                            [label]="'Cancel'"
+                ></app-button>
+            </div>
+        </div>
+    </div>
+</ng-template>

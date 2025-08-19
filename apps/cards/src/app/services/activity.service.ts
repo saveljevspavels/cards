@@ -90,6 +90,14 @@ export class ActivityService {
         })
     }
 
+    addCardPhotos(activityId: string, cardId: string, images: UploadedImage[]) {
+        return this.http.post(`${environment.baseBE}/activity/add-photos`, {
+            activityId,
+            cardId,
+            images,
+        })
+    }
+
     public rejectActivity(activityId: any, reason: string) {
         return this.http.post(`${environment.baseBE}/reject-activity`, {
             activityId,

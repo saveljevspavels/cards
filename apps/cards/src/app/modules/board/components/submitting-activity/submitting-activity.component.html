@@ -30,6 +30,13 @@
             [rewards]="submitPrice"
             [small]="false"
         ></app-rewards-button>
+
+        <app-button
+            [label]="'Delete Activity'"
+            [styleClass]="'mt-2'"
+            [type]="ButtonType.DANGER"
+            (buttonClick)="openDeletePopup()"
+        ></app-button>
     </div>
 
 </app-content>
