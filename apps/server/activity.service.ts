@@ -344,17 +344,22 @@ export default class ActivityService {
             {fieldPath: 'athlete.id', opStr: '==', value: parseInt(athleteId, 10)},
             {fieldPath: 'gameData.status', opStr: '==', value: ActivityStatus.NEW},
         ]);
+        if(!activities || !activities.length) {
+            return;
+        }
+        let filteredActivities: Activity[] = [];
         try {
-            activities = activities.filter(activity => new Date().valueOf() - (new Date(activity.start_date).valueOf() + (activity.elapsed_time * 1000)) > RULES.ACTIVITY_STALE_TIME_HOURS * 60 * 60 * 1000)
+            filteredActivities = activities.filter(activity => new Date().valueOf() - new Date(activity.start_date).valueOf() > RULES.ACTIVITY_STALE_TIME_HOURS * 60 * 60 * 1000)
+            this.logger.info(`Currently ${activities.length} pending activities for athlete ${athleteId}, ${filteredActivities.length} qualify for cleanup`);
         } catch (err) {
             this.logger.info(`Error filtering stale activities ${err}`);
         }
-        for(let i = 0; i < activities.length; i++) {
+        for(let i = 0; i < filteredActivities.length; i++) {
             try {
-                await this.submitActivity(activities[i].id, [], [], []);
-                await this.tryAutoApprove(activities[i].id);
+                await this.submitActivity(filteredActivities[i].id, [], [], []);
+                await this.tryAutoApprove(filteredActivities[i].id);
             } catch (err) {
-                this.logger.info(`Error auto submitting activity ${activities[i].id} for athlete ${athleteId}`);
+                this.logger.info(`Error auto submitting activity ${filteredActivities[i].id} for athlete ${athleteId}`);
             }
         }
     }

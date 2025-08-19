@@ -205,7 +205,7 @@ export default class CardService {
 
     async claimCardCurrencies(athlete: Athlete, card: Card) {
         const reward = card.rewards;
-        reward.experience = reward.experience + (athlete.perks[AbilityKey.EXPERIENCE_PER_TASK_BONUS] || 0);
+        reward.experience = reward.experience + ((athlete.perks[AbilityKey.EXPERIENCE_PER_TASK_BONUS] || 0) * RULES.TASK_EXTRA_EXPERIENCE);
 
         athlete.addCurrencies(reward);
         await this.athleteService.updateAthlete(athlete);

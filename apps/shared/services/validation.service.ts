@@ -47,7 +47,6 @@ export class StaticValidationService {
     }
 
     static getBaseValue(type: string, baseWorkout: BaseWorkout): number {
-        console.log('type', type, 'baseWorkout', baseWorkout);
         // @ts-ignore
         return baseWorkout[type][StaticValidationService.baseActivityTypeMap.get(type)];
     }

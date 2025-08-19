@@ -27,7 +27,7 @@ export class PendingActivityComponent implements OnInit {
   public athlete$: Observable<Athlete | null> = this.athleteService.me;
   public expiryHour: number;
   public expiryDanger: boolean;
-  public expiryAt = new Date();
+  public expiryAt: Date;
 
   constructor(
       private boardService: BoardService,
@@ -47,10 +47,12 @@ export class PendingActivityComponent implements OnInit {
     })
 
     const hour = new Date(this.activity.start_date).getHours() + RULES.ACTIVITY_STALE_TIME_HOURS + 1;
-    this.expiryHour = hour > 24 ? hour - 24 : hour;
-    this.expiryDanger = new Date().valueOf() - new Date(this.activity.start_date).valueOf() < 1000 * 60 * 60 * 2;
-    this.expiryAt.setHours(this.expiryHour);
+    this.expiryAt = new Date(this.activity.start_date);
+    this.expiryAt.setHours(hour);
     this.expiryAt.setMinutes(0);
+    this.expiryAt.setSeconds(0);
+    this.expiryHour = hour > 24 ? hour - 24 : hour;
+    this.expiryDanger = this.expiryAt.valueOf() - new Date().valueOf() < 1000 * 60 * 60 * 2;
   }
 
   cancel() {
