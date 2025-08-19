@@ -245,7 +245,7 @@ export default class Athlete implements JsonObjectInterface {
             permissions: this.permissions,
             achievements: this.achievements,
             level: this.level,
-            luck: this.luck,
+            luck: this.luck ?? 0,
             claimedLevelRewards: this.claimedLevelRewards,
             currencies: this.currencies.toJSONObject(),
             cards: this.cards,
