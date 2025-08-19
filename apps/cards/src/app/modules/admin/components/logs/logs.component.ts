@@ -38,7 +38,7 @@ export class LogsComponent implements OnInit {
         })
 
         this.searchControl.valueChanges.subscribe((value) => {
-            this.searchResult = this.allLogs.filter(item => item.m.toUpperCase().indexOf((value || '').toUpperCase()) !== -1);
+            this.searchResult = this.allLogs.filter(item => item.m.toString().toUpperCase().indexOf((value || '').toUpperCase()) !== -1);
         })
     }
 

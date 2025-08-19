@@ -210,7 +210,8 @@ export default class AbilityService {
             throw 'No chests available';
         }
         athlete.currencies.chest -= 1;
-        const rewards = this.getChestRewards();
+        const rewards = this.getChestRewards(athlete.luck ?? 0);
+        athlete.luck = 0;
         athlete.addCurrencies(rewards);
         await Promise.all([
             this.athleteService.updateAthlete(athlete),
@@ -220,38 +221,47 @@ export default class AbilityService {
         return rewards;
     }
 
-    getChestRewards(): Currencies {
+    getChestRewards(luck: number): Currencies {
         const reward = new Currencies();
 
         // Base coin reward
         reward.coins = 3 + getRandomInt(3); // 3-5
-        reward.special_task = getRandomInt(2);
 
         const roll= getRandomInt(101);
-        if(roll < 5) {
-            reward.energy = 1;
+        if(roll - luck > 100) { // Bad Luck
             reward.special_task = 1;
+            reward.coins -= 2;
+            return reward; // Abort here, no additional stuff
+        }
+        if((roll - luck) < 0) { // Good Luck
+            reward.coins += 16 + getRandomInt(4);
+        }
+
+        if(roll < 5) {
+            reward.energy += 1;
+            reward.special_task += 1;
             reward.coins--;
-        } if(roll < 10) {
+        } else if(roll < 10) {
             reward.coins += 16 + getRandomInt(4);
         } else if(roll < 20) {
             reward.coins += 12 + getRandomInt(4);
             reward.special_task = 1;
         } else if(roll < 25) {
-            reward.random_perk = 1;
-            reward.special_task = 1;
+            reward.random_perk += 1;
+            reward.special_task += 1;
             reward.coins--;
         } else if(roll < 40) {
-            reward.random_perk = 1;
+            reward.random_perk += 1;
         } else if(roll < 50) {
-            reward.special_task = 4;
+            reward.special_task += 4;
             reward.coins--;
         } else if(roll < 80) {
-            reward.special_task = 3;
+            reward.special_task += 3;
         } else {
-            reward.special_task = 2;
+            reward.special_task += 2;
             reward.coins += 1 + getRandomInt(3);
         }
+
         return reward;
     }
 }

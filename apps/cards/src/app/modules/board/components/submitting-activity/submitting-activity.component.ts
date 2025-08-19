@@ -15,6 +15,8 @@ import {ButtonType} from "../../../shared/components/button/button.component";
 import {AthleteService} from "../../../../services/athlete.service";
 import Athlete from "../../../../../../../shared/classes/athlete.class";
 import {Currencies} from "../../../../../../../shared/classes/currencies.class";
+import { UploadedImage } from '../../../../../../../shared/interfaces/image-upload.interface';
+import { UtilService } from '../../../../services/util.service';
 
 @Component({
   selector: 'app-submitting-activity',
@@ -128,20 +130,20 @@ export class SubmittingActivityComponent implements OnInit, OnDestroy {
         this.loading = true;
 
         const cardIds = this.selectedCards.value.map((validatedCard: ValidatedCard) => validatedCard.card.id);
-        let images = cardIds
+        const images = cardIds
             .map((id: string) => this.uploadedImages.get(id)?.value);
-        let comments = cardIds
+        const comments = cardIds
             .map((id: string) => this.commentControls.get(id)?.value);
 
 
         this.submitConfirmation.pipe(first()).subscribe(async confirmed => {
             if(confirmed) {
-                images = await Promise.all(images.map(async (imageGroup: File[]) => await this.fileService.uploadImages(imageGroup)))
+                const groupedImages = await this.fileService.uploadImageGroups(images, 3, 1000);
 
                 this.activityService.submitActivity(
                     this.boardService.activity.id,
                     cardIds,
-                    images,
+                    groupedImages,
                     comments,
                 ).subscribe(_ => {
                     this.boardService.deselectActivity();

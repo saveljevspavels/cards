@@ -28,7 +28,7 @@
                         [icon]="'flag'"
                         [type]="(card?.reportedByMe) ? ButtonType.DANGER_FILLED: ButtonType.DANGER"></app-button>
         </div>
-        <div class="d-flex gap-3">
+        <div class="d-flex gap-2">
             <app-button (click)="openComments.emit(card)"
                         [small]="true"
                         [label]="(card.comments?.length || '').toString()"

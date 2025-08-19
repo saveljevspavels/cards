@@ -28,6 +28,7 @@
             (buttonClick)="submitActivity()"
             [disabled]="loading || (notEnoughEnergy$ | async)"
             [rewards]="submitPrice"
+            [small]="false"
         ></app-rewards-button>
     </div>
 

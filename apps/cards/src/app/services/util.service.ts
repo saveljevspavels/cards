@@ -44,4 +44,25 @@ export class UtilService {
             return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
         });
     }
+
+    static async retry<T>(
+        fn: () => Promise<T>,
+        retries = 3,
+        delayMs = 500,
+        backoff = false
+    ): Promise<T> {
+        let lastError: any;
+        for (let attempt = 0; attempt < retries; attempt++) {
+            try {
+                return await fn();
+            } catch (err) {
+                lastError = err;
+                if (attempt < retries - 1) {
+                    const waitTime = backoff ? delayMs * Math.pow(2, attempt) : delayMs;
+                    await new Promise(res => setTimeout(res, waitTime));
+                }
+            }
+        }
+        throw lastError;
+    }
 }

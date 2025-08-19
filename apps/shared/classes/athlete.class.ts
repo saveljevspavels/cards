@@ -18,6 +18,7 @@ export default class Athlete implements JsonObjectInterface {
     permissions: string[];
     achievements: string[];
     level: number;
+    luck: number;
     claimedLevelRewards: number[];
     currencies: Currencies;
     cards: {
@@ -40,6 +41,7 @@ export default class Athlete implements JsonObjectInterface {
         permissions: string[],
         achievements: string[],
         level: number,
+        luck: number,
         claimedLevelRewards: number[],
         currencies: Currencies,
         cards: {
@@ -61,6 +63,7 @@ export default class Athlete implements JsonObjectInterface {
         this.permissions = permissions;
         this.achievements = achievements;
         this.level = level;
+        this.luck = luck;
         this.claimedLevelRewards = claimedLevelRewards;
         this.currencies = currencies;
         this.cards = cards;
@@ -81,6 +84,7 @@ export default class Athlete implements JsonObjectInterface {
             json['permissions'],
             json['achievements'],
             json['level'],
+            json['luck'],
             json['claimedLevelRewards'],
             Currencies.fromJSONObject(json['currencies']),
             json['cards'],
@@ -101,6 +105,7 @@ export default class Athlete implements JsonObjectInterface {
             RULES.DEFAULT_BASE_WORKOUT,
             ['default'],
             [],
+            0,
             0,
             [],
             new Currencies(0, 0, 0, 0, 0, 0, 3),
@@ -240,6 +245,7 @@ export default class Athlete implements JsonObjectInterface {
             permissions: this.permissions,
             achievements: this.achievements,
             level: this.level,
+            luck: this.luck,
             claimedLevelRewards: this.claimedLevelRewards,
             currencies: this.currencies.toJSONObject(),
             cards: this.cards,

@@ -12,6 +12,7 @@ export class RewardsButtonComponent {
     @Input() public rewards: Currencies;
     @Input() public label: string;
     @Input() public disabled = false;
+    @Input() public small = true;
 
     @Output() public buttonClick = new EventEmitter();
 
