@@ -47,6 +47,7 @@ export class CardSnapshotComponent {
 
     constructor(private popupService: PopupService,
                 private fileService: FileService,
+                public athleteService: AthleteService,
                 private messageService: MessageService,
                 private activityService: ActivityService) {}
 

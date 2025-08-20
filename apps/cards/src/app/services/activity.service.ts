@@ -8,7 +8,7 @@ import {ConstService} from "./const.service";
 import Athlete from "../../../../shared/classes/athlete.class";
 import {AngularFirestore} from "@angular/fire/compat/firestore";
 import {UploadedImage} from "../../../../shared/interfaces/image-upload.interface";
-import {ActivityStatus} from "../../../../shared/interfaces/activity.interface";
+import { Activity, ActivityStatus } from '../../../../shared/interfaces/activity.interface';
 import {CardSnapshot} from "../../../../shared/classes/card.class";
 
 @Injectable({
@@ -17,7 +17,7 @@ import {CardSnapshot} from "../../../../shared/classes/card.class";
 export class ActivityService {
 
     public pendingActivities = new BehaviorSubject<any>([])
-    public approvedActivities = new BehaviorSubject<any>([])
+    public approvedActivities = new BehaviorSubject<Activity[]>([])
     public newActivities = new BehaviorSubject<any>([])
 
     constructor(private db: AngularFirestore,
