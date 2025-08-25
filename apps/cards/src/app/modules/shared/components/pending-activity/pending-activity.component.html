@@ -71,12 +71,12 @@
             </p>
             <div class="mt-4 mb-2 full-width">
                 <app-button
-                        label="Boost for -{{RULES.COINS.ACTIVITY_BOOST_PRICE}}"
-                        [disabled]="RULES.COINS.ACTIVITY_BOOST_PRICE > (athlete$ | async)?.currencies.coins"
+                        label="Boost for -{{RULES.ACTIVITY_BOOST_PRICE}}"
+                        [disabled]="RULES.ACTIVITY_BOOST_PRICE > (athlete$ | async)?.currencies.experience"
                         type="action"
                         (buttonClick)="boostActivity()"
                 >
-                    <app-svg [icon]="'coin'" height="20"></app-svg>
+                    <app-svg [icon]="'token'" height="20"></app-svg>
                 </app-button>
             </div>
             <div class="mb-3">

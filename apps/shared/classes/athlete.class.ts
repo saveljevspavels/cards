@@ -193,6 +193,13 @@ export default class Athlete implements JsonObjectInterface {
         this.levelUp();
     }
 
+    spendExperience(amount: number) {
+        if(this.currencies.experience < amount) {
+            throw 'Not enough experience';
+        }
+        this.currencies.experience -= amount;
+    }
+
     levelUp() {
         while (this.level < LEVEL_REWARDS.length && this.currencies.experience >= RULES.LEVEL_EXPERIENCE[this.level]) {
             this.currencies.experience -= RULES.LEVEL_EXPERIENCE[this.level];

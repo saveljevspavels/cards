@@ -490,7 +490,7 @@ export default class ActivityService {
     }
 
     async boostActivity(activity: Activity, athlete: Athlete): Promise<Activity> {
-        athlete.spendCoins(RULES.COINS.ACTIVITY_BOOST_PRICE);
+        athlete.spendExperience(RULES.ACTIVITY_BOOST_PRICE);
 
         const activityType = StaticValidationService.normalizeActivityType(activity);
         const targetStat = StaticValidationService.baseActivityTypeMap.get(activityType);
@@ -511,7 +511,7 @@ export default class ActivityService {
               )
         ]);
 
-        this.logger.info(`Activity ${activity.id} ${activityType} ${targetStat} was boosted for athlete ${athlete.logName} for ${RULES.COINS.ACTIVITY_BOOST_PRICE} coins`)
+        this.logger.info(`Activity ${activity.id} ${activityType} ${targetStat} was boosted for athlete ${athlete.logName} for ${RULES.ACTIVITY_BOOST_PRICE} tokens`)
         return {
             ...activity,
             ...activityPatch

@@ -105,7 +105,6 @@ export const RULES = {
         FEATURED_CARD_POINT_CONVERSION: 2,
         BASE_UNLOCK_PRICE: 5,
         PER_LEVEL_PRICE: 5,
-        ACTIVITY_BOOST_PRICE: 1
     },
     SCHEME: {
         BOARDS_NUMBER: 5,
@@ -150,4 +149,5 @@ export const RULES = {
     UNLOCK_DISCOUNT_AMOUNT: 1,
     STARTING_CARD: '',
     ACTIVITY_STALE_TIME_HOURS: 12,
+    ACTIVITY_BOOST_PRICE: 3
 }
